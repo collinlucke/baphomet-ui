@@ -1,46 +1,57 @@
+import { useQuery } from '@apollo/client';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { GET_MOVIE } from './queries';
 
-const Movie = () => {
+const MovieEditor = () => {
+  const params = useParams();
+  console.log(params);
+
+  const { loading, error, data } = useQuery(GET_MOVIE, {
+    variables: { id: params.id?.toString() }
+  });
+  console.log(loading);
+
   const [form, setForm] = useState({
+    id: '',
     title: '',
     year: 0,
     rated: ''
   });
-  const [isNew, setIsNew] = useState(true);
+  // const [isNew, setIsNew] = useState(true);
 
-  const params = useParams();
-  const navigate = useNavigate();
+  // const params = useParams();
+  // const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const id = params.id?.toString() || undefined;
+  // useEffect(() => {
 
-      if (!id) return;
+  // const fetchData = async () => {
+  //   const id = params.id?.toString() || undefined;
 
-      setIsNew(false);
+  //   if (!id) return;
 
-      try {
-        const response = await fetch(
-          // `http://localhost:5050/movies/555`
-          `http://localhost:5050/movies/${params.id.toString()}`
-        );
-        try {
-          const movie = await response.json();
-          setForm(movie);
-        } catch (err) {
-          console.warn(`Movie with id ${id} not found`);
-          navigate('/');
-          return;
-        }
-      } catch (err) {
-        const errMessage = `An error has occurred: ${err.message}`;
-        console.error(errMessage);
-      }
-    };
-    fetchData();
-    return;
-  }, [params.id, navigate]);
+  //   setIsNew(false);
+
+  //   try {
+  //     const response = await fetch(
+  //       `http://localhost:5050/graphql/${params.id.toString()}`
+  //     );
+  //     try {
+  //       const movie = await response.json();
+  //       setForm(movie);
+  //     } catch (err) {
+  //       console.warn(`Movie with id ${id} not found`);
+  //       navigate('/');
+  //       return;
+  //     }
+  //   } catch (err) {
+  //     const errMessage = `An error has occurred: ${err.message}`;
+  //     console.error(errMessage);
+  //   }
+  // };
+  // fetchData();
+  // return;
+  // }, [params.id, navigate]);
 
   const updateForm = val => {
     return setForm(prev => {
@@ -48,43 +59,43 @@ const Movie = () => {
     });
   };
 
-  const onSubmit = async e => {
-    e.preventDefault();
-    const movie = { ...form };
+  // const onSubmit = async e => {
+  //   e.preventDefault();
+  //   const movie = { ...form };
 
-    try {
-      if (isNew) {
-        await fetch(`http://localhost:5050/movies`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(movie)
-        });
-      } else {
-        try {
-          await fetch(`http://localhost:5050/movies/${params.id}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(movie)
-          });
-        } catch (err) {
-          throw new Error(err);
-        }
-      }
-    } catch (err) {
-      console.error('A problem occurred with operation: ' + err);
-    } finally {
-      setForm({ name: '', year: 0, rated: '' });
-      navigate('/');
-    }
-  };
+  //   try {
+  //     if (isNew) {
+  //       await fetch(`http://localhost:5050/movies`, {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json'
+  //         },
+  //         body: JSON.stringify(movie)
+  //       });
+  //     } else {
+  //       try {
+  //         await fetch(`http://localhost:5050/movies/${params.id}`, {
+  //           method: 'PATCH',
+  //           headers: { 'Content-Type': 'application/json' },
+  //           body: JSON.stringify(movie)
+  //         });
+  //       } catch (err) {
+  //         throw new Error(err);
+  //       }
+  //     }
+  //   } catch (err) {
+  //     console.error('A problem occurred with operation: ' + err);
+  //   } finally {
+  //     setForm({ name: '', year: 0, rated: '' });
+  //     navigate('/');
+  //   }
+  // };
 
   return (
     <>
       <h3 className="text-lg font-semibold p-4">Create/Update Movie</h3>
       <form
-        onSubmit={onSubmit}
+        // onSubmit={onSubmit}
         className="border rounded-lg overflow-hidden p-4"
       >
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-slate-900/10 pb-12 md:grid-cols-2">
@@ -96,6 +107,7 @@ const Movie = () => {
               This information will be displayed publicly so be careful what you
               share.
             </p>
+            <img src={form.poster} />
           </div>
 
           <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 ">
@@ -240,4 +252,4 @@ const Movie = () => {
   );
 };
 
-export default Movie;
+export default MovieEditor;

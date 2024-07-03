@@ -1,10 +1,16 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import App from './App.tsx';
-import Movie from './components/Movie.jsx';
-import MovieList from './components/MovieList.jsx';
+import MovieEditor from './components/Movies/MovieEditor.tsx';
+import MovieList from './components/Movies/MovieList.tsx';
 import './index.css';
+
+const client = new ApolloClient({
+  uri: 'http://localhost:5050/graphql/',
+  cache: new InMemoryCache()
+});
 
 const router = createBrowserRouter([
   {
@@ -23,7 +29,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/edit/:id',
-        element: <Movie />
+        element: <MovieEditor />
       }
     ]
   },
@@ -33,7 +39,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/create',
-        element: <Movie />
+        element: <MovieEditor />
       }
     ]
   }
@@ -41,6 +47,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ApolloProvider client={client}>
+      <RouterProvider router={router} />
+    </ApolloProvider>
   </React.StrictMode>
 );
