@@ -1,115 +1,97 @@
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { GET_MOVIE } from './queries';
+import { ADD_MOVIE, UPDATE_MOVIE } from './mutations';
 
-const MovieEditor = () => {
+type MovieObject = {
+  id?: string;
+  title: string;
+  rated?: string;
+  year?: number;
+  poster?: string;
+};
+
+export const MovieEditor: React.FC = () => {
+  const location = useLocation();
   const params = useParams();
-  console.log(params);
-
-  const { loading, error, data } = useQuery(GET_MOVIE, {
-    variables: { id: params.id?.toString() }
-  });
-  console.log(loading);
-
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<MovieObject>({
     id: '',
     title: '',
     year: 0,
-    rated: ''
+    rated: '',
+    poster: ''
   });
-  // const [isNew, setIsNew] = useState(true);
 
-  // const params = useParams();
-  // const navigate = useNavigate();
+  useQuery(GET_MOVIE, {
+    variables: { id: params.id },
+    skip: !params.id,
+    onCompleted: data => {
+      const { id, title, year, rated } = data.getMovie;
+      setForm({ id, title, year, rated });
+    }
+  });
 
-  // useEffect(() => {
+  const [addMovie] = useMutation(ADD_MOVIE, {
+    variables: {
+      id: form.id,
+      title: form.title,
+      year: Number(form.year),
+      rated: form.rated,
+      poster: form.poster
+    }
+  });
 
-  // const fetchData = async () => {
-  //   const id = params.id?.toString() || undefined;
+  const [updateMovie] = useMutation(UPDATE_MOVIE, {
+    variables: {
+      id: form.id,
+      title: form.title,
+      year: Number(form.year),
+      rated: form.rated,
+      poster: form.poster
+    }
+  });
 
-  //   if (!id) return;
+  // Resets form if coming from the `edit` page. Without this, going to the `create` page will carry
+  // over the data from the `edit` page
+  useEffect(() => {
+    if (location.pathname === '/create') {
+      setForm({ id: '', title: '', year: 0, rated: '' });
+    }
+  }, [location.pathname]);
 
-  //   setIsNew(false);
-
-  //   try {
-  //     const response = await fetch(
-  //       `http://localhost:5050/graphql/${params.id.toString()}`
-  //     );
-  //     try {
-  //       const movie = await response.json();
-  //       setForm(movie);
-  //     } catch (err) {
-  //       console.warn(`Movie with id ${id} not found`);
-  //       navigate('/');
-  //       return;
-  //     }
-  //   } catch (err) {
-  //     const errMessage = `An error has occurred: ${err.message}`;
-  //     console.error(errMessage);
-  //   }
-  // };
-  // fetchData();
-  // return;
-  // }, [params.id, navigate]);
-
-  const updateForm = val => {
+  const updateForm = <T,>(val: T): void => {
     return setForm(prev => {
       return { ...prev, ...val };
     });
   };
 
-  // const onSubmit = async e => {
-  //   e.preventDefault();
-  //   const movie = { ...form };
-
-  //   try {
-  //     if (isNew) {
-  //       await fetch(`http://localhost:5050/movies`, {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'application/json'
-  //         },
-  //         body: JSON.stringify(movie)
-  //       });
-  //     } else {
-  //       try {
-  //         await fetch(`http://localhost:5050/movies/${params.id}`, {
-  //           method: 'PATCH',
-  //           headers: { 'Content-Type': 'application/json' },
-  //           body: JSON.stringify(movie)
-  //         });
-  //       } catch (err) {
-  //         throw new Error(err);
-  //       }
-  //     }
-  //   } catch (err) {
-  //     console.error('A problem occurred with operation: ' + err);
-  //   } finally {
-  //     setForm({ name: '', year: 0, rated: '' });
-  //     navigate('/');
-  //   }
-  // };
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!params.id) {
+      addMovie();
+    } else {
+      updateMovie();
+    }
+  };
 
   return (
     <>
       <h3 className="text-lg font-semibold p-4">Create/Update Movie</h3>
       <form
-        // onSubmit={onSubmit}
+        onSubmit={onSubmit}
         className="border rounded-lg overflow-hidden p-4"
       >
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-slate-900/10 pb-12 md:grid-cols-2">
           <div>
             <h2 className="text-base font-semibold leading-7 text-slate-900">
-              Movie Info
+              Movie Poster
             </h2>
             <p className="mt-1 text-sm leading-6 text-slate-600">
-              This information will be displayed publicly so be careful what you
-              share.
+              <input type="file" id="myFile" name="filename" />
             </p>
-            <img src={form.poster} />
           </div>
-
           <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 ">
             <div className="sm:col-span-4">
               <label
@@ -251,5 +233,3 @@ const MovieEditor = () => {
     </>
   );
 };
-
-export default MovieEditor;

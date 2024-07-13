@@ -3,8 +3,8 @@ import * as ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import App from './App.tsx';
-import MovieEditor from './components/Movies/MovieEditor.tsx';
-import MovieList from './components/Movies/MovieList.tsx';
+import { MovieEditor } from './components/Movies/MovieEditor.tsx';
+import { MovieList } from './components/Movies/MovieList.tsx';
 import './index.css';
 
 const client = new ApolloClient({
