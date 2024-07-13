@@ -12,6 +12,7 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
+// TODO: This is prolly gonna get moved to it's own file
 const router = createBrowserRouter([
   {
     path: '/',

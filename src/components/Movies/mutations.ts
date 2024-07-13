@@ -1,5 +1,7 @@
 import { gql } from '@apollo/client';
 
+// TODO: Update to handle uploading movie posters
+
 export const ADD_MOVIE = gql`
   mutation addMovie($title: String!, $rated: String, $year: Int) {
     addMovie(title: $title, rated: $rated, year: $year) {
