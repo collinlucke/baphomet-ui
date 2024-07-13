@@ -4,7 +4,7 @@ import { dirname } from 'path';
 const phantomArtistResolver = {
   resolve: {
     alias: {
-      '@collinlucke/phantomartist':
+      '@phantomartist':
         import.meta.env.NODE_ENV !== 'dev'
           ? '@collinlucke/phantomartist'
           : dirname(fileURLToPath(import.meta.url)) + '../phantomartist'
