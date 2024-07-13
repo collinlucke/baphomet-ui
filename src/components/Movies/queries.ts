@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const GET_ALL_MOVIES = gql`
-  query getAllMovies {
-    getAllMovies {
+  query getAllMovies($limit: Int) {
+    getAllMovies(limit: $limit) {
       title
       year
       rated

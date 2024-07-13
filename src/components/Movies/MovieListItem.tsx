@@ -1,6 +1,14 @@
 import { Link } from 'react-router-dom';
 
-const MovieListItem = ({ movie }) => {
+type MovieProps = {
+  movie: {
+    title: string;
+    year: number;
+    rated: string;
+    id: string;
+  };
+};
+export const MovieListItem: React.FC<MovieProps> = ({ movie }) => {
   const { title, year, rated, id } = movie;
   const tdClassName = 'p-4 align-middle [&amp;:has([role=checkbox])]:pr-0';
 
@@ -34,5 +42,3 @@ const MovieListItem = ({ movie }) => {
     </tr>
   );
 };
-
-export default MovieListItem;

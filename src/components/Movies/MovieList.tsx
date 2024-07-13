@@ -1,9 +1,30 @@
 import { useQuery } from '@apollo/client';
 import { GET_ALL_MOVIES } from './queries';
-import MovieListItem from './MovieListItem';
+import { MovieListItem } from './MovieListItem';
+import { useState } from 'react';
 
-const MovieList = () => {
-  const { loading, error, data } = useQuery(GET_ALL_MOVIES);
+type Movie = {
+  id: string;
+  title: string;
+  year: number;
+  rated: string;
+};
+
+type MovieData = {
+  getAllMovies: Movie[];
+};
+
+export const MovieList: React.FC<Movie> = () => {
+  const [movieData, setMovieData] = useState<MovieData>({ getAllMovies: [] });
+  const { loading, error } = useQuery(GET_ALL_MOVIES, {
+    variables: {
+      limit: 50
+    },
+    onCompleted: data => {
+      console.log(data);
+      setMovieData(data);
+    }
+  });
 
   return (
     <>
@@ -31,7 +52,7 @@ const MovieList = () => {
                 </tr>
               </thead>
               <tbody className="[&amp;_tr:last-child]:border-0">
-                {data.getAllMovies.map(mov => {
+                {movieData?.getAllMovies.map(mov => {
                   return <MovieListItem movie={mov} key={mov.id} />;
                 })}
               </tbody>
@@ -42,5 +63,3 @@ const MovieList = () => {
     </>
   );
 };
-
-export default MovieList;
