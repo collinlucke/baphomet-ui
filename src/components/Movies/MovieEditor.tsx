@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { GET_MOVIE } from './queries';
 import { ADD_MOVIE, UPDATE_MOVIE } from './mutations';
+import { Form } from '@crazy-overlord/phantomartist';
 
 type MovieObject = {
   id?: string;
@@ -75,7 +76,12 @@ export const MovieEditor: React.FC = () => {
       updateMovie();
     }
   };
+  console.log(onSubmit, updateForm);
 
   // TODO: Rip out form and replace with new form from PhantomArtist
-  return <>It'll be back. Don't you fret!</>;
+  return (
+    <>
+      <Form>Here Be Yer Form</Form>
+    </>
+  );
 };

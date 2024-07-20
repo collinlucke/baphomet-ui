@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
 
-interface Movie {
-  name: string;
-  director: string;
-  releaseDate: string;
-  mpaRating: string;
-}
+// interface Movie {
+//   name: string;
+//   director: string;
+//   releaseDate: string;
+//   mpaRating: string;
+// }
 
-const AddMovie: React.FC = () => {
+export const AddMovie: React.FC = () => {
   // const [movie, setMovie] = useState<Movie>({
   //   name: '',
   //   director: '',
@@ -39,5 +39,3 @@ const AddMovie: React.FC = () => {
     </>
   );
 };
-
-export default AddMovie;

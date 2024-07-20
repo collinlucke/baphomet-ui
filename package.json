@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "css": "type --module && tailwindcss -c ./src/App.tsx -i ./dist/styles.css"
   },
   "dependencies": {
     "@apollo/client": "^3.10.1",
@@ -16,12 +17,13 @@
     "@mui/material": "^5.15.15",
     "apollo-upload-client": "^18.0.1",
     "graphql": "^16.8.1",
+    "postcss-import": "^16.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.23.0"
   },
   "devDependencies": {
-    "@collinlucke/phantomartist": "link:/home/collin/Git/phantomartist",
+    "@crazy-overlord/phantomartist": "link:/home/collin/Git/phantomartist",
     "@types/react": "^18.2.79",
     "@types/react-dom": "^18.2.25",
     "@typescript-eslint/eslint-plugin": "^7.7.0",
