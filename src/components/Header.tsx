@@ -5,12 +5,12 @@ import { NavLink } from 'react-router-dom';
 const Navbar: React.FC = () => {
   return (
     <>
-      <div className="h-32 flex items-center p-5">
+      <div>
         <NavLink to="./">
-          <div className="text-5xl">Baphomet</div>
+          <div>Baphomet</div>
         </NavLink>
       </div>
-      <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700 w-full" />
+      <hr />
     </>
   );
 };

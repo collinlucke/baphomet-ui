@@ -28,10 +28,10 @@ export const MovieList: React.FC<Movie> = () => {
 
   return (
     <div>
-      <List className="p-10">
+      <List>
         {movieData.getAllMovies.map(mov => (
           // Ignore warning: key is being set on the li in the ListItem component
-          <ListItem className="bg-pink-400" id={mov.id}>
+          <ListItem id={mov.id}>
             <div>{mov.title}</div>
           </ListItem>
         ))}
