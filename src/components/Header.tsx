@@ -7,7 +7,7 @@ const Navbar: React.FC = () => {
     <>
       <div>
         <NavLink to="./">
-          <div>Baphomet</div>
+          <h1>Baphomet</h1>
         </NavLink>
       </div>
       <hr />

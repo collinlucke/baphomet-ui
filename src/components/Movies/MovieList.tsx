@@ -25,6 +25,7 @@ export const MovieList: React.FC<Movie> = () => {
       setMovieData(data);
     }
   });
+  console.log(loading, error);
 
   return (
     <div>
