@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import App from './App.tsx';
 import { MovieEditor } from './components/Movies/MovieEditor.tsx';
-import { MovieList } from './components/Movies/MovieList.tsx';
+import { MovieListPage } from './components/Pages/MovieListPage.tsx';
 
 const client = new ApolloClient({
   uri: 'http://localhost:5050/graphql/',
@@ -19,7 +19,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <MovieList />
+        element: <MovieListPage />
       }
     ]
   },
