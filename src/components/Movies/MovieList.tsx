@@ -1,42 +1,43 @@
-import { useQuery } from '@apollo/client';
-import { GET_ALL_MOVIES } from './queries';
 import { useState } from 'react';
+import { useQuery } from '@apollo/client';
+import { GET_ALL_MOVIES } from '../../api/queries';
 import { List, ListItem } from '@crazy-overlord/phantomartist';
+import { MovieListItem } from './MovieListItem';
+import { colors } from '../../styling/tokens.stylex';
+import * as stylex from '@stylexjs/stylex';
 
 type Movie = {
   id: string;
   title?: string;
   year?: number;
   rated?: string;
+  poster?: string;
 };
 
 type MovieData = {
-  getAllMovies: Movie[];
+  movieData: {
+    getAllMovies: Movie[];
+  };
 };
 
-export const MovieList: React.FC<Movie> = () => {
-  const [movieData, setMovieData] = useState<MovieData>({ getAllMovies: [] });
-
-  const { loading, error } = useQuery(GET_ALL_MOVIES, {
-    variables: {
-      limit: 50 // TODO: Hard coded until I get around to making a thingy to put put in a custom value
-    },
-    onCompleted: data => {
-      setMovieData(data);
-    }
-  });
-  console.log(loading, error);
-
+export const MovieList: React.FC<MovieData> = ({ movieData }) => {
   return (
-    <div>
-      <List>
+    <>
+      <List className={baseStyles.colors}>
         {movieData.getAllMovies.map(mov => (
           // Ignore warning: key is being set on the li in the ListItem component
-          <ListItem id={mov.id}>
-            <div>{mov.title}</div>
-          </ListItem>
+          <MovieListItem mov={mov} />
         ))}
       </List>
-    </div>
+    </>
   );
 };
+
+const baseStyles = stylex.create({
+  colors: {
+    color: {
+      default: colors.primaryColor,
+      ':hover': colors.secondaryColor
+    }
+  }
+});

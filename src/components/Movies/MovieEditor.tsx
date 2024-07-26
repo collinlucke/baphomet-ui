@@ -2,8 +2,8 @@ import { useQuery, useMutation } from '@apollo/client';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import { GET_MOVIE } from './queries';
-import { ADD_MOVIE, UPDATE_MOVIE } from './mutations';
+import { GET_MOVIE } from '../../api/queries';
+import { ADD_MOVIE, UPDATE_MOVIE } from '../../api/mutations';
 import { Form } from '@crazy-overlord/phantomartist';
 
 type MovieObject = {
@@ -29,8 +29,8 @@ export const MovieEditor: React.FC = () => {
     variables: { id: params.id },
     skip: !params.id,
     onCompleted: data => {
-      const { id, title, year, rated } = data.getMovie;
-      setForm({ id, title, year, rated });
+      const { id, title, year, rated, poster } = data.getMovie;
+      setForm({ id, title, year, rated, poster });
     }
   });
 

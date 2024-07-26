@@ -1,15 +1,17 @@
 import { Outlet } from 'react-router-dom';
-import Header from './components/Header.tsx';
-import './styles.css';
-import './App.css';
+import { Heading } from './components/Heading.tsx';
+import './styling/styleX.css';
+import { Main } from '@crazy-overlord/phantomartist';
 
 // TODO: Make error handling and loading states better
 function App() {
   return (
-    <div>
-      <Header />
-      <Outlet />
-    </div>
+    <>
+      <Heading />
+      <Main>
+        <Outlet />
+      </Main>
+    </>
   );
 }
 //changes
