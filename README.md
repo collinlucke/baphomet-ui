@@ -11,5 +11,5 @@ Frontend for the [baphomet-server](https://github.com/crazy-overlord/baphomet-se
 <br>
 <br>
 <sub>
-Current Stack: TypeScript, React, Tailwind, ApolloClient, GraphQL
+Current Stack: TypeScript, React, StyleX, ApolloClient, GraphQL
 </sub>
