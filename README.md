@@ -4,6 +4,8 @@ Right now, this is just a simple app that can view and change movie data. But ho
 
 Stay tuned...
 
+Frontend for the [baphomet-server](https://github.com/crazy-overlord/baphomet-server) project
+
 <br>
 <br>
 <br>
