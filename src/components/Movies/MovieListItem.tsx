@@ -1,7 +1,8 @@
-import React, { ChangeEvent, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import { ListItem } from '@crazy-overlord/phantomartist';
+import * as stylex from '@stylexjs/stylex';
 
-type MovType = {
+type MovieType = {
   id: string;
   poster?: string;
   year?: number;
@@ -9,22 +10,39 @@ type MovType = {
   title?: string;
 };
 
-export const MovieListItem = ({ mov }: { mov: MovType }) => {
-  const { id, year, title, rated, poster } = mov;
-  const [showPoster, setShowPoster] = useState(false);
-  const onClickHandler = () => {
-    setShowPoster(!showPoster);
-  };
+export const MovieListItem = ({ mov }: { mov: MovieType }) => {
+  const { id, year, title } = mov;
 
   return (
-    <ListItem id={mov.id}>
-      <div onClick={onClickHandler} id={id}>
-        {title} ---- Released {year} ----- Rated ----- {rated ? rated : '?'}{' '}
-        {poster &&
-          `---- Click to
-    ${showPoster ? 'hide' : 'show'} poster`}
-        {showPoster && poster && <img src={poster} />}
-      </div>
+    <ListItem>
+      {/* <NavLink {...stylex.props(baphStyles.navLink)} */}
+      <NavLink to={`./edit/${id}`}>
+        <div id={id} {...stylex.props(baphStyles.wrapper)}>
+          <span {...stylex.props(baphStyles.title)}>{title}</span>
+          <span {...stylex.props(baphStyles.year)}>Year Released: {year} </span>
+        </div>
+      </NavLink>
     </ListItem>
   );
 };
+
+const baphStyles = stylex.create({
+  title: {
+    width: '300px',
+    WebkitBoxOrient: 'vertical',
+    display: '-webkit-inline-box',
+    overflow: 'hidden',
+    WebkitLineClamp: '1'
+  },
+  year: {
+    paddingRight: '40px'
+  },
+  wrapper: {
+    display: 'flex',
+    justifyContent: 'space-between'
+  }
+  // navLink: {
+  //   color: colors.primary,
+  //   textDecoration: 'none'
+  // }
+});

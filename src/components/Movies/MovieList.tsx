@@ -1,10 +1,5 @@
-import { useState } from 'react';
-import { useQuery } from '@apollo/client';
-import { GET_ALL_MOVIES } from '../../api/queries';
-import { List, ListItem } from '@crazy-overlord/phantomartist';
+import { List } from '@crazy-overlord/phantomartist';
 import { MovieListItem } from './MovieListItem';
-import { colors } from '../../styling/tokens.stylex';
-import * as stylex from '@stylexjs/stylex';
 
 type Movie = {
   id: string;
@@ -22,22 +17,10 @@ type MovieData = {
 
 export const MovieList: React.FC<MovieData> = ({ movieData }) => {
   return (
-    <>
-      <List className={baseStyles.colors}>
-        {movieData.getAllMovies.map(mov => (
-          // Ignore warning: key is being set on the li in the ListItem component
-          <MovieListItem mov={mov} />
-        ))}
-      </List>
-    </>
+    <List>
+      {movieData.getAllMovies.map(mov => (
+        <MovieListItem mov={mov} key={mov.id} />
+      ))}
+    </List>
   );
 };
-
-const baseStyles = stylex.create({
-  colors: {
-    color: {
-      default: colors.primaryColor,
-      ':hover': colors.secondaryColor
-    }
-  }
-});
