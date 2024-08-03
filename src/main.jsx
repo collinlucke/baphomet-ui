@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import App from './App.tsx';
-import { MovieEditor } from './components/Movies/MovieEditor.tsx';
+import { EditMoviePage } from './components/Pages/EditMoviePage.tsx';
 import { MovieListPage } from './components/Pages/MovieListPage.tsx';
 
 const client = new ApolloClient({
@@ -29,20 +29,20 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/edit/:id',
-        element: <MovieEditor />
-      }
-    ]
-  },
-  {
-    path: '/create',
-    element: <App />,
-    children: [
-      {
-        path: '/create',
-        element: <MovieEditor />
+        element: <EditMoviePage />
       }
     ]
   }
+  // {
+  //   path: '/create',
+  //   element: <App />,
+  //   children: [
+  //     {
+  //       path: '/create',
+  //       element: <MovieEditor />
+  //     }
+  //   ]
+  // }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
