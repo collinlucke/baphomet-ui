@@ -6,8 +6,13 @@ import App from './App.tsx';
 import { EditMoviePage } from './components/Pages/EditMoviePage.tsx';
 import { MovieListPage } from './components/Pages/MovieListPage.tsx';
 
+const baseURL =
+  process.env.NODE_ENV === 'development'
+    ? process.env.LOCAL_BASE_URL
+    : process.env.SERVER_BASE_URL;
+
 const client = new ApolloClient({
-  uri: 'http://localhost:5050/graphql/',
+  uri: `${baseURL}/graphql/`,
   cache: new InMemoryCache()
 });
 
