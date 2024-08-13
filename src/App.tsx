@@ -1,16 +1,21 @@
 import { Outlet } from 'react-router-dom';
 import { Heading } from './components/Heading.tsx';
 import { Main } from '@crazy-overlord/phantomartist';
+import './styling/styleX.css';
 
-// TODO: Make error handling and loading states better
+const base_url =
+  process.env.NODE_EVIRONMENT === 'development'
+    ? process.env.LOCAL_BASE_URL
+    : process.env.SERVER_BASE_UR;
+
 function App() {
   return (
-    <>
+    <div>
       <Heading />
       <Main>
         <Outlet />
       </Main>
-    </>
+    </div>
   );
 }
 //changes

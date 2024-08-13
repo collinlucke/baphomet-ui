@@ -1,0 +1,30 @@
+name: Deploy Baphomet UI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+      - name: Login to Docker Hub
+        run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+      - name: Build Docker Image
+        run: docker build -t collinlucke/baphomet-ui . --build-arg NODE_ENV='production' --build-arg LOCAL_SERVER_URL=`${{secrets.SERVER_BASE_URL}}`'
+      - name: Publish Image to Docker Hub
+        run: docker push collinlucke/baphomet-ui:latest
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull Image from Docker Hub
+        run: docker pull collinlucke/baphomet-ui:latest
+      - name: Delete Old Container
+        run: docker rm -f baphomet-ui-container
+      - name: Run Docker Container
+        run: docker run -d -p 5050:5050 --name baphomet-ui-container collinlucke/baphomet-ui

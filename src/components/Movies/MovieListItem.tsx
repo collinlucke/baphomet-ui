@@ -15,8 +15,7 @@ export const MovieListItem = ({ mov }: { mov: MovieType }) => {
 
   return (
     <ListItem>
-      {/* <NavLink {...stylex.props(baphStyles.navLink)} */}
-      <NavLink to={`./edit/${id}`}>
+      <NavLink to={`/edit/${id}`}>
         <div id={id} {...stylex.props(baphStyles.wrapper)}>
           <span {...stylex.props(baphStyles.title)}>{title}</span>
           <span {...stylex.props(baphStyles.year)}>Year Released: {year} </span>
@@ -41,8 +40,4 @@ const baphStyles = stylex.create({
     display: 'flex',
     justifyContent: 'space-between'
   }
-  // navLink: {
-  //   color: colors.primary,
-  //   textDecoration: 'none'
-  // }
 });
