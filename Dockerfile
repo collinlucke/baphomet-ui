@@ -1,5 +1,13 @@
 FROM node:latest as build
 
+# Declare buildt time environment variables
+ARG NODE_ENV
+ARG SERVER_BASE_URL
+
+# Set environment variables
+ENV NODE_ENV=$NODE_ENV
+ENV SERVER_BASE_URL=$SERVER_BASE_URL
+
 # Biuld App
 WORKDIR /app
 COPY package.json .
