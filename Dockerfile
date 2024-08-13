@@ -2,9 +2,10 @@ FROM node:latest as build
 
 # Biuld App
 WORKDIR /app
-RUN pnpm install .
+COPY package.json .
+RUN npm install .
 COPY . .
-RUN pnpm run build
+RUN npm run build
 
 # Server with Nginx
 FROM nginx:latest
