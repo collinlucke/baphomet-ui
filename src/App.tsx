@@ -4,7 +4,7 @@ import { Main } from '@crazy-overlord/phantomartist';
 import './styling/styleX.css';
 
 const base_url =
-  process.env.NODE_EVIRONMENT === 'development'
+  process.env.NODE_ENV === 'development'
     ? process.env.LOCAL_BASE_URL
     : process.env.SERVER_BASE_UR;
 
