@@ -2,7 +2,7 @@ FROM node:latest as build
 
 # Biuld App
 WORKDIR /app
-RUN pnpm install
+RUN pnpm install .
 COPY . .
 RUN pnpm run build
 

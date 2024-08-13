@@ -11,10 +11,12 @@ jobs:
     steps:
       - name: Checkout Source
         uses: actions/checkout@v4
+      - name: Create .env File
+        run: echo "ATLAS_DB_PASSWORD=${{ secrets.ATLAS_DB_PASSWORD }}" >> .env
       - name: Login to Docker Hub
         run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
       - name: Build Docker Image
-        run: docker build -t collinlucke/baphomet-ui . --build-arg NODE_ENV='production' --build-arg LOCAL_SERVER_URL=`${{secrets.SERVER_BASE_URL}}`'
+        run: docker build -t collinlucke/baphomet-ui . --build-arg NODE_ENV='production' --build-arg SERVER_BASE_URL=`${{secrets.SERVER_BASE_URL}}`
       - name: Publish Image to Docker Hub
         run: docker push collinlucke/baphomet-ui:latest
 
