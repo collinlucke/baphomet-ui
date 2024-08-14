@@ -11,7 +11,7 @@ ENV SERVER_BASE_URL=$SERVER_BASE_URL
 # Biuld App
 WORKDIR /app
 COPY package.json .
-RUN npm install .
+RUN npm install
 COPY . .
 RUN npm run build
 
