@@ -7,9 +7,9 @@ import { EditMoviePage } from './components/Pages/EditMoviePage.tsx';
 import { MovieListPage } from './components/Pages/MovieListPage.tsx';
 
 const baseURL =
-  process.env.NODE_ENV === 'development'
-    ? process.env.LOCAL_BASE_URL
-    : process.env.SERVER_BASE_URL;
+  import.meta.env.VITE_NODE_ENV === 'development'
+    ? import.meta.env.VITE_LOCAL_BASE_URL
+    : import.meta.env.VITE_SERVER_BASE_URL;
 
 const client = new ApolloClient({
   uri: `${baseURL}/graphql/`,
