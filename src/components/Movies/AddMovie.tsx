@@ -32,10 +32,9 @@ export const AddMovie: React.FC = () => {
 
   return (
     <>
-      Gutted for now. A phantom will come...
       <br></br>
       <br></br>
-      <br></br>; That was really stupid. I'll show myself out.
+      <br></br>;
     </>
   );
 };
