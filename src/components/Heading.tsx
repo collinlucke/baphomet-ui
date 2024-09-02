@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Header, InnerWidth } from '@crazy-overlord/phantomartist';
+import { Header, InnerWidth } from '@collinlucke/phantomartist';
 import * as stylex from '@stylexjs/stylex';
 
 // TODO: Replace with PhantomArtist

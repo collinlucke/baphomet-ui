@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { GET_MOVIE } from '../../api/queries';
 // import { ADD_MOVIE, UPDATE_MOVIE } from '../../api/mutations';
-import { Form } from '@crazy-overlord/phantomartist';
+import { Form } from '@collinlucke/phantomartist';
 
 type MovieDataProps = {
   getMovie: {

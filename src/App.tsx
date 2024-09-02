@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import { Heading } from './components/Heading.tsx';
-import { Main } from '@crazy-overlord/phantomartist';
+import { Main } from '@collinlucke/phantomartist';
 import './styling/styleX.css';
 
 function App() {

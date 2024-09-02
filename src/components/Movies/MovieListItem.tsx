@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { ListItem } from '@crazy-overlord/phantomartist';
+import { ListItem } from '@collinlucke/phantomartist';
 import * as stylex from '@stylexjs/stylex';
 
 type MovieType = {
