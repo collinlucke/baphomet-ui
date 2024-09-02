@@ -1,4 +1,4 @@
-import { List } from '@crazy-overlord/phantomartist';
+import { List } from '@collinlucke/phantomartist';
 import { MovieListItem } from './MovieListItem';
 
 type Movie = {

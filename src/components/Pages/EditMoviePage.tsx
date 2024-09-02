@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_MOVIE } from '../../api/queries';
 import { MovieEditorForm } from '../MovieEditor/MovieEditorForm';
-import { Block, InnerWidth } from '@crazy-overlord/phantomartist';
+import { Block, InnerWidth } from '@collinlucke/phantomartist';
 import { useParams } from 'react-router-dom';
 
 type MovieProps = {

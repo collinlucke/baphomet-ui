@@ -2,7 +2,7 @@ import {
   Form
   // FormInputLabel,
   // FormTextInput
-} from '@crazy-overlord/phantomartist';
+} from '@collinlucke/phantomartist';
 
 type MovieEditorFormProps = {
   movieData: {
