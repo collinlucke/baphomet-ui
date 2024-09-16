@@ -1,22 +1,11 @@
-import { NavLink } from 'react-router-dom';
-import { Header, InnerWidth } from '@collinlucke/phantomartist';
-import * as stylex from '@stylexjs/stylex';
+import { Header, PANavLink } from '@collinlucke/phantomartist';
 
-// TODO: Replace with PhantomArtist
 export const Heading: React.FC = () => {
   return (
-    <Header className={baphStyles.header}>
-      <InnerWidth>
-        <NavLink to="/">
-          <h1>Baphomet</h1>
-        </NavLink>
-      </InnerWidth>
+    <Header useInnerWidth isHeading>
+      <PANavLink to="/">
+        <h1>Baphomet</h1>
+      </PANavLink>
     </Header>
   );
 };
-
-const baphStyles = stylex.create({
-  header: {
-    padding: '30px 0'
-  }
-});

@@ -6,26 +6,22 @@ import { Block, InnerWidth } from '@collinlucke/phantomartist';
 import { useParams } from 'react-router-dom';
 
 type MovieProps = {
-  getMovie: {
-    id: string;
-    title?: string;
-    year?: number;
-    rated?: string;
-    poster?: string;
-  };
+  id: string;
+  title?: string;
+  year?: number;
+  rated?: string;
+  poster?: string;
 };
 
 export const EditMoviePage = () => {
   const { id } = useParams();
 
-  const [movieData, setMovieData] = useState<MovieProps>({
-    getMovie: {
-      id: '',
-      poster: undefined,
-      rated: undefined,
-      title: undefined,
-      year: undefined
-    }
+  const [movie, setMovie] = useState<MovieProps>({
+    id: '',
+    poster: undefined,
+    rated: undefined,
+    title: undefined,
+    year: undefined
   });
 
   useQuery(GET_MOVIE, {
@@ -33,16 +29,23 @@ export const EditMoviePage = () => {
       id
     },
     onCompleted: data => {
-      console.log(data);
-      setMovieData(data);
+      const { movie } = data;
+      setMovie(movie);
     }
   });
+
+  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.target;
+    const { name, value } = target;
+    const newMovie = { ...movie, [name]: value };
+    setMovie(newMovie);
+  };
 
   return (
     <>
       <Block>
         <InnerWidth>
-          <MovieEditorForm movieData={movieData} />
+          <MovieEditorForm movie={movie} onChange={onChangeHandler} />
         </InnerWidth>
       </Block>
     </>
