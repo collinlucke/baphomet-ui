@@ -12,12 +12,11 @@ type Movie = {
 };
 
 type MovieData = {
-  getAllMovies: Movie[];
+  allMovies: Movie[];
 };
 
 export const MovieListPage = () => {
-  const [movieData, setMovieData] = useState<MovieData>({ getAllMovies: [] });
-
+  const [movieData, setMovieData] = useState<MovieData>({ allMovies: [] });
   const {} = useQuery(GET_ALL_MOVIES, {
     variables: {
       limit: 50 // TODO: Hard coded until I get around to making a thingy to put put in a custom value

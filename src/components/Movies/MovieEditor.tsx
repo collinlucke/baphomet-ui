@@ -32,13 +32,12 @@ export const MovieEditor: React.FC = () => {
       poster: ''
     }
   });
-  console.log(form, location, useMutation, useEffect);
 
   const {} = useQuery(GET_MOVIE, {
     variables: { id: params.id },
     skip: !params.id,
     onCompleted: (data: MovieDataProps) => {
-      console.log(data);
+      // console.log(data);
       const { id, title, year, rated, poster } = data.getMovie;
       setForm({ getMovie: { id, title, year, rated, poster } });
     }

@@ -11,14 +11,15 @@ type Movie = {
 
 type MovieData = {
   movieData: {
-    getAllMovies: Movie[];
+    allMovies: Movie[];
   };
 };
 
 export const MovieList: React.FC<MovieData> = ({ movieData }) => {
+  // console.log(movieData);
   return (
     <List>
-      {movieData.getAllMovies.map(mov => (
+      {movieData.allMovies.map(mov => (
         <MovieListItem mov={mov} key={mov.id} />
       ))}
     </List>
