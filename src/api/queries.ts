@@ -20,6 +20,7 @@ export const GET_MOVIE = gql`
       year
       rated
       id
+      fullplot
     }
   }
 `;

@@ -1,5 +1,4 @@
-import { NavLink } from 'react-router-dom';
-import { ListItem } from '@collinlucke/phantomartist';
+import { ListItem, PANavLink } from '@collinlucke/phantomartist';
 import * as stylex from '@stylexjs/stylex';
 
 type MovieType = {
@@ -14,27 +13,24 @@ export const MovieListItem = ({ mov }: { mov: MovieType }) => {
   const { id, year, title } = mov;
 
   return (
-    <ListItem>
-      <NavLink to={`/edit/${id}`}>
+    <ListItem useHover>
+      <PANavLink to={`/edit/${id}`}>
         <div id={id} {...stylex.props(baphStyles.wrapper)}>
           <span {...stylex.props(baphStyles.title)}>{title}</span>
-          <span {...stylex.props(baphStyles.year)}>Year Released: {year} </span>
+          <span>{year} </span>
         </div>
-      </NavLink>
+      </PANavLink>
     </ListItem>
   );
 };
 
 const baphStyles = stylex.create({
   title: {
-    width: '300px',
+    width: '350px',
     WebkitBoxOrient: 'vertical',
     display: '-webkit-inline-box',
     overflow: 'hidden',
     WebkitLineClamp: '1'
-  },
-  year: {
-    paddingRight: '40px'
   },
   wrapper: {
     display: 'flex',

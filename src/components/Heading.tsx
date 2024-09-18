@@ -1,11 +1,13 @@
-import { Header, PANavLink } from '@collinlucke/phantomartist';
+import { PANavLink, HeaderMain } from '@collinlucke/phantomartist';
 
 export const Heading: React.FC = () => {
+  const leftContent = <h1>Baphomet</h1>;
+  const rightContent = (
+    <PANavLink style="primaryButton" to="/create">
+      Add new movie
+    </PANavLink>
+  );
   return (
-    <Header useInnerWidth isHeading>
-      <PANavLink to="/">
-        <h1>Baphomet</h1>
-      </PANavLink>
-    </Header>
+    <HeaderMain homeLinkContent={leftContent} rightContent={rightContent} />
   );
 };
