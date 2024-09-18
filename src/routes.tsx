@@ -22,17 +22,17 @@ const routes = [
         element: <EditMoviePage />
       }
     ]
+  },
+  {
+    path: '/create',
+    element: <App />,
+    children: [
+      {
+        path: '/create',
+        element: <EditMoviePage clean />
+      }
+    ]
   }
-  // {
-  //   path: '/create',
-  //   element: <App />,
-  //   children: [
-  //     {
-  //       path: '/create',
-  //       element: <MovieEditor />
-  //     }
-  //   ]
-  // }
 ];
 
 export default routes;
