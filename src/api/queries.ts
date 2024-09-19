@@ -1,8 +1,9 @@
 import { gql } from '@apollo/client';
 
 export const GET_ALL_MOVIES = gql`
-  query getAllMovies($limit: Int) {
-    allMovies: getAllMovies(limit: $limit) {
+  query getAllMovies($limit: Int, $searchTerm: String) {
+    allMovies: getAllMovies(limit: $limit, searchTerm: $searchTerm) {
+      fullplot
       poster
       title
       year
