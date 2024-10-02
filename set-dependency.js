@@ -1,5 +1,5 @@
 import fs from 'fs';
-import packageJson from './package.json' assert { type: 'json' };
+import packageJson from './package.json' with { type: 'json' };
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
