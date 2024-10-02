@@ -1,18 +1,36 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
-import { RouterProvider, createHashRouter } from 'react-router-dom';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  createHttpLink
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import routes from './routes';
 
 const baseURL =
-  import.meta.env.NODE_ENV === 'development'
+  import.meta.env.VITE_NODE_ENV === 'development'
     ? import.meta.env.VITE_DEV_URI
     : import.meta.env.VITE_PROD_URI;
 
-const router = createHashRouter(routes);
+const router = createBrowserRouter(routes);
+const httpLink = createHttpLink({
+  uri: `${baseURL}/graphql/`
+});
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('token');
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : ''
+    }
+  };
+});
 
 const client = new ApolloClient({
-  uri: `${baseURL}/graphql/`,
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache()
 });
 

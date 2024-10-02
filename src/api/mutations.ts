@@ -50,3 +50,11 @@ export const UPDATE_MOVIE = gql`
     }
   }
 `;
+
+export const LOGIN = gql`
+  mutation login($email: String, $password: String) {
+    login(email: $email, password: $password) {
+      token
+    }
+  }
+`;

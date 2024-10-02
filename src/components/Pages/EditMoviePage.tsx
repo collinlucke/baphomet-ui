@@ -55,9 +55,6 @@ export const EditMoviePage: React.FC<EditMoviePage> = ({ clean }) => {
       rated: movie.rated,
       poster: movie.poster,
       fullplot: movie.fullplot
-    },
-    onCompleted: data => {
-      console.log(data);
     }
   });
 
