@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.11.8",
-    "@collinlucke/phantomartist": "link:../phantomartist",
+    "@collinlucke/phantomartist": "file:../phantomartist",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@stylexjs/dev-runtime": "^0.7.5",
