@@ -6,7 +6,7 @@ export const GET_ALL_MOVIES = gql`
       fullplot
       poster
       title
-      year
+      releaseDate
       rated
       id
     }
@@ -18,7 +18,7 @@ export const GET_MOVIE = gql`
     movie: getMovie(id: $id) {
       poster
       title
-      year
+      releaseDate
       rated
       id
       fullplot

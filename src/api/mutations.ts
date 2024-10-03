@@ -6,17 +6,17 @@ export const ADD_MOVIE = gql`
   mutation addMovie(
     $title: String!
     $rated: String
-    $year: Int
+    $releaseDate: String
     $fullplot: String
   ) {
     newMovie: addMovie(
       title: $title
       rated: $rated
-      year: $year
+      releaseDate: $releaseDate
       fullplot: $fullplot
     ) {
       title
-      year
+      releaseDate
       rated
       id
       fullplot
@@ -29,7 +29,7 @@ export const UPDATE_MOVIE = gql`
     $id: ID!
     $title: String!
     $rated: String
-    $year: Int
+    $releaseDate: String
     $poster: String
     $fullplot: String
   ) {
@@ -37,12 +37,12 @@ export const UPDATE_MOVIE = gql`
       id: $id
       title: $title
       rated: $rated
-      year: $year
+      releaseDate: $releaseDate
       poster: $poster
       fullplot: $fullplot
     ) {
       title
-      year
+      releaseDate
       rated
       id
       poster

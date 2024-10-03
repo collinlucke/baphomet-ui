@@ -8,17 +8,19 @@ import {
   Button
 } from '@collinlucke/phantomartist';
 import * as stylex from '@stylexjs/stylex';
+import { useNavigate } from 'react-router-dom';
 
 type MovieEditorFormProps = {
   movie: {
     id: string;
     poster?: string;
-    year?: number;
+    releaseDate?: string;
     rated?: string;
     title?: string;
     fullplot?: string;
   };
   clean?: boolean;
+  readonly?: boolean;
 
   onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -29,8 +31,10 @@ export const MovieEditorForm: React.FC<MovieEditorFormProps> = ({
   onSubmit,
   onChange,
   onChangeTextArea,
-  movie
+  movie,
+  readonly
 }) => {
+  const navigate = useNavigate();
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     onSubmit?.(e);
   };
@@ -45,23 +49,36 @@ export const MovieEditorForm: React.FC<MovieEditorFormProps> = ({
     onChangeTextArea?.(e);
   };
 
+  const cancelHandler = () => {
+    navigate(`/view/${movie.id}`);
+  };
+
+  const navToEdit = () => {
+    navigate(`/edit/${movie.id}`);
+  };
+
   const leftContent = (
     <>
-      <FormTextInput
-        label="Title"
-        labelPos="above"
-        name="title"
-        value={movie.title}
-        onChange={onChangeHandlerText}
-      />
+      {!readonly && (
+        <FormTextInput
+          readonly={readonly}
+          label="Title"
+          labelPos="above"
+          name="title"
+          value={movie.title}
+          onChange={onChangeHandlerText}
+        />
+      )}
       <FormInputLabel label="Poster" position="above" name="poster" />
       {movie.poster && (
         <img src={movie.poster} {...stylex.props(baphStyles.img)} />
       )}
-      <FormTextInput
+      <FormTextArea
+        readonly={readonly}
         name="poster"
         value={movie.poster}
-        onChange={onChangeHandlerText}
+        onChange={onChangeHandlerTextArea}
+        autoResize
       />
     </>
   );
@@ -69,34 +86,54 @@ export const MovieEditorForm: React.FC<MovieEditorFormProps> = ({
   const rightContent = (
     <>
       <FormTextArea
+        readonly={readonly}
         label="Plot"
         labelPos="above"
         name="fullplot"
         value={movie.fullplot}
         onChange={onChangeHandlerTextArea}
+        autoResize
       />
       <FormTextInput
+        readonly={readonly}
         label="Rated"
         labelPos="above"
         name="rated"
         value={movie.rated}
         onChange={onChangeHandlerText}
       />
+      {/* Need to figure out how to edit dates */}
       <FormTextInput
-        label="Year"
+        type="date"
+        readonly={readonly}
+        label="Release Date"
         labelPos="above"
-        name="year"
-        value={movie.year}
+        name="releaseDate"
+        value={movie.releaseDate}
         onChange={onChangeHandlerText}
       />
-      <Button type="submit">Save</Button>
+      {!readonly && (
+        <>
+          <Button type="submit" kind="primary">
+            Save
+          </Button>
+          <Button onClick={cancelHandler} kind="secondary">
+            Cancel
+          </Button>
+        </>
+      )}
     </>
   );
 
   return (
     <Form onSubmit={onSubmitHandler}>
-      <Header>
-        <h1>{movie.title || '-Add title-'}</h1>
+      <Header className={{ header: baphStyles.header }}>
+        <>
+          <h1 {...stylex.props(baphStyles.h1)}>
+            {movie.title || '-Add title-'}
+          </h1>
+          {readonly && <Button onClick={navToEdit}>Edit Movie</Button>}
+        </>
       </Header>
       <TwoColumn left={leftContent} right={rightContent} />
     </Form>
@@ -105,7 +142,14 @@ export const MovieEditorForm: React.FC<MovieEditorFormProps> = ({
 
 // TODO: Create Image Component
 const baphStyles = stylex.create({
+  h1: {
+    maxWidth: '80%'
+  },
   img: {
     marginBottom: '10px'
+  },
+  header: {
+    justifyContent: 'space-between',
+    alignItems: 'end'
   }
 });
