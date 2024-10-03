@@ -16,6 +16,16 @@ const routes = [
     ]
   },
   {
+    path: '/view/:id',
+    element: <App />,
+    children: [
+      {
+        path: '/view/:id',
+        element: <EditMoviePage readonly />
+      }
+    ]
+  },
+  {
     path: '/edit/:id',
     element: <App />,
     children: [

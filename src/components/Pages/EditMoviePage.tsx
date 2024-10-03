@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 type MovieProps = {
   id?: string;
   title?: string;
-  year?: number;
+  releaseDate?: string;
   rated?: string;
   poster?: string;
   fullplot?: string;
@@ -17,6 +17,7 @@ type MovieProps = {
 
 type EditMoviePage = MovieProps & {
   clean?: boolean;
+  readonly?: boolean;
 };
 
 const cleanForm = {
@@ -24,11 +25,11 @@ const cleanForm = {
   poster: undefined,
   rated: undefined,
   title: undefined,
-  year: undefined,
+  releaseDate: undefined,
   fullplot: ''
 };
 
-export const EditMoviePage: React.FC<EditMoviePage> = ({ clean }) => {
+export const EditMoviePage: React.FC<EditMoviePage> = ({ clean, readonly }) => {
   const { id } = useParams();
 
   const [movie, setMovie] = useState(cleanForm);
@@ -51,7 +52,7 @@ export const EditMoviePage: React.FC<EditMoviePage> = ({ clean }) => {
   const [addMovie] = useMutation(ADD_MOVIE, {
     variables: {
       title: movie.title,
-      year: Number(movie.year),
+      releaseDate: movie.releaseDate,
       rated: movie.rated,
       poster: movie.poster,
       fullplot: movie.fullplot
@@ -62,7 +63,7 @@ export const EditMoviePage: React.FC<EditMoviePage> = ({ clean }) => {
     variables: {
       id: movie.id,
       title: movie.title,
-      year: Number(movie.year),
+      releaseDate: movie.releaseDate,
       rated: movie.rated,
       poster: movie.poster,
       fullplot: movie.fullplot
@@ -104,6 +105,7 @@ export const EditMoviePage: React.FC<EditMoviePage> = ({ clean }) => {
       <Block>
         <InnerWidth>
           <MovieEditorForm
+            readonly={readonly}
             clean={clean}
             movie={movie}
             onChange={onChangeHandler}

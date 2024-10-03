@@ -4,20 +4,20 @@ import * as stylex from '@stylexjs/stylex';
 type MovieType = {
   id: string;
   poster?: string;
-  year?: number;
+  releaseDate?: string;
   rated?: string;
   title?: string;
 };
 
 export const MovieListItem = ({ mov }: { mov: MovieType }) => {
-  const { id, year, title } = mov;
+  const { id, releaseDate, title } = mov;
 
   return (
     <ListItem useHover>
-      <PANavLink to={`/edit/${id}`}>
+      <PANavLink to={`/view/${id}`}>
         <div id={id} {...stylex.props(baphStyles.wrapper)}>
           <span {...stylex.props(baphStyles.title)}>{title}</span>
-          <span>{year} </span>
+          <span>{releaseDate}</span>
         </div>
       </PANavLink>
     </ListItem>

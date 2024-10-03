@@ -6,7 +6,7 @@ import * as stylex from '@stylexjs/stylex';
 type Movie = {
   id: string;
   title?: string;
-  year?: number;
+  releaseDate?: string;
   rated?: string;
   poster?: string;
 };

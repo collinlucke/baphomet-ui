@@ -7,7 +7,7 @@ import { Block, InnerWidth } from '@collinlucke/phantomartist';
 type Movie = {
   id: string;
   title?: string;
-  year?: number;
+  releaseDate?: string;
   rated?: string;
 };
 
