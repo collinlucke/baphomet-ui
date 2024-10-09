@@ -1,7 +1,7 @@
+/** @jsxImportSource @emotion/react */
 import { List, Search } from '@collinlucke/phantomartist';
 import { MovieListItem } from './MovieListItem';
 import { ChangeEvent, FormEventHandler } from 'react';
-import * as stylex from '@stylexjs/stylex';
 
 type Movie = {
   id: string;
@@ -48,7 +48,7 @@ export const MovieList: React.FC<MovieData> = ({
       {movieData.allMovies.length ? (
         movieData.allMovies.map(mov => <MovieListItem mov={mov} key={mov.id} />)
       ) : (
-        <div {...stylex.props(baphStyles.noResults)}>
+        <div css={[baphStyles.noResults]}>
           <h2>No Movies Match Your Search</h2>
           <div>Maybe you should go make one...</div>
         </div>
@@ -57,12 +57,12 @@ export const MovieList: React.FC<MovieData> = ({
   );
 };
 
-const baphStyles = stylex.create({
+const baphStyles = {
   noResults: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'column' as 'column',
     alignItems: 'center',
     marginBottom: '30px',
     marginTop: '30px'
   }
-});
+};

@@ -1,5 +1,5 @@
+/** @jsxImportSource @emotion/react */
 import {
-  Header,
   Form,
   FormTextInput,
   TwoColumn,
@@ -7,7 +7,6 @@ import {
   FormTextArea,
   Button
 } from '@collinlucke/phantomartist';
-import * as stylex from '@stylexjs/stylex';
 import { useNavigate } from 'react-router-dom';
 
 type MovieEditorFormProps = {
@@ -70,9 +69,7 @@ export const MovieEditorForm: React.FC<MovieEditorFormProps> = ({
         />
       )}
       <FormInputLabel label="Poster" position="above" name="poster" />
-      {movie.poster && (
-        <img src={movie.poster} {...stylex.props(baphStyles.img)} />
-      )}
+      {movie.poster && <img src={movie.poster} css={[baphStyles.img]} />}
       <FormTextArea
         readonly={readonly}
         name="poster"
@@ -127,29 +124,22 @@ export const MovieEditorForm: React.FC<MovieEditorFormProps> = ({
 
   return (
     <Form onSubmit={onSubmitHandler}>
-      <Header className={{ header: baphStyles.header }}>
-        <>
-          <h1 {...stylex.props(baphStyles.h1)}>
-            {movie.title || '-Add title-'}
-          </h1>
-          {readonly && <Button onClick={navToEdit}>Edit Movie</Button>}
-        </>
-      </Header>
+      <>
+        <h1 css={[baphStyles.h1]}>{movie.title || '-Add title-'}</h1>
+        {readonly && <Button onClick={navToEdit}>Edit Movie</Button>}
+      </>
       <TwoColumn left={leftContent} right={rightContent} />
     </Form>
   );
 };
 
 // TODO: Create Image Component
-const baphStyles = stylex.create({
+const baphStyles = {
   h1: {
-    maxWidth: '80%'
+    maxWidth: '80%',
+    justifySelf: 'start'
   },
   img: {
     marginBottom: '10px'
-  },
-  header: {
-    justifyContent: 'space-between',
-    alignItems: 'end'
   }
-});
+};
