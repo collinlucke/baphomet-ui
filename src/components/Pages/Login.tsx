@@ -1,12 +1,12 @@
+/** @jsxImportSource @emotion/react */
 import { FormEvent, useState } from 'react';
 import { FormTextInput, Button, Form } from '@collinlucke/phantomartist';
 import { LOGIN } from '../../api/mutations';
-import * as stylex from '@stylexjs/stylex';
-import { colors } from '../../styling/tokens.stylex';
+import { colors } from '../../styling/baphTheme';
 import { useMutation } from '@apollo/client';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-export const Login = () => {
+export const Login: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [userInput, setUserInput] = useState({ email: '', password: '' });
@@ -34,11 +34,8 @@ export const Login = () => {
   };
 
   return (
-    <div {...stylex.props(baphStyles.modal)}>
-      <Form
-        className={{ formWrapper: baphStyles.formWrapper }}
-        onSubmit={loginHandler}
-      >
+    <div css={[baphStyles.modal]}>
+      <Form className={baphStyles} onSubmit={loginHandler}>
         <div>Need you to login real quick. thnx!</div>
         <FormTextInput
           label="Email"
@@ -63,9 +60,9 @@ export const Login = () => {
   );
 };
 
-const baphStyles = stylex.create({
+const baphStyles = {
   modal: {
-    position: 'absolute',
+    position: 'absolute' as 'absolute',
     width: '100%',
     height: '100%',
     top: 0,
@@ -74,10 +71,10 @@ const baphStyles = stylex.create({
     justifyContent: 'center',
     alignItems: 'center',
     background: `color-mix(in srgb, ${colors.tertiary} 30%, white)`,
-    flexDirection: 'column'
+    flexDirection: 'column' as 'column'
   },
   formWrapper: {
-    position: 'absolute',
+    position: 'absolute' as 'absolute',
     margin: '10%'
   }
-});
+};

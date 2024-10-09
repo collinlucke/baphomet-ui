@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { RouterProvider, createHashRouter } from 'react-router-dom';
 import {
   ApolloClient,
   InMemoryCache,
@@ -15,7 +15,7 @@ const baseURL =
     ? import.meta.env.VITE_DEV_URI
     : import.meta.env.VITE_PROD_URI;
 
-const router = createBrowserRouter(routes);
+const router = createHashRouter(routes);
 const httpLink = createHttpLink({
   uri: `${baseURL}/graphql/`
 });

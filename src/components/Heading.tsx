@@ -1,4 +1,5 @@
-import { HeaderMain, Button } from '@collinlucke/phantomartist';
+import { Header, Button, InnerWidth, Block } from '@collinlucke/phantomartist';
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 export const Heading: React.FC = () => {
@@ -7,9 +8,16 @@ export const Heading: React.FC = () => {
     navigate('/create');
   };
 
-  const leftContent = <h1>Baphomet</h1>;
+  const appTitle = <h1>Baphomet</h1>;
   const rightContent = <Button onClick={navToCreate}>Add new movie</Button>;
   return (
-    <HeaderMain homeLinkContent={leftContent} rightContent={rightContent} />
+    <Header>
+      <Block>
+        <InnerWidth>
+          <Link to="/">{appTitle}</Link>
+          <div>{rightContent}</div>
+        </InnerWidth>
+      </Block>
+    </Header>
   );
 };

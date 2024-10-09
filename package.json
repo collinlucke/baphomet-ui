@@ -1,9 +1,11 @@
 {
   "name": "baphomet-ui",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "preinstall": "node set-dependency.js",
+    "postinstall": "node link-package.js",
     "dev": "NODE_ENV=development && vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
@@ -11,7 +13,8 @@
   },
   "dependencies": {
     "@apollo/client": "^3.11.8",
-    "@collinlucke/phantomartist": "file:../phantomartist",
+    "@collinlucke/phantomartist": "latest",
+    "@emotion/babel-plugin": "^11.12.0",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@stylexjs/dev-runtime": "^0.7.5",

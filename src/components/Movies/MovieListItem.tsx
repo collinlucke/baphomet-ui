@@ -1,4 +1,4 @@
-import { ListItem, PANavLink } from '@collinlucke/phantomartist';
+import { ListItem } from '@collinlucke/phantomartist';
 import * as stylex from '@stylexjs/stylex';
 
 type MovieType = {
@@ -14,12 +14,10 @@ export const MovieListItem = ({ mov }: { mov: MovieType }) => {
 
   return (
     <ListItem useHover>
-      <PANavLink to={`/view/${id}`}>
-        <div id={id} {...stylex.props(baphStyles.wrapper)}>
-          <span {...stylex.props(baphStyles.title)}>{title}</span>
-          <span>{releaseDate}</span>
-        </div>
-      </PANavLink>
+      <div id={id} {...stylex.props(baphStyles.wrapper)}>
+        <span {...stylex.props(baphStyles.title)}>{title}</span>
+        <span>{releaseDate}</span>
+      </div>
     </ListItem>
   );
 };
