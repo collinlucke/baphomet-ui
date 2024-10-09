@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.1.1] - 2024-10-09
+
+### Added
+
+- #### N/A
+
+### Changed
+
+- Updated `cicd.yml` to store `GIT_REGISTRY_TOKEN` from `secrets`
+
+### Removed
+
+- #### N/A
+
+### Fixed
+
+- #### N/A
+
+<br/>
+
 ## [0.1.0] - 2024-10-09
 
 ### Added
@@ -24,3 +44,5 @@
 - Stylex - Juice wasn't worth the squeeze
 
 ### Fixed
+
+- #### N/A
