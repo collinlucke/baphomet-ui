@@ -11,6 +11,7 @@ ENV SERVER_BASE_URL=$VITE_SERVER_BASE_URL
 # Biuld App
 WORKDIR /app
 COPY package.json .
+COPY .npmrc .npmrc
 RUN npm install
 COPY . .
 RUN npm run build
