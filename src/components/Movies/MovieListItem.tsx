@@ -1,5 +1,5 @@
+/** @jsxImportSource @emotion/react */
 import { ListItem } from '@collinlucke/phantomartist';
-import * as stylex from '@stylexjs/stylex';
 
 type MovieType = {
   id: string;
@@ -9,23 +9,27 @@ type MovieType = {
   title?: string;
 };
 
-export const MovieListItem = ({ mov }: { mov: MovieType }) => {
+export const MovieListItem: React.FC<{ mov: MovieType }> = ({
+  mov
+}: {
+  mov: MovieType;
+}) => {
   const { id, releaseDate, title } = mov;
 
   return (
     <ListItem useHover>
-      <div id={id} {...stylex.props(baphStyles.wrapper)}>
-        <span {...stylex.props(baphStyles.title)}>{title}</span>
+      <div id={id} css={[baphStyles.wrapper]}>
+        <span css={[baphStyles.title]}>{title}</span>
         <span>{releaseDate}</span>
       </div>
     </ListItem>
   );
 };
 
-const baphStyles = stylex.create({
+const baphStyles = {
   title: {
     width: '350px',
-    WebkitBoxOrient: 'vertical',
+    WebkitBoxOrient: 'vertical' as 'vertical',
     display: '-webkit-inline-box',
     overflow: 'hidden',
     WebkitLineClamp: '1'
@@ -34,4 +38,4 @@ const baphStyles = stylex.create({
     display: 'flex',
     justifyContent: 'space-between'
   }
-});
+};
