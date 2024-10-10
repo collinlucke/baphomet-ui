@@ -15,6 +15,7 @@ dist-ssr
 .npmrc
 unused-*
 viteStaticCopyDump
+set-pnpmrc.sh
 
 # Editor directories and files
 .vscode/*
