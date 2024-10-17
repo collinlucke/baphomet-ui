@@ -1,8 +1,10 @@
 import App from './App.tsx';
 import { Login } from './components/Pages/Login.tsx';
+import { WelcomePage } from './components/Pages/WelcomePage.tsx';
 import { EditMoviePage } from './components/Pages/EditMoviePage.tsx';
 import { MovieListPage } from './components/Pages/MovieListPage.tsx';
 import { ProtectedRoute } from './components/ProtectedRoute.tsx';
+import { ArenaPage } from './components/Pages/ArenaPage.tsx';
 
 const routes = [
   {
@@ -11,6 +13,16 @@ const routes = [
     children: [
       {
         path: '/',
+        element: <WelcomePage />
+      }
+    ]
+  },
+  {
+    path: '/movielist',
+    element: <App />,
+    children: [
+      {
+        path: '/movielist',
         element: <MovieListPage />
       }
     ]
@@ -54,6 +66,16 @@ const routes = [
       {
         path: '/login',
         element: <Login />
+      }
+    ]
+  },
+  {
+    path: '/arena',
+    element: <App />,
+    children: [
+      {
+        path: '/arena',
+        element: <ProtectedRoute element={ArenaPage} />
       }
     ]
   }

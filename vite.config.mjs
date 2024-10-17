@@ -6,7 +6,7 @@ import del from 'rollup-plugin-delete';
 export default defineConfig(async ({ mode }) => {
   // Let's you use env.<whatever>
   const env = loadEnv(mode, process.cwd(), '');
-  console.log(env.NODE_ENV);
+
   const copyPath = env.NODE_ENV === 'production' && env.COPY_TO_PROD_PATH;
 
   return {

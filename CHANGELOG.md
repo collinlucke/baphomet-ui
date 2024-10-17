@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.1.2] - 2024-10-09
+
+### Added
+
+- Added `Welcome` page
+- Created Theme Provider that can pass styles to PhantomArtist
+- Add mysterious `Arena` page
+
+### Changed
+
+- Updated routing/navigation to accommodate the new `Welcome` page
+
+### Removed
+
+- Removed unused `AddMovie` component
+
+### Fixed
+
+- #### N/A
+
+<br/>
+
 ## [0.1.1] - 2024-10-09
 
 ### Added

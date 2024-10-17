@@ -4,7 +4,7 @@ import { GET_MOVIE } from '../../api/queries';
 import { UPDATE_MOVIE, ADD_MOVIE } from '../../api/mutations';
 import { MovieEditorForm } from '../MovieEditor/MovieEditorForm';
 import { Block, InnerWidth } from '@collinlucke/phantomartist';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 type MovieProps = {
   id?: string;
@@ -30,6 +30,7 @@ const cleanForm = {
 };
 
 export const EditMoviePage: React.FC<EditMoviePage> = ({ clean, readonly }) => {
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const [movie, setMovie] = useState(cleanForm);
@@ -56,6 +57,10 @@ export const EditMoviePage: React.FC<EditMoviePage> = ({ clean, readonly }) => {
       rated: movie.rated,
       poster: movie.poster,
       fullplot: movie.fullplot
+    },
+    onCompleted: data => {
+      console.log(data);
+      navigate(`/view/${data.newMovie.id}`);
     }
   });
 
@@ -89,9 +94,10 @@ export const EditMoviePage: React.FC<EditMoviePage> = ({ clean, readonly }) => {
   };
 
   const onSubmitHandler = () => {
-    const { pathname } = location;
-    const matchResult = pathname?.match(/\/[a-zA-Z0-9]+/);
+    const { hash } = location;
+    const matchResult = hash?.match(/\/[a-zA-Z0-9]+/);
     const endPoint = matchResult?.[0];
+    console.log(movie);
 
     if (endPoint === '/create') {
       addMovie();
