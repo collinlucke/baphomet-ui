@@ -24,13 +24,14 @@ export const MovieListPage = () => {
   const [movieData, setMovieData] = useState<MovieData>({ allMovies: [] });
 
   const [preventQuery, setPreventQuery] = useState(false);
+  const [useSearchButton] = useState(false);
 
   const {} = useQuery(GET_ALL_MOVIES, {
     variables: {
       limit: 100, // TODO: Hard coded until I get around to making a thingy to put put in a custom value
       searchTerm
     },
-    skip: preventQuery,
+    skip: useSearchButton && preventQuery,
     onCompleted: data => {
       setMovieData(data);
       setPreventQuery(true);
@@ -51,14 +52,22 @@ export const MovieListPage = () => {
     <>
       <Block>
         <InnerWidth>
+          <h2 css={baphStyles.h2}>Here's a List of Movies</h2>
           <MovieList
             movieData={movieData}
             onSearch={searchMoviesHandler}
             searchTerm={searchTerm}
             setSearchTerm={setSearchTermHandler}
+            useSearchButton={useSearchButton}
           />
         </InnerWidth>
       </Block>
     </>
   );
+};
+
+const baphStyles = {
+  h2: {
+    marginBottom: '20px'
+  }
 };

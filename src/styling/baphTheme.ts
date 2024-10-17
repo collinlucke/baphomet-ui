@@ -1,7 +1,20 @@
-export const colors = {
-  primary: '#800020',
-  secondary: '#343434',
-  tertiary: '#808000',
-  lightText: '#F4F0EC',
-  darkText: '#010B13'
+export const baphTheme = {
+  colors: {
+    primary: '#822B2A',
+    secondary: '#9A8447',
+    tertiary: '#89827B',
+    quaternary: '#012c35',
+    lightText: '#E2D6C6',
+    darkText: '#040A0C'
+  }
+  // buttons: ({ kind }: { kind: string }) => {
+  //   return {
+  // backgroundColor:
+  //   (kind === 'primary' &&
+  //     `color-mix(in srgb, ${baphTheme.colors.secondary} 85%, white)`) ||
+  //   (kind === 'secondary' &&
+  //     `color-mix(in srgb, ${baphTheme.colors.primary} 75%, black)`) ||
+  //   undefined
+  // };
+  // }
 };

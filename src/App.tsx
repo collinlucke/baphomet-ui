@@ -4,9 +4,11 @@ import { Main } from '@collinlucke/phantomartist';
 import './styling/index.css';
 
 function App() {
+  const isWelcomePage = location.hash === '';
+
   return (
     <div>
-      <Heading />
+      {!isWelcomePage && <Heading />}
       <Main>
         <Outlet />
       </Main>

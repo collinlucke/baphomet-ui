@@ -3,9 +3,11 @@ import {
   Form,
   FormTextInput,
   TwoColumn,
-  FormInputLabel,
+  ButtonGroup,
   FormTextArea,
-  Button
+  Button,
+  Header,
+  Image
 } from '@collinlucke/phantomartist';
 import { useNavigate } from 'react-router-dom';
 
@@ -49,7 +51,11 @@ export const MovieEditorForm: React.FC<MovieEditorFormProps> = ({
   };
 
   const cancelHandler = () => {
-    navigate(`/view/${movie.id}`);
+    if (movie.id) {
+      navigate(`/view/${movie.id}`);
+    } else {
+      navigate('/movielist');
+    }
   };
 
   const navToEdit = () => {
@@ -68,18 +74,22 @@ export const MovieEditorForm: React.FC<MovieEditorFormProps> = ({
           onChange={onChangeHandlerText}
         />
       )}
-      <FormInputLabel label="Poster" position="above" name="poster" />
-      {movie.poster && <img src={movie.poster} css={[baphStyles.img]} />}
-      <FormTextArea
-        readonly={readonly}
-        name="poster"
-        value={movie.poster}
-        onChange={onChangeHandlerTextArea}
-        autoResize
-      />
+      {movie.poster && (
+        <Image src={movie.poster} className={{ img: baphStyles.img }} />
+      )}
+      {!readonly && (
+        <FormTextArea
+          readonly={readonly}
+          name="poster"
+          value={movie.poster || ''}
+          onChange={onChangeHandlerTextArea}
+          autoResize
+          label="Poster URL"
+          labelPos="above"
+        />
+      )}
     </>
   );
-
   const rightContent = (
     <>
       <FormTextArea
@@ -110,36 +120,43 @@ export const MovieEditorForm: React.FC<MovieEditorFormProps> = ({
         onChange={onChangeHandlerText}
       />
       {!readonly && (
-        <>
+        <ButtonGroup>
           <Button type="submit" kind="primary">
             Save
           </Button>
           <Button onClick={cancelHandler} kind="secondary">
             Cancel
           </Button>
-        </>
+        </ButtonGroup>
       )}
     </>
   );
 
   return (
     <Form onSubmit={onSubmitHandler}>
-      <>
-        <h1 css={[baphStyles.h1]}>{movie.title || '-Add title-'}</h1>
-        {readonly && <Button onClick={navToEdit}>Edit Movie</Button>}
-      </>
+      <Header propStyles={baphStyles.header}>
+        <>
+          <h1 css={[baphStyles.h1]}>{movie.title || '-Add title-'}</h1>
+          {readonly && <Button onClick={navToEdit}>Edit Movie</Button>}
+        </>
+      </Header>
       <TwoColumn left={leftContent} right={rightContent} />
     </Form>
   );
 };
 
-// TODO: Create Image Component
 const baphStyles = {
+  header: {
+    justifyContent: 'space-between',
+    height: 'auto',
+    alignItems: 'end'
+  },
   h1: {
     maxWidth: '80%',
     justifySelf: 'start'
   },
   img: {
-    marginBottom: '10px'
+    marginBottom: '20px',
+    width: '100%'
   }
 };

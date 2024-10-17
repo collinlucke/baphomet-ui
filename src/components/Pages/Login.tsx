@@ -2,7 +2,6 @@
 import { FormEvent, useState } from 'react';
 import { FormTextInput, Button, Form } from '@collinlucke/phantomartist';
 import { LOGIN } from '../../api/mutations';
-import { colors } from '../../styling/baphTheme';
 import { useMutation } from '@apollo/client';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -13,8 +12,11 @@ export const Login: React.FC = () => {
   const [login] = useMutation(LOGIN, {
     onCompleted: data => {
       if (data.login.token) {
-        const { pathname } = location.state.from;
-        navigate(pathname);
+        localStorage.setItem('token', data.login.token);
+        const navigateTo = location?.state?.from?.pathname
+          ? location.state.from.pathname
+          : '/';
+        navigate(navigateTo);
       }
     }
   });
@@ -35,7 +37,7 @@ export const Login: React.FC = () => {
 
   return (
     <div css={[baphStyles.modal]}>
-      <Form className={baphStyles} onSubmit={loginHandler}>
+      <Form className={{ form: baphStyles.form }} onSubmit={loginHandler}>
         <div>Need you to login real quick. thnx!</div>
         <FormTextInput
           label="Email"
@@ -70,10 +72,9 @@ const baphStyles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    background: `color-mix(in srgb, ${colors.tertiary} 30%, white)`,
     flexDirection: 'column' as 'column'
   },
-  formWrapper: {
+  form: {
     position: 'absolute' as 'absolute',
     margin: '10%'
   }

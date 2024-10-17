@@ -1,7 +1,13 @@
 /** @jsxImportSource @emotion/react */
-import { List, Search } from '@collinlucke/phantomartist';
+import {
+  Button,
+  List,
+  Search,
+  useResizedWidth
+} from '@collinlucke/phantomartist';
 import { MovieListItem } from './MovieListItem';
 import { ChangeEvent, FormEventHandler } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 type Movie = {
   id: string;
@@ -17,6 +23,7 @@ type MovieData = {
   };
   searchTerm?: string;
   resultsCount?: number;
+  useSearchButton?: boolean;
 
   onSearch?: React.FormEventHandler<HTMLFormElement>;
   setSearchTerm?: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -24,16 +31,31 @@ type MovieData = {
 
 export const MovieList: React.FC<MovieData> = ({
   movieData,
-  onSearch,
   searchTerm,
+  useSearchButton,
+  onSearch,
   setSearchTerm
 }) => {
+  const navigate = useNavigate();
+  const width = useResizedWidth();
+
   const onSearchHandler: FormEventHandler<HTMLFormElement> = e => {
     onSearch?.(e);
   };
 
   const setSearchTermHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm?.(e);
+  };
+
+  const navigateToArena = () => {
+    navigate('/arena');
+  };
+
+  const buttonSize = () => {
+    if (width <= 580) {
+      return 'medium';
+    }
+    return 'large';
   };
 
   return (
@@ -44,6 +66,9 @@ export const MovieList: React.FC<MovieData> = ({
         searchLabel="Search Movies"
         setSearchTerm={setSearchTermHandler}
         resultsCount={movieData.allMovies.length}
+        buttonSize={buttonSize()}
+        inputSize={buttonSize()}
+        useSearchButton={useSearchButton}
       />
       {movieData.allMovies.length ? (
         movieData.allMovies.map(mov => <MovieListItem mov={mov} key={mov.id} />)
@@ -53,6 +78,13 @@ export const MovieList: React.FC<MovieData> = ({
           <div>Maybe you should go make one...</div>
         </div>
       )}
+      <Button
+        size={buttonSize()}
+        onClick={navigateToArena}
+        className={baphStyles}
+      >
+        Fight!
+      </Button>
     </List>
   );
 };
@@ -64,5 +96,10 @@ const baphStyles = {
     alignItems: 'center',
     marginBottom: '30px',
     marginTop: '30px'
+  },
+  buttons: {
+    alignSelf: 'end',
+    display: 'flex',
+    flexDirection: 'column' as 'column'
   }
 };

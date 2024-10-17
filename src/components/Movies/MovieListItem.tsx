@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { ListItem } from '@collinlucke/phantomartist';
+import { Link } from 'react-router-dom';
 
 type MovieType = {
   id: string;
@@ -18,17 +19,20 @@ export const MovieListItem: React.FC<{ mov: MovieType }> = ({
 
   return (
     <ListItem useHover>
-      <div id={id} css={[baphStyles.wrapper]}>
-        <span css={[baphStyles.title]}>{title}</span>
-        <span>{releaseDate}</span>
-      </div>
+      <Link to={`/view/${id}`}>
+        <div id={id} css={[baphStyles.wrapper]}>
+          <span css={[baphStyles.title]}>{title}</span>
+          <span css={[baphStyles.releaseDate]}>{releaseDate}</span>
+        </div>
+      </Link>
     </ListItem>
   );
 };
 
 const baphStyles = {
   title: {
-    width: '350px',
+    maxWidth: '350px',
+    minWidth: '200px',
     WebkitBoxOrient: 'vertical' as 'vertical',
     display: '-webkit-inline-box',
     overflow: 'hidden',
@@ -37,5 +41,11 @@ const baphStyles = {
   wrapper: {
     display: 'flex',
     justifyContent: 'space-between'
+  },
+  releaseDate: {
+    marginLeft: '20px',
+    marginRight: '20px',
+    minWidth: '120px',
+    textAlign: 'right' as 'right'
   }
 };

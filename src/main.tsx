@@ -9,6 +9,8 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import routes from './routes';
+import { baphTheme } from './styling/baphTheme';
+import BaphThemeProvider from './styling/BaphThemeProvider';
 
 const baseURL =
   import.meta.env.VITE_NODE_ENV === 'development'
@@ -16,6 +18,7 @@ const baseURL =
     : import.meta.env.VITE_PROD_URI;
 
 const router = createHashRouter(routes);
+
 const httpLink = createHttpLink({
   uri: `${baseURL}/graphql/`
 });
@@ -37,7 +40,9 @@ const client = new ApolloClient({
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <RouterProvider router={router} />
+      <BaphThemeProvider theme={baphTheme}>
+        <RouterProvider router={router} />
+      </BaphThemeProvider>
     </ApolloProvider>
   </React.StrictMode>
 );
