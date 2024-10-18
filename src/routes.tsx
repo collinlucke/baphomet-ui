@@ -1,84 +1,33 @@
 import App from './App.tsx';
-import { Login } from './components/Pages/Login.tsx';
-import { WelcomePage } from './components/Pages/WelcomePage.tsx';
-import { EditMoviePage } from './components/Pages/EditMoviePage.tsx';
-import { MovieListPage } from './components/Pages/MovieListPage.tsx';
-import { ProtectedRoute } from './components/ProtectedRoute.tsx';
-import { ArenaPage } from './components/Pages/ArenaPage.tsx';
+import { Login } from './components/Login/LoginPage.tsx';
+import { WelcomePage } from './components/Welcome/WelcomePage.tsx';
+import { MovieEditorPage } from './components/MovieEditor/MovieEditorPage.tsx';
+import { MovieListPage } from './components/MovieList/MovieListPage.tsx';
+import { ProtectedRoute } from './components/shared/ProtectedRoute.tsx';
+import { ArenaPage } from './components/Arena/ArenaPage.tsx';
 
 const routes = [
   {
     path: '/',
     element: <App />,
     children: [
+      { path: '/', element: <WelcomePage /> },
+      { path: 'movielist', element: <MovieListPage /> },
+      { path: 'view/:id', element: <MovieEditorPage readonly /> },
       {
-        path: '/',
-        element: <WelcomePage />
-      }
-    ]
-  },
-  {
-    path: '/movielist',
-    element: <App />,
-    children: [
+        path: 'edit/:id',
+        element: <ProtectedRoute element={MovieEditorPage} />
+      },
       {
-        path: '/movielist',
-        element: <MovieListPage />
-      }
-    ]
-  },
-  {
-    path: '/view/:id',
-    element: <App />,
-    children: [
-      {
-        path: '/view/:id',
-        element: <EditMoviePage readonly />
-      }
-    ]
-  },
-  {
-    path: '/edit/:id',
-    element: <App />,
-    children: [
-      {
-        path: '/edit/:id',
-        element: <ProtectedRoute element={EditMoviePage} />
-      }
-    ]
-  },
-  {
-    path: '/create',
-    element: <App />,
-    children: [
-      {
-        path: '/create',
+        path: 'create',
         element: (
-          <ProtectedRoute element={EditMoviePage} props={{ clean: true }} />
+          <ProtectedRoute element={MovieEditorPage} props={{ clean: true }} />
         )
-      }
+      },
+      { path: 'arena', element: <ProtectedRoute element={ArenaPage} /> }
     ]
   },
-  {
-    path: '/login',
-    element: <App />,
-    children: [
-      {
-        path: '/login',
-        element: <Login />
-      }
-    ]
-  },
-  {
-    path: '/arena',
-    element: <App />,
-    children: [
-      {
-        path: '/arena',
-        element: <ProtectedRoute element={ArenaPage} />
-      }
-    ]
-  }
+  { path: '/login', element: <Login /> }
 ];
 
 export default routes;

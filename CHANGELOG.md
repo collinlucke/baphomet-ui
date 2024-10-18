@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.1.4] - 2024-18-09
+
+### Added
+
+- ## N/A
+
+### Changed
+
+- Reorganized files and directories
+- Flattened route structure
+
+### Removed
+
+- ## N/A
+
+### Fixed
+
+- Made it so when a user enter something like `collinlucke.com/create`, it will redirect to
+  `collinlucke.com/#/create/`
+- Fixed some routing issues when navigating away from the `LoginPage`
+
+<br/>
+
 ## [0.1.3] - 2024-17-09
 
 ### Added

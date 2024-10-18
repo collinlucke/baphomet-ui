@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_ALL_MOVIES } from '../../api/queries';
-import { MovieList } from '../Movies/MovieList';
+import { MovieList } from './MovieList';
 import { Block, InnerWidth } from '@collinlucke/phantomartist';
 
 type Movie = {

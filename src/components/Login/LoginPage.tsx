@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, useEffect } from 'react';
 import { FormTextInput, Button, Form, Modal } from '@collinlucke/phantomartist';
 import { LOGIN } from '../../api/mutations';
 import { useMutation } from '@apollo/client';
@@ -13,13 +13,20 @@ export const Login: React.FC = () => {
     onCompleted: data => {
       if (data.login.token) {
         localStorage.setItem('token', data.login.token);
-        const navigateTo = location?.state?.from?.pathname
-          ? location.state.from.pathname
-          : '/';
-        navigate(navigateTo);
+        const navigateTo = location?.state?.from?.pathname || './movielist';
+        navigate(navigateTo, { replace: true });
+        window.location.hash = navigateTo;
       }
     }
   });
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      const navigateTo = location?.state?.from?.pathname || '/movielist';
+      navigate(navigateTo, { replace: true });
+      window.location.hash = navigateTo;
+    }
+  }, [navigate, location]);
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { target } = e;
@@ -27,12 +34,11 @@ export const Login: React.FC = () => {
     setUserInput({ ...userInput, [name]: value });
   };
 
-  const loginHandler = async (e: FormEvent) => {
+  const loginHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const response = await login({
+    login({
       variables: { email: userInput.email, password: userInput.password }
     });
-    localStorage.setItem('token', response.data.login.token);
   };
 
   return (
@@ -54,9 +60,7 @@ export const Login: React.FC = () => {
           onChange={onChangeHandler}
           type="password"
         />
-        <Button type="button" onClick={loginHandler}>
-          Submit
-        </Button>
+        <Button type="submit">Submit</Button>
       </Form>
     </Modal>
   );
