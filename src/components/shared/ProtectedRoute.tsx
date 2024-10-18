@@ -3,7 +3,7 @@ import { useLocation, Navigate } from 'react-router-dom';
 
 type ProtectedRoute = {
   element: ComponentType<any>;
-  props?: any;
+  props?: Record<string, any>;
 };
 export const ProtectedRoute: React.FC<ProtectedRoute> = ({
   element: Component,
