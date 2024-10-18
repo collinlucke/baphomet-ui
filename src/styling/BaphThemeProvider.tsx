@@ -9,7 +9,6 @@ const BaphThemeProvider: React.FC<ThemeProviderTypes> = ({
   theme,
   children
 }) => {
-  console.log;
   return (
     <EmotionThemeProvider theme={theme || {}}>{children}</EmotionThemeProvider>
   );

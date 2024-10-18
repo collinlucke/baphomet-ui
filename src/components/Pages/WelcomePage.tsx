@@ -1,24 +1,24 @@
 import { Button, InnerWidth, Block, Header } from '@collinlucke/phantomartist';
-import { useLayoutEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const WelcomePage = () => {
   const navigate = useNavigate();
+  const beenHereBefore = localStorage.getItem('beenHereBefore');
   const navigateToList = () => {
     navigate('/movielist');
   };
-  const beenHereBefore = localStorage.getItem('beenHereBefore');
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (beenHereBefore === 'yup') {
-      navigate('/movielist');
+      navigateToList();
     } else {
       localStorage.setItem('beenHereBefore', 'yup');
     }
-  }, []);
+  }, [beenHereBefore, navigate]);
 
   if (beenHereBefore) {
-    return;
+    return null;
   }
 
   return (
@@ -31,7 +31,7 @@ export const WelcomePage = () => {
       </Header>
       <div css={baphStyles.imgWrapper}>
         <img
-          src="./public/baphy-full-transparent.png"
+          src="baphy-full-transparent.png"
           alt="Picture of a cuddly little demon"
         />
       </div>
@@ -50,13 +50,12 @@ export const WelcomePage = () => {
           get around and styled using Emotion CSS. I'm also using a homegrown
           component library that I've regretfully name PhantomArtist (never tell
           yourself that no matter what, you'll call something by whatever the Wu
-          Tang name generator gives you). Like the rest, it's still under heavy
-          development
+          Tang name generator gives you).
         </p>
         <p>
           The backend is comprised of an Apollo GraphQL Server calling into a
           MongoDB database and serving up date from a (soon to be expired) S3
-          bucket. Planning to move my storage locally, in the near future.
+          bucket. Planning to move my storage locally.
         </p>
         <p>
           If you have a username/password, then you can login and play around
@@ -79,9 +78,10 @@ const baphStyles = {
   block: {
     flexDirection: 'column' as 'column',
     width: 'auto',
-    maxWidth: '1024px'
+    position: 'absolute' as 'absolute',
+    top: 0
   },
-  buttons: {
+  button: {
     alignSelf: 'center',
     margin: '30px 0'
   },
@@ -90,7 +90,7 @@ const baphStyles = {
     flexDirection: 'column' as 'column'
   },
   imgWrapper: {
-    width: '400px',
+    width: '275px',
     alignSelf: 'center'
   },
   innerWidth: {

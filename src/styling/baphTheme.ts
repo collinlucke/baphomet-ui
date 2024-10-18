@@ -7,7 +7,7 @@ export const baphTheme = {
     lightText: '#E2D6C6',
     darkText: '#040A0C'
   }
-  // buttons: ({ kind }: { kind: string }) => {
+  // button: ({ kind }: { kind: string }) => {
   //   return {
   // backgroundColor:
   //   (kind === 'primary' &&

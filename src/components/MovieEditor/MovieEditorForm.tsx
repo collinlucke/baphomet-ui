@@ -134,7 +134,7 @@ export const MovieEditorForm: React.FC<MovieEditorFormProps> = ({
 
   return (
     <Form onSubmit={onSubmitHandler}>
-      <Header propStyles={baphStyles.header}>
+      <Header className={{ header: baphStyles.header }}>
         <>
           <h1 css={[baphStyles.h1]}>{movie.title || '-Add title-'}</h1>
           {readonly && <Button onClick={navToEdit}>Edit Movie</Button>}

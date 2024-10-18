@@ -1,6 +1,27 @@
 # Changelog
 
-## [0.1.2] - 2024-10-09
+## [0.1.3] - 2024-17-09
+
+### Added
+
+- Implemented `Modal` from `PhantomArtist`
+
+### Changed
+
+- ## N/A
+
+### Removed
+
+- Removed unused `withAuth` method.
+
+### Fixed
+
+- Routing bug that was letting the `WelcomePage` show even though `beenHereBefore` was already `yup`
+- Some small styling changes
+
+<br/>
+
+## [0.1.2] - 2024-17-09
 
 ### Added
 
