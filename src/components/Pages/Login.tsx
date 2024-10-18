@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { FormEvent, useState } from 'react';
-import { FormTextInput, Button, Form } from '@collinlucke/phantomartist';
+import { FormTextInput, Button, Form, Modal } from '@collinlucke/phantomartist';
 import { LOGIN } from '../../api/mutations';
 import { useMutation } from '@apollo/client';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -36,7 +36,7 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div css={[baphStyles.modal]}>
+    <Modal>
       <Form className={{ form: baphStyles.form }} onSubmit={loginHandler}>
         <div>Need you to login real quick. thnx!</div>
         <FormTextInput
@@ -58,24 +58,13 @@ export const Login: React.FC = () => {
           Submit
         </Button>
       </Form>
-    </div>
+    </Modal>
   );
 };
 
 const baphStyles = {
-  modal: {
-    position: 'absolute' as 'absolute',
-    width: '100%',
-    height: '100%',
-    top: 0,
-    left: 0,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column' as 'column'
-  },
   form: {
     position: 'absolute' as 'absolute',
-    margin: '10%'
+    width: 'auto'
   }
 };

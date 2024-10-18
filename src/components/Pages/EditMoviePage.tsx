@@ -59,7 +59,6 @@ export const EditMoviePage: React.FC<EditMoviePage> = ({ clean, readonly }) => {
       fullplot: movie.fullplot
     },
     onCompleted: data => {
-      console.log(data);
       navigate(`/view/${data.newMovie.id}`);
     }
   });
@@ -97,7 +96,6 @@ export const EditMoviePage: React.FC<EditMoviePage> = ({ clean, readonly }) => {
     const { hash } = location;
     const matchResult = hash?.match(/\/[a-zA-Z0-9]+/);
     const endPoint = matchResult?.[0];
-    console.log(movie);
 
     if (endPoint === '/create') {
       addMovie();

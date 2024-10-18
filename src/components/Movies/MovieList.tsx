@@ -97,7 +97,7 @@ const baphStyles = {
     marginBottom: '30px',
     marginTop: '30px'
   },
-  buttons: {
+  button: {
     alignSelf: 'end',
     display: 'flex',
     flexDirection: 'column' as 'column'
