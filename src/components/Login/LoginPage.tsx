@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { FormEvent, useState, useEffect } from 'react';
 import { FormTextInput, Button, Form, Modal } from '@collinlucke/phantomartist';
 import { LOGIN } from '../../api/mutations';
@@ -12,7 +11,7 @@ export const Login: React.FC = () => {
   const [login] = useMutation(LOGIN, {
     onCompleted: data => {
       if (data.login.token) {
-        localStorage.setItem('token', data.login.token);
+        localStorage.setItem('baphomet-token', data.login.token);
         const navigateTo = location?.state?.from?.pathname || './movielist';
         navigate(navigateTo, { replace: true });
         window.location.hash = navigateTo;
@@ -21,7 +20,7 @@ export const Login: React.FC = () => {
   });
 
   useEffect(() => {
-    if (localStorage.getItem('token')) {
+    if (localStorage.getItem('baphomet-token')) {
       const navigateTo = location?.state?.from?.pathname || '/movielist';
       navigate(navigateTo, { replace: true });
       window.location.hash = navigateTo;
@@ -43,7 +42,7 @@ export const Login: React.FC = () => {
 
   return (
     <Modal>
-      <Form className={{ form: baphStyles.form }} onSubmit={loginHandler}>
+      <Form onSubmit={loginHandler}>
         <div>Need you to login real quick. thnx!</div>
         <FormTextInput
           label="Email"
@@ -64,11 +63,4 @@ export const Login: React.FC = () => {
       </Form>
     </Modal>
   );
-};
-
-const baphStyles = {
-  form: {
-    position: 'absolute' as 'absolute',
-    width: 'auto'
-  }
 };

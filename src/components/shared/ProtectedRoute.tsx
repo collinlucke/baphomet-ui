@@ -9,7 +9,7 @@ export const ProtectedRoute: React.FC<ProtectedRoute> = ({
   element: Component,
   props
 }) => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('baphomet-token');
   const location = useLocation();
 
   if (!token) {
