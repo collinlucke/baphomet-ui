@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.11.8",
+    "@collinlucke/phantomartist": "link:../phantomartist",
     "@emotion/babel-plugin": "^11.12.0",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
@@ -21,6 +22,7 @@
     "apollo-upload-client": "^18.0.1",
     "dotenv": "^16.4.5",
     "graphql": "^16.9.0",
+    "iconoir-react": "^7.9.0",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
     "react": "^18.3.1",
@@ -28,8 +30,7 @@
     "react-router-dom": "^6.26.2",
     "rollup-plugin-delete": "^2.1.0",
     "vite-plugin-static-copy": "^1.0.6",
-    "vite-plugin-stylex": "^0.10.1",
-    "@collinlucke/phantomartist": "link:../phantomartist"
+    "vite-plugin-stylex": "^0.10.1"
   },
   "devDependencies": {
     "@stylexjs/eslint-plugin": "^0.7.5",

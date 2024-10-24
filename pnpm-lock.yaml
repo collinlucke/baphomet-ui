@@ -38,6 +38,9 @@ importers:
       graphql:
         specifier: ^16.9.0
         version: 16.9.0
+      iconoir-react:
+        specifier: ^7.9.0
+        version: 7.9.0(react@18.3.1)
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.5
@@ -1072,6 +1075,11 @@ packages:
 
   hoist-non-react-statics@3.3.2:
     resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
+
+  iconoir-react@7.9.0:
+    resolution: {integrity: sha512-6DKkVs7YKxYL3ZCqpoYDD89p/bvuDwPV8JXmrpDGRUafRH6QBMXMAMnQe4rWHLTUIB5UXVVSikvHcpJZjN5/TA==}
+    peerDependencies:
+      react: ^16.8.6 || ^17 || ^18
 
   ignore-by-default@1.0.1:
     resolution: {integrity: sha512-Ius2VYcGNk7T90CppJqcIkS5ooHUZyIQK+ClZfMfMNFEF9VSE73Fq+906u/CWu92x4gzZMWOwfFYckPObzdEbA==}
@@ -2687,6 +2695,10 @@ snapshots:
   hoist-non-react-statics@3.3.2:
     dependencies:
       react-is: 16.13.1
+
+  iconoir-react@7.9.0(react@18.3.1):
+    dependencies:
+      react: 18.3.1
 
   ignore-by-default@1.0.1: {}
 

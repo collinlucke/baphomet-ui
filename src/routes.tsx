@@ -24,7 +24,7 @@ const routes = [
           <ProtectedRoute element={MovieEditorPage} props={{ clean: true }} />
         )
       },
-      { path: 'arena', element: <ProtectedRoute element={ArenaPage} /> }
+      { path: 'arena', element: <ArenaPage /> }
     ]
   },
   { path: '/login', element: <Login /> }

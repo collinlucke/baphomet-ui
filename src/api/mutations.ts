@@ -58,3 +58,9 @@ export const LOGIN = gql`
     }
   }
 `;
+
+export const DELETE_MOVIE = gql`
+  mutation deleteMovie($id: ID!) {
+    deleteMovie(id: $id)
+  }
+`;

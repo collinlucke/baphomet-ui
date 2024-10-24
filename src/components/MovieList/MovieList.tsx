@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import {
   Button,
   List,
@@ -11,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 type Movie = {
   id: string;
-  title?: string;
+  title: string;
   releaseDate?: string;
   rated?: string;
   poster?: string;
@@ -23,18 +22,18 @@ type MovieData = {
   };
   searchTerm?: string;
   resultsCount?: number;
-  useSearchButton?: boolean;
 
   onSearch?: React.FormEventHandler<HTMLFormElement>;
   setSearchTerm?: (e: ChangeEvent<HTMLInputElement>) => void;
+  openDeleteModal?: ({ id, title }: { id: string; title: string }) => void;
 };
 
 export const MovieList: React.FC<MovieData> = ({
   movieData,
   searchTerm,
-  useSearchButton,
   onSearch,
-  setSearchTerm
+  setSearchTerm,
+  openDeleteModal
 }) => {
   const navigate = useNavigate();
   const width = useResizedWidth();
@@ -68,10 +67,16 @@ export const MovieList: React.FC<MovieData> = ({
         resultsCount={movieData.allMovies.length}
         buttonSize={buttonSize()}
         inputSize={buttonSize()}
-        useSearchButton={useSearchButton}
+        useSearchButton={false}
       />
       {movieData.allMovies.length ? (
-        movieData.allMovies.map(mov => <MovieListItem mov={mov} key={mov.id} />)
+        movieData.allMovies.map(mov => (
+          <MovieListItem
+            mov={mov}
+            key={mov.id}
+            openDeleteModal={openDeleteModal || (() => {})}
+          />
+        ))
       ) : (
         <div css={[baphStyles.noResults]}>
           <h2>No Movies Match Your Search</h2>

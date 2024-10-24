@@ -9,8 +9,8 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import routes from './routes';
-import { baphTheme } from './styling/baphTheme';
-import BaphThemeProvider from './styling/BaphThemeProvider';
+// import { baphTheme } from './styling/baphTheme';
+// import BaphThemeProvider from './styling/BaphThemeProvider';
 
 const baseURL =
   import.meta.env.VITE_NODE_ENV === 'development'
@@ -23,7 +23,7 @@ const httpLink = createHttpLink({
   uri: `${baseURL}/graphql/`
 });
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('baphomet-token');
   return {
     headers: {
       ...headers,
@@ -37,12 +37,13 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
+// Not using BaphThemeProvider yet, but he can hang out.
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <BaphThemeProvider theme={baphTheme}>
-        <RouterProvider router={router} />
-      </BaphThemeProvider>
+      {/* <BaphThemeProvider theme={baphTheme}> */}
+      <RouterProvider router={router} />
+      {/* </BaphThemeProvider> */}
     </ApolloProvider>
   </React.StrictMode>
 );

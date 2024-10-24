@@ -1,12 +1,20 @@
 import { ChangeEvent, useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { useNavigate } from 'react-router-dom';
+import { useQuery, useMutation } from '@apollo/client';
 import { GET_ALL_MOVIES } from '../../api/queries';
+import { DELETE_MOVIE } from '../../api/mutations';
 import { MovieList } from './MovieList';
-import { Block, InnerWidth } from '@collinlucke/phantomartist';
+import {
+  Block,
+  Button,
+  ButtonGroup,
+  InnerWidth,
+  Modal
+} from '@collinlucke/phantomartist';
 
 type Movie = {
   id: string;
-  title?: string;
+  title: string;
   releaseDate?: string;
   rated?: string;
 };
@@ -14,38 +22,48 @@ type Movie = {
 type MovieData = {
   allMovies: Movie[];
   searchTerm?: string;
-  onSearch?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  deleteMovie?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   setSearchTerm?: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
 export const MovieListPage = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState<string>('');
-
   const [movieData, setMovieData] = useState<MovieData>({ allMovies: [] });
+  const [movieToDelete, setMovieToDelete] = useState({ id: '', title: '' });
 
-  const [preventQuery, setPreventQuery] = useState(false);
-  const [useSearchButton] = useState(false);
-
-  const {} = useQuery(GET_ALL_MOVIES, {
+  useQuery(GET_ALL_MOVIES, {
     variables: {
       limit: 100, // TODO: Hard coded until I get around to making a thingy to put put in a custom value
       searchTerm
     },
-    skip: useSearchButton && preventQuery,
+    fetchPolicy: 'network-only',
     onCompleted: data => {
       setMovieData(data);
-      setPreventQuery(true);
     }
   });
 
-  const searchMoviesHandler: React.FormEventHandler<HTMLFormElement> = e => {
-    e.preventDefault();
-    setPreventQuery(false);
-  };
+  const [deleteMovie] = useMutation(DELETE_MOVIE, {
+    onCompleted: data => {
+      if (data.deleteMovie) {
+        navigate(0);
+      }
+    }
+  });
 
   const setSearchTermHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
+    setMovieData({ allMovies: [] });
     setSearchTerm(value);
+  };
+
+  const openDeleteModal = ({ id, title }: { id: string; title: string }) => {
+    setMovieToDelete({ id, title });
+  };
+
+  const deleteMovieHandler = () => {
+    console.log(movieToDelete);
+    deleteMovie({ variables: { id: movieToDelete.id } });
   };
 
   return (
@@ -55,12 +73,34 @@ export const MovieListPage = () => {
           <h2 css={baphStyles.h2}>Here's a List of Movies</h2>
           <MovieList
             movieData={movieData}
-            onSearch={searchMoviesHandler}
             searchTerm={searchTerm}
             setSearchTerm={setSearchTermHandler}
-            useSearchButton={useSearchButton}
+            openDeleteModal={openDeleteModal}
           />
         </InnerWidth>
+        {movieToDelete.id && (
+          <Modal
+            className={baphStyles}
+            close={() => setMovieToDelete({ id: '', title: '' })}
+          >
+            <h2 css={baphStyles.h2}>
+              Are you sure you want to delete{' '}
+              <span css={baphStyles.movieTitleToDelete}>
+                {movieToDelete.title}
+              </span>
+              ?
+            </h2>
+            <ButtonGroup>
+              <Button onClick={deleteMovieHandler}>Delete</Button>
+              <Button
+                kind="secondary"
+                onClick={() => setMovieToDelete({ id: '', title: '' })}
+              >
+                Cancel
+              </Button>
+            </ButtonGroup>
+          </Modal>
+        )}
       </Block>
     </>
   );
@@ -69,5 +109,11 @@ export const MovieListPage = () => {
 const baphStyles = {
   h2: {
     marginBottom: '20px'
+  },
+  modal: {
+    backgroundColor: `rgba(255,255,255,.75)`
+  },
+  movieTitleToDelete: {
+    fontStyle: 'italic'
   }
 };

@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.1.5] - 2024-23-09
+
+### Added
+
+- Prepped for using `BaphThemeProvider`
+- Implemented `deleteMovie` functionality
+
+### Changed
+
+- Some small theming and typing changes
+
+### Removed
+
+- Deleted `main-w-ts.tsx`
+
+### Fixed
+
+-
+
+<br/>
+
 ## [0.1.4] - 2024-18-09
 
 ### Added
