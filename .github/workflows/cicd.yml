@@ -18,7 +18,7 @@ jobs:
       - name: Login to Docker Hub
         run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
       - name: Build Docker Image
-        run: docker build -t collinlucke/baphomet-ui . --build-arg NODE_ENV='production' --build-arg VITE_SERVER_BASE_URL=`${{secrets.VITE_SERVER_BASE_URL}}` --build-arg GIT_REGISTRY_TOKEN=`${{secrets.GIT_REGISTRY_TOKEN}}`
+        run: docker build -t collinlucke/baphomet-ui . --build-arg NODE_ENV='production' --build-arg SERVER_BASE_URL=`${{secrets.SERVER_BASE_URL}}` --build-arg GIT_REGISTRY_TOKEN=`${{secrets.GIT_REGISTRY_TOKEN}}`
       - name: Publish Image to Docker Hub
         run: docker push collinlucke/baphomet-ui:latest
 
