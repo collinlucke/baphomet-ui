@@ -4,6 +4,7 @@ import packageJson from './package.json' with { type: 'json' };
 import 'dotenv/config';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
+console.log('isDevelopment -> ' + isDevelopment);
 
 if (isDevelopment) {
   packageJson.dependencies['@collinlucke/phantomartist'] =
@@ -15,5 +16,8 @@ if (isDevelopment) {
 
 fs.writeFileSync('./package.json', JSON.stringify(packageJson, null, 2));
 
-// Install @collinlucke/phantomartist here because it doesn't actually install when `pnpm install` runs.
-execSync('pnpm install @collinlucke/phantomartist', { stdio: 'inherit' });
+// Install @collinlucke/phantomartist here because it doesn't actually install when `pnpm install`
+// runs.
+if (isDevelopment) {
+  execSync('pnpm install @collinlucke/phantomartist', { stdio: 'inherit' });
+}
