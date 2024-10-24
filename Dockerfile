@@ -15,7 +15,7 @@ COPY package.json .
 RUN echo "registry=https://registry.npmjs.org/" > .npmrc
 RUN echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
 RUN echo "//npm.pkg.github.com/:_authToken=$GIT_REGISTRY_TOKEN" >> .npmrc
-RUN node set-dependency.js
+RUN npm run preinstall
 RUN npm install
 COPY . .
 RUN npm run build
