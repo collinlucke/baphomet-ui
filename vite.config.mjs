@@ -8,6 +8,7 @@ export default defineConfig(async ({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
   const copyPath = env.NODE_ENV === 'production' && env.COPY_TO_PROD_PATH;
+  console.log('env.NODE_ENV -> ' + env.NODE_ENV);
 
   return {
     build: {

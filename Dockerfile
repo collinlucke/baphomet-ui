@@ -12,10 +12,10 @@ ENV SERVER_BASE_URL=$SERVER_BASE_URL
 # Biuld App
 WORKDIR /app
 COPY package.json .
-COPY set-dependency.js .
 RUN echo "registry=https://registry.npmjs.org/" > .npmrc
 RUN echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
 RUN echo "//npm.pkg.github.com/:_authToken=$GIT_REGISTRY_TOKEN" >> .npmrc
+RUN node set-dependency.js
 RUN npm install
 COPY . .
 RUN npm run build
