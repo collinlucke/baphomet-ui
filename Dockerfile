@@ -14,7 +14,7 @@ WORKDIR /app
 COPY package.json .
 RUN echo "registry=https://registry.npmjs.org/" > .npmrc
 RUN echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
-RUN echo "//npm.pkg.github.com/:_authToken=${GIT_REGISTRY_TOKEN}" >> .npmrc
+RUN echo "//npm.pkg.github.com/:_authToken=${secrets.GIT_REGISTRY_TOKEN}" >> .npmrc
 RUN npm install
 COPY . .
 RUN npm run build
