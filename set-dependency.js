@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { execSync } from 'child_process';
 import packageJson from './package.json' with { type: 'json' };
+execSync('pnpm install dotenv', { stdio: 'inherit' });
 import 'dotenv/config';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
