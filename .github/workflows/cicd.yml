@@ -1,5 +1,4 @@
 name: Deploy Baphomet UI
-
 on:
   push:
     branches:
@@ -11,14 +10,22 @@ jobs:
     steps:
       - name: Checkout Source
         uses: actions/checkout@v4
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 22
+
       - name: Login to Docker Hub
-        run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Build Docker Image
-        run: docker build -t collinlucke/baphomet-ui . --build-arg NODE_ENV='production' --build-arg SERVER_BASE_URL=`${{secrets.SERVER_BASE_URL}}` --build-arg GIT_REGISTRY_TOKEN=`${{secrets.GIT_REGISTRY_TOKEN}}`
+        run: |
+          docker build --build-arg NODE_ENV=production \
+                       --build-arg SERVER_BASE_URL=${{ secrets.SERVER_BASE_URL }} \
+                       --build-arg GIT_REGISTRY_TOKEN=${{ secrets.GIT_REGISTRY_TOKEN }} \
+                       -t collinlucke/baphomet-ui .
+
       - name: Publish Image to Docker Hub
         run: docker push collinlucke/baphomet-ui:latest
 
@@ -28,7 +35,9 @@ jobs:
     steps:
       - name: Pull Image from Docker Hub
         run: docker pull collinlucke/baphomet-ui:latest
+
       - name: Delete Old Container
         run: docker rm -f baphomet-ui-container
+
       - name: Run Docker Container
         run: docker run -d -p 5173:80 --name baphomet-ui-container collinlucke/baphomet-ui

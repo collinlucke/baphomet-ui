@@ -7,11 +7,12 @@ ARG GIT_REGISTRY_TOKEN
 
 # Set environment variables
 ENV NODE_ENV=$VITE_NODE_ENV
-ENV SERVER_BASE_URL=$VITE_SERVER_BASE_URL
+ENV SERVER_BASE_URL=$SERVER_BASE_URL
 
 # Biuld App
 WORKDIR /app
 COPY package.json .
+COPY set-dependency.js .
 RUN echo "registry=https://registry.npmjs.org/" > .npmrc
 RUN echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
 RUN echo "//npm.pkg.github.com/:_authToken=$GIT_REGISTRY_TOKEN" >> .npmrc
