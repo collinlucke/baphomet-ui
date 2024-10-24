@@ -4,7 +4,7 @@
   "version": "0.1.4",
   "type": "module",
   "scripts": {
-    "preinstall": "node ./set-dependency.js",
+    "preinstall": "node set-dependency.js",
     "postinstall": "node link-package.js",
     "dev": "vite",
     "build": "tsc && vite build",
