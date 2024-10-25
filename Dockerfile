@@ -19,7 +19,7 @@ RUN echo "registry=https://registry.npmjs.org/" > .npmrc
 RUN echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
 RUN echo "//npm.pkg.github.com/:_authToken=${GIT_REGISTRY_TOKEN}" >> .npmrc
 
-RUN npm install -g pnpm typescript inotify
+RUN npm install -g pnpm typescript n node-inotify
 RUN pnpm install --include=dev
 
 RUN pnpm list
