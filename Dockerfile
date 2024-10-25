@@ -20,7 +20,7 @@ RUN echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
 RUN echo "//npm.pkg.github.com/:_authToken=${GIT_REGISTRY_TOKEN}" >> .npmrc
 
 RUN npm install -g pnpm typescript
-RUN pnpm install
+RUN pnpm install --inclide=dev
 
 RUN pnpm list
 
