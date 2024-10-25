@@ -19,6 +19,5 @@ fs.writeFileSync('./package.json', JSON.stringify(packageJson, null, 2));
 
 // Install @collinlucke/phantomartist here because it doesn't actually install when `pnpm install`
 // runs.
-if (isDevelopment) {
+
   execSync('pnpm install @collinlucke/phantomartist', { stdio: 'inherit' });
-}

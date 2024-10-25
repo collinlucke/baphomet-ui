@@ -10,14 +10,16 @@ ENV GIT_REGISTRY_TOKEN=${GIT_REGISTRY_TOKEN}
 
 WORKDIR /app
 COPY package.json .
-COPY preinstall.js .
+COPY set-dependency.js .
 COPY link-package.js .
-COPY .env .
-COPY .npmrc .
+
+RUN echo "registry=https://registry.npmjs.org/" > .npmrc
+RUN echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
+RUN echo "//npm.pkg.github.com/:_authToken=${secretsGIT_REGISTRY_TOKEN}" >> .npmrc
 
 RUN npm install -g pnpm
 RUN pnpm install
-RUN node preinstall.js
+RUN node set-dependency.js
 RUN pnpm run build
 
 FROM nginx:latest
