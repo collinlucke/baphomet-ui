@@ -1,11 +1,11 @@
+import { loadEnv } from 'vite';
 import fs from 'fs';
 import { execSync } from 'child_process';
 import packageJson from './package.json' with { type: 'json' };
-execSync('pnpm install dotenv', { stdio: 'inherit' });
-import 'dotenv/config';
 
-const isDevelopment = process.env.NODE_ENV === 'development';
-console.log('isDevelopment -> ' + isDevelopment);
+const env = loadEnv(process.cwd(), '');
+
+const isDevelopment = env.VITE_NODE_ENV === 'development';
 
 if (isDevelopment) {
   packageJson.dependencies['@collinlucke/phantomartist'] =
