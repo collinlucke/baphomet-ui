@@ -23,11 +23,6 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install Build Tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y python3 make g++
-
       - name: Install Dependencies
         env:
           GIT_REGISTRY_TOKEN: ${{ secrets.GIT_REGISTRY_TOKEN }}
