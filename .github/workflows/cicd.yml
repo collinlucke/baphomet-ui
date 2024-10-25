@@ -26,7 +26,6 @@ jobs:
       - name: Install Dependencies
         run: |
           npm install -g pnpm typescript
-          pnpm install
 
       - name: Build Docker Image
         run: |
