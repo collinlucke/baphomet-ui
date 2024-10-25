@@ -1,30 +1,28 @@
 FROM node:latest as build
 
-# Declare buildt time environment variables
 ARG NODE_ENV
 ARG SERVER_BASE_URL
 ARG GIT_REGISTRY_TOKEN
 
-# Set environment variables
-ENV NODE_ENV=$VITE_NODE_ENV
-ENV SERVER_BASE_URL=$SERVER_BASE_URL
+ENV NODE_ENV=${NODE_ENV}
+ENV SERVER_BASE_URL=${SERVER_BASE_URL}
+ENV GIT_REGISTRY_TOKEN=${GIT_REGISTRY_TOKEN}
 
-# Biuld App
 WORKDIR /app
 COPY package.json .
-COPY set-dependency.js .
-RUN echo "registry=https://registry.npmjs.org/" > .npmrc
-RUN echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
-RUN echo "//npm.pkg.github.com/:_authToken=$GIT_REGISTRY_TOKEN" >> .npmrc
-RUN npm run preinstall
-RUN npm install
-COPY . .
-RUN npm run build
+COPY preinstall.js .
+COPY link-package.js .
+COPY .env .
+COPY .npmrc .
 
-# Server with Nginx
+RUN npm install -g pnpm
+RUN pnpm install
+RUN node preinstall.js
+RUN pnpm run build
+
 FROM nginx:latest
 WORKDIR /usr/share/nginx/html
 RUN rm -rf *
 COPY --from=build /app/dist .
 EXPOSE 80
-ENTRYPOINT [ "nginx", "-g", "daemon off;"  ]
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
