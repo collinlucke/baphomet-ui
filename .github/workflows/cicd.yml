@@ -27,6 +27,8 @@ jobs:
         run: |
           npm install -g pnpm typescript
           pnpm install
+        env:
+          GIT_REGISTRY_TOKEN: ${{ secrets.GIT_REGISTRY_TOKEN }}
 
       - name: Build Docker Image
         run: |
