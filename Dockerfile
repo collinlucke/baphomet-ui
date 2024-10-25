@@ -9,6 +9,9 @@ ENV SERVER_BASE_URL=${SERVER_BASE_URL}
 ENV GIT_REGISTRY_TOKEN=${GIT_REGISTRY_TOKEN}
 
 WORKDIR /app
+
+RUN apk add --no-cache python3 make g++
+
 COPY package.json .
 COPY index.html .
 COPY tsconfig.json .
@@ -19,7 +22,7 @@ RUN echo "registry=https://registry.npmjs.org/" > .npmrc
 RUN echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
 RUN echo "//npm.pkg.github.com/:_authToken=${GIT_REGISTRY_TOKEN}" >> .npmrc
 
-RUN npm install -g pnpm typescript node-inotify
+RUN npm install -g pnpm typescript
 RUN pnpm install --include=dev
 
 RUN pnpm list
