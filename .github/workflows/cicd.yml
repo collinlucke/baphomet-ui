@@ -24,11 +24,12 @@ jobs:
           node-version: 22
 
       - name: Install Dependencies
-        run: |
-          npm install -g pnpm typescript
-          pnpm install
         env:
           GIT_REGISTRY_TOKEN: ${{ secrets.GIT_REGISTRY_TOKEN }}
+        run: |
+          npm install -g pnpm typescript
+          echo "//npm.pkg.github.com/:_authToken=${GIT_REGISTRY_TOKEN}" >> ~/.npmrc
+          pnpm install
 
       - name: Build Docker Image
         run: |
@@ -40,15 +41,15 @@ jobs:
       - name: Publish Image to Docker Hub
         run: docker push collinlucke/baphomet-ui:latest
 
-  # deploy:
-  #   needs: build
-  #   runs-on: self-hosted
-  #   steps:
-  #     - name: Pull Image from Docker Hub
-  #       run: docker pull collinlucke/baphomet-ui:latest
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull Image from Docker Hub
+        run: docker pull collinlucke/baphomet-ui:latest
 
-  #     - name: Delete Old Container
-  #       run: docker rm -f baphomet-ui-container
+      - name: Delete Old Container
+        run: docker rm -f baphomet-ui-container
 
-  #     - name: Run Docker Container
-  #       run: docker run -d -p 5173:80 --name baphomet-ui-container collinlucke/baphomet-ui
+      - name: Run Docker Container
+        run: docker run -d -p 5173:80 --name baphomet-ui-container collinlucke/baphomet-ui
