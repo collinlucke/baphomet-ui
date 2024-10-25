@@ -1,4 +1,4 @@
-FROM node:latest as build
+FROM node:latest AS build
 
 ARG NODE_ENV
 ARG SERVER_BASE_URL
@@ -10,19 +10,23 @@ ENV GIT_REGISTRY_TOKEN=${GIT_REGISTRY_TOKEN}
 
 WORKDIR /app
 COPY package.json .
-COPY set-dependency.js .
-COPY link-package.js .
+COPY index.html .
+COPY tsconfig.json .
+COPY src ./src
+
 
 RUN echo "registry=https://registry.npmjs.org/" > .npmrc
 RUN echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
-RUN echo "//npm.pkg.github.com/:_authToken=${secretsGIT_REGISTRY_TOKEN}" >> .npmrc
+RUN echo "//npm.pkg.github.com/:_authToken=${GIT_REGISTRY_TOKEN}" >> .npmrc
 
-RUN npm install -g pnpm
+RUN npm install -g pnpm typescript
 RUN pnpm install
-RUN node set-dependency.js
+
+RUN pnpm list
+
 RUN pnpm run build
 
-FROM nginx:latest
+FROM nginx:stable-alpine
 WORKDIR /usr/share/nginx/html
 RUN rm -rf *
 COPY --from=build /app/dist .
