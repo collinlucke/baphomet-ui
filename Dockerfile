@@ -10,8 +10,6 @@ ENV GIT_REGISTRY_TOKEN=${GIT_REGISTRY_TOKEN}
 
 WORKDIR /app
 
-RUN apk add --no-cache python3 make g++
-
 COPY package.json .
 COPY index.html .
 COPY tsconfig.json .
