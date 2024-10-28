@@ -1,6 +1,6 @@
 services:
   app:
-    image: collinlucke/baphomet-ui:latest
+    image: collinlucke/baphomet-ui
     restart: unless-stopped
     build:
       context: .
