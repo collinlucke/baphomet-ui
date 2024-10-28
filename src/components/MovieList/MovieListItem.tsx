@@ -31,6 +31,7 @@ export const MovieListItem: React.FC<{
   openDeleteModal: OpenDeleteModalType;
 }) => {
   const [showTrashSolid, setShowTrashSolid] = useState(false);
+  const token = localStorage.getItem('baphomet-token');
   const { id, releaseDate, title } = mov;
 
   const mouseTrashHoverHandler: MouseEventHandler<HTMLDivElement> = e => {
@@ -54,16 +55,18 @@ export const MovieListItem: React.FC<{
             <span css={[baphStyles.releaseDate]}>{releaseDate}</span>
           )}
         </Link>
-        <Button kind="ghost" iconOnly onClick={openDeleteModalHandler}>
-          <div
-            onMouseEnter={mouseTrashHoverHandler}
-            onMouseLeave={mouseTrashHoverHandler}
-          >
-            <IconoirProvider iconProps={{ height: '1.2rem' }}>
-              {showTrashSolid ? <TrashSolid /> : <Trash />}
-            </IconoirProvider>
-          </div>
-        </Button>
+        {token && (
+          <Button kind="ghost" iconOnly onClick={openDeleteModalHandler}>
+            <div
+              onMouseEnter={mouseTrashHoverHandler}
+              onMouseLeave={mouseTrashHoverHandler}
+            >
+              <IconoirProvider iconProps={{ height: '1.2rem' }}>
+                {showTrashSolid ? <TrashSolid /> : <Trash />}
+              </IconoirProvider>
+            </div>
+          </Button>
+        )}
       </>
     </ListItem>
   );

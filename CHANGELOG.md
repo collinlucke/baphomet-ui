@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.1.6] - 2024-23-09
+
+### Added
+
+- ## N/A
+
+### Changed
+
+- Updated some packages
+
+### Removed
+
+- ## N/A
+
+### Fixed
+
+- Fixed weird `<ButtonGroup>` (for now)
+
+<br/>
+
 ## [0.1.5] - 2024-23-09
 
 ### Added
