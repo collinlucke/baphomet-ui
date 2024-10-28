@@ -1,6 +1,7 @@
 services:
   app:
-    image: collinlucke/baphomet-ui
+    image: collinlucke/baphomet-ui:latest
+    restart: unless-stopped
     build:
       context: .
       dockerfile: Dockerfile
