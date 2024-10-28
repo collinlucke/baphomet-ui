@@ -2,7 +2,7 @@ import {
   Form,
   FormTextInput,
   TwoColumn,
-  ButtonGroup,
+  // ButtonGroup,
   FormTextArea,
   Button,
   Header,
@@ -119,14 +119,14 @@ export const MovieEditorForm: React.FC<MovieEditorFormProps> = ({
         onChange={onChangeHandlerText}
       />
       {!readonly && (
-        <ButtonGroup>
+        <>
           <Button type="submit" kind="primary">
             Save
           </Button>
           <Button onClick={cancelHandler} kind="secondary">
             Cancel
           </Button>
-        </ButtonGroup>
+        </>
       )}
     </>
   );
