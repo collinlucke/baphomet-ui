@@ -6,11 +6,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - '5173:80'
-
     environment:
-      NODE_ENV: 'development'
+      NODE_ENV: 'production'
       SERVER_BASE_URL: ${SERVER_BASE_URL}
-
     secrets:
       - GIT_REGISTRY_TOKEN
 
