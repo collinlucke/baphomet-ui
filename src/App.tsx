@@ -1,25 +1,35 @@
-import { Outlet } from 'react-router-dom';
-import { Heading } from './components/shared/Heading.tsx';
-import { Main } from '@collinlucke/phantomartist';
 import './styling/index.css';
-import { useLayoutEffect } from 'react';
+import { Outlet } from 'react-router-dom';
+import { Heading } from './components/shared/Heading';
+import { Main } from '@collinlucke/phantomartist';
+// import { ErrorModal } from './components/shared/ErrorModal';
+// import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+// import { useLayoutEffect, useState } from 'react';
+import { ShowHeadingContext } from './contexts';
+
+// export const useShowNoHeading = () => useContext(ShowNoHeadingContext);
 
 function App() {
-  const isWelcomePage = location.hash === '/';
+  // const navigate = useNavigate();
+  const [showHeading, setShowHeading] = useState(true);
+  // const beenHereBefore = localStorage.getItem('beenHereBefore') === 'yup';
 
-  useLayoutEffect(() => {
-    if (location.pathname !== '/') {
-      location.hash = `#${location.pathname}`;
-      location.pathname = '';
-    }
-  });
+  // useLayoutEffect(() => {
+  //   if (beenHereBefore) {
+  //     navigate('movielist');
+  //   }
+  // }, [navigate, beenHereBefore]);
 
   return (
     <div>
-      {!isWelcomePage && <Heading />}
-      <Main>
-        <Outlet />
-      </Main>
+      <ShowHeadingContext.Provider value={{ showHeading, setShowHeading }}>
+        {!showHeading && <Heading />}
+        <Main>
+          <Outlet />
+        </Main>
+        {/* <ErrorModal /> */}
+      </ShowHeadingContext.Provider>
     </div>
   );
 }

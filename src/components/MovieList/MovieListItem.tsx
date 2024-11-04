@@ -1,7 +1,6 @@
-import { ListItem } from '@collinlucke/phantomartist';
 import { Link } from 'react-router-dom';
 import { Trash, TrashSolid, IconoirProvider } from 'iconoir-react';
-import { Button } from '@collinlucke/phantomartist';
+import { Button, ListItem } from '@collinlucke/phantomartist';
 import { useState, MouseEventHandler } from 'react';
 
 type MovieType = {

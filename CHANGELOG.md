@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.1.7] - 2024-23-09
+
+### Added
+
+- Error handling
+- Created context for showing the heading
+
+### Changed
+
+- Switch back to `createBrowserRouter` from `createHashRouter`
+
+### Removed
+
+- ## N/A
+
+### Fixed
+
+- ## N/A
+
+<br/>
+
 ## [0.1.6] - 2024-23-09
 
 ### Added

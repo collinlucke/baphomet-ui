@@ -1,9 +1,9 @@
-import { ChangeEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/client';
+import { useNavigate } from 'react-router-dom';
 import { GET_ALL_MOVIES } from '../../api/queries';
 import { DELETE_MOVIE } from '../../api/mutations';
 import { MovieList } from './MovieList';
+import { ErrorModal } from '../shared/ErrorModal';
 import {
   Block,
   Button,
@@ -11,6 +11,8 @@ import {
   InnerWidth,
   Modal
 } from '@collinlucke/phantomartist';
+import { ChangeEvent, useState, useEffect } from 'react';
+import { useShowHeading } from '../../contexts';
 
 type Movie = {
   id: string;
@@ -22,8 +24,6 @@ type Movie = {
 type MovieData = {
   allMovies: Movie[];
   searchTerm?: string;
-  deleteMovie?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  setSearchTerm?: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
 export const MovieListPage = () => {
@@ -31,6 +31,14 @@ export const MovieListPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [movieData, setMovieData] = useState<MovieData>({ allMovies: [] });
   const [movieToDelete, setMovieToDelete] = useState({ id: '', title: '' });
+  const [hasError, setHasError] = useState(false);
+  const { showHeading, setShowHeading } = useShowHeading();
+
+  useEffect(() => {
+    if (showHeading) {
+      setShowHeading(false);
+    }
+  }, [setShowHeading]);
 
   useQuery(GET_ALL_MOVIES, {
     variables: {
@@ -43,11 +51,14 @@ export const MovieListPage = () => {
     }
   });
 
-  const [deleteMovie] = useMutation(DELETE_MOVIE, {
+  const [deleteMovie, { error }] = useMutation(DELETE_MOVIE, {
     onCompleted: data => {
       if (data.deleteMovie) {
         navigate(0);
       }
+    },
+    onError: err => {
+      setHasError(true);
     }
   });
 
@@ -62,7 +73,6 @@ export const MovieListPage = () => {
   };
 
   const deleteMovieHandler = () => {
-    console.log(movieToDelete);
     deleteMovie({ variables: { id: movieToDelete.id } });
   };
 
@@ -81,7 +91,7 @@ export const MovieListPage = () => {
         {movieToDelete.id && (
           <Modal
             className={baphStyles}
-            close={() => setMovieToDelete({ id: '', title: '' })}
+            closeModal={() => setMovieToDelete({ id: '', title: '' })}
           >
             <h2 css={baphStyles.h2}>
               Are you sure you want to delete{' '}
@@ -101,6 +111,7 @@ export const MovieListPage = () => {
             </ButtonGroup>
           </Modal>
         )}
+        {hasError && <ErrorModal error={error} />}
       </Block>
     </>
   );
