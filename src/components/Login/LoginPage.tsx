@@ -8,13 +8,14 @@ export const Login: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [userInput, setUserInput] = useState({ email: '', password: '' });
+
   const [login] = useMutation(LOGIN, {
     onCompleted: data => {
       if (data.login.token) {
         localStorage.setItem('baphomet-token', data.login.token);
         const navigateTo = location?.state?.from?.pathname || './movielist';
         navigate(navigateTo, { replace: true });
-        window.location.hash = navigateTo;
+        window.location.pathname = navigateTo;
       }
     }
   });
@@ -23,7 +24,7 @@ export const Login: React.FC = () => {
     if (localStorage.getItem('baphomet-token')) {
       const navigateTo = location?.state?.from?.pathname || '/movielist';
       navigate(navigateTo, { replace: true });
-      window.location.hash = navigateTo;
+      window.location.pathname = navigateTo;
     }
   }, [navigate, location]);
 

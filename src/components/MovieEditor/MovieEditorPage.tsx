@@ -95,8 +95,7 @@ export const MovieEditorPage: React.FC<EditMoviePage> = ({
   };
 
   const onSubmitHandler = () => {
-    const { hash } = location;
-    const matchResult = hash?.match(/\/[a-zA-Z0-9]+/);
+    const matchResult = location.pathname?.match(/\/[a-zA-Z0-9]+/);
     const endPoint = matchResult?.[0];
 
     if (endPoint === '/create') {
