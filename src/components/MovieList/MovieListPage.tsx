@@ -58,6 +58,7 @@ export const MovieListPage = () => {
       }
     },
     onError: err => {
+      console.log(err);
       setHasError(true);
     }
   });
