@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.11.8",
-    "@collinlucke/phantomartist": "link:../phantomartist",
+    "@collinlucke/phantomartist": "latest",
     "@emotion/babel-plugin": "^11.12.0",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
