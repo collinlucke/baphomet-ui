@@ -5,6 +5,8 @@ import { UPDATE_MOVIE, ADD_MOVIE } from '../../api/mutations';
 import { MovieEditorForm } from './MovieEditorForm';
 import { Block, InnerWidth } from '@collinlucke/phantomartist';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useError } from '../../contexts';
+import { CustomErrorTypes } from '../../CustomTypes.types';
 
 type MovieProps = {
   id?: string;
@@ -33,6 +35,7 @@ export const MovieEditorPage: React.FC<EditMoviePage> = ({
   clean,
   readonly
 }) => {
+  const { setError } = useError();
   const navigate = useNavigate();
   const { id } = useParams();
   const [movie, setMovie] = useState(cleanForm);
@@ -62,6 +65,9 @@ export const MovieEditorPage: React.FC<EditMoviePage> = ({
     },
     onCompleted: data => {
       navigate(`/view/${data.newMovie.id}`);
+    },
+    onError: error => {
+      setError(error as CustomErrorTypes);
     }
   });
 
@@ -76,6 +82,9 @@ export const MovieEditorPage: React.FC<EditMoviePage> = ({
     },
     onCompleted: data => {
       setMovie(data.updatedMovie);
+    },
+    onError: error => {
+      setError(error as CustomErrorTypes);
     }
   });
 

@@ -5,23 +5,19 @@ import { MovieEditorPage } from './components/MovieEditor/MovieEditorPage.tsx';
 import { MovieListPage } from './components/MovieList/MovieListPage.tsx';
 import { ProtectedRoute } from './components/shared/ProtectedRoute.tsx';
 import { ArenaPage } from './components/Arena/ArenaPage.tsx';
-import { BaphErrorBoundary } from './components/shared/BaphErrorBoundary.tsx';
-import { FourOhFour } from './components/shared/FourOhFour.tsx';
-// import { useEffect } from 'react';
-// import { createRoutesFromElements, Route } from 'react-router-dom';
+import { ErrorBoundary } from './components/shared/ErrorBoundary.tsx';
 
 const routes = [
   {
     path: '/',
     element: <App />,
-    errorElement: <BaphErrorBoundary />,
+    errorElement: <ErrorBoundary />,
     children: [
       { path: '/', element: <WelcomePage /> },
       { path: 'movielist', element: <MovieListPage /> },
       {
         path: 'view/:id',
         element: <MovieEditorPage readonly />
-        // errorElement: <BaphErrorBoundary />
       },
       {
         path: 'edit/:id',
@@ -33,8 +29,7 @@ const routes = [
           <ProtectedRoute element={MovieEditorPage} props={{ clean: true }} />
         )
       },
-      { path: 'arena', element: <ArenaPage /> },
-      { path: '*', element: <FourOhFour /> } // Catch-all route for errors
+      { path: 'arena', element: <ArenaPage /> }
     ]
   },
   { path: '/login', element: <Login /> }

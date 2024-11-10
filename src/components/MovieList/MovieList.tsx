@@ -1,12 +1,8 @@
-import {
-  Button,
-  List,
-  Search,
-  useResizedWidth
-} from '@collinlucke/phantomartist';
+import { Button, List, Search } from '@collinlucke/phantomartist';
 import { MovieListItem } from './MovieListItem';
 import { ChangeEvent, FormEventHandler } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useScreenSize } from '../../hooks/useScreenSize';
 
 type Movie = {
   id: string;
@@ -36,7 +32,7 @@ export const MovieList: React.FC<MovieData> = ({
   openDeleteModal
 }) => {
   const navigate = useNavigate();
-  const width = useResizedWidth();
+  const screenSize = useScreenSize();
 
   const onSearchHandler: FormEventHandler<HTMLFormElement> = e => {
     onSearch?.(e);
@@ -50,13 +46,6 @@ export const MovieList: React.FC<MovieData> = ({
     navigate('/arena');
   };
 
-  const buttonSize = () => {
-    if (width <= 580) {
-      return 'medium';
-    }
-    return 'large';
-  };
-
   return (
     <List>
       <Search
@@ -65,8 +54,8 @@ export const MovieList: React.FC<MovieData> = ({
         searchLabel="Search Movies"
         setSearchTerm={setSearchTermHandler}
         resultsCount={movieData.allMovies.length}
-        buttonSize={buttonSize()}
-        inputSize={buttonSize()}
+        buttonSize={screenSize}
+        inputSize={screenSize}
         useSearchButton={false}
       />
       {movieData.allMovies.length ? (
@@ -84,7 +73,7 @@ export const MovieList: React.FC<MovieData> = ({
         </div>
       )}
       <Button
-        size={buttonSize()}
+        size={screenSize}
         onClick={navigateToArena}
         className={baphStyles}
       >

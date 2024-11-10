@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Trash, TrashSolid, IconoirProvider } from 'iconoir-react';
 import { Button, ListItem } from '@collinlucke/phantomartist';
 import { useState, MouseEventHandler } from 'react';
+import { useScreenSize } from '../../hooks/useScreenSize';
 
 type MovieType = {
   id: string;
@@ -29,6 +30,7 @@ export const MovieListItem: React.FC<{
   mov: MovieType;
   openDeleteModal: OpenDeleteModalType;
 }) => {
+  const screenSize = useScreenSize();
   const [showTrashSolid, setShowTrashSolid] = useState(false);
   const token = localStorage.getItem('baphomet-token');
   const { id, releaseDate, title } = mov;
@@ -46,16 +48,23 @@ export const MovieListItem: React.FC<{
   };
 
   return (
-    <ListItem useHover>
+    <ListItem className={{ li: baphStyles.li(screenSize) }} useHover>
       <>
-        <Link to={`/view/${id}`} style={baphStyles.wrapper}>
+        <Link to={`/view/${id}`} style={baphStyles.wrapper(screenSize)}>
           <span css={[baphStyles.title]}>{title}</span>
           {releaseDate && (
-            <span css={[baphStyles.releaseDate]}>{releaseDate}</span>
+            <span css={[baphStyles.releaseDate(screenSize)]}>
+              {releaseDate}
+            </span>
           )}
         </Link>
         {token && (
-          <Button kind="ghost" iconOnly onClick={openDeleteModalHandler}>
+          <Button
+            kind="ghost"
+            iconOnly
+            onClick={openDeleteModalHandler}
+            className={{ button: baphStyles.button(screenSize) }}
+          >
             <div
               onMouseEnter={mouseTrashHoverHandler}
               onMouseLeave={mouseTrashHoverHandler}
@@ -72,23 +81,31 @@ export const MovieListItem: React.FC<{
 };
 
 const baphStyles = {
-  wrapper: {
+  wrapper: (size: string) => ({
     display: 'flex',
     justifyContent: 'space-between',
-    flex: 1
-  },
+    alignItems: size === 'small' ? 'start' : 'center',
+    flex: 1,
+    flexDirection: size === 'small' ? ('column' as 'column') : ('row' as 'row'),
+    gap: size === 'small' ? '0' : '20px'
+  }),
   title: {
-    maxWidth: '550px',
-    minWidth: '200px',
     WebkitBoxOrient: 'vertical' as 'vertical',
     display: '-webkit-inline-box',
     overflow: 'hidden',
     WebkitLineClamp: '1'
   },
-  releaseDate: {
-    marginLeft: '20px',
+  releaseDate: (size: string) => ({
     marginRight: '20px',
-    minWidth: '120px',
-    textAlign: 'right' as 'right'
-  }
+    minWidth: 'max-content',
+    textAlign: 'right' as 'right',
+    fontSize: size === 'small' ? '.8em' : 'inherit'
+  }),
+  button: (size: string) => ({
+    alignItems: size === 'small' ? 'center' : 'start',
+    minWidth: 'max-content'
+  }),
+  li: (size: string) => ({
+    gap: size === 'small' ? '20px' : '0'
+  })
 };

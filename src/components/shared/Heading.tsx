@@ -1,27 +1,14 @@
-import {
-  Header,
-  Button,
-  InnerWidth,
-  Block,
-  useResizedWidth
-} from '@collinlucke/phantomartist';
+import { Header, Button, InnerWidth, Block } from '@collinlucke/phantomartist';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { useScreenSize } from '../../hooks/useScreenSize';
+import { PlusSignIcon } from 'hugeicons-react';
 
 export const Heading: React.FC = () => {
   const navigate = useNavigate();
-  const width = useResizedWidth();
+  const screenSize = useScreenSize();
   const navToCreate = () => {
     navigate('/create');
-  };
-  const buttonSize = () => {
-    if (width <= 480) {
-      return 'small';
-    }
-    if (width <= 580) {
-      return 'medium';
-    }
-    return 'large';
   };
 
   return (
@@ -32,8 +19,19 @@ export const Heading: React.FC = () => {
             <Link to={'/'}>Baphomet</Link>
           </h1>
           <div>
-            <Button size={buttonSize()} onClick={navToCreate}>
-              Add new movie
+            <Button
+              size={screenSize}
+              onClick={navToCreate}
+              icon={
+                <PlusSignIcon
+                  size={screenSize === 'small' ? 20 : 17}
+                  strokeWidth={'3px'}
+                />
+              }
+              iconOnly={screenSize === 'small'}
+              className={{ button: baphStyles.button }}
+            >
+              {screenSize === 'small' ? '' : <>Add new movie</>}
             </Button>
           </div>
         </InnerWidth>
@@ -46,5 +44,8 @@ const baphStyles = {
   innerWidth: {
     flexDirection: 'row' as 'row',
     alignItems: 'end'
+  },
+  button: {
+    position: 'relative' as 'relative'
   }
 };
