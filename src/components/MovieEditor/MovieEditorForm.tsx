@@ -6,7 +6,8 @@ import {
   FormTextArea,
   Button,
   Header,
-  Image
+  Image,
+  ButtonGroup
 } from '@collinlucke/phantomartist';
 import { useNavigate } from 'react-router-dom';
 
@@ -119,14 +120,14 @@ export const MovieEditorForm: React.FC<MovieEditorFormProps> = ({
         onChange={onChangeHandlerText}
       />
       {!readonly && (
-        <>
+        <ButtonGroup>
           <Button type="submit" kind="primary">
             Save
           </Button>
           <Button onClick={cancelHandler} kind="secondary">
             Cancel
           </Button>
-        </>
+        </ButtonGroup>
       )}
     </>
   );

@@ -25,3 +25,11 @@ export const GET_MOVIE = gql`
     }
   }
 `;
+
+export const CHECK_AUTH = gql`
+  query checkAuth($token: String) {
+    checkAuth(token: $token) {
+      isValid
+    }
+  }
+`;

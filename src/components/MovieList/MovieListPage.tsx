@@ -1,9 +1,8 @@
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation, ApolloError } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { GET_ALL_MOVIES } from '../../api/queries';
 import { DELETE_MOVIE } from '../../api/mutations';
 import { MovieList } from './MovieList';
-import { ErrorModal } from '../shared/ErrorModal';
 import {
   Block,
   Button,
@@ -12,7 +11,8 @@ import {
   Modal
 } from '@collinlucke/phantomartist';
 import { ChangeEvent, useState, useEffect } from 'react';
-import { useShowHeading } from '../../contexts';
+import { useShowHeading, useError } from '../../contexts';
+import { CustomErrorTypes } from '../../CustomTypes.types';
 
 type Movie = {
   id: string;
@@ -31,14 +31,14 @@ export const MovieListPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [movieData, setMovieData] = useState<MovieData>({ allMovies: [] });
   const [movieToDelete, setMovieToDelete] = useState({ id: '', title: '' });
-  const [hasError, setHasError] = useState(false);
   const { showHeading, setShowHeading } = useShowHeading();
+  const { error, setError } = useError();
 
   useEffect(() => {
-    if (showHeading) {
-      setShowHeading(false);
+    if (!showHeading) {
+      setShowHeading(true);
     }
-  }, [setShowHeading]);
+  }, [showHeading]);
 
   useQuery(GET_ALL_MOVIES, {
     variables: {
@@ -51,15 +51,14 @@ export const MovieListPage = () => {
     }
   });
 
-  const [deleteMovie, { error }] = useMutation(DELETE_MOVIE, {
+  const [deleteMovie] = useMutation(DELETE_MOVIE, {
     onCompleted: data => {
       if (data.deleteMovie) {
         navigate(0);
       }
     },
-    onError: err => {
-      console.log(err);
-      setHasError(true);
+    onError: (error: ApolloError) => {
+      setError(error as CustomErrorTypes);
     }
   });
 
@@ -89,7 +88,7 @@ export const MovieListPage = () => {
             openDeleteModal={openDeleteModal}
           />
         </InnerWidth>
-        {movieToDelete.id && (
+        {movieToDelete.id && !error && (
           <Modal
             className={baphStyles}
             closeModal={() => setMovieToDelete({ id: '', title: '' })}
@@ -112,7 +111,6 @@ export const MovieListPage = () => {
             </ButtonGroup>
           </Modal>
         )}
-        {hasError && <ErrorModal error={error} />}
       </Block>
     </>
   );

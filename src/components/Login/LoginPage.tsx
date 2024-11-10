@@ -1,13 +1,19 @@
-import { FormEvent, useState, useEffect } from 'react';
+import { FormEvent, useState, SetStateAction } from 'react';
 import { FormTextInput, Button, Form, Modal } from '@collinlucke/phantomartist';
 import { LOGIN } from '../../api/mutations';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { CHECK_AUTH } from '../../api/queries';
+import { ApolloError } from '@apollo/client';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [userInput, setUserInput] = useState({ email: '', password: '' });
+  const [error, setError] = useState<
+    SetStateAction<SetStateAction<undefined>> & { title: string }
+  >();
+  const baphToken = localStorage.getItem('baphomet-token');
 
   const [login] = useMutation(LOGIN, {
     onCompleted: data => {
@@ -17,17 +23,37 @@ export const Login: React.FC = () => {
         navigate(navigateTo, { replace: true });
         window.location.pathname = navigateTo;
       }
+    },
+    onError: error => {
+      const titledError = { ...error, title: 'login' };
+
+      setError(
+        titledError as SetStateAction<SetStateAction<undefined>> &
+          ApolloError & { title: string }
+      );
     }
   });
 
-  useEffect(() => {
-    if (localStorage.getItem('baphomet-token')) {
-      const navigateTo = location?.state?.from?.pathname || '/movielist';
-      navigate(navigateTo, { replace: true });
-      window.location.pathname = navigateTo;
-    }
-  }, [navigate, location]);
+  useQuery(CHECK_AUTH, {
+    variables: {
+      token: baphToken
+    },
+    onCompleted: data => {
+      if (data.checkAuth.isValid) {
+        const navigateTo = location?.state?.from?.pathname || '/movielist';
+        navigate(navigateTo, { replace: true });
+        window.location.pathname = navigateTo;
+      }
+    },
+    onError: error => {
+      const titledError = { ...error, title: 'checkAuth' };
 
+      setError(
+        titledError as SetStateAction<SetStateAction<undefined>> &
+          ApolloError & { title: string }
+      );
+    }
+  });
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { target } = e;
     const { name, value } = target;
@@ -44,6 +70,12 @@ export const Login: React.FC = () => {
   return (
     <Modal>
       <Form onSubmit={loginHandler}>
+        {error?.title === 'login' && (
+          <div css={baphStyles.errorMessage}>
+            Ups. Looks like either the email address or password you provided
+            are wrong. Like, very wrong.
+          </div>
+        )}
         <div>Need you to login real quick. thnx!</div>
         <FormTextInput
           label="Email"
@@ -64,4 +96,11 @@ export const Login: React.FC = () => {
       </Form>
     </Modal>
   );
+};
+
+const baphStyles = {
+  errorMessage: {
+    color: 'red',
+    marginBottom: '20px'
+  }
 };
