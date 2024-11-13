@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
-import { Trash, TrashSolid, IconoirProvider } from 'iconoir-react';
+import { Delete02Icon } from 'hugeicons-react';
 import { Button, ListItem } from '@collinlucke/phantomartist';
 import { useState, MouseEventHandler } from 'react';
 import { useScreenSize } from '../../hooks/useScreenSize';
+import { useIsAuthenticated } from '../../hooks/useIsAuthenticated';
 
 type MovieType = {
   id: string;
@@ -30,9 +31,9 @@ export const MovieListItem: React.FC<{
   mov: MovieType;
   openDeleteModal: OpenDeleteModalType;
 }) => {
+  const isAuthenticated = useIsAuthenticated({ protectedRoute: false });
   const screenSize = useScreenSize();
   const [showTrashSolid, setShowTrashSolid] = useState(false);
-  const token = localStorage.getItem('baphomet-token');
   const { id, releaseDate, title } = mov;
 
   const mouseTrashHoverHandler: MouseEventHandler<HTMLDivElement> = e => {
@@ -58,7 +59,7 @@ export const MovieListItem: React.FC<{
             </span>
           )}
         </Link>
-        {token && (
+        {isAuthenticated && (
           <Button
             kind="ghost"
             iconOnly
@@ -69,9 +70,11 @@ export const MovieListItem: React.FC<{
               onMouseEnter={mouseTrashHoverHandler}
               onMouseLeave={mouseTrashHoverHandler}
             >
-              <IconoirProvider iconProps={{ height: '1.2rem' }}>
-                {showTrashSolid ? <TrashSolid /> : <Trash />}
-              </IconoirProvider>
+              {showTrashSolid ? (
+                <Delete02Icon fill="silver" size={20} />
+              ) : (
+                <Delete02Icon size={20} />
+              )}
             </div>
           </Button>
         )}
