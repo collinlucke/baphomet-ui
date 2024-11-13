@@ -58,9 +58,6 @@ jobs:
                         --build-arg GIT_REGISTRY_TOKEN=${{ secrets.GIT_REGISTRY_TOKEN }} \
                         -t collinlucke/baphomet-ui . --push
 
-      - name: Publish Image to Docker Hub
-        run: docker push collinlucke/baphomet-ui:latest
-
   deploy:
     needs: build
     runs-on: self-hosted
