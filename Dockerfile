@@ -1,4 +1,4 @@
-FROM node:latest AS build
+FROM node:20 AS build
 
 ARG NODE_ENV
 ARG SERVER_BASE_URL
