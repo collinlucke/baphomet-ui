@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Configg for getting PhantomArtist
+      - name: Config for getting PhantomArtist
         env:
           GIT_REGISTRY_TOKEN: ${{ secrets.GIT_REGISTRY_TOKEN }}
         run: echo "//npm.pkg.github.com/:_authToken=${GIT_REGISTRY_TOKEN}" >> ~/.npmrc
