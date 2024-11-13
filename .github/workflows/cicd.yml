@@ -53,7 +53,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker buildX --build-arg NODE_ENV=development \
+          docker buildx --build-arg NODE_ENV=development \
                         --build-arg SERVER_BASE_URL=${{ secrets.SERVER_BASE_URL }} \
                         --build-arg GIT_REGISTRY_TOKEN=${{ secrets.GIT_REGISTRY_TOKEN }} \
                         -t collinlucke/baphomet-ui . --push
