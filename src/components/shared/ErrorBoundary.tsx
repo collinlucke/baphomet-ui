@@ -15,7 +15,6 @@ type ErrorBoundaryTypes = {
   error?: CustomErrorTypes;
   closeModal?: () => void;
 };
-
 export const ErrorBoundary: React.FC<ErrorBoundaryTypes> = ({
   className,
   children
@@ -25,10 +24,8 @@ export const ErrorBoundary: React.FC<ErrorBoundaryTypes> = ({
     message: `This isn't looking very good for you.`
   };
   const routerError = useRouteError() as CustomErrorTypes;
-
   const { error: contextError, setError } = useError();
   const navigate = useNavigate();
-  console.log(routerError?.status);
 
   if (contextError?.networkError?.statusCode === 401) {
     errorContent.status = '401';
@@ -56,9 +53,9 @@ export const ErrorBoundary: React.FC<ErrorBoundaryTypes> = ({
     navigate('movielist');
   };
 
-  const goBackHandler = () => {
+  const goToLoginHandler = () => {
     setError(undefined);
-    navigate(-1);
+    navigate('/login');
   };
 
   return (
@@ -82,8 +79,10 @@ export const ErrorBoundary: React.FC<ErrorBoundaryTypes> = ({
           </div>
 
           <ButtonGroup>
-            <Button onClick={goHomeHandler}>Go home</Button>
-            <Button onClick={goBackHandler}>Go back</Button>
+            <Button onClick={goHomeHandler} kind="ghost">
+              Go home
+            </Button>
+            <Button onClick={goToLoginHandler}>Log in</Button>
           </ButtonGroup>
         </>
       )}

@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.1.8] - 2024-12-11
+
+### Added
+
+- Created `AuthenticationContext`
+- Added `useLayoutEffect()` in a couple files so loading data doesn't look so choppy
+- Created `useIsAuthenticated()` hook
+
+### Changed
+
+- Made custom types changes based on authentication context addition
+- Switched out Iconoir for Hugeicons
+- flushed out `<ErrorBoundary/>` a little more
+
+### Removed
+
+- Removed AuthCheck from `<LoginPage>`
+
+### Fixed
+
+- ## N/A
+
+<br/>
+
 ## [0.1.7] - 2024-23-09
 
 ### Added

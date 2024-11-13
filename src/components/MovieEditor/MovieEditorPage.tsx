@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useLayoutEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_MOVIE } from '../../api/queries';
 import { UPDATE_MOVIE, ADD_MOVIE } from '../../api/mutations';
 import { MovieEditorForm } from './MovieEditorForm';
 import { Block, InnerWidth } from '@collinlucke/phantomartist';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useError } from '../../contexts';
+import { useError, useShowHeading } from '../../contexts';
 import { CustomErrorTypes } from '../../CustomTypes.types';
 
 type MovieProps = {
@@ -35,18 +35,22 @@ export const MovieEditorPage: React.FC<EditMoviePage> = ({
   clean,
   readonly
 }) => {
+  const [movie, setMovie] = useState(cleanForm);
+  const [isReady, setIsReady] = useState(false);
+  const { setShowHeading } = useShowHeading();
   const { setError } = useError();
   const navigate = useNavigate();
   const { id } = useParams();
-  const [movie, setMovie] = useState(cleanForm);
 
   useEffect(() => {
     if (clean && JSON.stringify(movie) !== JSON.stringify(cleanForm)) {
       setMovie(cleanForm);
     }
+    setShowHeading(true);
   }, [clean]);
 
-  useQuery(GET_MOVIE, {
+  const { loading, data } = useQuery(GET_MOVIE, {
+    // useQuery(GET_MOVIE, {
     variables: {
       id
     },
@@ -54,6 +58,12 @@ export const MovieEditorPage: React.FC<EditMoviePage> = ({
       setMovie(data.movie);
     }
   });
+
+  useLayoutEffect(() => {
+    if (!loading && data) {
+      setIsReady(true);
+    }
+  }, [loading, data]);
 
   const [addMovie] = useMutation(ADD_MOVIE, {
     variables: {
@@ -114,20 +124,26 @@ export const MovieEditorPage: React.FC<EditMoviePage> = ({
     }
   };
 
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
+
   return (
     <>
-      <Block>
-        <InnerWidth>
-          <MovieEditorForm
-            readonly={readonly}
-            clean={clean}
-            movie={movie}
-            onChange={onChangeHandler}
-            onChangeTextArea={onChangeHandlerTextArea}
-            onSubmit={onSubmitHandler}
-          />
-        </InnerWidth>
-      </Block>
+      {isReady && (
+        <Block>
+          <InnerWidth>
+            <MovieEditorForm
+              readonly={readonly}
+              clean={clean}
+              movie={movie}
+              onChange={onChangeHandler}
+              onChangeTextArea={onChangeHandlerTextArea}
+              onSubmit={onSubmitHandler}
+            />
+          </InnerWidth>
+        </Block>
+      )}
     </>
   );
 };

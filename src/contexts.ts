@@ -24,3 +24,15 @@ export const ErrorContext = createContext<{
 });
 
 export const useError = () => useContext(ErrorContext);
+
+// ---------- Authenticated Context
+
+export const AuthenticatedContext = createContext<{
+  authenticated: boolean;
+  setAuthenticated: (authorized: boolean) => void;
+}>({
+  authenticated: false,
+  setAuthenticated: () => {}
+});
+
+export const useAuthorized = () => useContext(AuthenticatedContext);
