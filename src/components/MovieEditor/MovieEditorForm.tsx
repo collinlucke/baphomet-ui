@@ -29,12 +29,14 @@ type MovieEditorFormProps = {
 };
 
 export const MovieEditorForm: React.FC<MovieEditorFormProps> = ({
+  movie,
+  readonly,
+  clean,
   onSubmit,
   onChange,
-  onChangeTextArea,
-  movie,
-  readonly
+  onChangeTextArea
 }) => {
+  console.log('is clean ', clean);
   const navigate = useNavigate();
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     onSubmit?.(e);

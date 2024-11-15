@@ -36,7 +36,7 @@ export const MovieEditorPage: React.FC<EditMoviePage> = ({
   readonly
 }) => {
   const [movie, setMovie] = useState(cleanForm);
-  const [isReady, setIsReady] = useState(false);
+  const [isViewReady, setIsViewReady] = useState(false);
   const { setShowHeading } = useShowHeading();
   const { setError } = useError();
   const navigate = useNavigate();
@@ -48,9 +48,9 @@ export const MovieEditorPage: React.FC<EditMoviePage> = ({
     }
     setShowHeading(true);
   }, [clean]);
+  console.log('isViewReady ', isViewReady);
 
   const { loading, data } = useQuery(GET_MOVIE, {
-    // useQuery(GET_MOVIE, {
     variables: {
       id
     },
@@ -61,7 +61,7 @@ export const MovieEditorPage: React.FC<EditMoviePage> = ({
 
   useLayoutEffect(() => {
     if (!loading && data) {
-      setIsReady(true);
+      setIsViewReady(true);
     }
   }, [loading, data]);
 
@@ -124,13 +124,9 @@ export const MovieEditorPage: React.FC<EditMoviePage> = ({
     }
   };
 
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
-
   return (
     <>
-      {isReady && (
+      {(isViewReady || clean) && (
         <Block>
           <InnerWidth>
             <MovieEditorForm
