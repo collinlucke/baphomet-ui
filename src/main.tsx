@@ -9,14 +9,17 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import routes from './routes';
+import 'dotenv';
 
 const baseURL =
-  import.meta.env.VITE_NODE_ENV === 'development'
-    ? import.meta.env.VITE_DEV_URI
-    : import.meta.env.VITE_PROD_URI;
-
+  location.hostname === 'localhost'
+    ? location.origin
+    : `${process.env.PROD_URL}`;
 const router = createBrowserRouter(routes);
-const httpLink = createHttpLink({ uri: `${baseURL}/graphql/` });
+const httpLink = createHttpLink({
+  uri: `${baseURL}:5050/graphql/`
+});
+
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('baphomet-token');
   return {

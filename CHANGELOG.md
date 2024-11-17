@@ -1,26 +1,25 @@
 # Changelog
 
-## [0.1.8] - 2024-12-11
+## [0.2.0] - 2024-17-11
 
 ### Added
 
-- Created `AuthenticationContext`
-- Added `useLayoutEffect()` in a couple files so loading data doesn't look so choppy
-- Created `useIsAuthenticated()` hook
+- Adding nginx.conf so connecting to baphomet-server's docker container actually works
 
 ### Changed
 
-- Made custom types changes based on authentication context addition
-- Switched out Iconoir for Hugeicons
-- flushed out `<ErrorBoundary/>` a little more
+- Updated main.js to use real .env variables and not the Vite ones.
+- Revamped the docker-compose.yml to work in the same network as baphomet-server.
+- Dockerfile using nginx in a way that makes thing do the things
 
 ### Removed
 
-- Removed AuthCheck from `<LoginPage>`
+- Got rid of the all the dist moving stuff since everything we need should be here now.
+- Got rid of the stupid thing I had foe Windows permissions
 
 ### Fixed
 
-- ## N/A
+- All the stuff around the ui and server not connecting
 
 <br/>
 
