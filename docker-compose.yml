@@ -1,7 +1,8 @@
 services:
   app:
-    image: collinlucke/baphomet-ui
-    restart: unless-stopped
+    restart: no
+    networks:
+      - baphomet
     build:
       context: .
       dockerfile: Dockerfile
@@ -9,6 +10,10 @@ services:
       - '80:80'
       - '443:443'
     environment:
-      NODE_ENV: 'production'
-      SERVER_BASE_URL: ${SERVER_BASE_URL}
-      GIT_REGISTRY_TOKEN: ${GIT_REGISTRY_TOKEN}
+      - NODE_ENV=${NODE_ENV}
+      - SERVER_BASE_URL=${SERVER_BASE_URL}
+      - GIT_REGISTRY_TOKEN=${GIT_REGISTRY_TOKEN}
+
+networks:
+  baphomet:
+    driver: bridge
