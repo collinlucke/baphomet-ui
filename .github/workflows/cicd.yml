@@ -65,7 +65,7 @@ jobs:
       # - name: Pull Image from Docker Hub
       #   run: docker pull collinlucke/baphomet-ui:latest
       - name: Pull Docker Image with Elevated Privileges
-        run: PowerShell -File scripts/runAsAdmin.ps1
+        run: powershell -File scripts/runAsAdmin.ps1
 
       - name: Delete Old Container
         run: docker rm -f baphomet-ui-container
