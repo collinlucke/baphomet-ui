@@ -42,7 +42,9 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Config for getting PhantomArtist
-        run: echo "//npm.pkg.github.com/:_authToken=${{secrets.GIT_REGISTRY_TOKEN}}" >> .npmrc
+        env:
+          GIT_REGISTRY_TOKEN: ${{ secrets.GIT_REGISTRY_TOKEN }}
+        run: echo "//npm.pkg.github.com/:_authToken=${GIT_REGISTRY_TOKEN}" >> ~/.npmrc
 
       - name: Install Dependencies
         run: |
@@ -60,8 +62,10 @@ jobs:
     needs: build
     runs-on: self-hosted
     steps:
-      - name: Pull Image from Docker Hub
-        run: docker pull collinlucke/baphomet-ui:latest
+      # - name: Pull Image from Docker Hub
+      #   run: docker pull collinlucke/baphomet-ui:latest
+      - name: Pull Docker Image with Elevated Privileges
+        run: PowerShell -File scripts/runAsAdmin.ps1
 
       - name: Delete Old Container
         run: docker rm -f baphomet-ui-container

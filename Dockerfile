@@ -2,9 +2,6 @@ FROM node:latest AS build
 
 WORKDIR /app
 
-ARG GIT_REGISTRY_TOKEN
-ENV GIT_REGISTRY_TOKEN=${GIT_REGISTRY_TOKEN}
-
 COPY package.json .
 COPY index.html .
 COPY tsconfig.json .
