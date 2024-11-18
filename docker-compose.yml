@@ -1,6 +1,6 @@
 services:
   app:
-    restart: no
+    restart: 'no'
     networks:
       - baphomet
     build:
