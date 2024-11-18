@@ -70,8 +70,8 @@ jobs:
       - name: Pull Docker Image with Elevated Privileges
         run: powershell -File scripts/runAsAdmin.ps1
 
-      - name: Delete Old Container
-        run: docker rm -f baphomet-ui-container
+      # - name: Delete Old Container
+      #   run: docker rm -f baphomet-ui-container
 
-      - name: Run Docker Container
-        run: docker run -d -p 80:80 -p 443:443 collinlucke/baphomet-ui
+      # - name: Run Docker Container
+      #   run: docker run -d -p 80:80 -p 443:443 collinlucke/baphomet-ui
