@@ -27,3 +27,7 @@ set-pnpmrc.sh
 *.njsproj
 *.sln
 *.sw?
+*.pfx
+*.pem
+*.cer
+*.key

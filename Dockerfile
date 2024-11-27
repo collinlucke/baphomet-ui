@@ -11,10 +11,7 @@ COPY tsconfig.json .
 COPY src ./src
 COPY scripts ./scripts
 COPY public ./public
-
-RUN echo "registry=https://registry.npmjs.org/" > .npmrc
-RUN echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
-RUN echo "//npm.pkg.github.com/:_authToken=${GIT_REGISTRY_TOKEN}" >> .npmrc
+COPY .npmrc .
 
 RUN npm install -g pnpm typescript
 RUN pnpm install
@@ -23,6 +20,12 @@ RUN pnpm build
 FROM nginx:stable-alpine
 WORKDIR /usr/share/nginx/html
 RUN rm -rf *
+
+RUN apk update \
+    && apk add openssl
+COPY fullchain.pem /etc/ssl/certs
+COPY privkey.pem /etc/ssl/private
+RUN openssl rsa -in /etc/ssl/private/privkey.pem -out /etc/ssl/private/privkey.pem -passin pass:ExportSSL4me!
 COPY --from=build /app/dist .
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80

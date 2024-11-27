@@ -48,12 +48,12 @@ export const MovieEditorPage: React.FC<EditMoviePage> = ({
     }
     setShowHeading(true);
   }, [clean]);
-  console.log('isViewReady ', isViewReady);
 
   const { loading, data } = useQuery(GET_MOVIE, {
     variables: {
       id
     },
+    skip: clean,
     onCompleted: data => {
       setMovie(data.movie);
     }

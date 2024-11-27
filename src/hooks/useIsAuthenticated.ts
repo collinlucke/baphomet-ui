@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { useNavigate } from 'react-router-dom';
 import { useError } from '../contexts';
 import {
   CustomErrorTypes,
@@ -15,26 +14,18 @@ type UseIsAuthenticatedTypes = {
 export const useIsAuthenticated: React.FC<UseIsAuthenticatedTypes> = ({
   protectedRoute = false
 } = {}) => {
-  const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { setError } = useError();
   const baphToken = localStorage.getItem('baphomet-token');
-
-  if (!baphToken) {
-    navigate('/login');
-  }
 
   useQuery(CHECK_AUTH, {
     variables: {
       token: baphToken
     },
     onCompleted: data => {
-      if (data.checkAuth.isValid) {
-        setIsAuthenticated(true);
-      }
+      setIsAuthenticated(data.checkAuth.isValid);
     },
     onError: error => {
-      console.log(protectedRoute);
       if (protectedRoute) {
         const titledError = {
           ...error,
