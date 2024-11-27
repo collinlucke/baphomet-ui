@@ -20,7 +20,6 @@ type MovieEditorFormProps = {
     title?: string;
     fullplot?: string;
   };
-  clean?: boolean;
   readonly?: boolean;
 
   onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -31,12 +30,10 @@ type MovieEditorFormProps = {
 export const MovieEditorForm: React.FC<MovieEditorFormProps> = ({
   movie,
   readonly,
-  clean,
   onSubmit,
   onChange,
   onChangeTextArea
 }) => {
-  console.log('is clean ', clean);
   const navigate = useNavigate();
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     onSubmit?.(e);

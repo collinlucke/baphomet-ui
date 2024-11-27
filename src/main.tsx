@@ -11,13 +11,12 @@ import { setContext } from '@apollo/client/link/context';
 import routes from './routes';
 import 'dotenv';
 
-const baseURL =
-  location.hostname === 'localhost'
-    ? location.origin
-    : `${process.env.PROD_URL}`;
+const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
 const router = createBrowserRouter(routes);
 const httpLink = createHttpLink({
-  uri: `${baseURL}:5050/graphql/`
+  uri: `${protocol}://${location.hostname}:${
+    protocol === 'https' ? '443' : '5050'
+  }/graphql`
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -25,7 +24,8 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : ''
+      authorization: token ? `Bearer ${token}` : '',
+      'x-apollo-operation-name': 'GraphQLOperation'
     }
   };
 });
