@@ -21,14 +21,11 @@ jobs:
       - name: Install PNPM and Typescript
         run: npm install -g pnpm typescript
 
-      - name: Set up .npmrc
+      - name: Set up .npmrc in Docker Context
         run: |
-          echo "registry=https://registry.npmjs.org/" > .npmrc
-          echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GIT_REGISTRY_TOKEN }}" >> .npmrc
-
-      - name: Copy .npmrc to Docker Context
-        run: cp .npmrc .
+          echo "registry=https://registry.npmjs.org/" > ./.npmrc
+          echo "@collinlucke:registry=https://npm.pkg.github.com" >> ./.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GIT_REGISTRY_TOKEN }}" >> ./.npmrc
 
       - name: Install Dependencies
         run: pnpm install
