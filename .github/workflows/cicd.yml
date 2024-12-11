@@ -21,6 +21,10 @@ jobs:
       - name: Install PNPM and Typescript
         run: npm install -g pnpm typescript
 
+      - name: Set up .npmrc
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GIT_REGISTRY_TOKEN }}" > ~/.npmrc
+
       - name: Install Dependencies
         run: pnpm install
 
