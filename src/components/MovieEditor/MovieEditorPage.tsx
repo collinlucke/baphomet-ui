@@ -1,4 +1,4 @@
-import { useEffect, useState, useLayoutEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_MOVIE } from '../../api/queries';
 import { UPDATE_MOVIE, ADD_MOVIE } from '../../api/mutations';
