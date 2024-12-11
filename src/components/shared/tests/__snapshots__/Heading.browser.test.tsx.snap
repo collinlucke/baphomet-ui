@@ -1,0 +1,52 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Heading > matches the snapshot 1`] = `
+<div>
+  <header
+    class="pa-header css-o2h1fg"
+    data-testid="main-page-heading"
+  >
+    <div
+      class="pa-block css-xfdfty"
+    >
+      <div
+        class="pa-inner-width css-l3e7vp"
+      >
+        <h1>
+          <a
+            data-testid="home-link"
+            href="/"
+          >
+            Baphomet
+          </a>
+        </h1>
+        <div>
+          <button
+            class="pa-button primary large css-z4rkrz"
+            data-testid="add-new-movie-button"
+          >
+            <svg
+              class=""
+              color="currentColor"
+              fill="none"
+              height="17"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="3px"
+              viewBox="0 0 24 24"
+              width="17"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 4V20M20 12H4"
+                stroke="currentColor"
+              />
+            </svg>
+            Add new movie
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+</div>
+`;

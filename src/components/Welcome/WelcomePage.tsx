@@ -22,7 +22,7 @@ export const WelcomePage = () => {
   }
 
   return (
-    <Block className={baphStyles}>
+    <Block className={baphStyles} dataTestId="welcome-page">
       <Header className={baphStyles}>
         <>
           <h1>WELCOME!!!</h1>

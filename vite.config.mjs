@@ -1,6 +1,5 @@
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
-import del from 'rollup-plugin-delete';
 
 export default defineConfig(async ({ mode }) => {
   return {
@@ -11,6 +10,19 @@ export default defineConfig(async ({ mode }) => {
           plugins: ['@emotion/babel-plugin']
         }
       })
-    ]
+    ],
+    test: {
+      globals: true,
+      setupFiles: 'vitest-setup.ts',
+      include: [
+        'src/tests/*.browser.{test,spec}.{js,ts,jsx,tsx}',
+        'src/**/tests/*.browser.{test,spec}.{js,ts,jsx,tsx}'
+      ],
+      exclude: [
+        'src/tests/*.api.{test,spec}.{js,ts,jsx,tsx}',
+        'src/**/tests/*.api.{test,spec}.{js,ts,jsx,tsx}'
+      ],
+      environment: 'jsdom'
+    }
   };
 });

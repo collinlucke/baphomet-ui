@@ -9,7 +9,7 @@ import { ErrorContext } from './contexts';
 import { AuthenticatedContext } from './contexts';
 import { CustomErrorTypes } from './CustomTypes.types';
 
-function App() {
+export const App = () => {
   const [showHeading, setShowHeading] = useState(true);
   const [error, setError] = useState<CustomErrorTypes | undefined>(undefined);
   const [authenticated, setAuthenticated] = useState(false);
@@ -36,6 +36,6 @@ function App() {
       </AuthenticatedContext.Provider>
     </div>
   );
-}
+};
 
 export default App;

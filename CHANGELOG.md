@@ -1,5 +1,48 @@
 # Changelog
 
+## [0.2.1] - 2024-10-12
+
+### Added
+
+- Unit/inegration tests for Heading and App components and all the fixin's -- snapshots, mock util functions, mock localStorage, data-testid's (used as dataTestId to pass to PA components), mock context fucntions
+
+### Changed
+
+- Changed up cicd.yml -- switched it back to building in linux and simplified it the build steps. Got to sort out deploy. and added testing to the workflow
+
+### Removed
+
+- ### N/A
+
+### Fixed
+
+- useRouterError is now using the right context
+
+<br/>
+
+## [0.2.0] - 2024-17-11
+
+### Added
+
+- Adding nginx.conf so connecting to baphomet-server's docker container actually works
+
+### Changed
+
+- Updated main.js to use real .env variables and not the Vite ones.
+- Revamped the docker-compose.yml to work in the same network as baphomet-server.
+- Dockerfile using nginx in a way that makes thing do the things
+
+### Removed
+
+- Got rid of the all the dist moving stuff since everything we need should be here now.
+- Got rid of the stupid thing I had foe Windows permissions
+
+### Fixed
+
+- All the stuff around the ui and server not connecting
+
+<br/>
+
 ## [0.2.0] - 2024-17-11
 
 ### Added
@@ -36,11 +79,11 @@
 
 ### Removed
 
-- ## N/A
+- ### N/A
 
 ### Fixed
 
-- ## N/A
+- ### N/A
 
 <br/>
 
@@ -48,7 +91,7 @@
 
 ### Added
 
-- ## N/A
+- ### N/A
 
 ### Changed
 
@@ -56,7 +99,7 @@
 
 ### Removed
 
-- ## N/A
+- ### N/A
 
 ### Fixed
 
@@ -81,15 +124,13 @@
 
 ### Fixed
 
--
-
 <br/>
 
 ## [0.1.4] - 2024-18-09
 
 ### Added
 
-- ## N/A
+- ### N/A
 
 ### Changed
 
@@ -98,7 +139,7 @@
 
 ### Removed
 
-- ## N/A
+- ### N/A
 
 ### Fixed
 
@@ -116,7 +157,7 @@
 
 ### Changed
 
-- ## N/A
+- ### N/A
 
 ### Removed
 
@@ -147,7 +188,7 @@
 
 ### Fixed
 
-- #### N/A
+- ### N/A
 
 <br/>
 
@@ -155,7 +196,7 @@
 
 ### Added
 
-- #### N/A
+- ### N/A
 
 ### Changed
 
@@ -163,11 +204,11 @@
 
 ### Removed
 
-- #### N/A
+- ### N/A
 
 ### Fixed
 
-- #### N/A
+- ### N/A
 
 <br/>
 
@@ -196,4 +237,4 @@
 
 ### Fixed
 
-- #### N/A
+- ### N/A
