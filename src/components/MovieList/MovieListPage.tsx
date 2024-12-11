@@ -40,7 +40,6 @@ export const MovieListPage = () => {
     if (!showHeading) {
       setShowHeading(true);
     }
-    setError(undefined);
     setMovieToDelete({ id: '', title: '' });
   }, [showHeading]);
 
@@ -92,7 +91,7 @@ export const MovieListPage = () => {
   return (
     <>
       {isReady && (
-        <Block>
+        <Block dataTestId="movie-list">
           <InnerWidth>
             <h2 css={baphStyles.h2}>Here's a List of Movies</h2>
             <MovieList

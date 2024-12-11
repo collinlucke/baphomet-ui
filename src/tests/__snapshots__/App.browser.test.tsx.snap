@@ -1,0 +1,110 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`App > 'beenHereBefore' HAS NOT been set > matches the snapshot with <WelcomePage> 1`] = `
+<div>
+  <div>
+    <header
+      class="pa-header css-o2h1fg"
+      data-testid="main-page-heading"
+    >
+      <div
+        class="pa-block css-xfdfty"
+      >
+        <div
+          class="pa-inner-width css-l3e7vp"
+        >
+          <h1>
+            <a
+              data-testid="home-link"
+              href="/"
+            >
+              Baphomet
+            </a>
+          </h1>
+          <div>
+            <button
+              class="pa-button primary large css-z4rkrz"
+              data-testid="add-new-movie-button"
+            >
+              <svg
+                class=""
+                color="currentColor"
+                fill="none"
+                height="17"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="3px"
+                viewBox="0 0 24 24"
+                width="17"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 4V20M20 12H4"
+                  stroke="currentColor"
+                />
+              </svg>
+              Add new movie
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main
+      class="css-1vyba8i"
+    >
+      <div
+        class="pa-block css-19umwiw"
+        data-testid="welcome-page"
+      >
+        <header
+          class="pa-header css-7czrpt"
+        >
+          <h1>
+            WELCOME!!!
+          </h1>
+          Looks like you might be new around here...
+        </header>
+        <div
+          class="css-yreaf4"
+        >
+          <img
+            alt="Picture of a cuddly little demon"
+            src="baphy-full-transparent.png"
+          />
+        </div>
+        <div
+          class="pa-inner-width css-zzctzn"
+        >
+          <p>
+            If you've reached this page, Hello! I'm Collin Lucke, I'm a Frontend Software Engineer, and you've stumbled upon my little pet project, Baphomet. Don't worry, it's not an app that sends you to hell - that's TicTok. This guy, as of now, displays a list of movies (like, only a couple at the time of writing this) and you can click on one to get more info. As you'll see it's still very rough around the edges. VERY rough around the edges.
+          </p>
+          <p>
+            On the frontend it's a React/Typescript Vite app using React Router to get around and styled using Emotion CSS. I'm also using a homegrown component library that I've regretfully name PhantomArtist (never tell yourself that no matter what, you'll call something by whatever the Wu Tang name generator gives you).
+          </p>
+          <p>
+            The backend is comprised of an Apollo GraphQL Server calling into a MongoDB database and serving up date from a (soon to be expired) S3 bucket. Planning to move my storage locally.
+          </p>
+          <p>
+            If you have a username/password, then you can login and play around with adding a movie or two. And if you'd like to peak at the code,
+             
+            <a
+              href="http://github.com/collinlucke"
+            >
+              click this stuff
+            </a>
+             
+          </p>
+          <p>
+            Towards the bottom of the list you'll see a "Fight!" button. That's for later.
+          </p>
+        </div>
+        <button
+          class="pa-button primary large css-1f24vce"
+        >
+          Have a Look Around!
+        </button>
+      </div>
+    </main>
+  </div>
+</div>
+`;

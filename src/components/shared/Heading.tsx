@@ -12,14 +12,17 @@ export const Heading: React.FC = () => {
   };
 
   return (
-    <Header>
+    <Header dataTestId="main-page-heading">
       <Block>
         <InnerWidth className={{ innerWidth: baphStyles.innerWidth }}>
           <h1>
-            <Link to={'/'}>Baphomet</Link>
+            <Link to={'/'} data-testid="home-link">
+              Baphomet
+            </Link>
           </h1>
           <div>
             <Button
+              dataTestId="add-new-movie-button"
               size={screenSize}
               onClick={navToCreate}
               icon={

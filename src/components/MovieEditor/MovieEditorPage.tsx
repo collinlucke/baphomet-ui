@@ -36,7 +36,6 @@ export const MovieEditorPage: React.FC<EditMoviePage> = ({
   readonly
 }) => {
   const [movie, setMovie] = useState(cleanForm);
-  const [isViewReady, setIsViewReady] = useState(false);
   const { setShowHeading } = useShowHeading();
   const { setError } = useError();
   const navigate = useNavigate();
@@ -49,7 +48,7 @@ export const MovieEditorPage: React.FC<EditMoviePage> = ({
     setShowHeading(true);
   }, [clean]);
 
-  const { loading, data } = useQuery(GET_MOVIE, {
+  useQuery(GET_MOVIE, {
     variables: {
       id
     },
@@ -58,12 +57,6 @@ export const MovieEditorPage: React.FC<EditMoviePage> = ({
       setMovie(data.movie);
     }
   });
-
-  useLayoutEffect(() => {
-    if (!loading && data) {
-      setIsViewReady(true);
-    }
-  }, [loading, data]);
 
   const [addMovie] = useMutation(ADD_MOVIE, {
     variables: {
@@ -126,12 +119,11 @@ export const MovieEditorPage: React.FC<EditMoviePage> = ({
 
   return (
     <>
-      {(isViewReady || clean) && (
-        <Block>
+      {(movie.title || clean) && (
+        <Block dataTestId="movie-editor-form">
           <InnerWidth>
             <MovieEditorForm
               readonly={readonly}
-              clean={clean}
               movie={movie}
               onChange={onChangeHandler}
               onChangeTextArea={onChangeHandlerTextArea}

@@ -2,7 +2,6 @@ import {
   Form,
   FormTextInput,
   TwoColumn,
-  // ButtonGroup,
   FormTextArea,
   Button,
   Header,
@@ -108,7 +107,6 @@ export const MovieEditorForm: React.FC<MovieEditorFormProps> = ({
         value={movie.rated}
         onChange={onChangeHandlerText}
       />
-      {/* Need to figure out how to edit dates */}
       <FormTextInput
         type="date"
         readonly={readonly}

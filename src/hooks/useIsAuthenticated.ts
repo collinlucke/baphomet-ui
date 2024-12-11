@@ -16,14 +16,15 @@ export const useIsAuthenticated: React.FC<UseIsAuthenticatedTypes> = ({
 } = {}) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { setError } = useError();
-  const baphToken = localStorage.getItem('baphomet-token');
-
+  const baphToken = localStorage.getItem('baphomet-token') || null;
   useQuery(CHECK_AUTH, {
     variables: {
       token: baphToken
     },
     onCompleted: data => {
-      setIsAuthenticated(data.checkAuth.isValid);
+      if (data.checkAuth.isValid) {
+        setIsAuthenticated(true);
+      }
     },
     onError: error => {
       if (protectedRoute) {
