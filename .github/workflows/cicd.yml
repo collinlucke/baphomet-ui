@@ -23,9 +23,9 @@ jobs:
 
       - name: Set up .npmrc
         run: |
-          echo "registry=https://registry.npmjs.org/" > ~/.npmrc
-          echo "@collinlucke:registry=https://npm.pkg.github.com" >> ~/.npmrc
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GIT_REGISTRY_TOKEN }}" >> ~/.npmrc
+          echo "registry=https://registry.npmjs.org/" > .npmrc
+          echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GIT_REGISTRY_TOKEN }}" >> .npmrc
 
       - name: Copy .npmrc to Docker Context
         run: cp .npmrc .
