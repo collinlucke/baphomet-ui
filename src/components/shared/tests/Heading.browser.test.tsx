@@ -49,7 +49,7 @@ describe('Heading', () => {
       );
 
       // Start from /view page so we have a unauthenticated and non-movielist starting point
-      expect(screen.getByTestId('movie-editor-form')).toBeVisible();
+      expect(await screen.findByTestId('movie-editor-form')).toBeVisible();
 
       // Finds and clicks the home link
       userEvent.click(screen.getByTestId('home-link'));
@@ -72,7 +72,7 @@ describe('Heading', () => {
         </MockedProvider>
       );
       // Make sure we start from /view
-      expect(screen.getByTestId('movie-editor-form')).toBeVisible();
+      expect(await screen.findByTestId('movie-editor-form')).toBeVisible();
 
       // Finds and clicks the home link in the Heading
 
