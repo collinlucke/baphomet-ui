@@ -3,7 +3,8 @@ import { useNavigate, useRouteError } from 'react-router-dom';
 import { ButtonGroup, Modal, Button } from '@collinlucke/phantomartist';
 import { CSSObject } from '@emotion/react';
 import { CustomErrorTypes } from '../../CustomTypes.types';
-import { useError } from '../../contexts';
+import { errorVar } from '../../reactiveVars';
+import { useReactiveVar } from '@apollo/client';
 
 type ErrorBoundaryTypes = {
   id?: string;
@@ -24,7 +25,7 @@ export const ErrorBoundary: React.FC<ErrorBoundaryTypes> = ({
     message: `This isn't looking very good for you.`
   };
   const routerError = useRouteError() as CustomErrorTypes;
-  const { error: contextError, setError } = useError();
+  const contextError = useReactiveVar(errorVar) as CustomErrorTypes | undefined;
   const navigate = useNavigate();
 
   const handleErrors = () => {
@@ -53,12 +54,12 @@ export const ErrorBoundary: React.FC<ErrorBoundaryTypes> = ({
   handleErrors();
 
   const goHomeHandler = () => {
-    setError(undefined);
+    errorVar(undefined);
     navigate('movielist');
   };
 
   const goToLoginHandler = () => {
-    setError(undefined);
+    errorVar(undefined);
     navigate('/login');
   };
 

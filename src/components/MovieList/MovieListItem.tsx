@@ -3,7 +3,8 @@ import { Delete02Icon } from 'hugeicons-react';
 import { Button, ListItem } from '@collinlucke/phantomartist';
 import { useState, MouseEventHandler } from 'react';
 import { useScreenSize } from '../../hooks/useScreenSize';
-import { useIsAuthenticated } from '../../hooks/useIsAuthenticated';
+import { useReactiveVar } from '@apollo/client';
+import { isAuthenticatedVar } from '../../reactiveVars';
 
 type MovieType = {
   id: string;
@@ -31,9 +32,9 @@ export const MovieListItem: React.FC<{
   mov: MovieType;
   openDeleteModal: OpenDeleteModalType;
 }) => {
-  const isAuthenticated = useIsAuthenticated({ protectedRoute: false });
-  const screenSize = useScreenSize();
   const [showTrashSolid, setShowTrashSolid] = useState(false);
+  const isAuthenticated = useReactiveVar(isAuthenticatedVar);
+  const screenSize = useScreenSize();
   const { id, releaseDate, title } = mov;
 
   const mouseTrashHoverHandler: MouseEventHandler<HTMLDivElement> = e => {

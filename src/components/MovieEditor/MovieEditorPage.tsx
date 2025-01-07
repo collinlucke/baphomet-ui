@@ -5,8 +5,8 @@ import { UPDATE_MOVIE, ADD_MOVIE } from '../../api/mutations';
 import { MovieEditorForm } from './MovieEditorForm';
 import { Block, InnerWidth } from '@collinlucke/phantomartist';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useError, useShowHeading } from '../../contexts';
 import { CustomErrorTypes } from '../../CustomTypes.types';
+import { errorVar, showHeadingVar } from '../../reactiveVars';
 
 type MovieProps = {
   id?: string;
@@ -36,8 +36,6 @@ export const MovieEditorPage: React.FC<EditMoviePage> = ({
   readonly
 }) => {
   const [movie, setMovie] = useState(cleanForm);
-  const { setShowHeading } = useShowHeading();
-  const { setError } = useError();
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -45,7 +43,7 @@ export const MovieEditorPage: React.FC<EditMoviePage> = ({
     if (clean && JSON.stringify(movie) !== JSON.stringify(cleanForm)) {
       setMovie(cleanForm);
     }
-    setShowHeading(true);
+    showHeadingVar(true);
   }, [clean]);
 
   useQuery(GET_MOVIE, {
@@ -70,7 +68,7 @@ export const MovieEditorPage: React.FC<EditMoviePage> = ({
       navigate(`/view/${data.newMovie.id}`);
     },
     onError: error => {
-      setError(error as CustomErrorTypes);
+      errorVar(error as CustomErrorTypes);
     }
   });
 
@@ -87,7 +85,7 @@ export const MovieEditorPage: React.FC<EditMoviePage> = ({
       setMovie(data.updatedMovie);
     },
     onError: error => {
-      setError(error as CustomErrorTypes);
+      errorVar(error as CustomErrorTypes);
     }
   });
 
