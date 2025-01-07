@@ -1,5 +1,9 @@
-import { useLayoutEffect } from 'react';
-import { useQuery, useMutation, ApolloError } from '@apollo/client';
+import {
+  useQuery,
+  useMutation,
+  ApolloError,
+  useReactiveVar
+} from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { GET_ALL_MOVIES } from '../../api/queries';
 import { DELETE_MOVIE } from '../../api/mutations';
@@ -12,8 +16,8 @@ import {
   Modal
 } from '@collinlucke/phantomartist';
 import { ChangeEvent, useState, useEffect } from 'react';
-import { useShowHeading, useError } from '../../contexts';
 import { CustomErrorTypes } from '../../CustomTypes.types';
+import { errorVar, showHeadingVar } from '../../reactiveVars';
 
 type Movie = {
   id: string;
@@ -33,17 +37,20 @@ export const MovieListPage = () => {
   const [movieData, setMovieData] = useState<MovieData>({ allMovies: [] });
   const [movieToDelete, setMovieToDelete] = useState({ id: '', title: '' });
   const [isReady, setIsReady] = useState(false);
-  const { showHeading, setShowHeading } = useShowHeading();
-  const { error, setError } = useError();
+  const error = useReactiveVar(errorVar);
+  const showHeading = useReactiveVar(showHeadingVar);
 
   useEffect(() => {
     if (!showHeading) {
-      setShowHeading(true);
+      showHeadingVar(true);
+    }
+    if (error) {
+      errorVar(undefined);
     }
     setMovieToDelete({ id: '', title: '' });
-  }, [showHeading]);
+  }, [showHeading, error]);
 
-  const { data, loading } = useQuery(GET_ALL_MOVIES, {
+  useQuery(GET_ALL_MOVIES, {
     variables: {
       limit: 100, // TODO: Hard coded until I get around to making a thingy to put put in a custom value
       searchTerm
@@ -56,12 +63,6 @@ export const MovieListPage = () => {
     }
   });
 
-  useLayoutEffect(() => {
-    if (!loading && !error && data) {
-      setIsReady(true);
-    }
-  }, [loading, error, data]);
-
   const [deleteMovie] = useMutation(DELETE_MOVIE, {
     onCompleted: data => {
       if (data.deleteMovie) {
@@ -69,7 +70,7 @@ export const MovieListPage = () => {
       }
     },
     onError: (error: ApolloError) => {
-      setError(error as CustomErrorTypes);
+      errorVar(error as CustomErrorTypes | undefined);
     }
   });
 
@@ -90,42 +91,42 @@ export const MovieListPage = () => {
 
   return (
     <>
-      {isReady && (
-        <Block dataTestId="movie-list">
-          <InnerWidth>
-            <h2 css={baphStyles.h2}>Here's a List of Movies</h2>
+      <Block dataTestId="movie-list">
+        <InnerWidth>
+          <h2 css={baphStyles.h2}>Here's a List of Movies</h2>
+          {isReady && (
             <MovieList
               movieData={movieData}
               searchTerm={searchTerm}
               setSearchTerm={setSearchTermHandler}
               openDeleteModal={openDeleteModal}
             />
-          </InnerWidth>
-          {movieToDelete.id && !error && (
-            <Modal
-              className={baphStyles}
-              closeModal={() => setMovieToDelete({ id: '', title: '' })}
-            >
-              <h2 css={baphStyles.h2}>
-                Are you sure you want to delete{' '}
-                <span css={baphStyles.movieTitleToDelete}>
-                  {movieToDelete.title}
-                </span>
-                ?
-              </h2>
-              <ButtonGroup>
-                <Button onClick={deleteMovieHandler}>Delete</Button>
-                <Button
-                  kind="secondary"
-                  onClick={() => setMovieToDelete({ id: '', title: '' })}
-                >
-                  Cancel
-                </Button>
-              </ButtonGroup>
-            </Modal>
           )}
-        </Block>
-      )}
+        </InnerWidth>
+        {movieToDelete.id && !error && (
+          <Modal
+            className={baphStyles}
+            closeModal={() => setMovieToDelete({ id: '', title: '' })}
+          >
+            <h2 css={baphStyles.h2}>
+              Are you sure you want to delete{' '}
+              <span css={baphStyles.movieTitleToDelete}>
+                {movieToDelete.title}
+              </span>
+              ?
+            </h2>
+            <ButtonGroup>
+              <Button onClick={deleteMovieHandler}>Delete</Button>
+              <Button
+                kind="secondary"
+                onClick={() => setMovieToDelete({ id: '', title: '' })}
+              >
+                Cancel
+              </Button>
+            </ButtonGroup>
+          </Modal>
+        )}
+      </Block>
     </>
   );
 };

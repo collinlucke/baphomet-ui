@@ -1,17 +1,16 @@
-import { FormEvent, useState, SetStateAction } from 'react';
+import { FormEvent, useState } from 'react';
 import { FormTextInput, Button, Form, Modal } from '@collinlucke/phantomartist';
 import { LOGIN } from '../../api/mutations';
-import { useMutation } from '@apollo/client';
+import { useMutation, useReactiveVar } from '@apollo/client';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ApolloError } from '@apollo/client';
+import { errorVar } from '../../reactiveVars';
+import { CustomErrorTypes } from '../../CustomTypes.types';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
+  const error = useReactiveVar(errorVar) as { title: string } | undefined;
   const location = useLocation();
   const [userInput, setUserInput] = useState({ email: '', password: '' });
-  const [error, setError] = useState<
-    SetStateAction<SetStateAction<undefined>> & { title: string }
-  >();
 
   const [login] = useMutation(LOGIN, {
     onCompleted: data => {
@@ -25,10 +24,7 @@ export const Login: React.FC = () => {
     onError: error => {
       const titledError = { ...error, title: 'login' };
 
-      setError(
-        titledError as SetStateAction<SetStateAction<undefined>> &
-          ApolloError & { title: string }
-      );
+      errorVar(titledError as CustomErrorTypes & { title: string });
     }
   });
 

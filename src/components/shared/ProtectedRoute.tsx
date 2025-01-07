@@ -1,7 +1,15 @@
 import { ComponentType, useEffect } from 'react';
-import { useError } from '../../contexts';
-import { useShowHeading } from '../../contexts';
-import { useIsAuthenticated } from '../../hooks/useIsAuthenticated';
+import {
+  CustomErrorTypes,
+  CustomNetworkErrorTypes
+} from '../../CustomTypes.types';
+import {
+  errorVar,
+  showHeadingVar,
+  isAuthenticatedVar
+} from '../../reactiveVars';
+import { useQuery, useReactiveVar } from '@apollo/client';
+import { CHECK_AUTH } from '../../api/queries';
 
 type ProtectedRouteTypes = {
   element: ComponentType<any>;
@@ -11,15 +19,36 @@ export const ProtectedRoute: React.FC<ProtectedRouteTypes> = ({
   element: Component,
   props
 }) => {
-  const isAuthenticated = useIsAuthenticated({ protectedRoute: true });
-  const { error } = useError();
-  const { setShowHeading } = useShowHeading();
+  const isAuthenticated = useReactiveVar(isAuthenticatedVar);
+  const error = useReactiveVar(errorVar);
+  const baphToken = localStorage.getItem('baphomet-token') || null;
+  useQuery(CHECK_AUTH, {
+    variables: {
+      token: baphToken
+    },
+    onCompleted: data => {
+      if (data.checkAuth.isValid) {
+        isAuthenticatedVar(true);
+      }
+    },
+    onError: error => {
+      const titledError = {
+        ...error,
+        title: 'checkAuth',
+        networkError: error.networkError as CustomNetworkErrorTypes | undefined,
+        cause: error.cause as CustomErrorTypes
+      };
+      errorVar(titledError);
+
+      isAuthenticatedVar(false);
+    }
+  });
 
   useEffect(() => {
     if (error) {
-      setShowHeading(false);
+      showHeadingVar(false);
     }
   }, [error]);
 
-  return <>{!isAuthenticated ? <div /> : <Component {...props} />}</>;
+  return <>{!isAuthenticated ? <></> : <Component {...props} />}</>;
 };

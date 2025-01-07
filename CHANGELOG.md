@@ -1,10 +1,30 @@
 # Changelog
 
+## [0.3.0] - 2024-10-12
+
+### Added
+
+- ### N/A
+
+### Changed
+
+- Switched from the Context API to Reactive Variables
+
+### Removed
+
+- ### N/A
+
+### Fixed
+
+- ### N/A
+
+<br/>
+
 ## [0.2.1] - 2024-10-12
 
 ### Added
 
-- Unit/inegration tests for Heading and App components and all the fixin's -- snapshots, mock util functions, mock localStorage, data-testid's (used as dataTestId to pass to PA components), mock context fucntions
+- Unit/integration tests for Heading and App components and all the fixin's -- snapshots, mock util functions, mock localStorage, data-testid's (used as dataTestId to pass to PA components), mock context functions
 
 ### Changed
 
