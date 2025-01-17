@@ -1,8 +1,8 @@
 import {
-  useQuery,
   useMutation,
   ApolloError,
-  useReactiveVar
+  useReactiveVar,
+  useLazyQuery
 } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { GET_ALL_MOVIES } from '../../api/queries';
@@ -15,30 +15,44 @@ import {
   InnerWidth,
   Modal
 } from '@collinlucke/phantomartist';
+import { useScreenSize } from '../../hooks/useScreenSize';
+
 import { ChangeEvent, useState, useEffect } from 'react';
 import { CustomErrorTypes } from '../../CustomTypes.types';
-import { errorVar, showHeadingVar } from '../../reactiveVars';
+import {
+  errorVar,
+  showHeadingVar,
+  scrollLimitVar,
+  cursorVar,
+  searchTermVar,
+  endOfResultsVar,
+  getAllMoviesQueryVar,
+  totalMovieCountVar
+} from '../../reactiveVars';
 
 type Movie = {
   id: string;
   title: string;
   releaseDate?: string;
   rated?: string;
-};
-
-type MovieData = {
-  allMovies: Movie[];
+  movies: Movie[];
+  totalMovieCount: string;
   searchTerm?: string;
 };
 
 export const MovieListPage = () => {
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [movieData, setMovieData] = useState<MovieData>({ allMovies: [] });
+  const screenSize = useScreenSize();
+  const [loadAction] = useState('scroll');
+  const [movies, setMovies] = useState<Movie[]>([]);
   const [movieToDelete, setMovieToDelete] = useState({ id: '', title: '' });
-  const [isReady, setIsReady] = useState(false);
   const error = useReactiveVar(errorVar);
   const showHeading = useReactiveVar(showHeadingVar);
+  const searchTerm = useReactiveVar(searchTermVar);
+  const cursor = useReactiveVar(cursorVar);
+  const endOfResults = useReactiveVar(endOfResultsVar);
+  const limit = useReactiveVar(scrollLimitVar);
+  const totalMovieCount = useReactiveVar(totalMovieCountVar);
 
   useEffect(() => {
     if (!showHeading) {
@@ -50,16 +64,31 @@ export const MovieListPage = () => {
     setMovieToDelete({ id: '', title: '' });
   }, [showHeading, error]);
 
-  useQuery(GET_ALL_MOVIES, {
+  const [getAllMovies] = useLazyQuery(GET_ALL_MOVIES, {
     variables: {
-      limit: 100, // TODO: Hard coded until I get around to making a thingy to put put in a custom value
-      searchTerm
+      limit,
+      searchTerm,
+      cursor,
+      loadAction,
+      endOfResults
     },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-first',
     onCompleted: data => {
-      setMovieData(data);
-      setIsReady(true);
+      const {
+        newMovies,
+        newTotalMovieCount,
+        newCursor,
+        loadAction,
+        endOfResults
+      } = data?.movieResults;
+      cursorVar(newCursor);
+      endOfResultsVar(endOfResults);
+      totalMovieCountVar(newTotalMovieCount);
+
+      if (loadAction === 'scroll') {
+        setMovies(() => [...movies, ...newMovies]);
+      } else if (loadAction === 'search') {
+        setMovies(() => newMovies);
+      }
     }
   });
 
@@ -74,10 +103,17 @@ export const MovieListPage = () => {
     }
   });
 
-  const setSearchTermHandler = (e: ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    getAllMoviesQueryVar(getAllMovies);
+    getAllMovies({ variables: { limit, searchTerm, cursor, loadAction } });
+  }, []);
+
+  const setSearchTermHandler = async (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    setMovieData({ allMovies: [] });
-    setSearchTerm(value);
+    searchTermVar(value);
+    getAllMovies({
+      variables: { limit, searchTerm: value, cursor: '', loadAction: 'search' }
+    });
   };
 
   const openDeleteModal = ({ id, title }: { id: string; title: string }) => {
@@ -89,20 +125,36 @@ export const MovieListPage = () => {
     setMovieToDelete({ id: '', title: '' });
   };
 
+  const navigateToArena = () => {
+    navigate('/arena');
+  };
+
   return (
     <>
-      <Block dataTestId="movie-list">
+      <Block
+        className={{ block: baphStyles.movieListBlock }}
+        dataTestId="movie-list"
+      >
+        <Button
+          size={screenSize}
+          onClick={navigateToArena}
+          className={{ button: baphStyles.button }}
+        >
+          Fight!
+        </Button>
         <InnerWidth>
           <h2 css={baphStyles.h2}>Here's a List of Movies</h2>
-          {isReady && (
-            <MovieList
-              movieData={movieData}
-              searchTerm={searchTerm}
-              setSearchTerm={setSearchTermHandler}
-              openDeleteModal={openDeleteModal}
-            />
-          )}
+          <MovieList
+            movies={movies}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTermHandler}
+            openDeleteModal={openDeleteModal}
+            totalMovieCount={totalMovieCount}
+            cursor={cursor}
+            endOfResults={endOfResults}
+          />
         </InnerWidth>
+
         {movieToDelete.id && !error && (
           <Modal
             className={baphStyles}
@@ -140,5 +192,11 @@ const baphStyles = {
   },
   movieTitleToDelete: {
     fontStyle: 'italic'
+  },
+  movieListBlock: {
+    marginBottom: '20px'
+  },
+  button: {
+    alignSelf: 'flex-end'
   }
 };

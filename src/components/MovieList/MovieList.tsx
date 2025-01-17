@@ -1,8 +1,8 @@
-import { Button, List, Search } from '@collinlucke/phantomartist';
-import { MovieListItem } from './MovieListItem';
 import { ChangeEvent, FormEventHandler } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { List, Search } from '@collinlucke/phantomartist';
+import { MovieListItem } from './MovieListItem';
 import { useScreenSize } from '../../hooks/useScreenSize';
+import { CSSObject } from '@emotion/react';
 
 type Movie = {
   id: string;
@@ -13,11 +13,12 @@ type Movie = {
 };
 
 type MovieData = {
-  movieData: {
-    allMovies: Movie[];
-  };
+  movies: Movie[];
   searchTerm?: string;
   resultsCount?: number;
+  totalMovieCount?: string;
+  cursor?: string;
+  endOfResults?: boolean;
 
   onSearch?: React.FormEventHandler<HTMLFormElement>;
   setSearchTerm?: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -25,13 +26,13 @@ type MovieData = {
 };
 
 export const MovieList: React.FC<MovieData> = ({
-  movieData,
+  movies,
   searchTerm,
+  totalMovieCount,
   onSearch,
   setSearchTerm,
   openDeleteModal
 }) => {
-  const navigate = useNavigate();
   const screenSize = useScreenSize();
 
   const onSearchHandler: FormEventHandler<HTMLFormElement> = e => {
@@ -39,51 +40,50 @@ export const MovieList: React.FC<MovieData> = ({
   };
 
   const setSearchTermHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
     setSearchTerm?.(e);
   };
 
-  const navigateToArena = () => {
-    navigate('/arena');
-  };
-
   return (
-    <List>
+    <div css={[baphStyles.movieListWrapper]}>
       <Search
         onSearch={onSearchHandler}
         searchTerm={searchTerm}
         searchLabel="Search Movies"
         setSearchTerm={setSearchTermHandler}
-        resultsCount={movieData.allMovies.length}
+        resultsCount={movies?.length}
         buttonSize={screenSize}
         inputSize={screenSize}
         useSearchButton={false}
+        totalResultsCount={totalMovieCount}
+        className={{ searchWrapper: baphStyles.searchWrapper }}
       />
-      {movieData.allMovies.length ? (
-        movieData.allMovies.map(mov => (
-          <MovieListItem
-            mov={mov}
-            key={mov.id}
-            openDeleteModal={openDeleteModal || (() => {})}
-          />
-        ))
-      ) : (
-        <div css={[baphStyles.noResults]}>
-          <h2>No Movies Match Your Search</h2>
-          <div>Maybe you should go make one...</div>
-        </div>
-      )}
-      <Button
-        size={screenSize}
-        onClick={navigateToArena}
-        className={baphStyles}
-      >
-        Fight!
-      </Button>
-    </List>
+      <div>
+        {movies ? (
+          <div>
+            <List>
+              {movies &&
+                movies.map(mov => (
+                  <MovieListItem
+                    mov={mov}
+                    key={mov.id}
+                    openDeleteModal={openDeleteModal || (() => {})}
+                  />
+                ))}
+            </List>
+          </div>
+        ) : (
+          <div css={[baphStyles.noResults]}>
+            <h2>No Movies Match Your Search</h2>
+            <div>Maybe you should go make one...</div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
-const baphStyles = {
+const baphStyles: { [key: string]: CSSObject } = {
   noResults: {
     display: 'flex',
     flexDirection: 'column' as 'column',
@@ -91,9 +91,11 @@ const baphStyles = {
     marginBottom: '30px',
     marginTop: '30px'
   },
-  button: {
-    alignSelf: 'end',
-    display: 'flex',
-    flexDirection: 'column' as 'column'
+  movieListWrapper: {
+    width: 'fill-available'
+  },
+  searchWrapper: {
+    position: 'sticky' as const,
+    top: 0
   }
 };
