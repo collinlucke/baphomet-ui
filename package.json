@@ -1,6 +1,6 @@
 {
   "name": "baphomet-ui",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -14,7 +14,6 @@
     "@apollo/client": "^3.12.2",
     "@collinlucke/phantomartist": "latest",
     "@emotion/babel-plugin": "^11.13.5",
-    "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@stylexjs/dev-runtime": "^0.7.5",
     "@stylexjs/stylex": "^0.7.5",
@@ -28,14 +27,13 @@
     "hugeicons-react": "^0.3.0",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0",
     "rollup-plugin-delete": "^2.1.0",
     "vite-plugin-static-copy": "^1.0.6",
     "vite-plugin-stylex": "^0.10.1"
   },
   "devDependencies": {
+    "@emotion/react": "^11.14.0",
     "@stylexjs/eslint-plugin": "^0.7.5",
     "@testing-library/jest-dom": "^6.6.3",
     "@types/node": "^22.10.1",
@@ -49,6 +47,8 @@
     "eslint-plugin-react-refresh": "^0.4.16",
     "jsdom": "^25.0.1",
     "nodemon": "^3.1.7",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "typescript": "^5.7.2",
     "vite": "^5.4.11",
     "vitest": "^2.1.8",
@@ -58,5 +58,10 @@
     "vite-plugin-stylex": {
       "@stylexjs/babel-plugin": "0.4.1"
     }
+  },
+  "peerDependencies": {
+    "@emotion/react": "^11.14.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   }
 }

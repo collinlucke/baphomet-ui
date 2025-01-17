@@ -1,14 +1,30 @@
 import { gql } from '@apollo/client';
 
 export const GET_ALL_MOVIES = gql`
-  query getAllMovies($limit: Int, $searchTerm: String) {
-    allMovies: getAllMovies(limit: $limit, searchTerm: $searchTerm) {
-      fullplot
-      poster
-      title
-      releaseDate
-      rated
-      id
+  query getAllMovies(
+    $limit: Int
+    $searchTerm: String
+    $cursor: String
+    $loadAction: String
+  ) {
+    movieResults: getAllMovies(
+      limit: $limit
+      searchTerm: $searchTerm
+      cursor: $cursor
+      loadAction: $loadAction
+    ) {
+      newMovies {
+        fullplot
+        poster
+        title
+        releaseDate
+        rated
+        id
+      }
+      newTotalMovieCount
+      newCursor
+      loadAction
+      endOfResults
     }
   }
 `;
