@@ -2,10 +2,11 @@ import {
   useMutation,
   ApolloError,
   useReactiveVar,
-  useLazyQuery
+  useLazyQuery,
+  useQuery
 } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import { GET_ALL_MOVIES } from '../../api/queries';
+import { CHECK_AUTH, GET_ALL_MOVIES } from '../../api/queries';
 import { DELETE_MOVIE } from '../../api/mutations';
 import { MovieList } from './MovieList';
 import {
@@ -16,7 +17,6 @@ import {
   Modal
 } from '@collinlucke/phantomartist';
 import { useScreenSize } from '../../hooks/useScreenSize';
-
 import { ChangeEvent, useState, useEffect } from 'react';
 import { CustomErrorTypes } from '../../CustomTypes.types';
 import {
@@ -27,8 +27,10 @@ import {
   searchTermVar,
   endOfResultsVar,
   getAllMoviesQueryVar,
-  totalMovieCountVar
+  totalMovieCountVar,
+  isAuthenticatedVar
 } from '../../reactiveVars';
+import { debounce } from '../../helpers/debounce';
 
 type Movie = {
   id: string;
@@ -53,6 +55,7 @@ export const MovieListPage = () => {
   const endOfResults = useReactiveVar(endOfResultsVar);
   const limit = useReactiveVar(scrollLimitVar);
   const totalMovieCount = useReactiveVar(totalMovieCountVar);
+  const baphToken = localStorage.getItem('baphomet-token') || null;
 
   useEffect(() => {
     if (!showHeading) {
@@ -62,7 +65,16 @@ export const MovieListPage = () => {
       errorVar(undefined);
     }
     setMovieToDelete({ id: '', title: '' });
-  }, [showHeading, error]);
+  }, []);
+
+  useQuery(CHECK_AUTH, {
+    variables: {
+      token: baphToken
+    },
+    onCompleted: data => {
+      isAuthenticatedVar(data?.checkAuth.isValid);
+    }
+  });
 
   const [getAllMovies] = useLazyQuery(GET_ALL_MOVIES, {
     variables: {
@@ -111,10 +123,20 @@ export const MovieListPage = () => {
   const setSearchTermHandler = async (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     searchTermVar(value);
-    getAllMovies({
-      variables: { limit, searchTerm: value, cursor: '', loadAction: 'search' }
-    });
+    debouncedSearchTermHandler();
   };
+
+  const debouncedSearchTermHandler = debounce(() => {
+    const searchTerm = searchTermVar();
+    getAllMovies({
+      variables: {
+        limit,
+        searchTerm,
+        cursor: '',
+        loadAction: 'search'
+      }
+    });
+  }, 500);
 
   const openDeleteModal = ({ id, title }: { id: string; title: string }) => {
     setMovieToDelete({ id, title });
@@ -122,7 +144,6 @@ export const MovieListPage = () => {
 
   const deleteMovieHandler = () => {
     deleteMovie({ variables: { id: movieToDelete.id } });
-    setMovieToDelete({ id: '', title: '' });
   };
 
   const navigateToArena = () => {
@@ -135,15 +156,17 @@ export const MovieListPage = () => {
         className={{ block: baphStyles.movieListBlock }}
         dataTestId="movie-list"
       >
-        <Button
-          size={screenSize}
-          onClick={navigateToArena}
-          className={{ button: baphStyles.button }}
-        >
-          Fight!
-        </Button>
         <InnerWidth>
-          <h2 css={baphStyles.h2}>Here's a List of Movies</h2>
+          <div css={baphStyles.headingWrapper}>
+            <h2>Here's a List of Movies</h2>
+            <Button
+              size={screenSize}
+              onClick={navigateToArena}
+              className={{ button: baphStyles.button }}
+            >
+              Fight!
+            </Button>
+          </div>
           <MovieList
             movies={movies}
             searchTerm={searchTerm}
@@ -160,7 +183,7 @@ export const MovieListPage = () => {
             className={baphStyles}
             closeModal={() => setMovieToDelete({ id: '', title: '' })}
           >
-            <h2 css={baphStyles.h2}>
+            <h2>
               Are you sure you want to delete{' '}
               <span css={baphStyles.movieTitleToDelete}>
                 {movieToDelete.title}
@@ -184,9 +207,6 @@ export const MovieListPage = () => {
 };
 
 const baphStyles = {
-  h2: {
-    marginBottom: '20px'
-  },
   modal: {
     backgroundColor: `rgba(255,255,255,.75)`
   },
@@ -198,5 +218,10 @@ const baphStyles = {
   },
   button: {
     alignSelf: 'flex-end'
+  },
+  headingWrapper: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end'
   }
 };
