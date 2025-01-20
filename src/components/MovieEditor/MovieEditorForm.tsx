@@ -9,6 +9,8 @@ import {
   ButtonGroup
 } from '@collinlucke/phantomartist';
 import { useNavigate } from 'react-router-dom';
+import { isAuthenticatedVar } from '../../reactiveVars';
+import { useReactiveVar } from '@apollo/client';
 
 type MovieEditorFormProps = {
   movie: {
@@ -33,6 +35,7 @@ export const MovieEditorForm: React.FC<MovieEditorFormProps> = ({
   onChange,
   onChangeTextArea
 }) => {
+  const isAuthenticated = useReactiveVar(isAuthenticatedVar);
   const navigate = useNavigate();
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     onSubmit?.(e);
@@ -134,7 +137,9 @@ export const MovieEditorForm: React.FC<MovieEditorFormProps> = ({
       <Header className={{ header: baphStyles.header }}>
         <>
           <h1 css={[baphStyles.h1]}>{movie.title || '-Add title-'}</h1>
-          {readonly && <Button onClick={navToEdit}>Edit Movie</Button>}
+          {readonly && isAuthenticated && (
+            <Button onClick={navToEdit}>Edit Movie</Button>
+          )}
         </>
       </Header>
       <TwoColumn left={leftContent} right={rightContent} />

@@ -3,12 +3,24 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useScreenSize } from '../../hooks/useScreenSize';
 import { PlusSignIcon } from 'hugeicons-react';
+import { isAuthenticatedVar } from '../../reactiveVars';
+import { useReactiveVar } from '@apollo/client';
 
 export const Heading: React.FC = () => {
   const navigate = useNavigate();
   const screenSize = useScreenSize();
+  const isAuthenticated = useReactiveVar(isAuthenticatedVar);
   const navToCreate = () => {
     navigate('/create');
+  };
+
+  const navToLogin = () => {
+    navigate('/login');
+  };
+
+  const logOut = () => {
+    localStorage.removeItem('baphomet-token');
+    isAuthenticatedVar(false);
   };
 
   return (
@@ -20,23 +32,41 @@ export const Heading: React.FC = () => {
               Baphomet
             </Link>
           </h1>
-          <div>
+          {!isAuthenticated && (
             <Button
-              dataTestId="add-new-movie-button"
-              size={screenSize}
-              onClick={navToCreate}
-              icon={
-                <PlusSignIcon
-                  size={screenSize === 'small' ? 20 : 17}
-                  strokeWidth={'3px'}
-                />
-              }
-              iconOnly={screenSize === 'small'}
-              className={{ button: baphStyles.button }}
+              onClick={navToLogin}
+              className={{ button: baphStyles.logInLogOut }}
+              kind="ghost"
             >
-              {screenSize === 'small' ? '' : <>Add new movie</>}
+              Log in
             </Button>
-          </div>
+          )}
+          {isAuthenticated && (
+            <div css={{ display: 'flex' }}>
+              <Button
+                kind="ghost"
+                className={{ button: baphStyles.logInLogOut }}
+                onClick={logOut}
+              >
+                Log out
+              </Button>
+              <Button
+                dataTestId="add-new-movie-button"
+                size={screenSize}
+                onClick={navToCreate}
+                icon={
+                  <PlusSignIcon
+                    size={screenSize === 'small' ? 20 : 17}
+                    strokeWidth={'3px'}
+                  />
+                }
+                iconOnly={screenSize === 'small'}
+                className={{ button: baphStyles.button }}
+              >
+                {screenSize === 'small' ? '' : <>Add new movie</>}
+              </Button>
+            </div>
+          )}
         </InnerWidth>
       </Block>
     </Header>
@@ -45,10 +75,14 @@ export const Heading: React.FC = () => {
 
 const baphStyles = {
   innerWidth: {
-    flexDirection: 'row' as 'row',
+    flexDirection: 'row' as const,
     alignItems: 'end'
   },
   button: {
-    position: 'relative' as 'relative'
+    position: 'relative' as const,
+    marginLeft: '20px'
+  },
+  logInLogOut: {
+    fontSize: '1.2em'
   }
 };

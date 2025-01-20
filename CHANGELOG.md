@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.3.3] - 2025-01-20
+
+### Added
+
+- Created a debouncer function to debounce the search term
+- Added login and logout buttons
+
+### Changed
+
+- Gussied up the login page a bit
+- Fixed up the UI in the MovieListPage
+
+### Removed
+
+- ### N/A
+
+### Fixed
+
+- ### N/A
+
+<br/>
+
 ## [0.3.0] - 2024-10-12
 
 ### Added

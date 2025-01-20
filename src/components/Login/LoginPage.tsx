@@ -3,7 +3,7 @@ import { FormTextInput, Button, Form, Modal } from '@collinlucke/phantomartist';
 import { LOGIN } from '../../api/mutations';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { errorVar } from '../../reactiveVars';
+import { errorVar, isAuthenticatedVar } from '../../reactiveVars';
 import { CustomErrorTypes } from '../../CustomTypes.types';
 
 export const Login: React.FC = () => {
@@ -16,9 +16,9 @@ export const Login: React.FC = () => {
     onCompleted: data => {
       if (data.login.token) {
         localStorage.setItem('baphomet-token', data.login.token);
-        const navigateTo = location?.state?.from?.pathname || './movielist';
+        isAuthenticatedVar(true);
+        const navigateTo = location?.state?.from?.pathname || '../movielist';
         navigate(navigateTo, { replace: true });
-        window.location.pathname = navigateTo;
       }
     },
     onError: error => {
@@ -67,6 +67,11 @@ export const Login: React.FC = () => {
           type="password"
         />
         <Button type="submit">Submit</Button>
+        <div css={baphStyles.psst}>
+          Pssst...
+          <br /> email: notareal@email.address.com
+          <br /> password: baphy!demo2024
+        </div>
       </Form>
     </Modal>
   );
@@ -76,5 +81,9 @@ const baphStyles = {
   errorMessage: {
     color: 'red',
     marginBottom: '20px'
+  },
+  psst: {
+    fontSize: '.75em',
+    marginTop: '20px'
   }
 };
