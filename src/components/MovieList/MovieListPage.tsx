@@ -17,7 +17,7 @@ import {
   Modal
 } from '@collinlucke/phantomartist';
 import { useScreenSize } from '../../hooks/useScreenSize';
-import { ChangeEvent, useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import { CustomErrorTypes } from '../../CustomTypes.types';
 import {
   errorVar,
@@ -28,27 +28,28 @@ import {
   endOfResultsVar,
   getAllMoviesQueryVar,
   totalMovieCountVar,
-  isAuthenticatedVar
+  isAuthenticatedVar,
+  moviesListVar
 } from '../../reactiveVars';
 import { debounce } from '../../helpers/debounce';
 
-type Movie = {
+export type MovieType = {
   id: string;
   title: string;
   releaseDate?: string;
   rated?: string;
-  movies: Movie[];
+  moviesList: MovieType[];
   totalMovieCount: string;
-  searchTerm?: string;
+  searchTerm?: string | number;
 };
 
 export const MovieListPage = () => {
   const navigate = useNavigate();
   const screenSize = useScreenSize();
-  const [loadAction] = useState('scroll');
-  const [movies, setMovies] = useState<Movie[]>([]);
   const [movieToDelete, setMovieToDelete] = useState({ id: '', title: '' });
+
   const error = useReactiveVar(errorVar);
+  const moviesList = useReactiveVar(moviesListVar);
   const showHeading = useReactiveVar(showHeadingVar);
   const searchTerm = useReactiveVar(searchTermVar);
   const cursor = useReactiveVar(cursorVar);
@@ -58,22 +59,14 @@ export const MovieListPage = () => {
   const baphToken = localStorage.getItem('baphomet-token') || null;
 
   useEffect(() => {
-    if (!showHeading) {
-      showHeadingVar(true);
-    }
-    if (error) {
-      errorVar(undefined);
-    }
+    if (!showHeading) showHeadingVar(true);
+    if (error) errorVar(undefined);
     setMovieToDelete({ id: '', title: '' });
   }, []);
 
   useQuery(CHECK_AUTH, {
-    variables: {
-      token: baphToken
-    },
-    onCompleted: data => {
-      isAuthenticatedVar(data?.checkAuth.isValid);
-    }
+    variables: { token: baphToken },
+    onCompleted: data => isAuthenticatedVar(data?.checkAuth.isValid)
   });
 
   const [getAllMovies] = useLazyQuery(GET_ALL_MOVIES, {
@@ -81,7 +74,7 @@ export const MovieListPage = () => {
       limit,
       searchTerm,
       cursor,
-      loadAction,
+      loadAction: 'scroll',
       endOfResults
     },
     onCompleted: data => {
@@ -97,46 +90,45 @@ export const MovieListPage = () => {
       totalMovieCountVar(newTotalMovieCount);
 
       if (loadAction === 'scroll') {
-        setMovies(() => [...movies, ...newMovies]);
+        moviesListVar([...(moviesList || []), ...newMovies]);
       } else if (loadAction === 'search') {
-        setMovies(() => newMovies);
+        moviesListVar(newMovies);
       }
     }
   });
 
   const [deleteMovie] = useMutation(DELETE_MOVIE, {
     onCompleted: data => {
-      if (data.deleteMovie) {
-        navigate(0);
-      }
+      if (data.deleteMovie) navigate(0);
     },
-    onError: (error: ApolloError) => {
-      errorVar(error as CustomErrorTypes | undefined);
-    }
+    onError: (error: ApolloError) =>
+      errorVar(error as CustomErrorTypes | undefined)
   });
 
   useEffect(() => {
     getAllMoviesQueryVar(getAllMovies);
-    getAllMovies({ variables: { limit, searchTerm, cursor, loadAction } });
+    getAllMovies({
+      variables: { limit, searchTerm, cursor, loadAction: 'scroll' }
+    });
   }, []);
 
-  const setSearchTermHandler = async (e: ChangeEvent<HTMLInputElement>) => {
+  const setSearchTermHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
+    document.getElementsByClassName('baph-scroll-wrapper')[0].scrollTop = 0;
     searchTermVar(value);
     debouncedSearchTermHandler();
   };
 
   const debouncedSearchTermHandler = debounce(() => {
-    const searchTerm = searchTermVar();
     getAllMovies({
       variables: {
         limit,
-        searchTerm,
+        searchTerm: searchTermVar(),
         cursor: '',
         loadAction: 'search'
       }
     });
-  }, 500);
+  }, 300);
 
   const openDeleteModal = ({ id, title }: { id: string; title: string }) => {
     setMovieToDelete({ id, title });
@@ -151,74 +143,64 @@ export const MovieListPage = () => {
   };
 
   return (
-    <>
-      <Block
-        className={{ block: baphStyles.movieListBlock }}
-        dataTestId="movie-list"
-      >
-        <InnerWidth>
-          <div css={baphStyles.headingWrapper}>
-            <h2>Here's a List of Movies</h2>
-            <Button
-              size={screenSize}
-              onClick={navigateToArena}
-              className={{ button: baphStyles.button }}
-            >
-              Fight!
-            </Button>
-          </div>
-          <MovieList
-            movies={movies}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTermHandler}
-            openDeleteModal={openDeleteModal}
-            totalMovieCount={totalMovieCount}
-            cursor={cursor}
-            endOfResults={endOfResults}
-          />
-        </InnerWidth>
-
-        {movieToDelete.id && !error && (
-          <Modal
-            className={baphStyles}
-            closeModal={() => setMovieToDelete({ id: '', title: '' })}
+    <Block
+      className={{ block: baphStyles.movieListBlock }}
+      dataTestId="movie-list"
+    >
+      <InnerWidth>
+        <div css={baphStyles.headingWrapper}>
+          <h2>Here's a List of Movies</h2>
+          <Button
+            size={screenSize}
+            onClick={navigateToArena}
+            className={{ button: baphStyles.button }}
           >
-            <h2>
-              Are you sure you want to delete{' '}
-              <span css={baphStyles.movieTitleToDelete}>
-                {movieToDelete.title}
-              </span>
-              ?
-            </h2>
-            <ButtonGroup>
-              <Button onClick={deleteMovieHandler}>Delete</Button>
-              <Button
-                kind="secondary"
-                onClick={() => setMovieToDelete({ id: '', title: '' })}
-              >
-                Cancel
-              </Button>
-            </ButtonGroup>
-          </Modal>
-        )}
-      </Block>
-    </>
+            Fight!
+          </Button>
+        </div>
+        <MovieList
+          movies={moviesList}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTermHandler}
+          openDeleteModal={openDeleteModal}
+          totalMovieCount={totalMovieCount}
+          cursor={cursor}
+          endOfResults={endOfResults}
+        />
+      </InnerWidth>
+
+      {movieToDelete.id && !error && (
+        <Modal
+          className={baphStyles}
+          closeModal={() => setMovieToDelete({ id: '', title: '' })}
+        >
+          <h2>
+            Are you sure you want to delete{' '}
+            <span css={baphStyles.movieTitleToDelete}>
+              {movieToDelete.title}
+            </span>
+            ?
+          </h2>
+          <ButtonGroup>
+            <Button onClick={deleteMovieHandler}>Delete</Button>
+            <Button
+              kind="secondary"
+              onClick={() => setMovieToDelete({ id: '', title: '' })}
+            >
+              Cancel
+            </Button>
+          </ButtonGroup>
+        </Modal>
+      )}
+    </Block>
   );
 };
 
 const baphStyles = {
-  modal: {
-    backgroundColor: `rgba(255,255,255,.75)`
-  },
-  movieTitleToDelete: {
-    fontStyle: 'italic'
-  },
-  movieListBlock: {
-    marginBottom: '20px'
-  },
-  button: {
-    alignSelf: 'flex-end'
-  },
+  modal: { backgroundColor: 'rgba(255,255,255,.75)' },
+  movieTitleToDelete: { fontStyle: 'italic' },
+  movieListBlock: { marginBottom: '20px' },
+  button: { alignSelf: 'flex-end' },
   headingWrapper: {
     display: 'flex',
     justifyContent: 'space-between',
