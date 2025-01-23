@@ -17,7 +17,6 @@ import { useReactiveVar } from '@apollo/client';
 import { CSSObject } from '@emotion/react';
 
 export const App = () => {
-  const scrollRef = useRef<HTMLDivElement>(null);
   const showHeading = useReactiveVar(showHeadingVar);
   const error = useReactiveVar(errorVar);
   const limit = useReactiveVar(scrollLimitVar);
@@ -29,7 +28,7 @@ export const App = () => {
     if (endOfResults) return;
     const { scrollTop, scrollHeight, clientHeight } =
       e.target as HTMLDivElement;
-    if (scrollTop + clientHeight >= scrollHeight - 500) {
+    if (scrollTop + clientHeight >= scrollHeight - 300) {
       getAllMoviesQueryVar()({
         variables: { limit, searchTerm, cursor, loadAction: 'scroll' }
       });
@@ -41,7 +40,6 @@ export const App = () => {
       className="baph-scroll-wrapper"
       onScroll={onScrollHandler}
       css={baphStyles.scrollDiv}
-      ref={scrollRef}
     >
       {showHeading && <Heading />}
       <Main>

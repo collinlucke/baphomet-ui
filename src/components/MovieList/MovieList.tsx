@@ -13,8 +13,8 @@ type Movie = {
 };
 
 type MovieData = {
-  movies: Movie[];
-  searchTerm?: string;
+  movies: Movie[] | null;
+  searchTerm?: string | number;
   resultsCount?: number;
   totalMovieCount?: string;
   cursor?: string;
@@ -29,6 +29,7 @@ export const MovieList: React.FC<MovieData> = ({
   movies,
   searchTerm,
   totalMovieCount,
+
   onSearch,
   setSearchTerm,
   openDeleteModal
@@ -40,12 +41,11 @@ export const MovieList: React.FC<MovieData> = ({
   };
 
   const setSearchTermHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
     setSearchTerm?.(e);
   };
 
   return (
-    <div css={[baphStyles.movieListWrapper]}>
+    <div css={[baphStyles.movieListWrapper]} className="baph-movie-list">
       <Search
         onSearch={onSearchHandler}
         searchTerm={searchTerm}
@@ -59,7 +59,7 @@ export const MovieList: React.FC<MovieData> = ({
         className={{ searchWrapper: baphStyles.searchWrapper }}
       />
       <div>
-        {movies ? (
+        {movies?.length ? (
           <div>
             <List>
               {movies &&

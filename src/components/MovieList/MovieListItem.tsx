@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Delete02Icon } from 'hugeicons-react';
 import { Button, ListItem } from '@collinlucke/phantomartist';
-import { useState, MouseEventHandler } from 'react';
+import { useState } from 'react';
 import { useScreenSize } from '../../hooks/useScreenSize';
 import { useReactiveVar } from '@apollo/client';
 import { isAuthenticatedVar } from '../../reactiveVars';
@@ -37,12 +37,12 @@ export const MovieListItem: React.FC<{
   const screenSize = useScreenSize();
   const { id, releaseDate, title } = mov;
 
-  const mouseTrashHoverHandler: MouseEventHandler<HTMLDivElement> = e => {
-    if (e.type === 'mouseenter') {
-      setShowTrashSolid(true);
-    } else {
-      setShowTrashSolid(false);
-    }
+  const handleMouseEnter = () => {
+    setShowTrashSolid(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowTrashSolid(false);
   };
 
   const openDeleteModalHandler = () => {
@@ -68,8 +68,8 @@ export const MovieListItem: React.FC<{
             className={{ button: baphStyles.button(screenSize) }}
           >
             <div
-              onMouseEnter={mouseTrashHoverHandler}
-              onMouseLeave={mouseTrashHoverHandler}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
             >
               {showTrashSolid ? (
                 <Delete02Icon fill="silver" size={20} />

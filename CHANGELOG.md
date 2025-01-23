@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.3.4] - 2025-01-23
+
+### Added
+
+- ### N/A
+
+### Changed
+
+- ### N/A
+
+### Removed
+
+- ### N/A
+
+### Fixed
+
+- Made the debounce actually work right
+
+<br/>
+
 ## [0.3.3] - 2025-01-20
 
 ### Added

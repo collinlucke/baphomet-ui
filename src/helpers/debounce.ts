@@ -4,14 +4,8 @@ export function debounce<T extends (...args: any[]) => void>(
 ) {
   let timeoutId: ReturnType<typeof setTimeout>;
 
-  return function executedFunction(...args: Parameters<T>) {
-    const later = () => {
-      const context = executedFunction;
-      clearTimeout(timeoutId);
-      func.apply(context, args);
-    };
-
+  return function (...args: Parameters<T>) {
     clearTimeout(timeoutId);
-    timeoutId = setTimeout(later, wait);
+    timeoutId = setTimeout(() => func(...args), wait);
   };
 }
