@@ -1,6 +1,6 @@
 {
   "name": "baphomet-ui",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@emotion/react": "^11.14.0",
+    "@rollup/plugin-alias": "^5.1.1",
     "@stylexjs/eslint-plugin": "^0.7.5",
     "@testing-library/jest-dom": "^6.6.3",
     "@types/node": "^22.10.1",

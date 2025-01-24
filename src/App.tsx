@@ -1,4 +1,4 @@
-import { UIEvent, useRef } from 'react';
+import { UIEvent } from 'react';
 import './styling/index.css';
 import { Outlet } from 'react-router-dom';
 import { Heading } from './components/shared/Heading';
