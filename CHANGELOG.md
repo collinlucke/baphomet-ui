@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.0.0] - 2025-02-03
+
+### Added
+
+- ### N/A
+
+### Changed
+
+- Removed `debounce` in favor of PhantomArtist's `useDebounced`
+- Change app packages to v1.0.0
+
+### Removed
+
+- ### N/A
+
+### Fixed
+
+- ### N/A
+
+<br/>
+
 ## [0.3.4] - 2025-01-23
 
 ### Added
