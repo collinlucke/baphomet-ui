@@ -14,7 +14,8 @@ import {
   Button,
   ButtonGroup,
   InnerWidth,
-  Modal
+  Modal,
+  PAHooks
 } from '@collinlucke/phantomartist';
 import { useScreenSize } from '../../hooks/useScreenSize';
 import { useState, useEffect, ChangeEvent } from 'react';
@@ -31,7 +32,6 @@ import {
   isAuthenticatedVar,
   moviesListVar
 } from '../../reactiveVars';
-import { debounce } from '../../helpers/debounce';
 
 export type MovieType = {
   id: string;
@@ -46,6 +46,7 @@ export type MovieType = {
 export const MovieListPage = () => {
   const navigate = useNavigate();
   const screenSize = useScreenSize();
+  const { useDebounce } = PAHooks;
   const [movieToDelete, setMovieToDelete] = useState({ id: '', title: '' });
 
   const error = useReactiveVar(errorVar);
@@ -119,7 +120,7 @@ export const MovieListPage = () => {
     debouncedSearchTermHandler();
   };
 
-  const debouncedSearchTermHandler = debounce(() => {
+  const debouncedSearchTermHandler = useDebounce(() => {
     getAllMovies({
       variables: {
         limit,
