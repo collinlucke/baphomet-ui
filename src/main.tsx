@@ -11,12 +11,20 @@ import { setContext } from '@apollo/client/link/context';
 import routes from './routes';
 import 'dotenv';
 
-const protocol = import.meta.env.MODE === 'development' ? 'http' : 'https';
+const getBackendUrl = () => {
+  if (import.meta.env.MODE === 'development') {
+    return 'http://localhost:5050/graphql';
+  }
+  // Production: Use your Render backend URL
+  return (
+    import.meta.env.GRAPHQL_BAPHOMET_SERVER_RENDER_URL ||
+    'https://baphomet-server.onrender.com/graphql'
+  );
+};
+
 const router = createBrowserRouter(routes);
 const httpLink = createHttpLink({
-  uri: `${protocol}://${location.hostname}:${
-    protocol === 'https' ? '443' : '5050'
-  }/graphql`
+  uri: getBackendUrl()
 });
 
 const authLink = setContext((_, { headers }) => {
