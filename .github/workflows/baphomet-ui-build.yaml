@@ -1,7 +1,7 @@
 # To better understand this file read this:
 # https://docs.ionos.space/docs/github-actions-customization/
 
-name: "Deploy Now: Execute Build"
+name: 'Deploy Now: Execute Build'
 
 on:
   workflow_call:
@@ -17,7 +17,7 @@ env:
   DEPLOYMENT_FOLDER: ./
 
 jobs:
-# Please do not rename this job
+  # Please do not rename this job
   build-project:
     name: build baphomet-ui
     runs-on: ubuntu-latest
@@ -36,12 +36,13 @@ jobs:
         env:
           CI: true
           SITE_URL: ${{ inputs.site-url }}
+          GIT_REGISTRY_TOKEN: ${{ secrets.GIT_REGISTRY_TOKEN }}
         run: |
           npm install --global pnpm
           pnpm install
           pnpm build
 
-# Please do not touch the following action
+      # Please do not touch the following action
       - name: Store deployment content
         uses: ionos-deploy-now/artifact-action@v1
         with:

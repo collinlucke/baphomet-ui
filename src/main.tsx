@@ -11,7 +11,7 @@ import { setContext } from '@apollo/client/link/context';
 import routes from './routes';
 import 'dotenv';
 
-const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+const protocol = import.meta.env.MODE === 'development' ? 'http' : 'https';
 const router = createBrowserRouter(routes);
 const httpLink = createHttpLink({
   uri: `${protocol}://${location.hostname}:${
