@@ -32,11 +32,17 @@ export const ProtectedRoute: React.FC<ProtectedRouteTypes> = ({
       }
     },
     onError: error => {
-      const titledError = {
+      const titledError: CustomErrorTypes = {
         ...error,
         title: 'checkAuth',
         networkError: error.networkError as CustomNetworkErrorTypes | undefined,
-        cause: error.cause as CustomErrorTypes
+        cause: error.cause as CustomErrorTypes,
+        protocolErrors: error.protocolErrors?.map(err => ({
+          message: err.message,
+          extensions: err.extensions ? [err.extensions] : undefined
+        })) || [],
+        clientErrors: error.clientErrors || [],
+        graphQLErrors: error.graphQLErrors || []
       };
       errorVar(titledError);
 
