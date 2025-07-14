@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Baphomet UI</title>
     <script>
-        // Redirect to the main app with the current path
-        window.location.href = '/' + window.location.pathname + window.location.search;
+        // Store the current path and redirect to home, let React Router handle it
+        sessionStorage.setItem('redirectPath', window.location.pathname + window.location.search);
+        window.location.href = '/';
     </script>
 </head>
 <body>
