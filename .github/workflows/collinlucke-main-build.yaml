@@ -19,7 +19,7 @@ env:
 jobs:
   # Please do not rename this job
   build-project:
-    name: build baphomet-ui
+    name: build collinlucke-main
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -60,5 +60,5 @@ jobs:
           branch-id: ${{ inputs.branch-id }}
           version: ${{ github.sha }}
           folder: ${{ env.DEPLOYMENT_FOLDER }}
-          config-file: .deploy-now/baphomet-ui/config.yaml
+          config-file: .deploy-now/collinlucke-main/config.yaml
           action: upload
