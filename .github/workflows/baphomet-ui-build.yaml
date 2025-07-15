@@ -32,10 +32,20 @@ jobs:
         with:
           node-version: v22.x
 
+      - name: Setup .npmrc for GitHub packages
+        env:
+          GIT_REGISTRY_TOKEN: ${{ secrets.GIT_REGISTRY_TOKEN }}
+        run: |
+          echo "registry=https://registry.npmjs.org/" > .npmrc
+          echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${GIT_REGISTRY_TOKEN}" >> .npmrc
+
       - name: Build Node assets
         env:
           CI: true
           SITE_URL: ${{ inputs.site-url }}
+          GRAPHQL_BAPHOMET_SERVER_RENDER_URL: ${{ secrets.GRAPHQL_BAPHOMET_SERVER_RENDER_URL }}
+          GIT_REGISTRY_TOKEN: ${{ secrets.GIT_REGISTRY_TOKEN }}
         run: |
           npm install --global pnpm
           pnpm install
