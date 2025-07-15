@@ -45,6 +45,7 @@ jobs:
           CI: true
           SITE_URL: ${{ inputs.site-url }}
           GRAPHQL_BAPHOMET_SERVER_RENDER_URL: ${{ secrets.GRAPHQL_BAPHOMET_SERVER_RENDER_URL }}
+          GIT_REGISTRY_TOKEN: ${{ secrets.GIT_REGISTRY_TOKEN }}
         run: |
           npm install --global pnpm
           pnpm install
