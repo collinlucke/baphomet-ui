@@ -10,8 +10,8 @@
   "routing": {
     "rules": [
       {
-        "source": "/baphomet/**",
-        "destination": "/baphomet/index.html",
+        "source": "/**",
+        "destination": "/index.html",
         "type": "rewrite"
       }
     ]
