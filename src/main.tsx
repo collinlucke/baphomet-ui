@@ -22,9 +22,7 @@ const getBackendUrl = () => {
   );
 };
 
-const router = createBrowserRouter(routes, {
-  basename: '/baphomet'
-});
+const router = createBrowserRouter(routes);
 const httpLink = createHttpLink({
   uri: getBackendUrl()
 });
