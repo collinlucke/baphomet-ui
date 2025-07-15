@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig(async ({ mode }) => {
   return {
+    base: '/baphomet/',
     plugins: [
       react({
         jsxImportSource: '@emotion/react',
