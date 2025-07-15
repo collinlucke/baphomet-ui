@@ -1,7 +1,7 @@
 # To better understand this file read this:
 # https://docs.ionos.space/docs/github-actions-customization/
 
-name: 'Deploy Now: Execute Build'
+name: "Deploy Now: Execute Build"
 
 on:
   workflow_call:
@@ -17,7 +17,7 @@ env:
   DEPLOYMENT_FOLDER: dist
 
 jobs:
-  # Please do not rename this job
+# Please do not rename this job
   build-project:
     name: build baphomet-ui
     runs-on: ubuntu-latest
@@ -32,32 +32,22 @@ jobs:
         with:
           node-version: v22.x
 
-      - name: Setup .npmrc for GitHub packages
-        env:
-          GIT_REGISTRY_TOKEN: ${{ secrets.GIT_REGISTRY_TOKEN }}
-        run: |
-          echo "registry=https://registry.npmjs.org/" > .npmrc
-          echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
-          echo "//npm.pkg.github.com/:_authToken=${GIT_REGISTRY_TOKEN}" >> .npmrc
-
       - name: Build Node assets
         env:
           CI: true
           SITE_URL: ${{ inputs.site-url }}
-          GRAPHQL_BAPHOMET_SERVER_RENDER_URL: ${{ secrets.GRAPHQL_BAPHOMET_SERVER_RENDER_URL }}
-          GIT_REGISTRY_TOKEN: ${{ secrets.GIT_REGISTRY_TOKEN }}
         run: |
           npm install --global pnpm
           pnpm install
           pnpm build
 
-      # Please do not touch the following action
+# Please do not touch the following action
       - name: Store deployment content
         uses: ionos-deploy-now/artifact-action@v1
         with:
           api-key: ${{ secrets.IONOS_API_KEY }}
           service-host: api-us.ionos.space
-          project-id: dae5d77f-49c9-48cc-8523-1ffcffd22dea
+          project-id: 3ed35c26-25a2-4e4d-80ee-4733a7cb8a7d
           branch-id: ${{ inputs.branch-id }}
           version: ${{ github.sha }}
           folder: ${{ env.DEPLOYMENT_FOLDER }}

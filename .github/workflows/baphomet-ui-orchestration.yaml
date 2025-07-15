@@ -3,7 +3,7 @@
 # More information under https://docs.ionos.space/docs/github-actions-customization/
 # version: 2022-07-21
 
-name: 'Deploy Now: Orchestration'
+name: "Deploy Now: Orchestration"
 run-name: "Deploy Now: Build baphomet-ui · ${{ github.event.head_commit.message || format('Triggered by {0}', github.triggering_actor) }}"
 
 on:
@@ -24,8 +24,9 @@ jobs:
         with:
           api-key: ${{ secrets.IONOS_API_KEY }}
           service-host: api-us.ionos.space
-          project-id: dae5d77f-49c9-48cc-8523-1ffcffd22dea
+          project-id: 3ed35c26-25a2-4e4d-80ee-4733a7cb8a7d
           action: retrieve-info
+
 
   build:
     name: build
@@ -49,6 +50,6 @@ jobs:
         with:
           api-key: ${{ secrets.IONOS_API_KEY }}
           service-host: api-us.ionos.space
-          project-id: dae5d77f-49c9-48cc-8523-1ffcffd22dea
+          project-id: 3ed35c26-25a2-4e4d-80ee-4733a7cb8a7d
           branch-id: ${{ needs.retrieve-project.outputs.branch-id }}
           action: dispatch-deployments
