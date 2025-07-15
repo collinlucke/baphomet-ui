@@ -57,7 +57,7 @@ jobs:
         with:
           api-key: ${{ secrets.IONOS_API_KEY }}
           service-host: api-us.ionos.space
-          project-id: dae5d77f-49c9-48cc-8523-1ffcffd22dea
+          project-id: 835b7c63-1f3f-451b-8490-25260324e54f
           branch-id: ${{ inputs.branch-id }}
           version: ${{ github.sha }}
           folder: ${{ env.DEPLOYMENT_FOLDER }}
