@@ -1,0 +1,25 @@
+{
+  "name": "baphomet-ui",
+  "domains": [
+    {
+      "domain": "baphomet.collinlucke.com",
+      "type": "custom"
+    }
+  ],
+  "build": {
+    "outputDirectory": "dist",
+    "commands": [
+      "pnpm install",
+      "pnpm run build"
+    ]
+  },
+  "routing": {
+    "rules": [
+      {
+        "source": "/**",
+        "destination": "/index.html",
+        "type": "rewrite"
+      }
+    ]
+  }
+}
