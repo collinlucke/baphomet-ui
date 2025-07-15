@@ -1,6 +1,11 @@
 {
   "name": "baphomet-ui",
-  "basePath": "/baphomet",
+  "domains": [
+    {
+      "domain": "baphomet.collinlucke.com",
+      "type": "custom"
+    }
+  ],
   "build": {
     "outputDirectory": "dist",
     "commands": [
@@ -11,8 +16,8 @@
   "routing": {
     "rules": [
       {
-        "source": "/baphomet/**",
-        "destination": "/baphomet/index.html",
+        "source": "/**",
+        "destination": "/index.html",
         "type": "rewrite"
       }
     ]
