@@ -26,3 +26,12 @@ routing:
   rewrites:
     - source: "/**"
       destination: "/index.html"
+
+# Headers for proper CORS and security
+headers:
+  - source: "/**"
+    headers:
+      - key: "X-Frame-Options"
+        value: "DENY"
+      - key: "X-Content-Type-Options"
+        value: "nosniff"
