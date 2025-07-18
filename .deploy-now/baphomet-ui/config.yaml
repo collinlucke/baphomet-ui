@@ -1,8 +1,6 @@
 distDir: dist
 routes:
   fallback: index.html
-domains:
-  - baphomet.collinlucke.com
 headers:
   - source: "/**"
     headers:
