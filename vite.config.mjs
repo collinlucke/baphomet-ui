@@ -2,8 +2,9 @@ import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig(async ({ mode }) => {
-  // Since we have a CNAME file for custom domain, always use root path
-  const base = '/';
+  // Use subdirectory base for GitHub Pages until custom domain DNS is set up
+  // Once DNS points to GitHub Pages, this will automatically use root path
+  const base = '/baphomet-ui/';
   
   console.log('Vite base path:', base);
   
