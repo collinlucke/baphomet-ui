@@ -22,8 +22,18 @@ const getBackendUrl = () => {
   );
 };
 
+const getBasename = () => {
+  // If we're on the custom domain or localhost, use root path
+  if (window.location.hostname === 'baphomet.collinlucke.com' || 
+      window.location.hostname === 'localhost') {
+    return '/';
+  }
+  // Otherwise we're on GitHub Pages subdirectory
+  return '/baphomet-ui';
+};
+
 const router = createBrowserRouter(routes, {
-  basename: import.meta.env.MODE === 'production' ? '/baphomet-ui' : '/'
+  basename: getBasename()
 });
 const httpLink = createHttpLink({
   uri: getBackendUrl()
