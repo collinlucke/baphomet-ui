@@ -49,6 +49,8 @@ jobs:
         env:
           VITE_GRAPHQL_BAPHOMET_SERVER_RENDER_URL: https://baphomet-server.onrender.com/graphql
           GIT_REGISTRY_TOKEN: ${{ secrets.GIT_REGISTRY_TOKEN }}
+          GITHUB_ACTIONS: true
+          GITHUB_PAGES_CUSTOM_DOMAIN: true
         run: pnpm build
 
       - name: Setup Pages
