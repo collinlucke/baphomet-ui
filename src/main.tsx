@@ -22,7 +22,9 @@ const getBackendUrl = () => {
   );
 };
 
-const router = createBrowserRouter(routes);
+const router = createBrowserRouter(routes, {
+  basename: import.meta.env.MODE === 'production' ? '/baphomet-ui' : '/'
+});
 const httpLink = createHttpLink({
   uri: getBackendUrl()
 });
