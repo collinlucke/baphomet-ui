@@ -1,0 +1,34 @@
+# render.yaml for baphomet-ui
+services:
+  - type: web
+    name: baphomet-ui
+    env: node
+    buildCommand: pnpm install && pnpm run build
+    staticPublishPath: dist
+    envVars:
+      - key: GRAPHQL_BAPHOMET_SERVER_RENDER_URL
+        fromService:
+          type: web
+          name: baphomet-server
+          envVarKey: RENDER_EXTERNAL_URL
+          property: url
+        value: https://baphomet-server.onrender.com/graphql
+      - key: GIT_REGISTRY_TOKEN
+        sync: false # This will be set manually in Render dashboard
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=31536000
+      - path: /index.html
+        name: Cache-Control
+        value: no-cache
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
