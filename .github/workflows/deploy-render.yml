@@ -1,4 +1,4 @@
-name: Build and Deploy to Render
+name: Build and Deploy to GitHub Pages
 
 on:
   push:
@@ -30,20 +30,15 @@ jobs:
           npm install -g pnpm
           pnpm install
 
-      - name: Build with secrets
+      - name: Build for production
         env:
           VITE_GRAPHQL_BAPHOMET_SERVER_RENDER_URL: https://baphomet-server.onrender.com/graphql
           GIT_REGISTRY_TOKEN: ${{ secrets.GIT_REGISTRY_TOKEN }}
         run: pnpm build
 
-      - name: Deploy to Render
-        env:
-          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
-        run: |
-          if [ -n "$RENDER_DEPLOY_HOOK" ]; then
-            echo "🚀 Triggering Render deployment..."
-            curl -X POST "$RENDER_DEPLOY_HOOK"
-            echo "✅ Deployment triggered!"
-          else
-            echo "⚠️  No RENDER_DEPLOY_HOOK found, skipping Render deployment"
-          fi
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          cname: baphomet.collinlucke.com
