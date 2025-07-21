@@ -2,14 +2,10 @@ import { ComponentType, useEffect } from 'react';
 import {
   CustomErrorTypes,
   CustomNetworkErrorTypes
-} from '../../CustomTypes.types';
-import {
-  errorVar,
-  showHeadingVar,
-  isAuthenticatedVar
-} from '../../reactiveVars';
+} from '../types/CustomTypes.types';
+import { errorVar, showHeadingVar, isAuthenticatedVar } from '../reactiveVars';
 import { useQuery, useReactiveVar } from '@apollo/client';
-import { CHECK_AUTH } from '../../api/queries';
+import { CHECK_AUTH } from '../api/queries';
 
 type ProtectedRouteTypes = {
   element: ComponentType<any>;

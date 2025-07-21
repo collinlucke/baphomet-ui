@@ -2,8 +2,8 @@ import React, { ReactNode } from 'react';
 import { useNavigate, useRouteError } from 'react-router-dom';
 import { ButtonGroup, Modal, Button } from '@collinlucke/phantomartist';
 import { CSSObject } from '@emotion/react';
-import { CustomErrorTypes } from '../../CustomTypes.types';
-import { errorVar } from '../../reactiveVars';
+import { CustomErrorTypes } from '../types/CustomTypes.types';
+import { errorVar } from '../reactiveVars';
 import { useReactiveVar } from '@apollo/client';
 
 type ErrorBoundaryTypes = {

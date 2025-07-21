@@ -4,7 +4,7 @@ import { LOGIN } from '../../api/mutations';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { errorVar, isAuthenticatedVar } from '../../reactiveVars';
-import { CustomErrorTypes } from '../../CustomTypes.types';
+import { CustomErrorTypes } from '../../types/CustomTypes.types.ts';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();

@@ -10,9 +10,9 @@ import {
   createBrowserRouter,
   RouterProvider
 } from 'react-router-dom';
-import { MovieListPage } from '../components/MovieList/MovieListPage';
+import { MovieListPage } from '../Pages/MovieList/MovieListPage';
 import { MockedProvider } from '@apollo/client/testing';
-import { WelcomePage } from '../components/Welcome/WelcomePage';
+import { WelcomePage } from '../Pages/Welcome/WelcomePage';
 import App from '../App';
 import mockGetAllMovies from '../components/shared/__mocks__/mockGetAllMovies';
 import mockCheckAuth from '../components/shared/__mocks__/mockCheckAuth';

@@ -1,9 +1,9 @@
 import { Header, Button, InnerWidth, Block } from '@collinlucke/phantomartist';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { useScreenSize } from '../../hooks/useScreenSize';
+import { useScreenSize } from '../hooks/useScreenSize';
 import { PlusSignIcon } from 'hugeicons-react';
-import { isAuthenticatedVar } from '../../reactiveVars';
+import { isAuthenticatedVar } from '../reactiveVars';
 import { useReactiveVar } from '@apollo/client';
 
 export const Heading: React.FC = () => {

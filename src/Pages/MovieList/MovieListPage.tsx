@@ -19,7 +19,7 @@ import {
 } from '@collinlucke/phantomartist';
 import { useScreenSize } from '../../hooks/useScreenSize';
 import { useState, useEffect, ChangeEvent } from 'react';
-import { CustomErrorTypes } from '../../CustomTypes.types';
+import { CustomErrorTypes } from '../../types/CustomTypes.types.ts';
 import {
   errorVar,
   showHeadingVar,

@@ -1,6 +1,6 @@
 import { makeVar } from '@apollo/client';
-import { CustomErrorTypes } from './CustomTypes.types';
-import { MovieType } from './components/MovieList/MovieListPage';
+import { CustomErrorTypes } from './types/CustomTypes.types.ts';
+import { MovieType } from './Pages/MovieList/MovieListPage';
 
 export const isAuthenticatedVar = makeVar(false);
 export const errorVar = makeVar<CustomErrorTypes | undefined>(undefined);

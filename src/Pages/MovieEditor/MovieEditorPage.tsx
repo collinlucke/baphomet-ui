@@ -5,7 +5,7 @@ import { UPDATE_MOVIE, ADD_MOVIE } from '../../api/mutations';
 import { MovieEditorForm } from './MovieEditorForm';
 import { Block, InnerWidth } from '@collinlucke/phantomartist';
 import { useNavigate, useParams } from 'react-router-dom';
-import { CustomErrorTypes } from '../../CustomTypes.types';
+import { CustomErrorTypes } from '../../types/CustomTypes.types.ts';
 import { errorVar, showHeadingVar } from '../../reactiveVars';
 
 type MovieProps = {

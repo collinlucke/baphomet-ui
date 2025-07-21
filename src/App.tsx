@@ -1,9 +1,9 @@
 import { UIEvent } from 'react';
 import './styling/index.css';
 import { Outlet } from 'react-router-dom';
-import { Heading } from './components/shared/Heading';
+import { Heading } from './components/Heading';
 import { Main } from '@collinlucke/phantomartist';
-import { ErrorBoundary } from './components/shared/ErrorBoundary';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import {
   errorVar,
   showHeadingVar,
