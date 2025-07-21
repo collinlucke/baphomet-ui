@@ -30,7 +30,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Setup .npmrc for GitHub packages
         env:
@@ -47,7 +47,7 @@ jobs:
 
       - name: Build for production
         env:
-          VITE_GRAPHQL_BAPHOMET_SERVER_RENDER_URL: https://baphomet-server.onrender.com/graphql
+          GRAPHQL_BAPHOMET_SERVER_RENDER_URL: https://baphomet-server.onrender.com/graphql
           GIT_REGISTRY_TOKEN: ${{ secrets.GIT_REGISTRY_TOKEN }}
           GITHUB_ACTIONS: true
           GITHUB_PAGES_CUSTOM_DOMAIN: true

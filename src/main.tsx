@@ -11,6 +11,13 @@ import { setContext } from '@apollo/client/link/context';
 import routes from './routes';
 import 'dotenv';
 
+// Handle redirect from 404.html before creating router
+const redirectPath = sessionStorage.getItem('redirectPath');
+if (redirectPath && redirectPath !== '/') {
+  sessionStorage.removeItem('redirectPath');
+  window.history.replaceState(null, '', redirectPath);
+}
+
 const getBackendUrl = () => {
   if (import.meta.env.MODE === 'development') {
     return 'http://localhost:5050/graphql';
@@ -22,9 +29,7 @@ const getBackendUrl = () => {
   );
 };
 
-const router = createBrowserRouter(routes, {
-  basename: '/' // Always use root path since GitHub redirects to custom domain
-});
+const router = createBrowserRouter(routes);
 const httpLink = createHttpLink({
   uri: getBackendUrl()
 });
@@ -52,16 +57,3 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     </ApolloProvider>
   </React.StrictMode>
 );
-
-// GitHub Pages SPA redirect handling
-// This handles the redirect from 404.html for direct navigation to routes
-(function(l) {
-  if (l.search[1] === '/' ) {
-    var decoded = l.search.slice(1).split('&').map(function(s) { 
-      return s.replace(/~and~/g, '&')
-    }).join('?');
-    window.history.replaceState(null, '',
-        l.pathname.slice(0, -1) + decoded + l.hash
-    );
-  }
-}(window.location));

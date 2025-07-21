@@ -1,24 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Baphomet UI</title>
     <script>
-      // GitHub Pages SPA redirect hack
-      // This script takes the current URL and redirects to the index page with the full path
-      // as a query parameter. Then the index page will pick it up and show the correct page.
-      var pathSegmentsToKeep = 0; // Change this if you use a subdirectory
-      
-      var l = window.location;
-      l.replace(
-        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-        l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
-        l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
-        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-        l.hash
-      );
+        // Store the current path and redirect to home, let React Router handle it
+        sessionStorage.setItem('redirectPath', window.location.pathname + window.location.search);
+        window.location.href = '/';
     </script>
 </head>
 <body>
+    <p>Redirecting...</p>
 </body>
 </html>

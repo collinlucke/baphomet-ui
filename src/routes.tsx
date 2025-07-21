@@ -13,8 +13,7 @@ const routes = [
     element: <App />,
     errorElement: <ErrorBoundary />,
     children: [
-      { path: '/', element: <MovieListPage /> },
-      { path: '/welcome', element: <WelcomePage /> },
+      { path: '/', element: <WelcomePage /> },
       { path: 'movielist', element: <MovieListPage /> },
       {
         path: 'view/:id',
