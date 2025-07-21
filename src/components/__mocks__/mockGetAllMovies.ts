@@ -1,4 +1,4 @@
-import { GET_ALL_MOVIES } from '../../../api/queries';
+import { GET_ALL_MOVIES } from '../../api/queries';
 
 export default {
   request: {

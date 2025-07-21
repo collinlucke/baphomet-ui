@@ -1,4 +1,4 @@
-import { CHECK_AUTH } from '../../../api/queries';
+import { CHECK_AUTH } from '../../api/queries';
 
 export default {
   request: {

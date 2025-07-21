@@ -3,7 +3,7 @@ import { expect, describe, it, beforeEach } from 'vitest';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import { mockLocalStorage } from '../shared/__mocks__/mockLocalStorage';
+import { mockLocalStorage } from '../__mocks__/mockLocalStorage';
 import { Heading } from '../Heading';
 import {
   BrowserRouter,
@@ -13,9 +13,9 @@ import {
 } from 'react-router-dom';
 import routes from '../../routes';
 import { MockedProvider } from '@apollo/client/testing';
-import mockGetAllMovies from '../shared/__mocks__/mockGetAllMovies';
-import mockCheckAuth from '../shared/__mocks__/mockCheckAuth';
-import mockGetMovie from '../shared/__mocks__/mockGetMovie';
+import mockGetAllMovies from '../__mocks__/mockGetAllMovies';
+import mockCheckAuth from '../__mocks__/mockCheckAuth';
+import mockGetMovie from '../__mocks__/mockGetMovie';
 
 beforeEach(() => mockLocalStorage());
 

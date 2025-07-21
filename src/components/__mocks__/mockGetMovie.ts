@@ -1,4 +1,4 @@
-import { GET_MOVIE } from '../../../api/queries';
+import { GET_MOVIE } from '../../api/queries';
 
 export default {
   request: {
