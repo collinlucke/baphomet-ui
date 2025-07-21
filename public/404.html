@@ -6,8 +6,13 @@
     <title>Baphomet UI</title>
     <script>
         // Store the current path and redirect to home, let React Router handle it
-        sessionStorage.setItem('redirectPath', window.location.pathname + window.location.search);
-        window.location.href = '/';
+        (function() {
+            var path = window.location.pathname + window.location.search + window.location.hash;
+            console.log('404 redirect - storing path:', path);
+            sessionStorage.setItem('redirectPath', path);
+            // Use replace to avoid adding to browser history
+            window.location.replace('/');
+        })();
     </script>
 </head>
 <body>
