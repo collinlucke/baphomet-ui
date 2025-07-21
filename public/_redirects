@@ -1,5 +1,0 @@
-/*
-  Ionos Deploy Now default fallback for SPA routing
-  This ensures all routes are handled by your React Router
-*/
-  *    /index.html   200

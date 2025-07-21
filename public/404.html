@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Baphomet UI</title>
+    <script>
+      // GitHub Pages SPA redirect hack
+      // This script takes the current URL and redirects to the index page with the full path
+      // as a query parameter. Then the index page will pick it up and show the correct page.
+      var pathSegmentsToKeep = 0; // Change this if you use a subdirectory
+      
+      var l = window.location;
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+        l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+        l.hash
+      );
+    </script>
+</head>
+<body>
+</body>
+</html>

@@ -4,8 +4,8 @@ import { WelcomePage } from './Pages/Welcome/WelcomePage.tsx';
 import { MovieEditorPage } from './Pages/MovieEditor/MovieEditorPage.tsx';
 import { MovieListPage } from './Pages/MovieList/MovieListPage.tsx';
 import { ArenaPage } from './Pages/Arena/ArenaPage.tsx';
-import { ProtectedRoute } from './components/ProtectedRoute.tsx';
-import { ErrorBoundary } from './components/ErrorBoundary.tsx';
+import { ProtectedRoute } from './components/shared/ProtectedRoute.tsx';
+import { ErrorBoundary } from './components/shared/ErrorBoundary.tsx';
 
 const routes = [
   {
