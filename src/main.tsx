@@ -9,7 +9,11 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import routes from './routes';
+import { logEnvironmentInfo } from './utils/environment';
 import 'dotenv';
+
+// Log environment info in development
+logEnvironmentInfo();
 
 // Handle redirect from 404.html before creating router
 const redirectPath = sessionStorage.getItem('redirectPath');

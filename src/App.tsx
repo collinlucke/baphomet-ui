@@ -4,6 +4,8 @@ import { Outlet } from 'react-router-dom';
 import { Heading } from './components/Heading';
 import { Main } from '@collinlucke/phantomartist';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { ThemeProvider } from '@emotion/react';
+import { baphTheme } from './styling/baphTheme';
 import {
   errorVar,
   showHeadingVar,
@@ -36,17 +38,19 @@ export const App = () => {
   };
 
   return (
-    <div
-      className="baph-scroll-wrapper"
-      onScroll={onScrollHandler}
-      css={baphStyles.scrollDiv}
-    >
-      {showHeading && <Heading />}
-      <Main>
-        <Outlet />
-      </Main>
-      {error && <ErrorBoundary />}
-    </div>
+    <ThemeProvider theme={baphTheme}>
+      <div
+        className="baph-scroll-wrapper"
+        onScroll={onScrollHandler}
+        css={baphStyles.scrollDiv}
+      >
+        {showHeading && <Heading />}
+        <Main>
+          <Outlet />
+        </Main>
+        {error && <ErrorBoundary />}
+      </div>
+    </ThemeProvider>
   );
 };
 
