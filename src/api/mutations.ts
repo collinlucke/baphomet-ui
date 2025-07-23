@@ -52,9 +52,37 @@ export const UPDATE_MOVIE = gql`
 `;
 
 export const LOGIN = gql`
-  mutation login($email: String, $password: String) {
+  mutation login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       token
+      user {
+        id
+        username
+        email
+        displayName
+        totalVotes
+        joinDate
+        role
+        emailVerified
+      }
+    }
+  }
+`;
+
+export const SIGNUP = gql`
+  mutation signup($username: String!, $email: String!, $password: String!, $displayName: String) {
+    signup(username: $username, email: $email, password: $password, displayName: $displayName) {
+      token
+      user {
+        id
+        username
+        email
+        displayName
+        totalVotes
+        joinDate
+        role
+        emailVerified
+      }
     }
   }
 `;

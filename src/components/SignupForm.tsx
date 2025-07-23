@@ -1,24 +1,14 @@
 import React, { useState } from 'react';
+import { useMutation } from '@apollo/client';
 import { InputField } from '@collinlucke/phantomartist';
 import { CSSObject } from '@emotion/react';
 import { baphColors, baphTypography } from '../styling/baphTheme';
-
-export interface SignupFormData {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  displayName: string;
-}
-
-export interface SignupFormProps {
-  onSubmit: (formData: SignupFormData) => Promise<void>;
-  isLoading?: boolean;
-}
+import { SIGNUP } from '../api/mutations';
+import { SignupFormData, SignupFormProps, AuthResponse } from '../types/auth.types';
 
 export const SignupForm: React.FC<SignupFormProps> = ({
-  onSubmit,
-  isLoading = false
+  onSuccess,
+  onError
 }) => {
   const [formData, setFormData] = useState<SignupFormData>({
     username: '',
@@ -29,6 +19,55 @@ export const SignupForm: React.FC<SignupFormProps> = ({
   });
 
   const [errors, setErrors] = useState<Partial<SignupFormData>>({});
+  const [generalError, setGeneralError] = useState<string>('');
+
+  const [signupMutation, { loading: isLoading }] = useMutation(SIGNUP, {
+    onCompleted: (data) => {
+      // Clear any previous errors
+      setGeneralError('');
+      setErrors({});
+      
+      // Store token in localStorage
+      localStorage.setItem('baphomet-token', data.signup.token);
+      
+      // Call success callback
+      if (onSuccess) {
+        onSuccess(data.signup);
+      }
+    },
+    onError: (error) => {
+      // Handle different types of errors
+      let errorMessage = 'An error occurred during signup';
+      
+      if (error.networkError) {
+        // Network errors (like CORS, server down, etc.)
+        errorMessage = 'Unable to connect to server. Please check your connection and try again.';
+      } else if (error.graphQLErrors && error.graphQLErrors.length > 0) {
+        // GraphQL errors (validation, business logic)
+        errorMessage = error.graphQLErrors[0].message;
+      } else if (error.message) {
+        // Other Apollo errors
+        errorMessage = error.message;
+      }
+      
+      // If it's a specific field error, show it on the field
+      if (errorMessage.toLowerCase().includes('username')) {
+        setErrors(prev => ({ ...prev, username: errorMessage }));
+        setGeneralError('');
+      } else if (errorMessage.toLowerCase().includes('email')) {
+        setErrors(prev => ({ ...prev, email: errorMessage }));
+        setGeneralError('');
+      } else {
+        // Show general error for network issues, server errors, etc.
+        setGeneralError(errorMessage);
+      }
+      
+      // Call error callback
+      if (onError) {
+        onError(errorMessage);
+      }
+    },
+  });
 
   const validateForm = (): boolean => {
     const newErrors: Partial<SignupFormData> = {};
@@ -73,17 +112,29 @@ export const SignupForm: React.FC<SignupFormProps> = ({
     }
 
     try {
-      await onSubmit(formData);
+      await signupMutation({
+        variables: {
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+          displayName: formData.displayName || formData.username
+        }
+      });
     } catch (error) {
+      // Error handling is done in the onError callback above
       console.error('Signup error:', error);
     }
   };
 
   const updateField = (field: keyof SignupFormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    // Clear error when user starts typing
+    // Clear field error when user starts typing
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: undefined }));
+    }
+    // Clear general error when user starts typing
+    if (generalError) {
+      setGeneralError('');
     }
   };
 
@@ -148,6 +199,12 @@ export const SignupForm: React.FC<SignupFormProps> = ({
         />
       </div>
 
+      {generalError && (
+        <div css={styles.generalError}>
+          {generalError}
+        </div>
+      )}
+
       <button css={styles.submitButton} type="submit" disabled={isLoading}>
         {isLoading ? 'Creating Account...' : 'Create Account'}
       </button>
@@ -186,6 +243,17 @@ const styles = {
     flexDirection: 'column' as const,
     gap: '1rem',
     alignItems: 'center'
+  } as CSSObject,
+
+  generalError: {
+    padding: '0.75rem',
+    backgroundColor: '#fee2e2',
+    color: '#dc2626',
+    border: '1px solid #fecaca',
+    borderRadius: '6px',
+    fontSize: '0.875rem',
+    marginBottom: '1rem',
+    textAlign: 'center' as const
   } as CSSObject,
 
   submitButton: {
