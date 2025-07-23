@@ -5,6 +5,7 @@ import { useMutation, useReactiveVar } from '@apollo/client';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { errorVar, isAuthenticatedVar } from '../../reactiveVars';
 import { CustomErrorTypes } from '../../types/CustomTypes.types.ts';
+import { baphSemanticColors, baphTypography } from '../../styling/baphTheme';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -79,11 +80,11 @@ export const Login: React.FC = () => {
 
 const baphStyles = {
   errorMessage: {
-    color: 'red',
+    color: baphSemanticColors.text.accent,
     marginBottom: '20px'
   },
   psst: {
-    fontSize: '.75em',
+    ...baphTypography.styles.caption,
     marginTop: '20px'
   }
 };
