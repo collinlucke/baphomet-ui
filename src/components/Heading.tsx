@@ -13,7 +13,7 @@ import { PlusSignIcon } from 'hugeicons-react';
 import { isAuthenticatedVar } from '../reactiveVars';
 import { useReactiveVar } from '@apollo/client';
 import { baphColors, baphTypography } from '../styling/baphTheme';
-import { SignupForm, SignupFormData } from './SignupForm';
+import { SignupForm, SignupFormData, AuthResponse } from './SignupForm';
 import { LoginForm, LoginFormData } from './LoginForm';
 import { useState } from 'react';
 
@@ -23,7 +23,6 @@ export const Heading: React.FC = () => {
   const isAuthenticated = useReactiveVar(isAuthenticatedVar);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const navToCreate = () => {
     navigate('/create');
@@ -62,39 +61,28 @@ export const Heading: React.FC = () => {
     isAuthenticatedVar(false);
   };
 
-  const handleSignup = async (formData: SignupFormData) => {
-    setIsLoading(true);
-    try {
-      // TODO: Implement actual signup API call
-      console.log('Signup data:', formData);
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setShowSignupModal(false);
-      // TODO: Handle successful signup (auto-login, show success message, etc.)
-    } catch (error) {
-      console.error('Signup failed:', error);
-      // TODO: Handle signup error
-    } finally {
-      setIsLoading(false);
-    }
+  const handleSignupSuccess = (authResponse: AuthResponse) => {
+    // Successfully created account for user: authResponse.user.username
+    isAuthenticatedVar(true);
+    setShowSignupModal(false);
+    // You could also redirect or show a success message here
   };
 
-  const handleLogin = async (formData: LoginFormData) => {
-    setIsLoading(true);
-    try {
-      // TODO: Implement actual login API call
-      console.log('Login data:', formData);
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setShowLoginModal(false);
-      // TODO: Handle successful login (store token, set auth state, etc.)
-      isAuthenticatedVar(true);
-    } catch (error) {
-      console.error('Login failed:', error);
-      // TODO: Handle login error
-    } finally {
-      setIsLoading(false);
-    }
+  const handleSignupError = (error: string) => {
+    // Handle signup error - could show an error toast or message here
+    console.error('Signup failed:', error);
+  };
+
+  const handleLoginSuccess = (authResponse: AuthResponse) => {
+    // Successfully logged in user: authResponse.user.username
+    isAuthenticatedVar(true);
+    setShowLoginModal(false);
+    // You could also redirect or show a success message here
+  };
+
+  const handleLoginError = (error: string) => {
+    // Handle login error - could show an error toast or message here
+    console.error('Login failed:', error);
   };
 
   return (
@@ -203,7 +191,7 @@ export const Heading: React.FC = () => {
         title="Create Your Account"
         showCloseButton
       >
-        <SignupForm onSubmit={handleSignup} isLoading={isLoading} />
+        <SignupForm onSuccess={handleSignupSuccess} onError={handleSignupError} />
       </Modal>
 
       {/* Login Modal */}
@@ -213,7 +201,7 @@ export const Heading: React.FC = () => {
         title="Log In"
         showCloseButton
       >
-        <LoginForm onSubmit={handleLogin} isLoading={isLoading} />
+        <LoginForm onSuccess={handleLoginSuccess} onError={handleLoginError} />
       </Modal>
     </>
   );
