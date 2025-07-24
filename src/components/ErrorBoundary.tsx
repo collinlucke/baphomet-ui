@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 import { useNavigate, useRouteError } from 'react-router-dom';
 import { ButtonGroup, Modal, Button } from '@collinlucke/phantomartist';
-import { CSSObject } from '@emotion/react';
 import { CustomErrorTypes } from '../types/CustomTypes.types';
 import { errorVar } from '../reactiveVars';
 import { useReactiveVar } from '@apollo/client';
@@ -9,17 +8,11 @@ import { useReactiveVar } from '@apollo/client';
 type ErrorBoundaryTypes = {
   id?: string;
   children?: ReactNode;
-  className?: {
-    errorModal?: CSSObject;
-  };
   error?: CustomErrorTypes;
   closeModal?: () => void;
 };
 
-export const ErrorBoundary: React.FC<ErrorBoundaryTypes> = ({
-  className,
-  children
-}) => {
+export const ErrorBoundary: React.FC<ErrorBoundaryTypes> = ({ children }) => {
   const errorContent = {
     status: 'It dun broke',
     message: `This isn't looking very good for you.`
@@ -65,9 +58,6 @@ export const ErrorBoundary: React.FC<ErrorBoundaryTypes> = ({
 
   return (
     <Modal
-      className={{
-        modal: { ...className?.errorModal, ...baseStyle.errorModal }
-      }}
       isOpen={true}
       onClose={() => {
         errorVar(undefined);
@@ -98,10 +88,4 @@ export const ErrorBoundary: React.FC<ErrorBoundaryTypes> = ({
       )}
     </Modal>
   );
-};
-
-const baseStyle = {
-  errorModal: {
-    backgroundColor: `rgba(255,255,255,.75)`
-  }
 };

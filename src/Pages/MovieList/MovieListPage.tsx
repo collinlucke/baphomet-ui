@@ -173,7 +173,6 @@ export const MovieListPage = () => {
 
       {movieToDelete.id && !error && (
         <Modal
-          className={baphStyles}
           onClose={() => setMovieToDelete({ id: '', title: '' })}
           isOpen={!!movieToDelete.id}
         >
