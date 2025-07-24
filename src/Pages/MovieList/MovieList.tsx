@@ -86,7 +86,7 @@ export const MovieList: React.FC<MovieData> = ({
 const baphStyles: { [key: string]: CSSObject } = {
   noResults: {
     display: 'flex',
-    flexDirection: 'column' as 'column',
+    flexDirection: 'column' as const,
     alignItems: 'center',
     marginBottom: '30px',
     marginTop: '30px'

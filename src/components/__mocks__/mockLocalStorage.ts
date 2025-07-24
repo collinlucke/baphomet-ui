@@ -18,7 +18,7 @@ export const mockLocalStorage = () => {
       delete mockLocalStorage[key];
     },
     clear: () => {
-      for (let key in mockLocalStorage) {
+      for (const key in mockLocalStorage) {
         delete mockLocalStorage[key];
       }
     }

@@ -31,8 +31,17 @@ export const App = () => {
     const { scrollTop, scrollHeight, clientHeight } =
       e.target as HTMLDivElement;
     if (scrollTop + clientHeight >= scrollHeight - 300) {
-      getAllMoviesQueryVar()({
-        variables: { limit, searchTerm, cursor, loadAction: 'scroll' }
+      const queryFunction = getAllMoviesQueryVar();
+      if (!queryFunction) return;
+
+      queryFunction({
+        variables: {
+          limit,
+          searchTerm,
+          cursor,
+          loadAction: 'scroll',
+          endOfResults
+        }
       });
     }
   };

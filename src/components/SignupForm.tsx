@@ -4,7 +4,7 @@ import { InputField } from '@collinlucke/phantomartist';
 import { CSSObject } from '@emotion/react';
 import { baphColors, baphTypography } from '../styling/baphTheme';
 import { SIGNUP } from '../api/mutations';
-import { SignupFormData, SignupFormProps, AuthResponse } from '../types/auth.types';
+import { SignupFormData, SignupFormProps } from '../types/auth.types';
 
 export const SignupForm: React.FC<SignupFormProps> = ({
   onSuccess,
@@ -22,26 +22,27 @@ export const SignupForm: React.FC<SignupFormProps> = ({
   const [generalError, setGeneralError] = useState<string>('');
 
   const [signupMutation, { loading: isLoading }] = useMutation(SIGNUP, {
-    onCompleted: (data) => {
+    onCompleted: data => {
       // Clear any previous errors
       setGeneralError('');
       setErrors({});
-      
+
       // Store token in localStorage
       localStorage.setItem('baphomet-token', data.signup.token);
-      
+
       // Call success callback
       if (onSuccess) {
         onSuccess(data.signup);
       }
     },
-    onError: (error) => {
+    onError: error => {
       // Handle different types of errors
       let errorMessage = 'An error occurred during signup';
-      
+
       if (error.networkError) {
         // Network errors (like CORS, server down, etc.)
-        errorMessage = 'Unable to connect to server. Please check your connection and try again.';
+        errorMessage =
+          'Unable to connect to server. Please check your connection and try again.';
       } else if (error.graphQLErrors && error.graphQLErrors.length > 0) {
         // GraphQL errors (validation, business logic)
         errorMessage = error.graphQLErrors[0].message;
@@ -49,7 +50,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
         // Other Apollo errors
         errorMessage = error.message;
       }
-      
+
       // If it's a specific field error, show it on the field
       if (errorMessage.toLowerCase().includes('username')) {
         setErrors(prev => ({ ...prev, username: errorMessage }));
@@ -61,12 +62,12 @@ export const SignupForm: React.FC<SignupFormProps> = ({
         // Show general error for network issues, server errors, etc.
         setGeneralError(errorMessage);
       }
-      
+
       // Call error callback
       if (onError) {
         onError(errorMessage);
       }
-    },
+    }
   });
 
   const validateForm = (): boolean => {
@@ -199,11 +200,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
         />
       </div>
 
-      {generalError && (
-        <div css={styles.generalError}>
-          {generalError}
-        </div>
-      )}
+      {generalError && <div css={styles.generalError}>{generalError}</div>}
 
       <button css={styles.submitButton} type="submit" disabled={isLoading}>
         {isLoading ? 'Creating Account...' : 'Create Account'}

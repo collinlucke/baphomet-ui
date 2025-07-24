@@ -22,7 +22,7 @@ export const getPhantomArtistSource = () => {
 };
 
 export const getGraphQLEndpoint = () => {
-  return isDevelopment() 
+  return isDevelopment()
     ? 'http://localhost:5050/graphql'
     : import.meta.env.VITE_GRAPHQL_ENDPOINT || 'http://localhost:5050/graphql';
 };

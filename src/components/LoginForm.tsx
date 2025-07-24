@@ -4,12 +4,9 @@ import { InputField } from '@collinlucke/phantomartist';
 import { CSSObject } from '@emotion/react';
 import { baphColors, baphTypography } from '../styling/baphTheme';
 import { LOGIN } from '../api/mutations';
-import { LoginFormData, LoginFormProps, AuthResponse } from '../types/auth.types';
+import { LoginFormData, LoginFormProps } from '../types/auth.types';
 
-export const LoginForm: React.FC<LoginFormProps> = ({
-  onSuccess,
-  onError
-}) => {
+export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
     password: ''
@@ -19,26 +16,27 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   const [generalError, setGeneralError] = useState<string>('');
 
   const [loginMutation, { loading: isLoading }] = useMutation(LOGIN, {
-    onCompleted: (data) => {
+    onCompleted: data => {
       // Clear any previous errors
       setGeneralError('');
       setErrors({});
-      
+
       // Store token in localStorage
       localStorage.setItem('baphomet-token', data.login.token);
-      
+
       // Call success callback
       if (onSuccess) {
         onSuccess(data.login);
       }
     },
-    onError: (error) => {
+    onError: error => {
       // Handle different types of errors
       let errorMessage = 'An error occurred during login';
-      
+
       if (error.networkError) {
         // Network errors (like CORS, server down, etc.)
-        errorMessage = 'Unable to connect to server. Please check your connection and try again.';
+        errorMessage =
+          'Unable to connect to server. Please check your connection and try again.';
       } else if (error.graphQLErrors && error.graphQLErrors.length > 0) {
         // GraphQL errors (validation, business logic)
         errorMessage = error.graphQLErrors[0].message;
@@ -46,24 +44,27 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         // Other Apollo errors
         errorMessage = error.message;
       }
-      
+
       // If it's a specific field error, show it on the field
       if (errorMessage.toLowerCase().includes('password')) {
         setErrors(prev => ({ ...prev, password: errorMessage }));
         setGeneralError('');
-      } else if (errorMessage.toLowerCase().includes('user does not exist') || errorMessage.toLowerCase().includes('email')) {
+      } else if (
+        errorMessage.toLowerCase().includes('user does not exist') ||
+        errorMessage.toLowerCase().includes('email')
+      ) {
         setErrors(prev => ({ ...prev, email: errorMessage }));
         setGeneralError('');
       } else {
         // Show general error for network issues, server errors, etc.
         setGeneralError(errorMessage);
       }
-      
+
       // Call error callback
       if (onError) {
         onError(errorMessage);
       }
-    },
+    }
   });
 
   const validateForm = (): boolean => {
@@ -146,11 +147,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         />
       </div>
 
-      {generalError && (
-        <div css={styles.generalError}>
-          {generalError}
-        </div>
-      )}
+      {generalError && <div css={styles.generalError}>{generalError}</div>}
 
       <button css={styles.submitButton} type="submit" disabled={isLoading}>
         {isLoading ? 'Signing In...' : 'Sign In'}

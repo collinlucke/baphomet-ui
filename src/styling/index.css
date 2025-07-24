@@ -5,7 +5,7 @@
 }
 
 /* Override PhantomArtist Header margin */
-[data-testid="main-page-heading"] {
+[data-testid='main-page-heading'] {
   margin: 0 !important;
   margin-bottom: 0 !important;
 }

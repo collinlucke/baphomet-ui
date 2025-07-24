@@ -3,19 +3,19 @@
 
 # Project configuration
 project:
-  name: "baphomet-ui"
-  
+  name: 'baphomet-ui'
+
 # Custom domain configuration
 domains:
-  - "baphomet.collinlucke.com"
+  - 'baphomet.collinlucke.com'
 
 # Build configuration
 build:
   commands:
-    - "pnpm install"
-    - "pnpm run build"
-  outputDirectory: "dist"
-  
+    - 'pnpm install'
+    - 'pnpm run build'
+  outputDirectory: 'dist'
+
 # Environment variables (these will be set in GitHub secrets)
 environment:
   - GIT_REGISTRY_TOKEN
@@ -24,5 +24,5 @@ environment:
 # SPA routing configuration
 routing:
   rewrites:
-    - source: "/**"
-      destination: "/index.html"
+    - source: '/**'
+      destination: '/index.html'
