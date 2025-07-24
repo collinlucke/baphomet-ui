@@ -13,8 +13,8 @@ import { PlusSignIcon } from 'hugeicons-react';
 import { isAuthenticatedVar } from '../reactiveVars';
 import { useReactiveVar } from '@apollo/client';
 import { baphColors, baphTypography } from '../styling/baphTheme';
-import { SignupForm, SignupFormData, AuthResponse } from './SignupForm';
-import { LoginForm, LoginFormData } from './LoginForm';
+import { SignupForm } from './SignupForm';
+import { LoginForm } from './LoginForm';
 import { useState } from 'react';
 
 export const Heading: React.FC = () => {
@@ -61,7 +61,7 @@ export const Heading: React.FC = () => {
     isAuthenticatedVar(false);
   };
 
-  const handleSignupSuccess = (authResponse: AuthResponse) => {
+  const handleSignupSuccess = () => {
     // Successfully created account for user: authResponse.user.username
     isAuthenticatedVar(true);
     setShowSignupModal(false);
@@ -73,7 +73,7 @@ export const Heading: React.FC = () => {
     console.error('Signup failed:', error);
   };
 
-  const handleLoginSuccess = (authResponse: AuthResponse) => {
+  const handleLoginSuccess = () => {
     // Successfully logged in user: authResponse.user.username
     isAuthenticatedVar(true);
     setShowLoginModal(false);
@@ -191,7 +191,10 @@ export const Heading: React.FC = () => {
         title="Create Your Account"
         showCloseButton
       >
-        <SignupForm onSuccess={handleSignupSuccess} onError={handleSignupError} />
+        <SignupForm
+          onSuccess={handleSignupSuccess}
+          onError={handleSignupError}
+        />
       </Modal>
 
       {/* Login Modal */}

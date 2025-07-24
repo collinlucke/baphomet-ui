@@ -76,9 +76,9 @@ export const WelcomePage = () => {
 
 const baphStyles = {
   block: {
-    flexDirection: 'column' as 'column',
+    flexDirection: 'column' as const,
     width: 'auto',
-    position: 'absolute' as 'absolute',
+    position: 'absolute' as const,
     top: 0
   },
   button: {
@@ -86,15 +86,15 @@ const baphStyles = {
     margin: '30px 0'
   },
   header: {
-    textAlign: 'center' as 'center',
-    flexDirection: 'column' as 'column'
+    textAlign: 'center' as const,
+    flexDirection: 'column' as const
   },
   imgWrapper: {
     width: '275px',
     alignSelf: 'center'
   },
   innerWidth: {
-    flexDirection: 'column' as 'column',
+    flexDirection: 'column' as const,
     alignItems: 'start',
     alignSelf: 'center'
   }

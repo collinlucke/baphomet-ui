@@ -8,8 +8,8 @@ import { useQuery, useReactiveVar } from '@apollo/client';
 import { CHECK_AUTH } from '../api/queries';
 
 type ProtectedRouteTypes = {
-  element: ComponentType<any>;
-  props?: Record<string, any>;
+  element: ComponentType<Record<string, unknown>>;
+  props?: Record<string, unknown>;
 };
 export const ProtectedRoute: React.FC<ProtectedRouteTypes> = ({
   element: Component,
@@ -53,5 +53,5 @@ export const ProtectedRoute: React.FC<ProtectedRouteTypes> = ({
     }
   }, [error]);
 
-  return <>{!isAuthenticated ? <></> : <Component {...props} />}</>;
+  return <>{!isAuthenticated ? <></> : <Component {...(props || {})} />}</>;
 };

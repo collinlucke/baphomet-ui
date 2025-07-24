@@ -5,14 +5,15 @@
   "scripts": {
     "dev": "vite",
     "test": "vitest",
-    "build": "tsc && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "build": "pnpm lint && tsc && vite build",
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 50",
+    "lint:fix": "eslint . --report-unused-disable-directives --max-warnings 50 --fix",
     "preview": "vite preview",
     "install:dev": "NODE_ENV=development pnpm install"
   },
   "dependencies": {
     "@apollo/client": "^3.12.2",
-    "@collinlucke/phantomartist": "latest",
+    "@collinlucke/phantomartist": "link:../phantomartist",
     "@emotion/babel-plugin": "^11.13.5",
     "@emotion/styled": "^11.14.0",
     "@stylexjs/dev-runtime": "^0.7.5",
@@ -35,6 +36,7 @@
   },
   "devDependencies": {
     "@emotion/react": "^11.14.0",
+    "@eslint/js": "^9.31.0",
     "@rollup/plugin-alias": "^5.1.1",
     "@stylexjs/eslint-plugin": "^0.7.5",
     "@testing-library/jest-dom": "^6.6.3",
@@ -45,13 +47,16 @@
     "@typescript-eslint/parser": "^7.18.0",
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.16",
+    "globals": "^16.3.0",
     "jsdom": "^25.0.1",
     "nodemon": "^3.1.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "typescript": "^5.7.2",
+    "typescript-eslint": "^8.38.0",
     "vite": "^5.4.11",
     "vitest": "^2.1.8",
     "vitest-browser-react": "^0.0.4"

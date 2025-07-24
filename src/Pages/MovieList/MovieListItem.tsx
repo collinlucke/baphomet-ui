@@ -90,11 +90,11 @@ const baphStyles = {
     justifyContent: 'space-between',
     alignItems: size === 'small' ? 'start' : 'center',
     flex: 1,
-    flexDirection: size === 'small' ? ('column' as 'column') : ('row' as 'row'),
+    flexDirection: size === 'small' ? ('column' as const) : ('row' as const),
     gap: size === 'small' ? '0' : '20px'
   }),
   title: {
-    WebkitBoxOrient: 'vertical' as 'vertical',
+    WebkitBoxOrient: 'vertical' as const,
     display: '-webkit-inline-box',
     overflow: 'hidden',
     WebkitLineClamp: '1'
@@ -102,7 +102,7 @@ const baphStyles = {
   releaseDate: (size: string) => ({
     marginRight: '20px',
     minWidth: 'max-content',
-    textAlign: 'right' as 'right',
+    textAlign: 'right' as const,
     fontSize: size === 'small' ? '.8em' : 'inherit'
   }),
   button: (size: string) => ({

@@ -79,13 +79,14 @@ export const MovieListPage = () => {
       endOfResults
     },
     onCompleted: data => {
+      if (!data?.movieResults) return;
       const {
         newMovies,
         newTotalMovieCount,
         newCursor,
         loadAction,
         endOfResults
-      } = data?.movieResults;
+      } = data.movieResults;
       cursorVar(newCursor);
       endOfResultsVar(endOfResults);
       totalMovieCountVar(newTotalMovieCount);
@@ -173,7 +174,8 @@ export const MovieListPage = () => {
       {movieToDelete.id && !error && (
         <Modal
           className={baphStyles}
-          closeModal={() => setMovieToDelete({ id: '', title: '' })}
+          onClose={() => setMovieToDelete({ id: '', title: '' })}
+          isOpen={!!movieToDelete.id}
         >
           <h2>
             Are you sure you want to delete{' '}

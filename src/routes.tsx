@@ -1,8 +1,7 @@
 import App from './App.tsx';
-import { Login } from './Pages/Login/LoginPage.tsx';
 import { HomePage } from './Pages/Home/HomePage.tsx';
 import { MovieEditorPage } from './Pages/MovieEditor/MovieEditorPage.tsx';
-import { MovieListPage } from './Pages/MovieList/MovieListPage.tsx';
+// import { MovieListPage } from './Pages/MovieList/MovieListPage.tsx'; // Uncomment if MovieListPage is needed
 import { ArenaPage } from './Pages/Arena/ArenaPage.tsx';
 import { ProtectedRoute } from './components/ProtectedRoute.tsx';
 import { ErrorBoundary } from './components/ErrorBoundary.tsx';
@@ -33,8 +32,7 @@ const routes = [
       { path: 'arena', element: <ArenaPage /> },
       { path: 'styles', element: <StylesShowcase /> }
     ]
-  },
-  { path: '/login', element: <Login /> }
+  }
 ];
 
 export default routes;

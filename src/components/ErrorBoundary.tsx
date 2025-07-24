@@ -68,7 +68,11 @@ export const ErrorBoundary: React.FC<ErrorBoundaryTypes> = ({
       className={{
         modal: { ...className?.errorModal, ...baseStyle.errorModal }
       }}
-      dataTestId={`error-modal-${errorContent.status}`}
+      isOpen={true}
+      onClose={() => {
+        errorVar(undefined);
+      }}
+      // dataTestId={`error-modal-${errorContent.status}`}
     >
       {children ? (
         children

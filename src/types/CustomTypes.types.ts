@@ -27,7 +27,17 @@ export type CustomErrorTypes = Error & {
   }>;
   clientErrors: ReadonlyArray<Error>;
   statusCode?: number;
-  extraInfo?: any;
+  extraInfo?: unknown;
   cause?: Error;
   stack?: string;
+};
+
+export type GetAllMoviesQueryVarsObject = {
+  variables: {
+    limit: number;
+    searchTerm: string | number | undefined;
+    cursor: string;
+    loadAction: 'scroll';
+    endOfResults: boolean;
+  };
 };

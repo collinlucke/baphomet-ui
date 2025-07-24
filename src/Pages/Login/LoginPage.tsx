@@ -43,7 +43,7 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <Modal>
+    <Modal isOpen={true} onClose={() => navigate('../movielist')}>
       <Form onSubmit={loginHandler}>
         {error?.title === 'login' && (
           <div css={baphStyles.errorMessage}>
