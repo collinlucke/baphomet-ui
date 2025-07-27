@@ -1,5 +1,22 @@
 # Development Guide
 
+## PhantomArtist Dependency
+
+This project uses the local PhantomArtist design system for development but the published package for production:
+
+- **Development**: Links to local `../phantomartist` directory for live changes
+- **Production**: Uses published `@collinlucke/phantomartist@^1.0.3` from npm
+
+### Setup Commands
+
+```bash
+# Development setup (links local PhantomArtist)
+pnpm install:dev
+
+# Production setup (uses published package)
+pnpm install:prod
+```
+
 ## Quick Start
 
 ```bash
