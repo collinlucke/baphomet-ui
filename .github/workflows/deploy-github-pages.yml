@@ -43,6 +43,8 @@ jobs:
       - name: Install dependencies
         run: |
           npm install -g pnpm
+          # Clear cache to ensure latest packages are fetched
+          pnpm store prune
           pnpm install
 
       - name: Build for production
