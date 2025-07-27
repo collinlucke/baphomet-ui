@@ -40,13 +40,18 @@ jobs:
           echo "registry=https://registry.npmjs.org/" > .npmrc
           echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
           echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
+          echo "Created .npmrc file:"
+          cat .npmrc
 
       - name: Install dependencies
         run: |
           npm install -g pnpm
           # Clear cache to ensure latest packages are fetched
           pnpm store prune
-          pnpm install
+          echo "Installing dependencies..."
+          pnpm install --verbose
+          echo "Checking if PhantomArtist was installed:"
+          ls -la node_modules/@collinlucke/ || echo "PhantomArtist not found in node_modules"
 
       - name: Build for production
         env:
