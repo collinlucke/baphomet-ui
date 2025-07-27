@@ -15,6 +15,11 @@ import 'dotenv';
 // Log environment info in development
 logEnvironmentInfo();
 
+// Import accessibility analysis for development
+if (import.meta.env.DEV) {
+  import('./utils/accessibilitySetup');
+}
+
 // Handle redirect from 404.html before creating router
 const redirectPath = sessionStorage.getItem('redirectPath');
 if (redirectPath && redirectPath !== '/') {
