@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "bash scripts/dev-with-cleanup.sh",
+    "dev:windows": "powershell -ExecutionPolicy Bypass -File scripts/dev-with-cleanup.ps1",
+    "dev:simple": "vite",
     "test": "vitest",
     "build": "pnpm lint && tsc && vite build",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 50",
@@ -13,7 +15,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.12.2",
-    "@collinlucke/phantomartist": "latest",
+    "@collinlucke/phantomartist": "link:../phantomartist",
     "@emotion/babel-plugin": "^11.13.5",
     "@emotion/styled": "^11.14.0",
     "@stylexjs/dev-runtime": "^0.7.5",

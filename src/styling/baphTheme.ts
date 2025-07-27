@@ -1,12 +1,12 @@
 export const baphColors = {
-  primary: '#0B1828', // Dark blue-gray (was #822B2A)
-  secondary: '#178582', // Teal (was #9A8447, now also headerBackground)
-  tertiary: '#BFA081', // Warm beige (was #89827B)
-  accent: '#9F0001', // Deep red (was quaternary #012c35)
-  quaternary: '#012c35', // Keep for backward compatibility
-  lightText: '#F6F2EE', // Updated to match requested color
-  darkText: '#040A0C', // Keep existing dark text
-  headerBackground: '#178582' // Now matches secondary
+  primary: '#0B1828',
+  secondary: '#146B68',
+  tertiary: '#BFA081',
+  accent: '#9F0001',
+  quaternary: '#012c35',
+  lightText: '#FFFFFF',
+  darkText: '#040A0C',
+  headerBackground: '#146B68'
 };
 
 // Color variations and tints
@@ -29,9 +29,9 @@ export const baphColorVariations = {
     200: '#80D9D4', // Medium-light teal
     300: '#4DCAC3', // Medium teal
     400: '#2AA39B', // Dark teal
-    500: '#178582', // Base secondary
-    600: '#146B68', // Darker secondary
-    700: '#10524F', // Very dark teal
+    500: '#146B68', // Base secondary (darker for better contrast)
+    600: '#125A57', // Darker secondary
+    700: '#0F4A47', // Very dark teal
     800: '#0C3835', // Almost black teal
     900: '#081F1C' // Nearly black teal
   },

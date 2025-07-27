@@ -102,83 +102,128 @@ export const Heading: React.FC = () => {
                   to={'/'}
                   data-testid="home-link"
                   css={baphStyles.logoLink}
+                  aria-label="Baphomet - Go to homepage"
                 >
                   Baphomet
                   <img
                     src="/baphy-favicon.png"
-                    alt="Baphomet favicon"
+                    alt="Baphomet logo"
                     css={baphStyles.favicon}
+                    role="presentation"
+                    aria-hidden="true"
                   />
                 </Link>
               </h1>
 
-              <div css={baphStyles.actions}>
+              <nav
+                css={baphStyles.actions}
+                role="navigation"
+                aria-label="Main navigation"
+              >
                 {/* Navigation button group */}
-                <ButtonGroup
-                // className={{ buttonGroup: baphStyles.navButtonGroup }}
-                // gap="medium"
-                >
-                  <Button kind="ghost" onClick={navToArena} size="medium">
-                    Arena
-                  </Button>
-                  <Button
-                    kind="ghost"
-                    onClick={navToLeaderboards}
-                    size="medium"
+                <div role="group" aria-label="Navigation pages">
+                  <ButtonGroup
+                  // className={{ buttonGroup: baphStyles.navButtonGroup }}
+                  // gap="medium"
                   >
-                    Leader Boards
-                  </Button>
-                  <Button kind="ghost" onClick={navToMovies} size="medium">
-                    All Movies
-                  </Button>
-                </ButtonGroup>
-
-                {/* Add movie button - only when authenticated */}
-                {isAuthenticated && (
-                  <Button
-                    dataTestId="add-new-movie-button"
-                    size="medium"
-                    onClick={navToCreate}
-                    icon={<PlusSignIcon size={17} strokeWidth={'3px'} />}
-                    iconOnly={screenSize === 'small'}
-                    className={{ button: baphStyles.addButton }}
-                    kind="secondary"
-                  >
-                    {screenSize === 'small' ? '' : 'Add new movie'}
-                  </Button>
-                )}
-
-                {/* Signup/Login buttons - only when not authenticated */}
-                {!isAuthenticated ? (
-                  <div css={baphStyles.authButtons}>
                     <Button
-                      onClick={openSignupModal}
-                      className={{ button: baphStyles.signupButton }}
+                      kind="ghost"
+                      onClick={navToArena}
+                      size="medium"
+                      aria-label="Go to Arena page"
+                    >
+                      Arena
+                    </Button>
+                    <Button
+                      kind="ghost"
+                      onClick={navToLeaderboards}
+                      size="medium"
+                      aria-label="Go to Leader Boards page"
+                    >
+                      Leader Boards
+                    </Button>
+                    <Button
+                      kind="ghost"
+                      onClick={navToMovies}
+                      size="medium"
+                      aria-label="Go to All Movies page"
+                    >
+                      All Movies
+                    </Button>
+                  </ButtonGroup>
+                </div>
+
+                {/* User actions */}
+                <div role="group" aria-label="User actions">
+                  {/* Add movie button - only when authenticated */}
+                  {isAuthenticated && (
+                    <Button
+                      dataTestId="add-new-movie-button"
+                      size="medium"
+                      onClick={navToCreate}
+                      icon={<PlusSignIcon size={17} strokeWidth={'3px'} />}
+                      iconOnly={screenSize === 'small'}
+                      className={{ button: baphStyles.addButton }}
                       kind="secondary"
-                      size="medium"
+                      aria-label={
+                        screenSize === 'small' ? 'Add new movie' : undefined
+                      }
                     >
-                      Sign Up
+                      {screenSize === 'small' ? '' : 'Add new movie'}
                     </Button>
+                  )}
+
+                  {/* Signup/Login buttons - only when not authenticated */}
+                  {!isAuthenticated ? (
+                    <div
+                      css={baphStyles.authButtons}
+                      role="group"
+                      aria-label="Authentication options"
+                    >
+                      <Button
+                        onClick={openSignupModal}
+                        className={{ button: baphStyles.signupButton }}
+                        kind="secondary"
+                        size="medium"
+                        aria-label="Open sign up form"
+                        aria-describedby="signup-help"
+                        dataTestId="signup-button"
+                      >
+                        Sign Up
+                      </Button>
+                      <Button
+                        onClick={openLoginModal}
+                        className={{ button: baphStyles.loginButton }}
+                        kind="primary"
+                        size="medium"
+                        aria-label="Open log in form"
+                        aria-describedby="login-help"
+                        dataTestId="login-button"
+                      >
+                        Log in
+                      </Button>
+                      {/* Hidden helper text for screen readers */}
+                      <span id="signup-help" css={baphStyles.srOnly}>
+                        Create a new account to add and rate movies
+                      </span>
+                      <span id="login-help" css={baphStyles.srOnly}>
+                        Sign in to your existing account
+                      </span>
+                    </div>
+                  ) : (
                     <Button
-                      onClick={openLoginModal}
-                      className={{ button: baphStyles.loginButton }}
                       kind="primary"
+                      className={{ button: baphStyles.loginButton }}
+                      onClick={logOut}
                       size="medium"
+                      aria-label="Sign out of your account"
+                      dataTestId="logout-button"
                     >
-                      Log in
+                      Log out
                     </Button>
-                  </div>
-                ) : (
-                  <Button
-                    kind="primary"
-                    className={{ button: baphStyles.loginButton }}
-                    onClick={logOut}
-                    size="medium"
-                  >
-                    Log out
-                  </Button>
-                )}
-              </div>
+                  )}
+                </div>
+              </nav>
             </div>
           </InnerWidth>
         </Block>
@@ -190,6 +235,7 @@ export const Heading: React.FC = () => {
         onClose={closeSignupModal}
         title="Create Your Account"
         showCloseButton
+        dataTestId="signup-modal-content"
       >
         <SignupForm
           onSuccess={handleSignupSuccess}
@@ -203,6 +249,7 @@ export const Heading: React.FC = () => {
         onClose={closeLoginModal}
         title="Log In"
         showCloseButton
+        dataTestId="login-modal-content"
       >
         <LoginForm onSuccess={handleLoginSuccess} onError={handleLoginError} />
       </Modal>
@@ -294,7 +341,24 @@ const baphStyles = {
     marginBottom: '1.5rem',
     marginTop: 0
   },
+  modalDescription: {
+    ...baphTypography.styles.body,
+    color: baphColors.lightText,
+    marginBottom: '1.5rem',
+    marginTop: 0
+  },
   logInLogOut: {
     ...baphTypography.styles.button
+  },
+  srOnly: {
+    position: 'absolute' as const,
+    width: '1px',
+    height: '1px',
+    padding: 0,
+    margin: '-1px',
+    overflow: 'hidden',
+    clip: 'rect(0, 0, 0, 0)',
+    whiteSpace: 'nowrap' as const,
+    border: 0
   }
 };

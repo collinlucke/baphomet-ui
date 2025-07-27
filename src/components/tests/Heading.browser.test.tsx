@@ -1,140 +1,208 @@
 import '@testing-library/jest-dom';
 import { expect, describe, it, beforeEach } from 'vitest';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import '@testing-library/jest-dom';
 import { mockLocalStorage } from '../__mocks__/mockLocalStorage';
 import { Heading } from '../Heading';
-import {
-  BrowserRouter,
-  createBrowserRouter,
-  RouterProvider,
-  createMemoryRouter
-} from 'react-router-dom';
-import routes from '../../routes';
+import { BrowserRouter } from 'react-router-dom';
 import { MockedProvider } from '@apollo/client/testing';
-import mockGetAllMovies from '../__mocks__/mockGetAllMovies';
-import mockCheckAuth from '../__mocks__/mockCheckAuth';
-import mockGetMovie from '../__mocks__/mockGetMovie';
+import { isAuthenticatedVar } from '../../reactiveVars';
 
-beforeEach(() => mockLocalStorage());
+beforeEach(() => {
+  mockLocalStorage();
+  // Reset authentication state
+  isAuthenticatedVar(false);
+});
 
 describe('Heading', () => {
-  describe(`'Baphomet' title`, () => {
-    it(`renders correctly as a link`, async () => {
+  describe('Basic rendering', () => {
+    it('renders the logo/home link correctly', async () => {
       render(
-        <BrowserRouter>
-          <Heading />
-        </BrowserRouter>
+        <MockedProvider mocks={[]}>
+          <BrowserRouter>
+            <Heading />
+          </BrowserRouter>
+        </MockedProvider>
       );
 
       expect(await screen.findByTestId('home-link')).toBeVisible();
+      expect(screen.getByText('Baphomet')).toBeVisible();
     });
 
-    it(`when clicked, it automatically redirects to /movielist if 'beenHereBefore' HAS been set`, async () => {
-      // Pretend that we've been to the site before
-      localStorage.setItem('beenHereBefore', 'yup');
-
-      const router = createMemoryRouter(routes, {
-        initialEntries: ['/view/test-movie-id']
-      });
-
+    it('renders navigation buttons', async () => {
       render(
-        <MockedProvider
-          mocks={[mockGetAllMovies, mockGetMovie, mockCheckAuth]}
-          addTypename={false}
-        >
-          <RouterProvider router={router} />
+        <MockedProvider mocks={[]}>
+          <BrowserRouter>
+            <Heading />
+          </BrowserRouter>
         </MockedProvider>
       );
 
-      // Start from /view page so we have a unauthenticated and non-movielist starting point
-      expect(await screen.findByTestId('movie-editor-form')).toBeVisible();
-
-      // Finds and clicks the home link
-      userEvent.click(screen.getByTestId('home-link'));
-
-      // Automatically redirects to the <MoviewListPage>
-      expect(await screen.findByTestId('movie-list')).toBeVisible();
-    });
-
-    it(`when clicked, goes to the <WelcomePage> if 'beenHereBefore' HAS NOT been set`, async () => {
-      const router = createMemoryRouter(routes, {
-        initialEntries: ['/view/test-movie-id']
-      });
-
-      render(
-        <MockedProvider
-          mocks={[mockCheckAuth, mockGetMovie]}
-          addTypename={false}
-        >
-          <RouterProvider router={router} />
-        </MockedProvider>
-      );
-      // Make sure we start from /view
-      expect(await screen.findByTestId('movie-editor-form')).toBeVisible();
-
-      // Finds and clicks the home link in the Heading
-
-      await act(async () => {
-        userEvent.click(screen.getByTestId('home-link'));
-      });
-
-      // Automatically redirects to the <WelcomePage/>
-      expect(await screen.findByTestId('welcome-page')).toBeVisible();
+      expect(screen.getByText('Arena')).toBeVisible();
+      expect(screen.getByText('Leader Boards')).toBeVisible();
+      expect(screen.getByText('All Movies')).toBeVisible();
     });
   });
 
-  describe(`'Add new' button`, () => {
-    it(`renders the button correctly`, async () => {
-      render(
-        <BrowserRouter>
-          <Heading />
-        </BrowserRouter>
-      );
-
-      const buttonElem = await screen.findByTestId('add-new-movie-button');
-
-      expect(buttonElem.tagName).toBe('BUTTON');
+  describe('When user is NOT authenticated', () => {
+    beforeEach(() => {
+      isAuthenticatedVar(false);
     });
 
-    it(`redirects to 401 error modal when 'Add new movie' button is clicked`, async () => {
-      localStorage.setItem('beenHereBefore', 'yup');
+    it('shows Sign Up and Log in buttons', async () => {
+      render(
+        <MockedProvider mocks={[]}>
+          <BrowserRouter>
+            <Heading />
+          </BrowserRouter>
+        </MockedProvider>
+      );
 
-      const router = createBrowserRouter(routes);
+      expect(screen.getByTestId('signup-button')).toBeVisible();
+      expect(screen.getByTestId('login-button')).toBeVisible();
+    });
 
-      await act(async () => {
-        render(
-          <MockedProvider
-            mocks={[mockGetAllMovies, mockCheckAuth, mockCheckAuth]}
-          >
-            <RouterProvider router={router} />
-          </MockedProvider>
-        );
-      });
+    it('does NOT show Add new movie button', async () => {
+      render(
+        <MockedProvider mocks={[]}>
+          <BrowserRouter>
+            <Heading />
+          </BrowserRouter>
+        </MockedProvider>
+      );
 
-      // Make sure we start out at the <MovieList>
-      expect(await screen.findByTestId('movie-list')).toBeVisible();
+      expect(screen.queryByTestId('add-new-movie-button')).toBeNull();
+    });
 
-      const buttonElem = screen.getByTestId('add-new-movie-button');
-      await userEvent.click(buttonElem);
+    it('opens signup modal when Sign Up button is clicked', async () => {
+      const user = userEvent.setup();
 
-      // Confirm Heading is gone as error modals don't allow it
+      render(
+        <MockedProvider mocks={[]}>
+          <BrowserRouter>
+            <Heading />
+          </BrowserRouter>
+        </MockedProvider>
+      );
+
+      await user.click(screen.getByTestId('signup-button'));
+
+      // Wait for the modal to appear in the DOM
       await waitFor(() => {
-        expect(screen.queryByTestId('main-page-heading')).toBeNull();
+        expect(screen.getByTestId('signup-modal-content')).toBeVisible();
       });
+    });
 
-      expect(await screen.findByTestId('error-modal-401')).toBeVisible();
+    it('opens login modal when Log in button is clicked', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <MockedProvider mocks={[]}>
+          <BrowserRouter>
+            <Heading />
+          </BrowserRouter>
+        </MockedProvider>
+      );
+
+      await user.click(screen.getByTestId('login-button'));
+
+      // Wait for the modal to appear in the DOM
+      await waitFor(() => {
+        expect(screen.getByTestId('login-modal-content')).toBeVisible();
+      });
     });
   });
 
-  it('matches the snapshot', async () => {
-    const { container } = render(
-      <BrowserRouter>
-        <Heading />
-      </BrowserRouter>
-    );
+  describe('When user IS authenticated', () => {
+    beforeEach(() => {
+      isAuthenticatedVar(true);
+    });
 
-    expect(container).toMatchSnapshot();
+    it('shows Add new movie button', async () => {
+      render(
+        <MockedProvider mocks={[]}>
+          <BrowserRouter>
+            <Heading />
+          </BrowserRouter>
+        </MockedProvider>
+      );
+
+      expect(await screen.findByTestId('add-new-movie-button')).toBeVisible();
+    });
+
+    it('shows Log out button', async () => {
+      render(
+        <MockedProvider mocks={[]}>
+          <BrowserRouter>
+            <Heading />
+          </BrowserRouter>
+        </MockedProvider>
+      );
+
+      expect(screen.getByTestId('logout-button')).toBeVisible();
+    });
+
+    it('does NOT show Sign Up and Log in buttons', async () => {
+      render(
+        <MockedProvider mocks={[]}>
+          <BrowserRouter>
+            <Heading />
+          </BrowserRouter>
+        </MockedProvider>
+      );
+
+      expect(screen.queryByTestId('signup-button')).toBeNull();
+      expect(screen.queryByTestId('login-button')).toBeNull();
+    });
+
+    it('logs out user when Log out button is clicked', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <MockedProvider mocks={[]}>
+          <BrowserRouter>
+            <Heading />
+          </BrowserRouter>
+        </MockedProvider>
+      );
+
+      await user.click(screen.getByText('Log out'));
+
+      // Wait for the reactive variable to update and component to re-render
+      await waitFor(() => {
+        expect(screen.getByText('Sign Up')).toBeVisible();
+        expect(screen.getByText('Log in')).toBeVisible();
+      });
+    });
+  });
+
+  describe('Snapshots', () => {
+    it('matches snapshot when not authenticated', async () => {
+      isAuthenticatedVar(false);
+
+      const { container } = render(
+        <MockedProvider mocks={[]}>
+          <BrowserRouter>
+            <Heading />
+          </BrowserRouter>
+        </MockedProvider>
+      );
+
+      expect(container).toMatchSnapshot('heading-not-authenticated');
+    });
+
+    it('matches snapshot when authenticated', async () => {
+      isAuthenticatedVar(true);
+
+      const { container } = render(
+        <MockedProvider mocks={[]}>
+          <BrowserRouter>
+            <Heading />
+          </BrowserRouter>
+        </MockedProvider>
+      );
+
+      expect(container).toMatchSnapshot('heading-authenticated');
+    });
   });
 });

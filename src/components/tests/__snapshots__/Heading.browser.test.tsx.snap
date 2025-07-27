@@ -1,49 +1,209 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Heading > matches the snapshot 1`] = `
+exports[`Heading > Snapshots > matches snapshot when authenticated > heading-authenticated 1`] = `
 <div>
   <header
-    class="pa-header css-o2h1fg"
+    class="pa-header css-1ajigxh"
     data-testid="main-page-heading"
   >
     <div
-      class="pa-block css-xfdfty"
+      class="pa-block css-kxgmte"
     >
       <div
-        class="pa-inner-width css-l3e7vp"
+        class="pa-inner-width css-gd6j6w"
       >
-        <h1>
-          <a
-            data-testid="home-link"
-            href="/"
+        <div
+          class="css-nb2z2f"
+        >
+          <h1
+            class="css-1flzlgq"
           >
-            Baphomet
-          </a>
-        </h1>
-        <div>
-          <button
-            class="pa-button primary large css-z4rkrz"
-            data-testid="add-new-movie-button"
-          >
-            <svg
-              class=""
-              color="currentColor"
-              fill="none"
-              height="17"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="3px"
-              viewBox="0 0 24 24"
-              width="17"
-              xmlns="http://www.w3.org/2000/svg"
+            <a
+              aria-label="Baphomet - Go to homepage"
+              class="css-120nera"
+              data-testid="home-link"
+              href="/"
             >
-              <path
-                d="M12 4V20M20 12H4"
-                stroke="currentColor"
+              Baphomet
+              <img
+                alt="Baphomet logo"
+                aria-hidden="true"
+                class="css-1ly76gi"
+                role="presentation"
+                src="/baphy-favicon.png"
               />
-            </svg>
-            Add new movie
-          </button>
+            </a>
+          </h1>
+          <nav
+            aria-label="Main navigation"
+            class="css-15q091u"
+            role="navigation"
+          >
+            <div
+              aria-label="Navigation pages"
+              role="group"
+            >
+              <div
+                class="pa-button-group horizontal medium css-g48o9w"
+              >
+                <button
+                  class="pa-button ghost medium css-49n9kc"
+                >
+                  Arena
+                </button>
+                <button
+                  class="pa-button ghost medium css-49n9kc"
+                >
+                  Leader Boards
+                </button>
+                <button
+                  class="pa-button ghost medium css-49n9kc"
+                >
+                  All Movies
+                </button>
+              </div>
+            </div>
+            <div
+              aria-label="User actions"
+              role="group"
+            >
+              <button
+                class="pa-button secondary medium css-31xtvp"
+                data-testid="add-new-movie-button"
+              >
+                <svg
+                  class=""
+                  color="currentColor"
+                  fill="none"
+                  height="17"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="3px"
+                  viewBox="0 0 24 24"
+                  width="17"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 4V20M20 12H4"
+                    stroke="currentColor"
+                  />
+                </svg>
+                Add new movie
+              </button>
+              <button
+                class="pa-button primary medium css-v1wkt7"
+                data-testid="logout-button"
+              >
+                Log out
+              </button>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+</div>
+`;
+
+exports[`Heading > Snapshots > matches snapshot when not authenticated > heading-not-authenticated 1`] = `
+<div>
+  <header
+    class="pa-header css-1ajigxh"
+    data-testid="main-page-heading"
+  >
+    <div
+      class="pa-block css-kxgmte"
+    >
+      <div
+        class="pa-inner-width css-gd6j6w"
+      >
+        <div
+          class="css-nb2z2f"
+        >
+          <h1
+            class="css-1flzlgq"
+          >
+            <a
+              aria-label="Baphomet - Go to homepage"
+              class="css-120nera"
+              data-testid="home-link"
+              href="/"
+            >
+              Baphomet
+              <img
+                alt="Baphomet logo"
+                aria-hidden="true"
+                class="css-1ly76gi"
+                role="presentation"
+                src="/baphy-favicon.png"
+              />
+            </a>
+          </h1>
+          <nav
+            aria-label="Main navigation"
+            class="css-15q091u"
+            role="navigation"
+          >
+            <div
+              aria-label="Navigation pages"
+              role="group"
+            >
+              <div
+                class="pa-button-group horizontal medium css-g48o9w"
+              >
+                <button
+                  class="pa-button ghost medium css-49n9kc"
+                >
+                  Arena
+                </button>
+                <button
+                  class="pa-button ghost medium css-49n9kc"
+                >
+                  Leader Boards
+                </button>
+                <button
+                  class="pa-button ghost medium css-49n9kc"
+                >
+                  All Movies
+                </button>
+              </div>
+            </div>
+            <div
+              aria-label="User actions"
+              role="group"
+            >
+              <div
+                aria-label="Authentication options"
+                class="css-rvp98e"
+                role="group"
+              >
+                <button
+                  class="pa-button secondary medium css-1xx6gfn"
+                  data-testid="signup-button"
+                >
+                  Sign Up
+                </button>
+                <button
+                  class="pa-button primary medium css-v1wkt7"
+                  data-testid="login-button"
+                >
+                  Log in
+                </button>
+                <span
+                  class="css-1q51cld"
+                  id="signup-help"
+                >
+                  Create a new account to add and rate movies
+                </span>
+                <span
+                  class="css-1q51cld"
+                  id="login-help"
+                >
+                  Sign in to your existing account
+                </span>
+              </div>
+            </div>
+          </nav>
         </div>
       </div>
     </div>
