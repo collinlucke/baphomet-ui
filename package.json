@@ -11,11 +11,12 @@
     "lint": "eslint . --report-unused-disable-directives --max-warnings 50",
     "lint:fix": "eslint . --report-unused-disable-directives --max-warnings 50 --fix",
     "preview": "vite preview",
-    "install:dev": "NODE_ENV=development pnpm install"
+    "install:dev": "NODE_ENV=development pnpm install && pnpm link ../phantomartist",
+    "install:prod": "pnpm install"
   },
   "dependencies": {
     "@apollo/client": "^3.12.2",
-    "@collinlucke/phantomartist": "link:../phantomartist",
+    "@collinlucke/phantomartist": "latest",
     "@emotion/babel-plugin": "^11.13.5",
     "@emotion/styled": "^11.14.0",
     "@stylexjs/dev-runtime": "^0.7.5",
