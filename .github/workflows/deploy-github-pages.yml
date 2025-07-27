@@ -49,6 +49,8 @@ jobs:
           # Clear cache to ensure latest packages are fetched
           pnpm store prune
           echo "Installing dependencies..."
+          # Remove lock file to force fresh resolution from registry
+          rm -f pnpm-lock.yaml
           pnpm install --verbose
           echo "Checking if PhantomArtist was installed:"
           ls -la node_modules/@collinlucke/ || echo "PhantomArtist not found in node_modules"
