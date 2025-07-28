@@ -91,6 +91,7 @@ exports[`Heading > Snapshots > matches snapshot when authenticated > heading-aut
                 Add new movie
               </button>
               <button
+                aria-label="Sign out of your account"
                 class="pa-button primary medium css-v1wkt7"
                 data-testid="logout-button"
               >
@@ -184,6 +185,8 @@ exports[`Heading > Snapshots > matches snapshot when not authenticated > heading
                   Sign Up
                 </button>
                 <button
+                  aria-describedby="login-help"
+                  aria-label="Open log in form"
                   class="pa-button primary medium css-v1wkt7"
                   data-testid="login-button"
                 >
