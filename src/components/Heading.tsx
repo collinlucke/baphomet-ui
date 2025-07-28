@@ -196,8 +196,8 @@ export const Heading: React.FC = () => {
                         className={{ button: baphStyles.loginButton }}
                         kind="primary"
                         size="medium"
-                        aria-label="Open log in form"
-                        aria-describedby="login-help"
+                        ariaLabel="Open log in form"
+                        ariaDescribedby="login-help"
                         dataTestId="login-button"
                       >
                         Log in
@@ -216,7 +216,7 @@ export const Heading: React.FC = () => {
                       className={{ button: baphStyles.loginButton }}
                       onClick={logOut}
                       size="medium"
-                      aria-label="Sign out of your account"
+                      ariaLabel="Sign out of your account"
                       dataTestId="logout-button"
                     >
                       Log out

@@ -1,5 +1,39 @@
 # Changelog
 
+## [1.1.0] - 07-28-2025
+
+### Added
+
+- **Comprehensive Testing Suite**: Extensive browser and unit tests for authentication flows including login, signup, and logout functionality
+- **StylesShowcase Component**: Complete design system documentation with interactive examples of colors, typography, and button variants
+- **Form Testing Infrastructure**: Added data-testid attributes to all form inputs and buttons for improved test reliability
+- **Authentication Integration Tests**: Full end-to-end testing of user authentication workflows with proper state management validation
+- **Component Test Coverage**: Comprehensive testing for LoginForm, SignupForm, and Heading components with realistic user scenarios
+- **Accessibility Testing**: Keyboard navigation and screen reader compatibility tests for authentication components
+
+### Changed
+
+- **PhantomArtist Upgrade**: Updated to PhantomArtist v1.1.0 with consolidated InputField component and enhanced accessibility features
+- **Button Component Props**: Migrated from legacy aria-* props to new ariaLabel and ariaDescribedby props for better TypeScript support
+- **Component Naming**: Renamed ColorShowcase to StylesShowcase for clearer purpose identification
+- **Development Scripts**: Simplified install:dev script by removing NODE_ENV dependency for better cross-platform compatibility
+- **Import Structure**: Updated page imports to use proper casing (pages/ instead of Pages/) for consistency
+- **Test Snapshots**: Updated component snapshots to reflect new accessibility attributes and prop changes
+
+### Removed
+
+- **Legacy Form Components**: Transitioned away from old PhantomArtist form components to consolidated InputField
+- **Deprecated Test Files**: Cleaned up unused test scaffolding files (SignupFormRealistic.browser.test.tsx, SignupFormSimple.browser.test.tsx)
+
+### Fixed
+
+- **Authentication State Management**: Improved reactive variable handling for authentication state persistence
+- **Form Validation**: Enhanced client-side validation with proper error handling and user feedback
+- **Accessibility Compliance**: Added proper ARIA labels and descriptions for screen reader compatibility
+- **Test Reliability**: Fixed intermittent test failures by adding proper data-testid attributes and improved async handling
+
+<br/>
+
 ## [1.0.0] - 2025-02-03
 
 ### Added

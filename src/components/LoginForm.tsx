@@ -133,6 +133,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
           required
           error={errors.email}
           disabled={isLoading}
+          data-testid="login-email-input"
         />
 
         <InputField
@@ -144,12 +145,22 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
           required
           error={errors.password}
           disabled={isLoading}
+          data-testid="login-password-input"
         />
       </div>
 
-      {generalError && <div css={styles.generalError}>{generalError}</div>}
+      {generalError && (
+        <div css={styles.generalError} data-testid="login-general-error">
+          {generalError}
+        </div>
+      )}
 
-      <button css={styles.submitButton} type="submit" disabled={isLoading}>
+      <button
+        css={styles.submitButton}
+        type="submit"
+        disabled={isLoading}
+        data-testid="login-submit-button"
+      >
         {isLoading ? 'Signing In...' : 'Sign In'}
       </button>
 

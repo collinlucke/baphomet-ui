@@ -152,6 +152,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
           required
           error={errors.username}
           disabled={isLoading}
+          data-testid="signup-username-input"
         />
 
         <InputField
@@ -162,6 +163,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
           required
           error={errors.displayName}
           disabled={isLoading}
+          data-testid="signup-display-name-input"
         />
 
         <InputField
@@ -173,6 +175,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
           required
           error={errors.email}
           disabled={isLoading}
+          data-testid="signup-email-input"
         />
 
         <InputField
@@ -184,6 +187,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
           required
           error={errors.password}
           disabled={isLoading}
+          data-testid="signup-password-input"
         />
 
         <InputField
@@ -195,12 +199,22 @@ export const SignupForm: React.FC<SignupFormProps> = ({
           required
           error={errors.confirmPassword}
           disabled={isLoading}
+          data-testid="signup-confirm-password-input"
         />
       </div>
 
-      {generalError && <div css={styles.generalError}>{generalError}</div>}
+      {generalError && (
+        <div css={styles.generalError} data-testid="signup-general-error">
+          {generalError}
+        </div>
+      )}
 
-      <button css={styles.submitButton} type="submit" disabled={isLoading}>
+      <button
+        css={styles.submitButton}
+        type="submit"
+        disabled={isLoading}
+        data-testid="signup-submit-button"
+      >
         {isLoading ? 'Creating Account...' : 'Create Account'}
       </button>
     </form>
