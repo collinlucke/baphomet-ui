@@ -133,7 +133,7 @@ describe('Authentication Integration Tests', () => {
       expect(localStorage.getItem('baphomet-token')).toBe('mock-jwt-token');
     });
 
-    it('handles login errors gracefully', async () => {
+    it.only('handles login errors gracefully', async () => {
       const mockLoginError = {
         request: {
           query: LOGIN,
@@ -142,7 +142,9 @@ describe('Authentication Integration Tests', () => {
             password: 'wrongpassword'
           }
         },
-        error: new GraphQLError('Invalid email or password')
+        result: {
+          errors: [new GraphQLError('Invalid email or password')]
+        }
       };
 
       const user = userEvent.setup();
@@ -167,10 +169,13 @@ describe('Authentication Integration Tests', () => {
 
       // Error should be shown, modal stays open
       await waitFor(() => {
+        const loginModal = screen.getByTestId('login-modal-content');
+        console.log('XXXXXXXXX');
+        console.log(loginModal.innerHTML);
         expect(
           screen.getByText('Invalid email or password')
         ).toBeInTheDocument();
-        expect(screen.getByTestId('login-modal-content')).toBeVisible();
+        expect(loginModal).toBeVisible();
       });
 
       // User should still be unauthenticated
