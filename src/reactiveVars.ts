@@ -2,7 +2,7 @@ import { makeVar } from '@apollo/client';
 import {
   CustomErrorTypes,
   GetAllMoviesQueryVarsObject
-} from './types/CustomTypes.types.ts';
+} from './types/CustomTypes.types';
 import { MovieType } from './pages/MovieList/MovieListPage';
 
 export const isAuthenticatedVar = makeVar(false);

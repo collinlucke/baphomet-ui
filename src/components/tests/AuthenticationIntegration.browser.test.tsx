@@ -133,7 +133,7 @@ describe('Authentication Integration Tests', () => {
       expect(localStorage.getItem('baphomet-token')).toBe('mock-jwt-token');
     });
 
-    it.only('handles login errors gracefully', async () => {
+    it('handles login errors gracefully', async () => {
       const mockLoginError = {
         request: {
           query: LOGIN,
@@ -170,8 +170,6 @@ describe('Authentication Integration Tests', () => {
       // Error should be shown, modal stays open
       await waitFor(() => {
         const loginModal = screen.getByTestId('login-modal-content');
-        console.log('XXXXXXXXX');
-        console.log(loginModal.innerHTML);
         expect(
           screen.getByText('Invalid email or password')
         ).toBeInTheDocument();
@@ -250,7 +248,9 @@ describe('Authentication Integration Tests', () => {
             displayName: 'Existing User'
           }
         },
-        error: new GraphQLError('Username already exists')
+        result: {
+          errors: [new GraphQLError('Username already exists')]
+        }
       };
 
       const user = userEvent.setup();
