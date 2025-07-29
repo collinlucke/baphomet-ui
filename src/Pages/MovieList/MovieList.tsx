@@ -14,7 +14,7 @@ type Movie = {
 
 type MovieData = {
   movies: Movie[] | null;
-  searchTerm?: string | number;
+  searchTerm?: string;
   resultsCount?: number;
   totalMovieCount?: string;
   cursor?: string;

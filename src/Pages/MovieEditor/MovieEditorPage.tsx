@@ -89,14 +89,16 @@ export const MovieEditorPage: React.FC<EditMoviePage> = ({
     }
   });
 
-  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeHandler = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const target = e.target;
     const { name, value } = target;
     const newMovie = { ...movie, [name]: value };
     setMovie(newMovie);
   };
   const onChangeHandlerTextArea = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const target = e.target;
     const { name, value } = target;

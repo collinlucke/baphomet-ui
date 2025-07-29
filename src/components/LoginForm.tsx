@@ -44,6 +44,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
         // Other Apollo errors
         errorMessage = error.message;
       }
+      console.log(error);
 
       // If it's a specific field error, show it on the field
       if (errorMessage.toLowerCase().includes('password')) {
@@ -104,11 +105,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
     }
   };
 
-  const updateField = (field: keyof LoginFormData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+  const updateField = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
     // Clear field error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
+    if (errors[name as keyof LoginFormData]) {
+      setErrors(prev => ({ ...prev, [name]: undefined }));
     }
     // Clear general error when user starts typing
     if (generalError) {
@@ -127,8 +131,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
         <InputField
           label="Email"
           type="email"
+          name="email"
           value={formData.email}
-          onChange={(value: string) => updateField('email', value)}
+          onChange={updateField}
           placeholder="Enter your email address"
           required
           error={errors.email}
@@ -139,8 +144,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
         <InputField
           label="Password"
           type="password"
+          name="password"
           value={formData.password}
-          onChange={(value: string) => updateField('password', value)}
+          onChange={updateField}
           placeholder="Enter your password"
           required
           error={errors.password}

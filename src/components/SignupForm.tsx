@@ -125,11 +125,14 @@ export const SignupForm: React.FC<SignupFormProps> = ({
     }
   };
 
-  const updateField = (field: keyof SignupFormData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+  const updateField = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
     // Clear field error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
+    if (errors[name as keyof SignupFormData]) {
+      setErrors(prev => ({ ...prev, [name]: undefined }));
     }
     // Clear general error when user starts typing
     if (generalError) {
@@ -138,7 +141,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
   };
 
   return (
-    <form css={styles.form} onSubmit={handleSubmit}>
+    <form css={styles.form} onSubmit={handleSubmit} noValidate>
       <div css={styles.header}>
         <p css={styles.subtitle}>Join the movie ranking community!</p>
       </div>
@@ -147,59 +150,64 @@ export const SignupForm: React.FC<SignupFormProps> = ({
         <InputField
           label="Username"
           value={formData.username}
-          onChange={(value: string) => updateField('username', value)}
+          onChange={updateField}
           placeholder="Enter your username"
           required
           error={errors.username}
           disabled={isLoading}
           data-testid="signup-username-input"
+          name="username"
         />
 
         <InputField
           label="Display Name"
           value={formData.displayName}
-          onChange={(value: string) => updateField('displayName', value)}
+          onChange={updateField}
           placeholder="How should we display your name?"
           required
           error={errors.displayName}
           disabled={isLoading}
           data-testid="signup-display-name-input"
+          name="displayName"
         />
 
         <InputField
           label="Email"
           type="email"
           value={formData.email}
-          onChange={(value: string) => updateField('email', value)}
+          onChange={updateField}
           placeholder="Enter your email address"
           required
           error={errors.email}
           disabled={isLoading}
           data-testid="signup-email-input"
+          name="email"
         />
 
         <InputField
           label="Password"
           type="password"
           value={formData.password}
-          onChange={(value: string) => updateField('password', value)}
+          onChange={updateField}
           placeholder="Create a secure password"
           required
           error={errors.password}
           disabled={isLoading}
           data-testid="signup-password-input"
+          name="password"
         />
 
         <InputField
           label="Confirm Password"
           type="password"
           value={formData.confirmPassword}
-          onChange={(value: string) => updateField('confirmPassword', value)}
+          onChange={updateField}
           placeholder="Confirm your password"
           required
           error={errors.confirmPassword}
           disabled={isLoading}
           data-testid="signup-confirm-password-input"
+          name="confirmPassword"
         />
       </div>
 

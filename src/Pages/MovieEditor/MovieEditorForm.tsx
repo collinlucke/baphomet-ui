@@ -1,8 +1,6 @@
 import {
-  Form,
-  FormTextInput,
+  InputField,
   TwoColumn,
-  FormTextArea,
   Button,
   Header,
   Image,
@@ -24,8 +22,12 @@ type MovieEditorFormProps = {
   readonly?: boolean;
 
   onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onChangeTextArea?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onChange?: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
+  onChangeTextArea?: (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => void;
 };
 
 export const MovieEditorForm: React.FC<MovieEditorFormProps> = ({
@@ -41,12 +43,14 @@ export const MovieEditorForm: React.FC<MovieEditorFormProps> = ({
     onSubmit?.(e);
   };
 
-  const onChangeHandlerText = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeHandlerText = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     onChange?.(e);
   };
 
   const onChangeHandlerTextArea = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     onChangeTextArea?.(e);
   };
@@ -66,12 +70,12 @@ export const MovieEditorForm: React.FC<MovieEditorFormProps> = ({
   const leftContent = (
     <>
       {!readonly && (
-        <FormTextInput
+        <InputField
           readonly={readonly}
           label="Title"
-          labelPos="above"
+          labelPosition="above"
           name="title"
-          value={movie.title}
+          value={movie.title || ''}
           onChange={onChangeHandlerText}
         />
       )}
@@ -79,44 +83,44 @@ export const MovieEditorForm: React.FC<MovieEditorFormProps> = ({
         <Image src={movie.poster} className={{ img: baphStyles.img }} />
       )}
       {!readonly && (
-        <FormTextArea
+        <InputField
           readonly={readonly}
           name="poster"
           value={movie.poster || ''}
           onChange={onChangeHandlerTextArea}
-          autoResize
+          type="textarea"
           label="Poster URL"
-          labelPos="above"
+          labelPosition="above"
         />
       )}
     </>
   );
   const rightContent = (
     <>
-      <FormTextArea
+      <InputField
         readonly={readonly}
         label="Plot"
-        labelPos="above"
+        labelPosition="above"
         name="fullplot"
-        value={movie.fullplot}
+        value={movie.fullplot || ''}
         onChange={onChangeHandlerTextArea}
-        autoResize
+        type="textarea"
       />
-      <FormTextInput
+      <InputField
         readonly={readonly}
         label="Rated"
-        labelPos="above"
+        labelPosition="above"
         name="rated"
-        value={movie.rated}
+        value={movie.rated || ''}
         onChange={onChangeHandlerText}
       />
-      <FormTextInput
-        type="date"
+      <InputField
+        type="text"
         readonly={readonly}
         label="Release Date"
-        labelPos="above"
+        labelPosition="above"
         name="releaseDate"
-        value={movie.releaseDate}
+        value={movie.releaseDate || ''}
         onChange={onChangeHandlerText}
       />
       {!readonly && (
@@ -133,7 +137,7 @@ export const MovieEditorForm: React.FC<MovieEditorFormProps> = ({
   );
 
   return (
-    <Form onSubmit={onSubmitHandler}>
+    <form onSubmit={onSubmitHandler}>
       <Header className={{ header: baphStyles.header }}>
         <>
           <h1 css={[baphStyles.h1]}>{movie.title || '-Add title-'}</h1>
@@ -143,7 +147,7 @@ export const MovieEditorForm: React.FC<MovieEditorFormProps> = ({
         </>
       </Header>
       <TwoColumn left={leftContent} right={rightContent} />
-    </Form>
+    </form>
   );
 };
 

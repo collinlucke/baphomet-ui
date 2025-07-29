@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { FormTextInput, Button, Form, Modal } from '@collinlucke/phantomartist';
+import { InputField, Button, Modal } from '@collinlucke/phantomartist';
 import { LOGIN } from '../../api/mutations';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -29,7 +29,9 @@ export const Login: React.FC = () => {
     }
   });
 
-  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeHandler = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { target } = e;
     const { name, value } = target;
     setUserInput({ ...userInput, [name]: value });
@@ -44,7 +46,7 @@ export const Login: React.FC = () => {
 
   return (
     <Modal isOpen={true} onClose={() => navigate('../movielist')}>
-      <Form onSubmit={loginHandler}>
+      <form onSubmit={loginHandler}>
         {error?.title === 'login' && (
           <div css={baphStyles.errorMessage}>
             Ups. Looks like either the email address or password you provided
@@ -52,20 +54,21 @@ export const Login: React.FC = () => {
           </div>
         )}
         <div>Need you to login real quick. thnx!</div>
-        <FormTextInput
+        <InputField
           label="Email"
-          labelPos="above"
+          labelPosition="above"
           name="email"
+          type="email"
           value={userInput.email}
           onChange={onChangeHandler}
         />
-        <FormTextInput
+        <InputField
           label="Password"
-          labelPos="above"
+          labelPosition="above"
           name="password"
+          type="password"
           value={userInput.password}
           onChange={onChangeHandler}
-          type="password"
         />
         <Button type="submit">Submit</Button>
         <div css={baphStyles.psst}>
@@ -73,7 +76,7 @@ export const Login: React.FC = () => {
           <br /> email: notareal@email.address.com
           <br /> password: baphy!demo2024
         </div>
-      </Form>
+      </form>
     </Modal>
   );
 };

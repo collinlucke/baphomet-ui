@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.1] - 07-28-2025
+
+### Changed
+- Consolidated login error handling in `LoginForm` to always display in the general error banner.
+- Updated authentication integration tests to mock GraphQL errors via `result.errors` and use regex matchers for flexible assertions.
+
+### Fixed
+- Resolved failing "handles login errors gracefully" test by aligning mock behavior and component error rendering.
+
 ## [1.1.0] - 07-28-2025
 
 ### Added
@@ -14,7 +23,7 @@
 ### Changed
 
 - **PhantomArtist Upgrade**: Updated to PhantomArtist v1.1.0 with consolidated InputField component and enhanced accessibility features
-- **Button Component Props**: Migrated from legacy aria-* props to new ariaLabel and ariaDescribedby props for better TypeScript support
+- **Button Component Props**: Migrated from legacy aria-\* props to new ariaLabel and ariaDescribedby props for better TypeScript support
 - **Component Naming**: Renamed ColorShowcase to StylesShowcase for clearer purpose identification
 - **Development Scripts**: Simplified install:dev script by removing NODE_ENV dependency for better cross-platform compatibility
 - **Import Structure**: Updated page imports to use proper casing (pages/ instead of Pages/) for consistency
