@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import { GET_MOVIE } from '../../api/queries';
-import { UPDATE_MOVIE, ADD_MOVIE } from '../../api/mutations';
-import { MovieEditorForm } from './MovieEditorForm';
+import { GET_MOVIE } from '../../api/queries.ts';
+import { UPDATE_MOVIE, ADD_MOVIE } from '../../api/mutations.ts';
+import { MovieEditorForm } from './MovieEditorForm.tsx';
 import { Block, InnerWidth } from '@collinlucke/phantomartist';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CustomErrorTypes } from '../../types/CustomTypes.types.ts';
-import { errorVar, showHeadingVar } from '../../reactiveVars';
+import { errorVar, showHeadingVar } from '../../reactiveVars.ts';
 
 type MovieProps = {
   id?: string;
