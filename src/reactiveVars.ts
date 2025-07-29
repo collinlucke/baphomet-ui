@@ -3,7 +3,7 @@ import {
   CustomErrorTypes,
   GetAllMoviesQueryVarsObject
 } from './types/CustomTypes.types';
-import { MovieType } from './pages/MovieList/MovieListPage';
+import { MovieType } from './pages/MovieList/MovieListPage.tsx';
 
 export const isAuthenticatedVar = makeVar(false);
 export const errorVar = makeVar<CustomErrorTypes | undefined>(undefined);
