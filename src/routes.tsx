@@ -1,11 +1,11 @@
-import App from './App';
-import { HomePage } from './pages/Home/HomePage';
-import { MovieEditorPage } from './pages/MovieEditor/MovieEditorPage';
-// import { MovieListPage } from './pages/MovieList/MovieListPage'; // Uncomment if MovieListPage is needed
-import { ArenaPage } from './pages/Arena/ArenaPage';
-import { ProtectedRoute } from './components/ProtectedRoute';
-import { ErrorBoundary } from './components/ErrorBoundary';
-import { StylesShowcase } from './components/StylesShowcase';
+import App from './App.tsx';
+import { HomePage } from './pages/Home/HomePage.tsx';
+import { MovieEditorPage } from './pages/MovieEditor/MovieEditorPage.tsx';
+// import { MovieListPage } from './pages/MovieList/MovieListPage.tsx'; // Uncomment if MovieListPage is needed
+import { ArenaPage } from './pages/Arena/ArenaPage.tsx';
+import { ProtectedRoute } from './components/ProtectedRoute.tsx';
+import { ErrorBoundary } from './components/ErrorBoundary.tsx';
+import { StylesShowcase } from './components/StylesShowcase.tsx';
 
 const routes = [
   {

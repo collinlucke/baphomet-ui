@@ -16,7 +16,6 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
-    "typeRoots": ["./dist/esm/index.d.ts"],
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
 
