@@ -1,11 +1,11 @@
 import { FormEvent, useState } from 'react';
 import { InputField, Button, Modal } from '@collinlucke/phantomartist';
-import { LOGIN } from '../../api/mutations';
+import { LOGIN } from '../../api/mutations.ts';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { errorVar, isAuthenticatedVar } from '../../reactiveVars';
+import { errorVar, isAuthenticatedVar } from '../../reactiveVars.ts';
 import { CustomErrorTypes } from '../../types/CustomTypes.types.ts';
-import { baphSemanticColors, baphTypography } from '../../styling/baphTheme';
+import { baphSemanticColors, baphTypography } from '../../styling/baphTheme.ts';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();

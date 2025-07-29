@@ -6,9 +6,9 @@ import {
   useQuery
 } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import { CHECK_AUTH, GET_ALL_MOVIES } from '../../api/queries';
-import { DELETE_MOVIE } from '../../api/mutations';
-import { MovieList } from './MovieList';
+import { CHECK_AUTH, GET_ALL_MOVIES } from '../../api/queries.ts';
+import { DELETE_MOVIE } from '../../api/mutations.ts';
+import { MovieList } from './MovieList.tsx';
 import {
   Block,
   Button,
@@ -17,7 +17,7 @@ import {
   Modal,
   PAHooks
 } from '@collinlucke/phantomartist';
-import { useScreenSize } from '../../hooks/useScreenSize';
+import { useScreenSize } from '../../hooks/useScreenSize.ts';
 import { useState, useEffect, ChangeEvent } from 'react';
 import { CustomErrorTypes } from '../../types/CustomTypes.types.ts';
 import {
@@ -31,7 +31,7 @@ import {
   totalMovieCountVar,
   isAuthenticatedVar,
   moviesListVar
-} from '../../reactiveVars';
+} from '../../reactiveVars.ts';
 
 export type MovieType = {
   id: string;
