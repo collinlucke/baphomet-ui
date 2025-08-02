@@ -5,21 +5,54 @@ import { gql } from '@apollo/client';
 export const ADD_MOVIE = gql`
   mutation addMovie(
     $title: String!
-    $rated: String
     $releaseDate: String
-    $fullplot: String
+    # $directors: [String] # Directors are fetched from TMDB's credits endpoint - implement later
+    $genres: [String]
+    $revenue: String
+    $posterUrl: String
+    $backdropUrl: String
+    $tmdbId: Int
+    $addedBy: ID
+    $lastUpdated: DateTime
+    $createdAt: DateTime
+    $totalWins: Int
+    $totalLosses: Int
+    $winningPercentage: Float
+    $totalComparisons: Int
   ) {
     newMovie: addMovie(
       title: $title
-      rated: $rated
       releaseDate: $releaseDate
-      fullplot: $fullplot
+      directors: $directors
+      genres: $genres
+      revenue: $revenue
+      posterUrl: $posterUrl
+      backdropUrl: $backdropUrl
+      tmdbId: $tmdbId
+      addedBy: $addedBy
+      lastUpdated: $lastUpdated
+      createdAt: $createdAt
+      totalWins: $totalWins
+      totalLosses: $totalLosses
+      winningPercentage: $winningPercentage
+      totalComparisons: $totalComparisons
     ) {
+      id
       title
       releaseDate
-      rated
-      id
-      fullplot
+      directors
+      genres
+      revenue
+      posterUrl
+      backdropUrl
+      tmdbId
+      totalWins
+      totalLosses
+      winningPercentage
+      totalComparisons
+      addedBy
+      lastUpdated
+      createdAt
     }
   }
 `;

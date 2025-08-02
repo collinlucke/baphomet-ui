@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { InputField } from '@collinlucke/phantomartist';
+import { InputField, Button } from '@collinlucke/phantomartist';
 import { CSSObject } from '@emotion/react';
-import { baphColors, baphTypography } from '../styling/baphTheme';
+// import { baphColors, baphTypography } from '../styling/baphTheme';
 import { LOGIN } from '../api/mutations';
 import { LoginFormData, LoginFormProps } from '../types/auth.types';
 
@@ -23,6 +23,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
 
       // Store token in localStorage
       localStorage.setItem('baphomet-token', data.login.token);
+      localStorage.setItem('baphomet-user', JSON.stringify(data.login.user));
 
       // Call success callback
       if (onSuccess) {
@@ -121,13 +122,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
   };
 
   return (
-    <form css={styles.form} onSubmit={handleSubmit}>
-      <div css={styles.header}>
-        <h2 css={styles.title}>Welcome Back!</h2>
-        <p css={styles.subtitle}>Sign in to your account</p>
+    <form css={baphStyles.form} onSubmit={handleSubmit}>
+      <div css={baphStyles.header}>
+        <h2 css={baphStyles.title}>Welcome Back!</h2>
+        <p css={baphStyles.subtitle}>Sign in to your account</p>
       </div>
 
-      <div css={styles.fields}>
+      <div css={baphStyles.fields}>
         <InputField
           label="Email"
           type="email"
@@ -156,22 +157,23 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
       </div>
 
       {generalError && (
-        <div css={styles.generalError} data-testid="login-general-error">
+        <div css={baphStyles.generalError} data-testid="login-general-error">
           {generalError}
         </div>
       )}
 
-      <button
-        css={styles.submitButton}
+      <Button
         type="submit"
+        kind="primary"
         disabled={isLoading}
-        data-testid="login-submit-button"
+        dataTestId="login-submit-button"
+        className={{ button: baphStyles.logInButton }}
       >
         {isLoading ? 'Signing In...' : 'Sign In'}
-      </button>
+      </Button>
 
-      <div css={styles.footer}>
-        <a href="#" css={styles.forgotLink}>
+      <div css={baphStyles.footer}>
+        <a href="#" css={baphStyles.forgotLink}>
           Forgot your password?
         </a>
       </div>
@@ -179,38 +181,30 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
   );
 };
 
-const styles = {
+const baphStyles: { [key: string]: CSSObject } = {
   form: {
     display: 'flex',
     flexDirection: 'column' as const,
     gap: '1.5rem',
     width: '100%',
     maxWidth: '400px'
-  } as CSSObject,
-
+  },
   header: {
     textAlign: 'center' as const,
     marginBottom: '1rem'
-  } as CSSObject,
-
+  },
   title: {
-    ...baphTypography.styles.h2,
-    margin: '0 0 0.5rem 0',
-    color: baphColors.primary
-  } as CSSObject,
-
+    margin: '0 0 0.5rem 0'
+  },
   subtitle: {
-    ...baphTypography.styles.body,
     margin: 0,
     color: '#6b7280'
-  } as CSSObject,
-
+  },
   fields: {
     display: 'flex',
     flexDirection: 'column' as const,
     gap: '1rem'
-  } as CSSObject,
-
+  },
   generalError: {
     padding: '0.75rem',
     backgroundColor: '#fee2e2',
@@ -220,37 +214,19 @@ const styles = {
     fontSize: '0.875rem',
     marginBottom: '1rem',
     textAlign: 'center' as const
-  } as CSSObject,
-
-  submitButton: {
-    ...baphTypography.styles.button,
-    padding: '0.75rem 1.5rem',
-    backgroundColor: baphColors.primary,
-    color: '#fff',
-    border: 'none',
-    borderRadius: '6px',
-    cursor: 'pointer',
-    transition: 'all 0.2s ease',
-    '&:hover:not(:disabled)': {
-      backgroundColor: '#1e40af'
-    },
-    '&:disabled': {
-      opacity: 0.6,
-      cursor: 'not-allowed'
-    }
-  } as CSSObject,
-
+  },
   footer: {
     textAlign: 'center' as const
-  } as CSSObject,
-
+  },
   forgotLink: {
-    ...baphTypography.styles.body,
-    color: baphColors.secondary,
     textDecoration: 'none',
     fontSize: '0.875rem',
     '&:hover': {
       textDecoration: 'underline'
     }
-  } as CSSObject
+  },
+  logInButton: {
+    justifyContent: 'center',
+    width: '100%'
+  }
 };

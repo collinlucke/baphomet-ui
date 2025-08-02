@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { expect, test } from 'vitest';
-import { MovieListPage } from '../MovieListPage';
+import { MovieListPage } from '../OldMovieListPage';
 import { MemoryRouter } from 'react-router-dom';
 import { MockedProvider } from '@apollo/client/testing';
 import { GET_ALL_MOVIES } from '../../../api/queries';

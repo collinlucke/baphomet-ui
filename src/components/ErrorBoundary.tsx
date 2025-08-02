@@ -48,7 +48,7 @@ export const ErrorBoundary: React.FC<ErrorBoundaryTypes> = ({ children }) => {
 
   const goHomeHandler = () => {
     errorVar(undefined);
-    navigate('movielist');
+    navigate('/');
   };
 
   const goToLoginHandler = () => {

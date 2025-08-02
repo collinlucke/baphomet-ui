@@ -3,9 +3,10 @@ import {
   CustomErrorTypes,
   GetAllMoviesQueryVarsObject
 } from './types/CustomTypes.types';
-import { MovieType } from './Pages/MovieList/MovieListPage.tsx';
+import { MovieType } from './pages/OldMovieList/OldMovieListPage.tsx';
 
 export const isAuthenticatedVar = makeVar(false);
+export const showUnauthorizedModalVar = makeVar(false);
 export const errorVar = makeVar<CustomErrorTypes | undefined>(undefined);
 export const showHeadingVar = makeVar(true);
 export const scrollLimitVar = makeVar(20);

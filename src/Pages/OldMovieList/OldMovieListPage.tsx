@@ -8,7 +8,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { CHECK_AUTH, GET_ALL_MOVIES } from '../../api/queries.ts';
 import { DELETE_MOVIE } from '../../api/mutations.ts';
-import { MovieList } from './MovieList.tsx';
+import { MovieList } from './OldMovieList.tsx';
 import {
   Block,
   Button,

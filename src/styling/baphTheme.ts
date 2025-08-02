@@ -61,54 +61,32 @@ export const baphColorVariations = {
   }
 };
 
-// Typography system
+// Additional bright and vibrant colors
+export const baphVibrantColors = {
+  primary: {
+    300: '#8AB6FF', // Light vibrant blue
+    500: '#4F86F7', // Base vibrant blue
+    700: '#255AFF' // Dark vibrant blue
+  },
+  secondary: {
+    300: '#75DAC7', // Light vibrant teal
+    500: '#1ABC9C', // Base vibrant teal
+    700: '#138F6E' // Dark vibrant teal
+  },
+  tertiary: {
+    300: '#F7C873', // Light vibrant orange
+    500: '#F39C12', // Base vibrant orange
+    700: '#C9780E' // Dark vibrant orange
+  },
+  accent: {
+    300: '#F48A6F', // Light vibrant red
+    500: '#E74C3C', // Base vibrant red
+    700: '#C0392B' // Dark vibrant red
+  }
+};
+
+// Typography system - only app-specific styles
 export const baphTypography = {
-  fontFamily: {
-    primary: '"Montserrat", sans-serif',
-    fallback: 'system-ui, -apple-system, sans-serif'
-  },
-
-  // Font weights
-  fontWeight: {
-    light: 300,
-    regular: 400,
-    medium: 500,
-    semibold: 600,
-    bold: 700,
-    extrabold: 800
-  },
-
-  // Font sizes
-  fontSize: {
-    xs: '12px', // 0.75rem
-    sm: '14px', // 0.875rem
-    base: '16px', // 1rem
-    lg: '18px', // 1.125rem
-    xl: '20px', // 1.25rem
-    '2xl': '24px', // 1.5rem
-    '3xl': '30px', // 1.875rem
-    '4xl': '36px', // 2.25rem
-    '5xl': '48px', // 3rem
-    '6xl': '60px', // 3.75rem
-    '7xl': '72px' // 4.5rem
-  },
-
-  // Line heights
-  lineHeight: {
-    tight: 1.25,
-    normal: 1.5,
-    relaxed: 1.625,
-    loose: 2
-  },
-
-  // Letter spacing
-  letterSpacing: {
-    tight: '-0.025em',
-    normal: '0em',
-    wide: '0.025em',
-    wider: '0.05em',
-    widest: '0.1em'
-  },
 
   // Predefined text styles
   styles: {
@@ -179,51 +157,7 @@ export const baphTypography = {
       letterSpacing: 'normal'
     },
 
-    // UI Elements
-    menu: {
-      fontFamily: '"Montserrat", sans-serif',
-      fontSize: '16px',
-      fontWeight: 600, // semibold
-      lineHeight: 1.5,
-      letterSpacing: 'normal'
-    },
-    button: {
-      fontFamily: '"Montserrat", sans-serif',
-      fontSize: '16px',
-      fontWeight: 400, // regular
-      lineHeight: 1,
-      letterSpacing: '0.025em'
-    },
-    buttonSmall: {
-      fontFamily: '"Montserrat", sans-serif',
-      fontSize: '14px',
-      fontWeight: 400, // regular
-      lineHeight: 1,
-      letterSpacing: '0.025em'
-    },
-    buttonLarge: {
-      fontFamily: '"Montserrat", sans-serif',
-      fontSize: '18px',
-      fontWeight: 400, // regular
-      lineHeight: 1,
-      letterSpacing: '0.025em'
-    },
-
-    // Labels and captions
-    label: {
-      fontFamily: '"Montserrat", sans-serif',
-      fontSize: '14px',
-      fontWeight: 500, // medium
-      lineHeight: 1.25,
-      letterSpacing: '0.025em'
-    },
-    caption: {
-      fontFamily: '"Montserrat", sans-serif',
-      fontSize: '12px',
-      fontWeight: 400,
-      lineHeight: 1.25,
-      letterSpacing: '0.025em'
-    },
+      // UI Elements - only custom styles not provided by phantomartist
 
     // Special styles
     hero: {
@@ -276,7 +210,7 @@ export const baphSemanticColors = {
   },
   button: {
     primary: {
-      background: baphColors.secondary,
+      background: baphColors.primary,
       text: '#FFFFFF',
       hover: baphColorVariations.secondary[600],
       active: baphColorVariations.secondary[700]
@@ -313,18 +247,44 @@ export const baphTheme = {
   variations: baphColorVariations,
   semantic: baphSemanticColors,
   typography: baphTypography,
-  button: ({ kind }: { kind?: string; size?: string; iconOnly?: boolean }) => {
-    if (kind === 'ghostOnDark') {
-      return {
-        color: baphSemanticColors.button.ghostOnDark.text,
-        '&:hover': {
-          backgroundColor: baphSemanticColors.button.ghostOnDark.hover
-        },
-        '&:active': {
-          backgroundColor: baphSemanticColors.button.ghostOnDark.active
-        }
-      };
-    }
-    return {};
+  button: ({
+    kind
+  }: {
+    kind?: string;
+  }) => {
+    const btn = baphSemanticColors.button;
+    // Only return color-related styles, let baseTheme handle the rest
+    return kind ? {
+      primary: {
+        backgroundColor: btn.primary.background,
+        color: btn.primary.text,
+        '&:hover': { backgroundColor: btn.primary.hover },
+        '&:active': { backgroundColor: btn.primary.active }
+      },
+      secondary: {
+        backgroundColor: btn.secondary.background,
+        color: btn.secondary.text,
+        '&:hover': { backgroundColor: btn.secondary.hover },
+        '&:active': { backgroundColor: btn.secondary.active }
+      },
+      accent: {
+        backgroundColor: btn.accent.background,
+        color: btn.accent.text,
+        '&:hover': { backgroundColor: btn.accent.hover },
+        '&:active': { backgroundColor: btn.accent.active }
+      },
+      ghost: {
+        backgroundColor: btn.ghost.background,
+        color: btn.ghost.text,
+        '&:hover': { backgroundColor: btn.ghost.hover },
+        '&:active': { backgroundColor: btn.ghost.active }
+      },
+      ghostOnDark: {
+        backgroundColor: btn.ghostOnDark.background,
+        color: btn.ghostOnDark.text,
+        '&:hover': { backgroundColor: btn.ghostOnDark.hover },
+        '&:active': { backgroundColor: btn.ghostOnDark.active }
+      }
+    }[kind] : {};
   }
 };
