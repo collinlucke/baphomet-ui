@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEventHandler } from 'react';
 import { List, Search } from '@collinlucke/phantomartist';
-import { MovieListItem } from './MovieListItem';
+import { MovieListItem } from './OldMovieListItem';
 import { useScreenSize } from '../../hooks/useScreenSize';
 import { CSSObject } from '@emotion/react';
 

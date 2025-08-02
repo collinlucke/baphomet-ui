@@ -58,7 +58,7 @@ Contains movie metadata and aggregated ranking statistics.
   _id: ObjectId,
   title: "The Shawshank Redemption",
   year: 1994,
-  director: "Frank Darabont",
+  // director: "Frank Darabont", // Getting directors requires a different call to TMDB's credit endpoint
   genre: ["Drama"],
   posterUrl: "https://...",
   tmdbId: 278, // The Movie Database ID for external API integration

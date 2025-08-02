@@ -3,7 +3,8 @@ import {
   baphColors,
   baphColorVariations,
   baphSemanticColors,
-  baphTypography
+  baphTypography,
+  baphVibrantColors
 } from '../styling/baphTheme';
 import { Button } from '@collinlucke/phantomartist';
 
@@ -173,6 +174,28 @@ export const StylesShowcase: React.FC = () => {
               </div>
             )
           )}
+        </div>
+      </section>
+
+      {/* Vibrant Colors */}
+      <section css={styles.section}>
+        <h2 css={styles.sectionTitle}>Vibrant Colors</h2>
+        <div css={styles.variationsGrid}>
+          {Object.entries(baphVibrantColors).map(([name, shades]) => (
+            <div key={name} css={styles.variationGroup}>
+              <h3 css={styles.variationTitle}>
+                {name.charAt(0).toUpperCase() + name.slice(1)}
+              </h3>
+              <div css={styles.variationSwatches}>
+                {Object.entries(shades).map(([weight, hex]) => (
+                  <div key={weight} css={styles.variationSwatch}>
+                    <div css={[styles.smallSwatch, { backgroundColor: hex }]} />
+                    <span css={styles.weightLabel}>{weight}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
