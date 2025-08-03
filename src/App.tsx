@@ -218,7 +218,7 @@ const baphStyles = (backgroundImage?: string) =>
         backgroundRepeat: 'no-repeat',
         backgroundAttachment: 'fixed',
         filter: 'grayscale(100%)',
-        opacity: 0.05,
+        opacity: 0.03,
         zIndex: 1
       }
     }

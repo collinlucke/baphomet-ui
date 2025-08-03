@@ -63,7 +63,7 @@ export const UPDATE_MOVIE = gql`
     $title: String!
     $rated: String
     $releaseDate: String
-    $poster: String
+    $posterUrl: String
     $overview: String
   ) {
     updatedMovie: updateMovie(
@@ -71,14 +71,14 @@ export const UPDATE_MOVIE = gql`
       title: $title
       rated: $rated
       releaseDate: $releaseDate
-      poster: $poster
+      posterUrl: $posterUrl
       overview: $overview
     ) {
       title
       releaseDate
       rated
       id
-      poster
+      posterUrl
       overview
     }
   }

@@ -4,14 +4,16 @@ import { CSSObject } from '@emotion/react';
 type AboveTheFoldProps = {
   children: React.ReactNode;
   innerWidthSize?: 'full' | 'large' | 'medium' | 'small';
+  pageSlug?: string;
 };
 
 export const AboveTheFold: React.FC<AboveTheFoldProps> = ({
   children,
-  innerWidthSize
+  innerWidthSize,
+  pageSlug
 }) => {
   return (
-    <Block className={{ block: baphStyles.container }} dataTestId="home-page">
+    <Block className={{ block: baphStyles.container }} dataTestId={pageSlug}>
       <section css={baphStyles.aboveTheFoldSection}>
         <InnerWidth
           size={innerWidthSize}
