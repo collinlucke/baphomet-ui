@@ -62,24 +62,12 @@ export const StylesShowcase: React.FC = () => {
           <div css={styles.typographyCard}>
             <h3 css={styles.cardTitle}>UI Elements</h3>
             <div css={styles.typographySamples}>
-              <div css={baphTypography.styles.menu}>
-                menu - Menu Text - 16px Semibold
-              </div>
-              <div css={baphTypography.styles.button}>
-                button - Button Text - 16px Regular
-              </div>
-              <div css={baphTypography.styles.buttonSmall}>
-                buttonSmall - Button Small - 14px Regular
-              </div>
-              <div css={baphTypography.styles.buttonLarge}>
-                buttonLarge - Button Large - 18px Regular
-              </div>
-              <div css={baphTypography.styles.label}>
-                label - Label - 14px Medium
-              </div>
-              <div css={baphTypography.styles.caption}>
-                caption - Caption - 12px Regular
-              </div>
+              <div>menu - Menu Text - 16px Semibold</div>
+              <div>button - Button Text - 16px Regular</div>
+              <div>buttonSmall - Button Small - 14px Regular</div>
+              <div>buttonLarge - Button Large - 18px Regular</div>
+              <div>label - Label - 14px Medium</div>
+              <div>caption - Caption - 12px Regular</div>
             </div>
           </div>
 
@@ -418,7 +406,7 @@ const styles = {
     border: `1px solid ${baphSemanticColors.border.light}`
   },
   weightLabel: {
-    ...baphTypography.styles.caption,
+    // ...baphTypography.styles.caption,
     color: baphSemanticColors.text.secondary
   },
   semanticDemo: {
@@ -457,7 +445,7 @@ const styles = {
     gap: '0.5rem'
   },
   sizeLabel: {
-    ...baphTypography.styles.label,
+    // ...baphTypography.styles.label,
     color: baphSemanticColors.text.secondary,
     fontWeight: 600
   },

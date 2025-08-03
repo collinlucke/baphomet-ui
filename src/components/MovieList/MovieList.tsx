@@ -1,10 +1,8 @@
-import { ChangeEvent, FormEventHandler, useState } from 'react';
 import { List, Search } from '@collinlucke/phantomartist';
 import { MovieListItem } from './MovieListItem';
 import { useScreenSize } from '../../hooks/useScreenSize';
-import { baphTypography, baphColorVariations } from '../../styling/baphTheme';
+import { baphColorVariations } from '../../styling/baphTheme';
 import { CSSObject } from '@emotion/react';
-import { searchByMovieTitle } from '../../api/tmdbApi';
 
 type Movie = {
   id: string;
@@ -22,7 +20,7 @@ type MovieData = {
   cursor?: string;
   endOfResults?: boolean;
 
-  onSearch?: React.FormEventHandler<HTMLFormElement>;
+  onSearch?: (searchTerm: string) => void;
   setSearchTerm?: (term: string) => void;
   openDeleteModal?: ({ id, title }: { id: string; title: string }) => void;
 };
@@ -37,12 +35,11 @@ export const MovieList: React.FC<MovieData> = ({
 }) => {
   const screenSize = useScreenSize();
 
-  const onSearchHandler: FormEventHandler<HTMLFormElement> = e => {
-    onSearch?.(e);
+  const onSearchHandler = (searchTerm: string) => {
+    onSearch?.(searchTerm);
   };
 
-  const setSearchTermHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
+  const setSearchTermHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm?.(e.target.value);
   };
 
@@ -129,7 +126,5 @@ const baphStyles: { [key: string]: CSSObject } = {
   },
   resultsText: {
     color: baphColorVariations.tertiary[50]
-    // fontSize: baphTypography.fontSize.lg,
-    // fontWeight: baphTypography.fontWeight.regular
   }
 };

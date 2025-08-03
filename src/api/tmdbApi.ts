@@ -11,7 +11,7 @@ export const searchByMovieTitle = async (title: string) => {
   return response.json();
 };
 
-export const getMovieByTMDBId = async (tmdbId: number) => {
+export const getMovieByTMDBId = async (tmdbId: string) => {
   const apiKey = import.meta.env.VITE_TMDB_API_KEY;
   const response = await fetch(
     `https://api.themoviedb.org/3/movie/${tmdbId}?language=en-US&api_key=${apiKey}`

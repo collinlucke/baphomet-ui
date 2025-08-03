@@ -5,6 +5,7 @@ import { CSSObject } from '@emotion/react';
 // import { baphColors, baphTypography } from '../styling/baphTheme';
 import { LOGIN } from '../api/mutations';
 import { LoginFormData, LoginFormProps } from '../types/auth.types';
+import { isAuthenticatedVar } from '../reactiveVars';
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
   const [formData, setFormData] = useState<LoginFormData>({
@@ -24,6 +25,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
       // Store token in localStorage
       localStorage.setItem('baphomet-token', data.login.token);
       localStorage.setItem('baphomet-user', JSON.stringify(data.login.user));
+      isAuthenticatedVar(true);
 
       // Call success callback
       if (onSuccess) {
@@ -122,7 +124,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
   };
 
   return (
-    <form css={baphStyles.form} onSubmit={handleSubmit}>
+    <form
+      css={baphStyles.form}
+      onSubmit={handleSubmit}
+      data-testid="login-form"
+    >
       <div css={baphStyles.header}>
         <h2 css={baphStyles.title}>Welcome Back!</h2>
         <p css={baphStyles.subtitle}>Sign in to your account</p>

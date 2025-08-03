@@ -5,7 +5,10 @@ import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { GraphQLError } from 'graphql';
+import { useState } from 'react';
 import { Heading } from '../Heading';
+import { LoginForm } from '../LoginForm';
+import { SignupForm } from '../SignupForm';
 import { isAuthenticatedVar } from '../../reactiveVars';
 import { LOGIN, SIGNUP } from '../../api/mutations';
 import { mockLocalStorage } from '../__mocks__/mockLocalStorage';
@@ -72,14 +75,52 @@ const mockSuccessfulSignup = {
   }
 };
 
-const renderHeading = (mocks: MockedResponse[] = []) => {
-  return render(
+// Test component that manages modal state
+const TestAuthComponent: React.FC<{ mocks: MockedResponse[] }> = ({
+  mocks
+}) => {
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showSignupModal, setShowSignupModal] = useState(false);
+
+  return (
     <MockedProvider mocks={mocks}>
       <BrowserRouter>
-        <Heading />
+        <Heading
+          setShowLoginModal={setShowLoginModal}
+          setShowSignupModal={setShowSignupModal}
+        />
+        {showLoginModal && (
+          <div data-testid="login-modal-content">
+            <LoginForm
+              onSuccess={() => setShowLoginModal(false)}
+              onError={() => {}}
+            />
+            <button onClick={() => setShowLoginModal(false)} aria-label="Close">
+              Close
+            </button>
+          </div>
+        )}
+        {showSignupModal && (
+          <div data-testid="signup-modal-content">
+            <SignupForm
+              onSuccess={() => setShowSignupModal(false)}
+              onError={() => {}}
+            />
+            <button
+              onClick={() => setShowSignupModal(false)}
+              aria-label="Close"
+            >
+              Close
+            </button>
+          </div>
+        )}
       </BrowserRouter>
     </MockedProvider>
   );
+};
+
+const renderHeading = (mocks: MockedResponse[] = []) => {
+  return render(<TestAuthComponent mocks={mocks} />);
 };
 
 describe('Authentication Integration Tests', () => {
@@ -98,7 +139,7 @@ describe('Authentication Integration Tests', () => {
 
       // 3. Login modal opens
       await waitFor(() => {
-        expect(screen.getByTestId('login-modal-content')).toBeVisible();
+        expect(screen.getByTestId('login-form')).toBeVisible();
       });
 
       // 4. User fills out login form
@@ -116,9 +157,7 @@ describe('Authentication Integration Tests', () => {
 
       // 6. Wait for login to complete and modal to close
       await waitFor(() => {
-        expect(
-          screen.queryByTestId('login-modal-content')
-        ).not.toBeInTheDocument();
+        expect(screen.queryByTestId('login-form')).not.toBeInTheDocument();
       });
 
       // 7. User should now be authenticated - check UI changes
@@ -153,7 +192,7 @@ describe('Authentication Integration Tests', () => {
       // Open login modal
       await user.click(screen.getByTestId('login-button'));
       await waitFor(() => {
-        expect(screen.getByTestId('login-modal-content')).toBeVisible();
+        expect(screen.getByTestId('login-form')).toBeVisible();
       });
 
       // Submit invalid credentials
@@ -169,7 +208,7 @@ describe('Authentication Integration Tests', () => {
 
       // Error should be shown, modal stays open
       await waitFor(() => {
-        const loginModal = screen.getByTestId('login-modal-content');
+        const loginModal = screen.getByTestId('login-form');
         expect(
           screen.getByText('Invalid email or password')
         ).toBeInTheDocument();
@@ -193,7 +232,7 @@ describe('Authentication Integration Tests', () => {
 
       // 2. Signup modal opens
       await waitFor(() => {
-        expect(screen.getByTestId('signup-modal-content')).toBeVisible();
+        expect(screen.getByTestId('signup-form')).toBeVisible();
       });
 
       // 3. User fills out signup form
@@ -220,9 +259,7 @@ describe('Authentication Integration Tests', () => {
 
       // 5. Wait for signup to complete and modal to close
       await waitFor(() => {
-        expect(
-          screen.queryByTestId('signup-modal-content')
-        ).not.toBeInTheDocument();
+        expect(screen.queryByTestId('signup-form')).not.toBeInTheDocument();
       });
 
       // 6. User should now be authenticated
@@ -259,7 +296,7 @@ describe('Authentication Integration Tests', () => {
       // Open signup modal
       await user.click(screen.getByTestId('signup-button'));
       await waitFor(() => {
-        expect(screen.getByTestId('signup-modal-content')).toBeVisible();
+        expect(screen.getByTestId('signup-form')).toBeVisible();
       });
 
       // Submit form with existing username
@@ -288,7 +325,7 @@ describe('Authentication Integration Tests', () => {
       // Error should be shown, modal stays open
       await waitFor(() => {
         expect(screen.getByText('Username already exists')).toBeInTheDocument();
-        expect(screen.getByTestId('signup-modal-content')).toBeVisible();
+        expect(screen.getByTestId('signup-form')).toBeVisible();
       });
 
       // User should still be unauthenticated
@@ -352,7 +389,7 @@ describe('Authentication Integration Tests', () => {
       // Open login modal
       await user.click(screen.getByTestId('login-button'));
       await waitFor(() => {
-        expect(screen.getByTestId('login-modal-content')).toBeVisible();
+        expect(screen.getByTestId('login-form')).toBeVisible();
       });
 
       // Find and click close button (assuming modal has a close button)
@@ -361,9 +398,7 @@ describe('Authentication Integration Tests', () => {
 
       // Modal should close
       await waitFor(() => {
-        expect(
-          screen.queryByTestId('login-modal-content')
-        ).not.toBeInTheDocument();
+        expect(screen.queryByTestId('login-form')).not.toBeInTheDocument();
       });
 
       // User should still be unauthenticated
@@ -378,7 +413,7 @@ describe('Authentication Integration Tests', () => {
       // Open signup modal
       await user.click(screen.getByTestId('signup-button'));
       await waitFor(() => {
-        expect(screen.getByTestId('signup-modal-content')).toBeVisible();
+        expect(screen.getByTestId('signup-form')).toBeVisible();
       });
 
       // Find and click close button
@@ -387,9 +422,7 @@ describe('Authentication Integration Tests', () => {
 
       // Modal should close
       await waitFor(() => {
-        expect(
-          screen.queryByTestId('signup-modal-content')
-        ).not.toBeInTheDocument();
+        expect(screen.queryByTestId('signup-form')).not.toBeInTheDocument();
       });
 
       // User should still be unauthenticated
@@ -404,28 +437,24 @@ describe('Authentication Integration Tests', () => {
       // Open login modal first
       await user.click(screen.getByTestId('login-button'));
       await waitFor(() => {
-        expect(screen.getByTestId('login-modal-content')).toBeVisible();
+        expect(screen.getByTestId('login-form')).toBeVisible();
       });
 
       // Close login modal
       await user.click(screen.getByRole('button', { name: /close/i }));
       await waitFor(() => {
-        expect(
-          screen.queryByTestId('login-modal-content')
-        ).not.toBeInTheDocument();
+        expect(screen.queryByTestId('login-form')).not.toBeInTheDocument();
       });
 
       // Open signup modal
       await user.click(screen.getByTestId('signup-button'));
       await waitFor(() => {
-        expect(screen.getByTestId('signup-modal-content')).toBeVisible();
+        expect(screen.getByTestId('signup-form')).toBeVisible();
       });
 
       // Both modals should not be open at the same time
-      expect(
-        screen.queryByTestId('login-modal-content')
-      ).not.toBeInTheDocument();
-      expect(screen.getByTestId('signup-modal-content')).toBeVisible();
+      expect(screen.queryByTestId('login-form')).not.toBeInTheDocument();
+      expect(screen.getByTestId('signup-form')).toBeVisible();
     });
   });
 
@@ -444,7 +473,10 @@ describe('Authentication Integration Tests', () => {
       rerender(
         <MockedProvider mocks={[]}>
           <BrowserRouter>
-            <Heading />
+            <Heading
+              setShowLoginModal={() => {}}
+              setShowSignupModal={() => {}}
+            />
           </BrowserRouter>
         </MockedProvider>
       );

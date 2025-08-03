@@ -1,13 +1,37 @@
+/* eslint-disable */
+import { useState } from 'react';
 import { Block } from '@collinlucke/phantomartist';
 import { MovieList } from '../../components/MovieList/MovieList';
+// @ts-ignore
+import { GET_ALL_MOVIES } from '../../api/queries';
 import {
   baphSemanticColors,
   baphTypography,
   baphColors
 } from '../../styling/baphTheme';
 import { CSSObject } from '@emotion/react';
+// @ts-ignore
+import { useLazyQuery } from '@apollo/client/react/hooks/useLazyQuery';
 
 export const AllMoviesPage: React.FC = () => {
+  // @ts-ignore
+  const [allMovies, setAllMovies] = useState([]);
+  // @ts-ignore
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // const [fetchMovies] = useLazyQuery(GET_ALL_MOVIES, {
+  //   variables: { searchTerm },
+  //    onCompleted: data => {
+  //     setAllMovies(data.getAllMovies);
+  //    }
+  // });
+
+  const onSearchHandler = (searchTerm: string) => {
+    // e.preventDefault();
+    console.log('Search term:', searchTerm);
+    // fetchMovies();
+  };
+
   return (
     <Block className={{ block: styles.container }} dataTestId="all-movies-page">
       <section css={styles.listSection}>
@@ -18,10 +42,10 @@ export const AllMoviesPage: React.FC = () => {
           </p>
         </div>
         <MovieList
-          movies={[]}
-          totalMovieCount="0"
-          onSearch={() => {}}
-          setSearchTerm={() => {}}
+          movies={allMovies}
+          totalMovieCount={allMovies.length.toString()}
+          onSearch={onSearchHandler}
+          setSearchTerm={setSearchTerm}
           openDeleteModal={() => {}}
         />
       </section>

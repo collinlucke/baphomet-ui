@@ -1,3 +1,0 @@
-// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
-
-exports[`Check to see if page with no movies renders correctly 1`] = `<div />`;

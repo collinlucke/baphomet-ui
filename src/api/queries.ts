@@ -14,7 +14,7 @@ export const GET_ALL_MOVIES = gql`
       loadAction: $loadAction
     ) {
       newMovies {
-        fullplot
+        overview
         poster
         title
         releaseDate
@@ -37,7 +37,7 @@ export const GET_MOVIE = gql`
       releaseDate
       rated
       id
-      fullplot
+      overview
     }
   }
 `;

@@ -1,18 +1,18 @@
-import React from 'react';
+import { CSSObject } from '@emotion/react';
 
 export const Footer: React.FC = () => {
   return (
-    <footer css={footerStyles}>
-      <div css={footerContentStyles}>
+    <footer css={baphStyles.footerStyles}>
+      <div css={baphStyles.footerContentStyles}>
         <p>© {new Date().getFullYear()} Baphomet</p>
         <p>
           Made with ❤️ by{' '}
           <a
-            href="https://github.com/your-username"
+            href="https://github.com/collinlucke"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Your Name
+            Collin Lucke
           </a>
         </p>
       </div>
@@ -20,14 +20,15 @@ export const Footer: React.FC = () => {
   );
 };
 
-const footerStyles = {
-  padding: '1rem',
-  backgroundColor: '#f8f9fa',
-  borderTop: '1px solid #eee'
-};
-
-const footerContentStyles = {
-  maxWidth: '1200px',
-  margin: '0 auto',
-  textAlign: 'center'
+const baphStyles: { [key: string]: CSSObject } = {
+  footerStyles: {
+    padding: '1rem',
+    backgroundColor: '#f8f9fa',
+    borderTop: '1px solid #eee'
+  },
+  footerContentStyles: {
+    maxWidth: '1200px',
+    margin: '0 auto',
+    textAlign: 'center'
+  }
 };

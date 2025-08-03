@@ -6,6 +6,7 @@ import {
   InputField,
   Search,
   baseColors as paColors,
+  baseVibrantColors,
   mediaQueries
 } from '@collinlucke/phantomartist';
 import { AboveTheFold } from '../../components/AboveTheFold';
@@ -14,13 +15,13 @@ import { ADD_MOVIE } from '../../api/mutations';
 
 type NewMovie = {
   title: string;
-  releaseDate: string;
-  directors: string[];
-  genres: string[];
-  posterUrl: string;
-  backdropUrl: string;
-  tmdbId: string;
-  revenue: string;
+  releaseDate?: string;
+  genres?: string[];
+  overview?: string;
+  posterUrl?: string;
+  backdropUrl?: string;
+  tmdbId?: string;
+  revenue?: string;
 };
 
 type TMDBGenre = {
@@ -29,34 +30,35 @@ type TMDBGenre = {
 };
 
 export const AddMoviesPage: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [tmdbId, setTmdbId] = useState<string>('');
+  const [showSuccess, setShowSuccess] = useState<boolean>(false);
   const [newMovie, setNewMovie] = useState<NewMovie>({
     title: '',
     releaseDate: '',
-    directors: [],
     genres: [],
     revenue: '',
     posterUrl: '',
     backdropUrl: '',
-    tmdbId: ''
+    tmdbId: '',
+    overview: ''
   });
-  const [addMovieMutation, { loading: isLoading, error }] = useMutation(
-    ADD_MOVIE,
-    {
-      onCompleted: data => {
-        console.log('Movie added successfully:', data);
-      },
-      onError: error => {
-        console.error('Error adding movie:', error);
-      }
+  const [addMovieMutation, { loading: isLoading }] = useMutation(ADD_MOVIE, {
+    onCompleted: data => {
+      console.log('Movie added successfully:', data);
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000); // Hide success message after 3 seconds
+    },
+    onError: error => {
+      console.error('Error adding movie:', error);
+      // You could add an error notification here
     }
-  );
+  });
 
   const handleFetch = async (tmdbId?: string) => {
-    const idToFetch = tmdbId || searchTerm;
+    const idToFetch = tmdbId || newMovie.tmdbId;
     if (!idToFetch) return;
     try {
-      const data = await getMovieByTMDBId(Number(idToFetch));
+      const data = await getMovieByTMDBId(idToFetch);
       setNewMovie({
         ...newMovie,
         title: data.title || '',
@@ -64,6 +66,7 @@ export const AddMoviesPage: React.FC = () => {
         // directors: [], // Directors are fetched from TMDB's credits endpoint
         genres: data.genres?.map((genre: TMDBGenre) => genre.name) || [],
         revenue: data.revenue ? `$${data.revenue.toLocaleString()} USD` : '',
+        overview: data.overview || '',
         posterUrl: data.poster_path
           ? `https://image.tmdb.org/t/p/original${data.poster_path}`
           : '',
@@ -77,27 +80,27 @@ export const AddMoviesPage: React.FC = () => {
     }
   };
 
-  const handleSearch = (searchValue?: string) => {
-    if (searchValue) {
-      handleFetch(searchValue);
+  const handleSearch = (tmdbId: string) => {
+    if (tmdbId) {
+      handleFetch(tmdbId);
     }
   };
 
   const handleSearchTermChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
+    setTmdbId(e.target.value);
   };
 
   const handleClear = () => {
-    setSearchTerm('');
+    setTmdbId('');
     setNewMovie({
       title: '',
       releaseDate: '',
-      directors: [],
       genres: [],
       revenue: '',
       posterUrl: '',
       backdropUrl: '',
-      tmdbId: ''
+      tmdbId: '',
+      overview: ''
     });
   };
 
@@ -105,7 +108,7 @@ export const AddMoviesPage: React.FC = () => {
     (field: keyof NewMovie) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const value = e.target.value;
-      if (field === 'directors' || field === 'genres') {
+      if (field === 'genres') {
         setNewMovie({
           ...newMovie,
           [field]: value.split(',').map(s => s.trim())
@@ -115,32 +118,36 @@ export const AddMoviesPage: React.FC = () => {
       }
     };
 
-  const handleAddMovie = async (e: React.FormEvent) => {
+  const handleAddMovie = async () => {
     const { id } = JSON.parse(localStorage.getItem('baphomet-user') || '{}');
-    const addtionalMovieData = {
-      totalWins: 0,
-      totalLosses: 0,
-      winningPercentage: 0,
-      totalComparisons: 0,
+    const movieInput = {
+      ...newMovie,
       addedBy: id,
       lastUpdated: new Date().toISOString(),
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      totalWins: 0,
+      totalLosses: 0,
+      winningPercentage: 0.0,
+      totalComparisons: 0
     };
-    console.log({ ...newMovie, ...addtionalMovieData });
-    // try {
-    //   await addMovieMutation({
-    //     variables: {
-    //       input: { ...newMovie, ...addtionalMovieData }
-    //     }
-    //   });
-    // } catch (error) {
-    //   console.error('Error adding movie:', error);
-    // }
+
+    try {
+      const result = await addMovieMutation({
+        variables: movieInput
+      });
+      console.log('Movie added successfully:', result);
+      handleClear();
+    } catch (error) {
+      console.error('Error adding movie:', error);
+    }
   };
 
   return (
     <AboveTheFold>
       <h1>Add Movies</h1>
+      <div css={baphStyles.successMessage}>
+        {showSuccess && <h4>Movie added successfully!</h4>}
+      </div>
       <div
         css={baphStyles.formContainer}
         className="baph-add-movies-form-container"
@@ -150,7 +157,7 @@ export const AddMoviesPage: React.FC = () => {
           className="baph-add-movies-left-side"
         >
           <Search
-            searchTerm={searchTerm}
+            searchTerm={tmdbId}
             searchLabel="Enter TMDB ID"
             setSearchTerm={handleSearchTermChange}
             onSearch={handleSearch}
@@ -177,7 +184,7 @@ export const AddMoviesPage: React.FC = () => {
               size="medium"
               label="Release Date"
               type="text"
-              value={newMovie.releaseDate}
+              value={newMovie.releaseDate || ''}
               onChange={handleChange('releaseDate')}
               placeholder="Release Date"
               onDark
@@ -186,16 +193,25 @@ export const AddMoviesPage: React.FC = () => {
               size="medium"
               label="Genres"
               type="text"
-              value={newMovie.genres.join(', ')}
+              value={newMovie.genres?.join(', ') || ''}
               onChange={handleChange('genres')}
               placeholder="Genres, comma-separated"
               onDark
             />
             <InputField
               size="medium"
+              label="Overview"
+              type="text"
+              value={newMovie.overview || ''}
+              onChange={handleChange('overview')}
+              placeholder="Overview"
+              onDark
+            />
+            <InputField
+              size="medium"
               label="Revenue"
               type="text"
-              value={newMovie.revenue}
+              value={newMovie.revenue || ''}
               onChange={handleChange('revenue')}
               placeholder="Revenue"
               onDark
@@ -204,7 +220,7 @@ export const AddMoviesPage: React.FC = () => {
               size="medium"
               label="Poster URL"
               type="text"
-              value={newMovie.posterUrl}
+              value={newMovie.posterUrl || ''}
               onChange={handleChange('posterUrl')}
               placeholder="URL to poster image"
               onDark
@@ -213,7 +229,7 @@ export const AddMoviesPage: React.FC = () => {
               size="medium"
               label="Backdrop URL"
               type="text"
-              value={newMovie.backdropUrl}
+              value={newMovie.backdropUrl || ''}
               onChange={handleChange('backdropUrl')}
               placeholder="URL to backdrop image"
               onDark
@@ -256,8 +272,13 @@ export const AddMoviesPage: React.FC = () => {
         </div>
       </div>
       <div css={baphStyles.saveButtonGroup}>
-        <Button size="small" kind="secondary" onClick={handleAddMovie}>
-          Add Movie
+        <Button
+          size="small"
+          kind="secondary"
+          onClick={handleAddMovie}
+          disabled={isLoading || !newMovie.title}
+        >
+          {isLoading ? 'Adding...' : 'Add Movie'}
         </Button>
         <Button size="medium" kind="ghost" onClick={handleClear}>
           Clear
@@ -268,6 +289,11 @@ export const AddMoviesPage: React.FC = () => {
 };
 
 const baphStyles: { [key: string]: CSSObject } = {
+  successMessage: {
+    color: baseVibrantColors.secondary[700],
+    position: 'absolute',
+    top: '60px'
+  },
   formFieldContainers: {
     display: 'flex',
     gap: '2rem',

@@ -2,6 +2,7 @@ import { UIEvent, useEffect, useState } from 'react';
 import './styling/index.css';
 import { Outlet } from 'react-router-dom';
 import { Heading } from './components/Heading';
+import { Footer } from './components/Footer';
 import { Main, Globals, Modal, Button } from '@collinlucke/phantomartist';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import {
@@ -20,7 +21,6 @@ import { CSSObject } from '@emotion/react';
 import { CHECK_AUTH } from './api/queries';
 import { SignupForm } from './components/SignupForm';
 import { LoginForm } from './components/LoginForm';
-import { AuthResponse } from './types/auth.types';
 
 export const App = () => {
   const showHeading = useReactiveVar(showHeadingVar);
@@ -104,11 +104,11 @@ export const App = () => {
     setShowLoginModal(true);
   };
 
-  const handleLoginSuccess = (_authResponse: AuthResponse) => {
+  const handleLoginSuccess = () => {
     setShowLoginModal(false);
   };
 
-  const handleSignupSuccess = (_authResponse: AuthResponse) => {
+  const handleSignupSuccess = () => {
     setShowSignupModal(false);
   };
 
@@ -133,6 +133,7 @@ export const App = () => {
         >
           <Outlet />
         </Main>
+        <Footer />
         {error && <ErrorBoundary />}
 
         {/* Authentication Modals */}
@@ -206,7 +207,7 @@ const baphStyles = (backgroundImage?: string) =>
       position: 'relative',
       '&::before': {
         content: '""',
-        position: 'fixed',
+        position: 'absolute',
         top: 0,
         left: 0,
         right: 0,

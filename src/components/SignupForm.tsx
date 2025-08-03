@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { InputField, Button } from '@collinlucke/phantomartist';
 import { CSSObject } from '@emotion/react';
-import { baphColors, baphTypography } from '../styling/baphTheme';
+import { baphColors } from '../styling/baphTheme';
 import { SIGNUP } from '../api/mutations';
 import { SignupFormData, SignupFormProps } from '../types/auth.types';
+import { isAuthenticatedVar } from '../reactiveVars';
 
 export const SignupForm: React.FC<SignupFormProps> = ({
   onSuccess,
@@ -30,6 +31,9 @@ export const SignupForm: React.FC<SignupFormProps> = ({
       // Store token and user data in localStorage
       localStorage.setItem('baphomet-token', data.signup.token);
       localStorage.setItem('baphomet-user', JSON.stringify(data.signup.user));
+
+      // Update authentication state immediately
+      isAuthenticatedVar(true);
 
       // Call success callback
       if (onSuccess) {
@@ -142,7 +146,12 @@ export const SignupForm: React.FC<SignupFormProps> = ({
   };
 
   return (
-    <form css={baphStyles.form} onSubmit={handleSubmit} noValidate>
+    <form
+      css={baphStyles.form}
+      onSubmit={handleSubmit}
+      noValidate
+      data-testid="signup-form"
+    >
       <div css={baphStyles.header}>
         <p css={baphStyles.subtitle}>Join the movie ranking community!</p>
       </div>
