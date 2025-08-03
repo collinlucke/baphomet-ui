@@ -61,7 +61,7 @@ Contains movie metadata and aggregated ranking statistics.
   // director: "Frank Darabont", // Getting directors requires a different call to TMDB's credit endpoint
   genre: ["Drama"],
   posterUrl: "https://...",
-  tmdbId: 278, // The Movie Database ID for external API integration
+  tmdbId: "278", // The Movie Database ID for external API integration
 
   // Aggregated ranking statistics (calculated from votes)
   totalWins: 145,

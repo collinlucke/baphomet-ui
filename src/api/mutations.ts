@@ -6,12 +6,12 @@ export const ADD_MOVIE = gql`
   mutation addMovie(
     $title: String!
     $releaseDate: String
-    # $directors: [String] # Directors are fetched from TMDB's credits endpoint - implement later
+    $overview: String
     $genres: [String]
     $revenue: String
     $posterUrl: String
     $backdropUrl: String
-    $tmdbId: Int
+    $tmdbId: String
     $addedBy: ID
     $lastUpdated: DateTime
     $createdAt: DateTime
@@ -23,7 +23,7 @@ export const ADD_MOVIE = gql`
     newMovie: addMovie(
       title: $title
       releaseDate: $releaseDate
-      directors: $directors
+      overview: $overview
       genres: $genres
       revenue: $revenue
       posterUrl: $posterUrl
@@ -40,7 +40,7 @@ export const ADD_MOVIE = gql`
       id
       title
       releaseDate
-      directors
+      overview
       genres
       revenue
       posterUrl
@@ -64,7 +64,7 @@ export const UPDATE_MOVIE = gql`
     $rated: String
     $releaseDate: String
     $poster: String
-    $fullplot: String
+    $overview: String
   ) {
     updatedMovie: updateMovie(
       id: $id
@@ -72,14 +72,14 @@ export const UPDATE_MOVIE = gql`
       rated: $rated
       releaseDate: $releaseDate
       poster: $poster
-      fullplot: $fullplot
+      overview: $overview
     ) {
       title
       releaseDate
       rated
       id
       poster
-      fullplot
+      overview
     }
   }
 `;

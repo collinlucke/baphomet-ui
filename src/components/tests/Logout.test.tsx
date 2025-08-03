@@ -17,7 +17,7 @@ const renderHeading = () => {
   return render(
     <MockedProvider mocks={[]}>
       <BrowserRouter>
-        <Heading />
+        <Heading setShowLoginModal={() => {}} setShowSignupModal={() => {}} />
       </BrowserRouter>
     </MockedProvider>
   );
@@ -200,7 +200,10 @@ describe('Logout Functionality', () => {
       rerender(
         <MockedProvider mocks={[]}>
           <BrowserRouter>
-            <Heading />
+            <Heading
+              setShowLoginModal={() => {}}
+              setShowSignupModal={() => {}}
+            />
           </BrowserRouter>
         </MockedProvider>
       );

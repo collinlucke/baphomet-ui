@@ -1,15 +1,22 @@
-import { Button, ButtonGroup, Header } from '@collinlucke/phantomartist';
+import {
+  Button,
+  ButtonGroup,
+  Header,
+  mediaQueries
+} from '@collinlucke/phantomartist';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useScreenSize } from '../hooks/useScreenSize';
-import { PlusSignIcon } from 'hugeicons-react';
+import { PlusSignIcon, Menu01Icon, Cancel01Icon } from 'hugeicons-react';
 import { isAuthenticatedVar } from '../reactiveVars';
 import { useReactiveVar } from '@apollo/client';
+import { useState } from 'react';
+import { CSSObject } from '@emotion/react';
 
-interface HeadingProps {
+type HeadingProps = {
   setShowLoginModal: (show: boolean) => void;
   setShowSignupModal: (show: boolean) => void;
-}
+};
 
 export const Heading: React.FC<HeadingProps> = ({
   setShowLoginModal,
@@ -18,196 +25,390 @@ export const Heading: React.FC<HeadingProps> = ({
   const navigate = useNavigate();
   const screenSize = useScreenSize();
   const isAuthenticated = useReactiveVar(isAuthenticatedVar);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleAddMovies = () => {
     navigate('/add-movies');
+    setIsMobileMenuOpen(false); // Close menu after navigation
   };
 
   const openSignupModal = () => {
     setShowSignupModal(true);
+    setIsMobileMenuOpen(false); // Close menu after action
   };
 
   const openLoginModal = () => {
     setShowLoginModal(true);
+    setIsMobileMenuOpen(false); // Close menu after action
   };
 
   const logOut = () => {
     localStorage.removeItem('baphomet-token');
     localStorage.removeItem('baphomet-user');
     isAuthenticatedVar(false);
+    setIsMobileMenuOpen(false); // Close menu after action
   };
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    setIsMobileMenuOpen(false); // Close menu after navigation
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const isMobile = screenSize === 'small';
 
   return (
     <Header>
       {[
-        <div key="header-content" style={baphStyles.headerContent}>
+        <div key="header-content" css={baphStyles.headerContent}>
           <Link
             to={'/'}
             data-testid="home-link"
-            style={baphStyles.logoLink}
+            css={baphStyles.logoLink}
             aria-label="Baphomet - Go to homepage"
           >
-            <h1>Baphomet</h1>
+            <h1 css={baphStyles.title}>Baphomet</h1>
             <img
               src="/baphy-favicon.png"
               alt="Baphomet logo"
-              style={baphStyles.favicon}
+              css={baphStyles.favicon}
               role="presentation"
               aria-hidden="true"
             />
           </Link>
 
-          <div css={baphStyles.rightSideContent}>
-            <nav
-              css={baphStyles.nav}
-              role="navigation"
-              aria-label="Main navigation"
-            >
-              <ButtonGroup ariaLabel="Navigation buttons">
-                <Button
-                  size="small"
-                  kind="ghostOnDark"
-                  onClick={() => navigate('/arena')}
-                  ariaLabel="Go to Arena page"
-                >
-                  Arena
-                </Button>
-                <Button
-                  size="small"
-                  kind="ghostOnDark"
-                  onClick={() => navigate('/leaderboards')}
-                  ariaLabel="Go to Leader Boards page"
-                  disabled
-                >
-                  Leader Boards
-                </Button>
-                <Button
-                  size="small"
-                  kind="ghostOnDark"
-                  onClick={() => navigate('/all-movies')}
-                  ariaLabel="Go to All Movies page"
-                >
-                  All Movies
-                </Button>
-              </ButtonGroup>
-            </nav>
-
-            {isAuthenticated && (
-              <ButtonGroup ariaLabel="User actions">
-                <Button
-                  dataTestId="add-new-movie-button"
-                  size="small"
-                  // onClick={navToCreate}
-                  icon={<PlusSignIcon size={17} strokeWidth={'3px'} />}
-                  iconOnly={screenSize === 'small'}
-                  kind="secondary"
-                  ariaLabel={
-                    screenSize === 'small' ? 'Add new movie' : undefined
-                  }
-                  onClick={handleAddMovies}
-                >
-                  {screenSize === 'small' ? (
-                    <span className="sr-only">Add new movie</span>
-                  ) : (
-                    'Add new movie'
-                  )}
-                </Button>
-                <Button
-                  kind="primary"
-                  onClick={logOut}
-                  size="small"
-                  ariaLabel="Sign out of your account"
-                  dataTestId="logout-button"
-                >
-                  Log out
-                </Button>
-              </ButtonGroup>
-            )}
-
-            {/* Signup/Login buttons - only when not authenticated */}
-            {!isAuthenticated && (
-              <>
-                <ButtonGroup ariaLabel="Authentication options">
+          {/* Desktop Navigation */}
+          {!isMobile && (
+            <div css={baphStyles.rightSideContent}>
+              <nav
+                css={baphStyles.nav}
+                role="navigation"
+                aria-label="Main navigation"
+              >
+                <ButtonGroup ariaLabel="Navigation buttons">
                   <Button
-                    onClick={openSignupModal}
-                    kind="secondary"
                     size="small"
-                    ariaLabel="Open sign up form"
-                    ariaDescribedBy="signup-help"
-                    dataTestId="signup-button"
+                    kind="ghostOnDark"
+                    onClick={() => handleNavigation('/arena')}
+                    ariaLabel="Go to Arena page"
                   >
-                    Sign Up
+                    Arena
                   </Button>
                   <Button
-                    onClick={openLoginModal}
-                    kind="primary"
                     size="small"
-                    ariaLabel="Open log in form"
-                    ariaDescribedBy="login-help"
-                    dataTestId="login-button"
+                    kind="ghostOnDark"
+                    onClick={() => handleNavigation('/leaderboards')}
+                    ariaLabel="Go to Leader Boards page"
+                    disabled
                   >
-                    Log in
+                    Leader Boards
+                  </Button>
+                  <Button
+                    size="small"
+                    kind="ghostOnDark"
+                    onClick={() => handleNavigation('/all-movies')}
+                    ariaLabel="Go to All Movies page"
+                  >
+                    All Movies
                   </Button>
                 </ButtonGroup>
-                {/* Hidden helper text for screen readers */}
-                <span id="signup-help" css={baphStyles.srOnly}>
-                  Create a new account to add and rate movies
-                </span>
-                <span id="login-help" css={baphStyles.srOnly}>
-                  Sign in to your existing account
-                </span>
-              </>
-            )}
-          </div>
+              </nav>
+
+              {isAuthenticated && (
+                <ButtonGroup ariaLabel="User actions">
+                  <Button
+                    dataTestId="add-new-movie-button"
+                    size="small"
+                    icon={<PlusSignIcon size={17} strokeWidth={'3px'} />}
+                    kind="secondary"
+                    ariaLabel="Add new movie"
+                    onClick={handleAddMovies}
+                  >
+                    Add new movie
+                  </Button>
+                  <Button
+                    kind="primary"
+                    onClick={logOut}
+                    size="small"
+                    ariaLabel="Sign out of your account"
+                    dataTestId="logout-button"
+                  >
+                    Log out
+                  </Button>
+                </ButtonGroup>
+              )}
+
+              {!isAuthenticated && (
+                <>
+                  <ButtonGroup ariaLabel="Authentication options">
+                    <Button
+                      onClick={openSignupModal}
+                      kind="secondary"
+                      size="small"
+                      ariaLabel="Open sign up form"
+                      ariaDescribedBy="signup-help"
+                      dataTestId="signup-button"
+                    >
+                      Sign Up
+                    </Button>
+                    <Button
+                      onClick={openLoginModal}
+                      kind="primary"
+                      size="small"
+                      ariaLabel="Open log in form"
+                      ariaDescribedBy="login-help"
+                      dataTestId="login-button"
+                    >
+                      Log in
+                    </Button>
+                  </ButtonGroup>
+                  <span id="signup-help" css={baphStyles.srOnly}>
+                    Create a new account to add and rate movies
+                  </span>
+                  <span id="login-help" css={baphStyles.srOnly}>
+                    Sign in to your existing account
+                  </span>
+                </>
+              )}
+            </div>
+          )}
+
+          {/* Mobile Navigation */}
+          {isMobile && (
+            <div css={baphStyles.mobileControls}>
+              <Button
+                kind="ghostOnDark"
+                size="small"
+                iconOnly
+                icon={
+                  isMobileMenuOpen ? (
+                    <Cancel01Icon size={24} />
+                  ) : (
+                    <Menu01Icon size={24} />
+                  )
+                }
+                onClick={toggleMobileMenu}
+                ariaLabel={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+              />
+            </div>
+          )}
+
+          {/* Mobile Menu Overlay */}
+          {isMobile && isMobileMenuOpen && (
+            <div
+              css={baphStyles.mobileMenuOverlay}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <div
+                css={baphStyles.mobileMenu}
+                onClick={e => e.stopPropagation()}
+              >
+                <nav
+                  css={baphStyles.mobileNav}
+                  role="navigation"
+                  aria-label="Mobile navigation"
+                >
+                  <div css={baphStyles.mobileNavSection}>
+                    <Button
+                      size="medium"
+                      kind="ghostOnDark"
+                      onClick={() => handleNavigation('/arena')}
+                      className={{ button: baphStyles.mobileNavButton }}
+                    >
+                      Arena
+                    </Button>
+                    <Button
+                      size="medium"
+                      kind="ghostOnDark"
+                      onClick={() => handleNavigation('/leaderboards')}
+                      disabled
+                      className={{ button: baphStyles.mobileNavButton }}
+                    >
+                      Leader Boards
+                    </Button>
+                    <Button
+                      size="medium"
+                      kind="ghostOnDark"
+                      onClick={() => handleNavigation('/all-movies')}
+                      className={{ button: baphStyles.mobileNavButton }}
+                    >
+                      All Movies
+                    </Button>
+                  </div>
+
+                  {isAuthenticated && (
+                    <div css={baphStyles.mobileNavSection}>
+                      <Button
+                        size="medium"
+                        kind="secondary"
+                        onClick={handleAddMovies}
+                        icon={<PlusSignIcon size={20} strokeWidth={'3px'} />}
+                        className={{ button: baphStyles.mobileNavButton }}
+                      >
+                        Add new movie
+                      </Button>
+                      <Button
+                        kind="primary"
+                        onClick={logOut}
+                        size="medium"
+                        className={{ button: baphStyles.mobileNavButton }}
+                      >
+                        Log out
+                      </Button>
+                    </div>
+                  )}
+
+                  {!isAuthenticated && (
+                    <div css={baphStyles.mobileNavSection}>
+                      <Button
+                        onClick={openSignupModal}
+                        kind="secondary"
+                        size="medium"
+                        className={{ button: baphStyles.mobileNavButton }}
+                      >
+                        Sign Up
+                      </Button>
+                      <Button
+                        onClick={openLoginModal}
+                        kind="primary"
+                        size="medium"
+                        className={{ button: baphStyles.mobileNavButton }}
+                      >
+                        Log in
+                      </Button>
+                    </div>
+                  )}
+                </nav>
+              </div>
+            </div>
+          )}
         </div>
       ]}
     </Header>
   );
 };
 
-// Define base styles
-const baphStyles = {
+// Define base styles with mobile responsiveness
+const baphStyles: { [key: string]: CSSObject } = {
   headerContent: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
-    padding: '0 20px'
-  },
-  logo: {
-    margin: 0,
-    textDecoration: 'none'
+    padding: '0 15px',
+    [mediaQueries.minWidth.sm]: {
+      padding: '0 20px'
+    }
   },
   logoLink: {
     display: 'flex',
     alignItems: 'center',
-    gap: '12px',
-    textDecoration: 'none'
+    gap: '6px',
+    textDecoration: 'none',
+    [mediaQueries.minWidth.sm]: {
+      gap: '8px'
+    },
+    [mediaQueries.minWidth.md]: {
+      gap: '10px'
+    },
+    [mediaQueries.minWidth.lg]: {
+      gap: '12px'
+    }
+  },
+  title: {
+    margin: 0,
+    fontSize: '1.2rem',
+    [mediaQueries.minWidth.sm]: {
+      fontSize: '1.4rem'
+    },
+    [mediaQueries.minWidth.md]: {
+      fontSize: '1.6rem'
+    },
+    [mediaQueries.minWidth.lg]: {
+      fontSize: '2rem'
+    }
   },
   favicon: {
-    width: '64px',
-    height: '64px',
-    objectFit: 'contain' as const
+    width: '32px',
+    height: '32px',
+    objectFit: 'contain' as const,
+    [mediaQueries.minWidth.sm]: {
+      width: '40px',
+      height: '40px'
+    },
+    [mediaQueries.minWidth.md]: {
+      width: '48px',
+      height: '48px'
+    },
+    [mediaQueries.minWidth.lg]: {
+      width: '64px',
+      height: '64px'
+    }
   },
   rightSideContent: {
     display: 'flex',
     alignItems: 'center',
-    gap: '20px',
+    gap: '15px',
     flex: 1,
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    [mediaQueries.minWidth.md]: {
+      gap: '20px'
+    }
   },
   nav: {
     display: 'flex',
     alignItems: 'center',
-    gap: '20px'
+    gap: '15px',
+    [mediaQueries.minWidth.md]: {
+      gap: '20px'
+    }
   },
-  authButtons: {
+  mobileControls: {
     display: 'flex',
-    alignItems: 'center',
-    gap: '1rem'
+    alignItems: 'center'
   },
-  button: {
-    position: 'relative' as const
+  mobileMenuOverlay: {
+    position: 'fixed' as const,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    zIndex: 1000,
+    display: 'flex',
+    justifyContent: 'flex-end'
+  },
+  mobileMenu: {
+    backgroundColor: '#0B1828', // Using primary color
+    width: '280px',
+    height: '100%',
+    padding: '20px',
+    boxShadow: '-2px 0 8px rgba(0, 0, 0, 0.3)',
+    overflowY: 'auto' as const
+  },
+  mobileNav: {
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: '20px',
+    paddingTop: '60px' // Account for header height
+  },
+  mobileNavSection: {
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: '12px',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+    paddingBottom: '20px',
+    '&:last-child': {
+      borderBottom: 'none',
+      paddingBottom: 0
+    }
+  },
+  mobileNavButton: {
+    width: '100%',
+    justifyContent: 'flex-start'
   },
   srOnly: {
     position: 'absolute' as const,

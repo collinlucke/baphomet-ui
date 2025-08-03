@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { expect, describe, it, beforeEach } from 'vitest';
+import { expect, describe, it, beforeEach, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { mockLocalStorage } from '../__mocks__/mockLocalStorage';
@@ -20,7 +20,10 @@ describe('Heading', () => {
       render(
         <MockedProvider mocks={[]}>
           <BrowserRouter>
-            <Heading />
+            <Heading
+              setShowLoginModal={() => {}}
+              setShowSignupModal={() => {}}
+            />
           </BrowserRouter>
         </MockedProvider>
       );
@@ -33,7 +36,10 @@ describe('Heading', () => {
       render(
         <MockedProvider mocks={[]}>
           <BrowserRouter>
-            <Heading />
+            <Heading
+              setShowLoginModal={() => {}}
+              setShowSignupModal={() => {}}
+            />
           </BrowserRouter>
         </MockedProvider>
       );
@@ -53,7 +59,10 @@ describe('Heading', () => {
       render(
         <MockedProvider mocks={[]}>
           <BrowserRouter>
-            <Heading />
+            <Heading
+              setShowLoginModal={() => {}}
+              setShowSignupModal={() => {}}
+            />
           </BrowserRouter>
         </MockedProvider>
       );
@@ -66,7 +75,10 @@ describe('Heading', () => {
       render(
         <MockedProvider mocks={[]}>
           <BrowserRouter>
-            <Heading />
+            <Heading
+              setShowLoginModal={() => {}}
+              setShowSignupModal={() => {}}
+            />
           </BrowserRouter>
         </MockedProvider>
       );
@@ -76,40 +88,48 @@ describe('Heading', () => {
 
     it('opens signup modal when Sign Up button is clicked', async () => {
       const user = userEvent.setup();
+      const mockSetShowSignupModal = vi.fn();
+      const mockSetShowLoginModal = vi.fn();
 
       render(
         <MockedProvider mocks={[]}>
           <BrowserRouter>
-            <Heading />
+            <Heading
+              setShowLoginModal={mockSetShowLoginModal}
+              setShowSignupModal={mockSetShowSignupModal}
+            />
           </BrowserRouter>
         </MockedProvider>
       );
 
       await user.click(screen.getByTestId('signup-button'));
 
-      // Wait for the modal to appear in the DOM
-      await waitFor(() => {
-        expect(screen.getByTestId('signup-modal-content')).toBeVisible();
-      });
+      // Verify the callback was called with true to open the modal
+      expect(mockSetShowSignupModal).toHaveBeenCalledWith(true);
+      expect(mockSetShowLoginModal).not.toHaveBeenCalled();
     });
 
     it('opens login modal when Log in button is clicked', async () => {
       const user = userEvent.setup();
+      const mockSetShowSignupModal = vi.fn();
+      const mockSetShowLoginModal = vi.fn();
 
       render(
         <MockedProvider mocks={[]}>
           <BrowserRouter>
-            <Heading />
+            <Heading
+              setShowLoginModal={mockSetShowLoginModal}
+              setShowSignupModal={mockSetShowSignupModal}
+            />
           </BrowserRouter>
         </MockedProvider>
       );
 
       await user.click(screen.getByTestId('login-button'));
 
-      // Wait for the modal to appear in the DOM
-      await waitFor(() => {
-        expect(screen.getByTestId('login-modal-content')).toBeVisible();
-      });
+      // Verify the callback was called with true to open the modal
+      expect(mockSetShowLoginModal).toHaveBeenCalledWith(true);
+      expect(mockSetShowSignupModal).not.toHaveBeenCalled();
     });
   });
 
@@ -122,7 +142,10 @@ describe('Heading', () => {
       render(
         <MockedProvider mocks={[]}>
           <BrowserRouter>
-            <Heading />
+            <Heading
+              setShowLoginModal={() => {}}
+              setShowSignupModal={() => {}}
+            />
           </BrowserRouter>
         </MockedProvider>
       );
@@ -134,7 +157,10 @@ describe('Heading', () => {
       render(
         <MockedProvider mocks={[]}>
           <BrowserRouter>
-            <Heading />
+            <Heading
+              setShowLoginModal={() => {}}
+              setShowSignupModal={() => {}}
+            />
           </BrowserRouter>
         </MockedProvider>
       );
@@ -146,7 +172,10 @@ describe('Heading', () => {
       render(
         <MockedProvider mocks={[]}>
           <BrowserRouter>
-            <Heading />
+            <Heading
+              setShowLoginModal={() => {}}
+              setShowSignupModal={() => {}}
+            />
           </BrowserRouter>
         </MockedProvider>
       );
@@ -161,7 +190,10 @@ describe('Heading', () => {
       render(
         <MockedProvider mocks={[]}>
           <BrowserRouter>
-            <Heading />
+            <Heading
+              setShowLoginModal={() => {}}
+              setShowSignupModal={() => {}}
+            />
           </BrowserRouter>
         </MockedProvider>
       );
@@ -183,7 +215,10 @@ describe('Heading', () => {
       const { container } = render(
         <MockedProvider mocks={[]}>
           <BrowserRouter>
-            <Heading />
+            <Heading
+              setShowLoginModal={() => {}}
+              setShowSignupModal={() => {}}
+            />
           </BrowserRouter>
         </MockedProvider>
       );
@@ -197,7 +232,10 @@ describe('Heading', () => {
       const { container } = render(
         <MockedProvider mocks={[]}>
           <BrowserRouter>
-            <Heading />
+            <Heading
+              setShowLoginModal={() => {}}
+              setShowSignupModal={() => {}}
+            />
           </BrowserRouter>
         </MockedProvider>
       );

@@ -29,7 +29,7 @@ if (redirectPath && redirectPath !== '/') {
 
 const getBackendUrl = () => {
   if (import.meta.env.MODE === 'development') {
-    return 'http://localhost:5050/graphql';
+    return `http://${window.location.hostname}:5050/graphql`;
   }
   // Production: Use your Render backend URL
   return (

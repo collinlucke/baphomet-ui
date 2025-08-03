@@ -35,7 +35,9 @@ export default defineConfig(({ mode }) => {
       fs: {
         // Allow serving files from one level up
         allow: ['..']
-      }
+      },
+      host: '0.0.0.0',
+      port: 5173 // Default Vite port
     },
     test: {
       globals: true,
