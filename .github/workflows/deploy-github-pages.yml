@@ -58,6 +58,7 @@ jobs:
 
       - name: Build for production
         env:
+          VITE_TMDB_API_KEY: ${{ secrets.VITE_TMDB_API_KEY }}
           GRAPHQL_BAPHOMET_SERVER_RENDER_URL: https://baphomet-server.onrender.com/graphql
           GIT_REGISTRY_TOKEN: ${{ secrets.GIT_REGISTRY_TOKEN }}
           GITHUB_ACTIONS: true
