@@ -13,13 +13,24 @@ export const GET_ALL_MOVIES = gql`
       cursor: $cursor
       loadAction: $loadAction
     ) {
-      newMovies {
-        overview
-        poster
-        title
-        releaseDate
-        rated
+      searchResults {
         id
+        title
+        rated
+        releaseDate
+        overview
+        genres
+        revenue
+        posterUrl
+        backdropUrl
+        tmdbId
+        addedBy
+        lastUpdated
+        createdAt
+        totalWins
+        totalLosses
+        winningPercentage
+        totalComparisons
       }
       newTotalMovieCount
       newCursor
@@ -32,7 +43,9 @@ export const GET_ALL_MOVIES = gql`
 export const GET_MOVIE = gql`
   query getMovie($id: ID!) {
     movie: getMovie(id: $id) {
-      poster
+      posterUrl
+      overview
+      genres
       title
       releaseDate
       rated

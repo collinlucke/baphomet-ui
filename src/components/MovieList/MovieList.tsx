@@ -9,7 +9,13 @@ type Movie = {
   title: string;
   releaseDate?: string;
   rated?: string;
-  poster?: string;
+  posterUrl?: string;
+  winningPercentage: number;
+  overview?: string;
+  genres?: string[];
+  revenue?: number;
+  backdropUrl?: string;
+  tmdbId?: number;
 };
 
 type MovieData = {
@@ -22,7 +28,7 @@ type MovieData = {
 
   onSearch?: (searchTerm: string) => void;
   setSearchTerm?: (term: string) => void;
-  openDeleteModal?: ({ id, title }: { id: string; title: string }) => void;
+  // openDeleteModal?: ({ id, title }: { id: string; title: string }) => void;
 };
 
 export const MovieList: React.FC<MovieData> = ({
@@ -63,30 +69,20 @@ export const MovieList: React.FC<MovieData> = ({
       />
       <div css={baphStyles.listWrapper}>
         {movies?.length ? (
-          <div>
-            <List>
-              {/* {movies &&
-                movies.map(mov => (
-                  <MovieListItem
-                    mov={mov}
-                    key={mov.id}
-                    openDeleteModal={openDeleteModal || (() => {})}
-                  />
-                ))} */}
-            </List>
-          </div>
+          <List className={baphStyles.ul} date-testid="movie-list">
+            {movies &&
+              movies.map(mov => (
+                <MovieListItem
+                  movie={mov}
+                  key={mov.id}
+                  // openDeleteModal={openDeleteModal || (() => {})}
+                />
+              ))}
+          </List>
         ) : (
           <div css={[baphStyles.noResults]}>
             <h2>Real sorry to tell you this, but...</h2>
             <div>No movies match your search</div>
-            <MovieListItem
-              movie={{
-                _id: '1',
-                posterUrl:
-                  'https://image.tmdb.org/t/p/original/xeEw3eLeSFmJgXZzmF2Efww0q3s.jpg',
-                winningPercentage: 99.99
-              }}
-            />
           </div>
         )}
       </div>
@@ -101,8 +97,8 @@ const baphStyles: { [key: string]: CSSObject } = {
   listWrapper: {
     display: 'flex',
     alignItems: 'center',
-    height: '65vh',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    width: '100%'
   },
   noResults: {
     display: 'flex',
@@ -111,6 +107,9 @@ const baphStyles: { [key: string]: CSSObject } = {
     marginBottom: '30px',
     marginTop: '30px',
     color: baphColorVariations.tertiary[50]
+  },
+  ul: {
+    // flexDirection: 'row' as const
   },
   movieListWrapper: {
     display: 'flex',
