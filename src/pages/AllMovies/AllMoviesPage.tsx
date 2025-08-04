@@ -36,10 +36,8 @@ export const AllMoviesPage: React.FC = () => {
   return (
     <AboveTheFold pageSlug="all-movies">
       <div css={styles.listContainer}>
-        <p>
-          <div css={styles.welcomeTitle}>All Movies</div>
-          <div>Here's a big ol' list of movies.</div>
-        </p>
+        <div css={styles.welcomeTitle}>All Movies</div>
+        <div>Here's a big ol' list of movies.</div>
       </div>
       <MovieList
         movies={allMovies}

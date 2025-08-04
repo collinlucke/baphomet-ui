@@ -1,6 +1,5 @@
 import { List, Search } from '@collinlucke/phantomartist';
 import { MovieListItem } from './MovieListItem';
-import { useScreenSize } from '../../hooks/useScreenSize';
 import { baphColorVariations } from '../../styling/baphTheme';
 import { CSSObject } from '@emotion/react';
 
@@ -39,8 +38,6 @@ export const MovieList: React.FC<MovieData> = ({
   onSearch,
   setSearchTerm
 }) => {
-  const screenSize = useScreenSize();
-
   const onSearchHandler = (searchTerm: string) => {
     onSearch?.(searchTerm);
   };
@@ -50,15 +47,13 @@ export const MovieList: React.FC<MovieData> = ({
   };
 
   return (
-    <div css={[baphStyles.movieListWrapper]} className="baph-movie-list">
+    <div css={baphStyles.movieListWrapper} className="baph-movie-list">
       <Search
         onSearch={onSearchHandler}
         searchTerm={searchTerm}
         searchLabel="Search Movies"
         setSearchTerm={setSearchTermHandler}
         resultsCount={movies?.length}
-        buttonSize={screenSize}
-        inputSize={'small'}
         useSearchButton={false}
         totalResultsCount={totalMovieCount}
         className={{
@@ -69,7 +64,7 @@ export const MovieList: React.FC<MovieData> = ({
       />
       <div css={baphStyles.listWrapper}>
         {movies?.length ? (
-          <List className={baphStyles.ul} date-testid="movie-list">
+          <List className={{ ui: baphStyles.ul }} date-testid="movie-list">
             {movies &&
               movies.map(mov => (
                 <MovieListItem
@@ -96,9 +91,8 @@ const baphStyles: { [key: string]: CSSObject } = {
   },
   listWrapper: {
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%'
+    width: '100%',
+    marginTop: '30px'
   },
   noResults: {
     display: 'flex',
@@ -109,7 +103,14 @@ const baphStyles: { [key: string]: CSSObject } = {
     color: baphColorVariations.tertiary[50]
   },
   ul: {
-    // flexDirection: 'row' as const
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))',
+    gap: '35px',
+    listStyleType: 'none',
+    paddingInlineStart: 0,
+    margin: 0,
+    width: '100%',
+    justifyContent: 'center'
   },
   movieListWrapper: {
     display: 'flex',
@@ -120,8 +121,7 @@ const baphStyles: { [key: string]: CSSObject } = {
   searchWrapper: {
     position: 'sticky' as const,
     backgroundColor: 'transparent',
-    top: 0,
-    maxWidth: 'fit-content'
+    top: 0
   },
   resultsText: {
     color: baphColorVariations.tertiary[50]

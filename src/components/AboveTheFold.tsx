@@ -32,10 +32,11 @@ const baphStyles: { [key: string]: CSSObject } = {
     width: '100%'
   },
   aboveTheFoldSection: {
-    padding: '2rem',
+    // padding: '2rem',
     minHeight: 'calc(100vh - 75px)',
     display: 'flex',
     flexDirection: 'column' as const,
+    padding: '0 36px',
     '& > *': {
       position: 'relative',
       zIndex: 2

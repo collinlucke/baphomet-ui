@@ -50,7 +50,6 @@ export const AddMoviesPage: React.FC = () => {
     },
     onError: error => {
       console.error('Error adding movie:', error);
-      // You could add an error notification here
     }
   });
 
