@@ -6,7 +6,6 @@ import {
 } from '@collinlucke/phantomartist';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { useScreenSize } from '../hooks/useScreenSize';
 import { PlusSignIcon, Menu01Icon, Cancel01Icon } from 'hugeicons-react';
 import { isAuthenticatedVar } from '../reactiveVars';
 import { useReactiveVar } from '@apollo/client';
@@ -23,7 +22,6 @@ export const Heading: React.FC<HeadingProps> = ({
   setShowSignupModal
 }) => {
   const navigate = useNavigate();
-  const screenSize = useScreenSize();
   const isAuthenticated = useReactiveVar(isAuthenticatedVar);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -58,8 +56,6 @@ export const Heading: React.FC<HeadingProps> = ({
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  const isMobile = screenSize === 'small';
-
   return (
     <Header>
       {[
@@ -80,124 +76,120 @@ export const Heading: React.FC<HeadingProps> = ({
             />
           </Link>
 
-          {/* Desktop Navigation */}
-          {!isMobile && (
-            <div css={baphStyles.rightSideContent}>
-              <nav
-                css={baphStyles.nav}
-                role="navigation"
-                aria-label="Main navigation"
-              >
-                <ButtonGroup ariaLabel="Navigation buttons">
-                  <Button
-                    size="small"
-                    kind="ghostOnDark"
-                    onClick={() => handleNavigation('/arena')}
-                    ariaLabel="Go to Arena page"
-                  >
-                    Arena
-                  </Button>
-                  <Button
-                    size="small"
-                    kind="ghostOnDark"
-                    onClick={() => handleNavigation('/leaderboards')}
-                    ariaLabel="Go to Leader Boards page"
-                    disabled
-                  >
-                    Leader Boards
-                  </Button>
-                  <Button
-                    size="small"
-                    kind="ghostOnDark"
-                    onClick={() => handleNavigation('/all-movies')}
-                    ariaLabel="Go to All Movies page"
-                  >
-                    All Movies
-                  </Button>
-                </ButtonGroup>
-              </nav>
+          {/* Desktop Navigation - hidden on mobile via CSS */}
+          <div css={baphStyles.rightSideContent}>
+            <nav
+              css={baphStyles.nav}
+              role="navigation"
+              aria-label="Main navigation"
+            >
+              <ButtonGroup ariaLabel="Navigation buttons">
+                <Button
+                  size="small"
+                  kind="ghostOnDark"
+                  onClick={() => handleNavigation('/arena')}
+                  ariaLabel="Go to Arena page"
+                >
+                  Arena
+                </Button>
+                <Button
+                  size="small"
+                  kind="ghostOnDark"
+                  onClick={() => handleNavigation('/leaderboards')}
+                  ariaLabel="Go to Leader Boards page"
+                  disabled
+                >
+                  Leader Boards
+                </Button>
+                <Button
+                  size="small"
+                  kind="ghostOnDark"
+                  onClick={() => handleNavigation('/all-movies')}
+                  ariaLabel="Go to All Movies page"
+                >
+                  All Movies
+                </Button>
+              </ButtonGroup>
+            </nav>
 
-              {isAuthenticated && (
-                <ButtonGroup ariaLabel="User actions">
+            {isAuthenticated && (
+              <ButtonGroup ariaLabel="User actions">
+                <Button
+                  dataTestId="add-new-movie-button"
+                  size="small"
+                  icon={<PlusSignIcon size={17} strokeWidth={'3px'} />}
+                  kind="secondary"
+                  ariaLabel="Add new movie"
+                  onClick={handleAddMovies}
+                >
+                  Add new movie
+                </Button>
+                <Button
+                  kind="primary"
+                  onClick={logOut}
+                  size="small"
+                  ariaLabel="Sign out of your account"
+                  dataTestId="logout-button"
+                >
+                  Log out
+                </Button>
+              </ButtonGroup>
+            )}
+
+            {!isAuthenticated && (
+              <>
+                <ButtonGroup ariaLabel="Authentication options">
                   <Button
-                    dataTestId="add-new-movie-button"
-                    size="small"
-                    icon={<PlusSignIcon size={17} strokeWidth={'3px'} />}
+                    onClick={openSignupModal}
                     kind="secondary"
-                    ariaLabel="Add new movie"
-                    onClick={handleAddMovies}
+                    size="small"
+                    ariaLabel="Open sign up form"
+                    ariaDescribedBy="signup-help"
+                    dataTestId="signup-button"
                   >
-                    Add new movie
+                    Sign Up
                   </Button>
                   <Button
+                    onClick={openLoginModal}
                     kind="primary"
-                    onClick={logOut}
                     size="small"
-                    ariaLabel="Sign out of your account"
-                    dataTestId="logout-button"
+                    ariaLabel="Open log in form"
+                    ariaDescribedBy="login-help"
+                    dataTestId="login-button"
                   >
-                    Log out
+                    Log in
                   </Button>
                 </ButtonGroup>
-              )}
+                <span id="signup-help" css={baphStyles.srOnly}>
+                  Create a new account to add and rate movies
+                </span>
+                <span id="login-help" css={baphStyles.srOnly}>
+                  Sign in to your existing account
+                </span>
+              </>
+            )}
+          </div>
 
-              {!isAuthenticated && (
-                <>
-                  <ButtonGroup ariaLabel="Authentication options">
-                    <Button
-                      onClick={openSignupModal}
-                      kind="secondary"
-                      size="small"
-                      ariaLabel="Open sign up form"
-                      ariaDescribedBy="signup-help"
-                      dataTestId="signup-button"
-                    >
-                      Sign Up
-                    </Button>
-                    <Button
-                      onClick={openLoginModal}
-                      kind="primary"
-                      size="small"
-                      ariaLabel="Open log in form"
-                      ariaDescribedBy="login-help"
-                      dataTestId="login-button"
-                    >
-                      Log in
-                    </Button>
-                  </ButtonGroup>
-                  <span id="signup-help" css={baphStyles.srOnly}>
-                    Create a new account to add and rate movies
-                  </span>
-                  <span id="login-help" css={baphStyles.srOnly}>
-                    Sign in to your existing account
-                  </span>
-                </>
-              )}
-            </div>
-          )}
+          {/* Mobile Controls - shown only on mobile via CSS */}
+          <div css={baphStyles.mobileControls}>
+            <Button
+              kind="ghostOnDark"
+              size="small"
+              iconOnly
+              icon={
+                isMobileMenuOpen ? (
+                  <Cancel01Icon size={24} />
+                ) : (
+                  <Menu01Icon size={24} />
+                )
+              }
+              onClick={toggleMobileMenu}
+              ariaLabel={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+            />
+          </div>
 
-          {/* Mobile Navigation */}
-          {isMobile && (
-            <div css={baphStyles.mobileControls}>
-              <Button
-                kind="ghostOnDark"
-                size="small"
-                iconOnly
-                icon={
-                  isMobileMenuOpen ? (
-                    <Cancel01Icon size={24} />
-                  ) : (
-                    <Menu01Icon size={24} />
-                  )
-                }
-                onClick={toggleMobileMenu}
-                ariaLabel={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
-              />
-            </div>
-          )}
-
-          {/* Mobile Menu Overlay */}
-          {isMobile && isMobileMenuOpen && (
+          {/* Mobile Menu Overlay - shown only when menu is open */}
+          {isMobileMenuOpen && (
             <div
               css={baphStyles.mobileMenuOverlay}
               onClick={() => setIsMobileMenuOpen(false)}
@@ -349,12 +341,13 @@ const baphStyles: { [key: string]: CSSObject } = {
     }
   },
   rightSideContent: {
-    display: 'flex',
+    display: 'none', // Hidden on mobile by default
     alignItems: 'center',
     gap: '15px',
     flex: 1,
     justifyContent: 'flex-end',
     [mediaQueries.minWidth.md]: {
+      display: 'flex', // Show on desktop (640px+)
       gap: '20px'
     }
   },
@@ -367,8 +360,11 @@ const baphStyles: { [key: string]: CSSObject } = {
     }
   },
   mobileControls: {
-    display: 'flex',
-    alignItems: 'center'
+    display: 'flex', // Show on mobile by default
+    alignItems: 'center',
+    [mediaQueries.minWidth.md]: {
+      display: 'none' // Hide on desktop (640px+)
+    }
   },
   mobileMenuOverlay: {
     position: 'fixed' as const,
