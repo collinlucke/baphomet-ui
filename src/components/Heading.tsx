@@ -24,9 +24,11 @@ export const Heading: React.FC<HeadingProps> = ({
   const navigate = useNavigate();
   const isAuthenticated = useReactiveVar(isAuthenticatedVar);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const user = localStorage.getItem('baphomet-user')
+    ? JSON.parse(localStorage.getItem('baphomet-user') || '{}')
+    : null;
 
   const handleAddMovies = () => {
-    navigate('/add-movies');
     setIsMobileMenuOpen(false); // Close menu after navigation
   };
 
@@ -84,46 +86,52 @@ export const Heading: React.FC<HeadingProps> = ({
               aria-label="Main navigation"
             >
               <ButtonGroup ariaLabel="Navigation buttons">
-                <Button
-                  size="small"
-                  kind="ghostOnDark"
-                  onClick={() => handleNavigation('/arena')}
-                  ariaLabel="Go to Arena page"
-                >
-                  Arena
-                </Button>
-                <Button
-                  size="small"
-                  kind="ghostOnDark"
-                  onClick={() => handleNavigation('/leaderboards')}
-                  ariaLabel="Go to Leader Boards page"
-                  disabled
-                >
-                  Leader Boards
-                </Button>
-                <Button
-                  size="small"
-                  kind="ghostOnDark"
-                  onClick={() => handleNavigation('/all-movies')}
-                  ariaLabel="Go to All Movies page"
-                >
-                  All Movies
-                </Button>
+                <Link to="/arena">
+                  <Button
+                    size="small"
+                    kind="ghostOnDark"
+                    onClick={() => handleNavigation('/arena')}
+                    ariaLabel="Go to Arena page"
+                  >
+                    Arena
+                  </Button>
+                </Link>
+                <Link to="/leaderboards">
+                  <Button
+                    size="small"
+                    kind="ghostOnDark"
+                    ariaLabel="Go to Leader Boards page"
+                    disabled
+                  >
+                    Leader Boards
+                  </Button>
+                </Link>
+                <Link to="/all-movies">
+                  <Button
+                    size="small"
+                    kind="ghostOnDark"
+                    ariaLabel="Go to All Movies page"
+                  >
+                    All Movies
+                  </Button>
+                </Link>
               </ButtonGroup>
             </nav>
 
-            {isAuthenticated && (
+            {isAuthenticated && user.role === 'admin' && (
               <ButtonGroup ariaLabel="User actions">
-                <Button
-                  dataTestId="add-new-movie-button"
-                  size="small"
-                  icon={<PlusSignIcon size={17} strokeWidth={'3px'} />}
-                  kind="secondary"
-                  ariaLabel="Add new movie"
-                  onClick={handleAddMovies}
-                >
-                  Add new movie
-                </Button>
+                <Link to="/add-movies">
+                  <Button
+                    dataTestId="add-new-movie-button"
+                    size="small"
+                    icon={<PlusSignIcon size={17} strokeWidth={'3px'} />}
+                    kind="secondary"
+                    ariaLabel="Add new movie"
+                    onClick={handleAddMovies}
+                  >
+                    Add new movie
+                  </Button>
+                </Link>
                 <Button
                   kind="primary"
                   onClick={logOut}
@@ -231,7 +239,7 @@ export const Heading: React.FC<HeadingProps> = ({
                     </Button>
                   </div>
 
-                  {isAuthenticated && (
+                  {isAuthenticated && user.role === 'admin' && (
                     <div css={baphStyles.mobileNavSection}>
                       <Button
                         size="medium"

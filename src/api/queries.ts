@@ -62,3 +62,15 @@ export const CHECK_AUTH = gql`
     }
   }
 `;
+
+export const CHECK_MOVIE_BY_TMDB_ID = gql`
+  query checkMovieByTmdbId($tmdbId: String!) {
+    movieResults: getAllMovies(searchTerm: $tmdbId) {
+      searchResults {
+        id
+        title
+        tmdbId
+      }
+    }
+  }
+`;
