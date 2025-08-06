@@ -1,4 +1,4 @@
-export const searchByMovieTitle = async (title: string) => {
+export const getMoviesByTitle = async (title: string) => {
   // Vite exposes env vars as import.meta.env
   const apiKey = import.meta.env.VITE_TMDB_API_KEY;
   // console.log(title);
