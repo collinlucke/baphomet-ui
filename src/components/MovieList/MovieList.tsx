@@ -26,7 +26,7 @@ type MovieData = {
   endOfResults?: boolean;
 
   onSearch?: (searchTerm: string) => void;
-  setSearchTerm?: (term: string) => void;
+  setSearchTerm?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   // openDeleteModal?: ({ id, title }: { id: string; title: string }) => void;
 };
 
@@ -34,7 +34,6 @@ export const MovieList: React.FC<MovieData> = ({
   movies,
   searchTerm,
   totalMovieCount,
-
   onSearch,
   setSearchTerm
 }) => {
@@ -43,7 +42,7 @@ export const MovieList: React.FC<MovieData> = ({
   };
 
   const setSearchTermHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm?.(e.target.value);
+    setSearchTerm?.(e);
   };
 
   return (
@@ -53,7 +52,6 @@ export const MovieList: React.FC<MovieData> = ({
         searchTerm={searchTerm}
         searchLabel="Search Movies"
         setSearchTerm={setSearchTermHandler}
-        resultsCount={movies?.length}
         useSearchButton={false}
         totalResultsCount={totalMovieCount}
         className={{

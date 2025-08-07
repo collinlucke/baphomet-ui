@@ -87,7 +87,6 @@ export const baphVibrantColors = {
 
 // Typography system - only app-specific styles
 export const baphTypography = {
-
   // Predefined text styles
   styles: {
     // Headings
@@ -157,7 +156,7 @@ export const baphTypography = {
       letterSpacing: 'normal'
     },
 
-      // UI Elements - only custom styles not provided by phantomartist
+    // UI Elements - only custom styles not provided by phantomartist
 
     // Special styles
     hero: {
@@ -238,6 +237,11 @@ export const baphSemanticColors = {
       text: baphColors.lightText,
       hover: 'rgba(255, 255, 255, 0.1)',
       active: 'rgba(255, 255, 255, 0.2)'
+    },
+    outline: {
+      background: 'transparent',
+      text: baphColors.secondary,
+      border: `1px solid ${baphColors.secondary}`
     }
   }
 };
@@ -247,44 +251,48 @@ export const baphTheme = {
   variations: baphColorVariations,
   semantic: baphSemanticColors,
   typography: baphTypography,
-  button: ({
-    kind
-  }: {
-    kind?: string;
-  }) => {
+  button: ({ kind }: { kind?: string }) => {
     const btn = baphSemanticColors.button;
     // Only return color-related styles, let baseTheme handle the rest
-    return kind ? {
-      primary: {
-        backgroundColor: btn.primary.background,
-        color: btn.primary.text,
-        '&:hover': { backgroundColor: btn.primary.hover },
-        '&:active': { backgroundColor: btn.primary.active }
-      },
-      secondary: {
-        backgroundColor: btn.secondary.background,
-        color: btn.secondary.text,
-        '&:hover': { backgroundColor: btn.secondary.hover },
-        '&:active': { backgroundColor: btn.secondary.active }
-      },
-      accent: {
-        backgroundColor: btn.accent.background,
-        color: btn.accent.text,
-        '&:hover': { backgroundColor: btn.accent.hover },
-        '&:active': { backgroundColor: btn.accent.active }
-      },
-      ghost: {
-        backgroundColor: btn.ghost.background,
-        color: btn.ghost.text,
-        '&:hover': { backgroundColor: btn.ghost.hover },
-        '&:active': { backgroundColor: btn.ghost.active }
-      },
-      ghostOnDark: {
-        backgroundColor: btn.ghostOnDark.background,
-        color: btn.ghostOnDark.text,
-        '&:hover': { backgroundColor: btn.ghostOnDark.hover },
-        '&:active': { backgroundColor: btn.ghostOnDark.active }
-      }
-    }[kind] : {};
+    return kind
+      ? {
+          primary: {
+            backgroundColor: btn.primary.background,
+            color: btn.primary.text,
+            '&:hover': { backgroundColor: btn.primary.hover },
+            '&:active': { backgroundColor: btn.primary.active }
+          },
+          secondary: {
+            backgroundColor: btn.secondary.background,
+            color: btn.secondary.text,
+            '&:hover': { backgroundColor: btn.secondary.hover },
+            '&:active': { backgroundColor: btn.secondary.active }
+          },
+          accent: {
+            backgroundColor: btn.accent.background,
+            color: btn.accent.text,
+            '&:hover': { backgroundColor: btn.accent.hover },
+            '&:active': { backgroundColor: btn.accent.active }
+          },
+          ghost: {
+            backgroundColor: btn.ghost.background,
+            color: btn.ghost.text,
+            '&:hover': { backgroundColor: btn.ghost.hover },
+            '&:active': { backgroundColor: btn.ghost.active }
+          },
+          ghostOnDark: {
+            backgroundColor: btn.ghostOnDark.background,
+            color: btn.ghostOnDark.text,
+            '&:hover': { backgroundColor: btn.ghostOnDark.hover },
+            '&:active': { backgroundColor: btn.ghostOnDark.active }
+          },
+          outline: {
+            backgroundColor: 'transparent',
+            color: btn.secondary.text,
+            border: `1px solid white`
+            // border: `1px solid ${btn.secondary.text}`
+          }
+        }[kind]
+      : {};
   }
 };

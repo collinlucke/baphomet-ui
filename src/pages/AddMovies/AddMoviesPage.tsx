@@ -80,8 +80,7 @@ export const AddMoviesPage: React.FC = () => {
   };
 
   const [addMovieMutation, { loading: isLoading }] = useMutation(ADD_MOVIE, {
-    onCompleted: data => {
-      console.log('Movie added successfully:', data);
+    onCompleted: () => {
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 3000); // Hide success message after 3 seconds
     },
@@ -92,9 +91,8 @@ export const AddMoviesPage: React.FC = () => {
 
   const [checkMovieByTmdbId] = useLazyQuery(CHECK_MOVIE_BY_TMDB_ID, {
     onCompleted: data => {
+      console.log(data);
       const { searchResults } = data?.movieResults || {};
-      console.log('Duplicate check result:', data);
-      console.log('Duplicate check result:', searchResults);
       // If movies are found with this TMDB ID, prevent adding
       if (searchResults && searchResults.length > 0) {
         setDuplicateError(
@@ -378,7 +376,7 @@ export const AddMoviesPage: React.FC = () => {
         >
           {isLoading ? 'Adding...' : 'Add Movie'}
         </Button>
-        <Button size="medium" kind="ghost" onClick={handleClear}>
+        <Button size="medium" kind="outline" onClick={handleClear}>
           Clear
         </Button>
       </div>
