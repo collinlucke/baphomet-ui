@@ -1,7 +1,7 @@
 import { makeVar } from '@apollo/client';
 import {
   CustomErrorTypes,
-  GetAllMoviesQueryVarsObject
+  GetMoviesByTitleQueryVarsObject
 } from './types/CustomTypes.types';
 
 export const isAuthenticatedVar = makeVar(false);
@@ -12,7 +12,7 @@ export const scrollLimitVar = makeVar(20);
 export const searchTermVar = makeVar<string | undefined>(undefined);
 export const cursorVar = makeVar('');
 export const endOfResultsVar = makeVar(false);
-export const getAllMoviesQueryVar = makeVar<
-  ((variables: GetAllMoviesQueryVarsObject) => void) | null
+export const getMoviesByTitleQueryVar = makeVar<
+  ((variables: GetMoviesByTitleQueryVarsObject) => void) | null
 >(null);
 export const totalMovieCountVar = makeVar('');
