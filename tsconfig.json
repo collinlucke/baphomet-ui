@@ -28,6 +28,6 @@
     "sourceMap": true,
     "outDir": "dist"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../phantomartist/lib/styling/hexToRgba.ts"],
   "exclude": ["node_modules", "**/unused-*"]
 }

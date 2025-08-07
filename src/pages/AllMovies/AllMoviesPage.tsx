@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MovieList } from '../../components/MovieList/MovieList';
+import { GET_MOVIES_BY_TITLE } from '../../api/queries';
 import { GET_MOVIES_BY_TITLE } from '../../api/queries';
 import {
   baphSemanticColors,
@@ -24,7 +26,22 @@ type Movie = {
   tmdbId?: number;
 };
 
+type Movie = {
+  id: string;
+  title: string;
+  releaseDate?: string;
+  rated?: string;
+  posterUrl?: string;
+  winningPercentage: number;
+  overview?: string;
+  genres?: string[];
+  revenue?: number;
+  backdropUrl?: string;
+  tmdbId?: number;
+};
+
 export const AllMoviesPage: React.FC = () => {
+  const [allMovies, setAllMovies] = useState<Movie[]>([]);
   const [allMovies, setAllMovies] = useState<Movie[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [cursor, setCursor] = useState('');
@@ -66,6 +83,7 @@ export const AllMoviesPage: React.FC = () => {
     onError: err => {
       console.error('Error fetching movies:', err);
       setIsLoadingMore(false);
+      setIsLoadingMore(false);
     }
   });
 
@@ -83,7 +101,28 @@ export const AllMoviesPage: React.FC = () => {
   };
 
   // Set it off
+  const fetchMoreMovies = async () => {
+    if (isLoadingMore || !hasMore) return;
+    setIsLoadingMore(true);
+    // Use GraphQL query for loading more movies
+    fetchMovies({
+      variables: {
+        title: searchTerm,
+        limit: 28,
+        cursor
+      }
+    });
+  };
+
+  // Set it off
   useEffect(() => {
+    fetchMovies({
+      variables: {
+        title: '',
+        limit: 28,
+        cursor: ''
+      }
+    });
     fetchMovies({
       variables: {
         title: '',
@@ -131,6 +170,7 @@ export const AllMoviesPage: React.FC = () => {
 
   return (
     <AboveTheFold pageSlug="all-movies" onScroll={fetchMoreMovies}>
+    <AboveTheFold pageSlug="all-movies" onScroll={fetchMoreMovies}>
       <div css={styles.listContainer}>
         <div css={styles.welcomeTitle}>All Movies</div>
         <div>Here's a big ol' list of movies.</div>
@@ -143,6 +183,20 @@ export const AllMoviesPage: React.FC = () => {
         // onSearch={onSearchHandler}
         // openDeleteModal={() => {}}
       />
+
+      {/* Loading indicator for lazy loading */}
+      {isLoadingMore && (
+        <div css={styles.loadingContainer}>
+          <div css={styles.loadingText}>Loading more movies...</div>
+        </div>
+      )}
+
+      {/* End of results indicator */}
+      {!hasMore && allMovies.length > 0 && (
+        <div css={styles.endContainer}>
+          <div css={styles.endText}>You've reached the end! 🎬</div>
+        </div>
+      )}
 
       {/* Loading indicator for lazy loading */}
       {isLoadingMore && (
@@ -176,6 +230,39 @@ const styles: { [key: string]: CSSObject } = {
     ...baphTypography.styles.h1,
     color: baphColors.lightText,
     display: 'inline'
+  },
+  loadingContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '2rem',
+    marginTop: '2rem'
+  },
+  loadingText: {
+    color: baphColors.lightText,
+    fontSize: '1.1rem',
+    fontWeight: 'bold',
+    opacity: 0.8,
+    '@keyframes pulse': {
+      '0%': { opacity: 0.4 },
+      '50%': { opacity: 1 },
+      '100%': { opacity: 0.4 }
+    },
+    animation: 'pulse 2s infinite'
+  },
+  endContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '3rem 2rem',
+    marginTop: '2rem'
+  },
+  endText: {
+    color: baphColors.lightText,
+    fontSize: '1.2rem',
+    fontWeight: 'bold',
+    opacity: 0.6,
+    textAlign: 'center' as const
   },
   loadingContainer: {
     display: 'flex',
