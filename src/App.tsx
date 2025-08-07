@@ -8,11 +8,10 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import {
   errorVar,
   showHeadingVar,
-  scrollLimitVar,
   cursorVar,
   searchTermVar,
   endOfResultsVar,
-  getAllMoviesQueryVar,
+  getMoviesByTitleQueryVar,
   isAuthenticatedVar,
   showUnauthorizedModalVar
 } from './reactiveVars';
@@ -25,7 +24,6 @@ import { LoginForm } from './components/LoginForm';
 export const App = () => {
   const showHeading = useReactiveVar(showHeadingVar);
   const error = useReactiveVar(errorVar);
-  const limit = useReactiveVar(scrollLimitVar);
   const cursor = useReactiveVar(cursorVar);
   const searchTerm = useReactiveVar(searchTermVar);
   const endOfResults = useReactiveVar(endOfResultsVar);
@@ -64,26 +62,6 @@ export const App = () => {
     }
   }, [checkAuth]);
 
-  const onScrollHandler = (e: UIEvent<HTMLDivElement>) => {
-    if (endOfResults) return;
-    const { scrollTop, scrollHeight, clientHeight } =
-      e.target as HTMLDivElement;
-    if (scrollTop + clientHeight >= scrollHeight - 300) {
-      const queryFunction = getAllMoviesQueryVar();
-      if (!queryFunction) return;
-
-      queryFunction({
-        variables: {
-          limit,
-          searchTerm,
-          cursor,
-          loadAction: 'scroll',
-          endOfResults
-        }
-      });
-    }
-  };
-
   const backgroundImage = '/back-to-the-future-backdrop.jpg';
 
   // Modal handlers
@@ -116,81 +94,76 @@ export const App = () => {
     // <ThemeProvider theme={baphTheme}>
     <>
       <Globals />
-      <div
-        className="baph-scroll-wrapper"
-        onScroll={onScrollHandler}
-        css={baphStyles().scrollDiv}
+
+      {showHeading && (
+        <Heading
+          setShowLoginModal={setShowLoginModal}
+          setShowSignupModal={setShowSignupModal}
+        />
+      )}
+      <Main
+        isDark={true}
+        className={{ main: baphStyles(backgroundImage).main }}
       >
-        {showHeading && (
-          <Heading
-            setShowLoginModal={setShowLoginModal}
-            setShowSignupModal={setShowSignupModal}
-          />
-        )}
-        <Main
-          isDark={true}
-          className={{ main: baphStyles(backgroundImage).main }}
+        <Outlet />
+      </Main>
+      <Footer />
+      {error && <ErrorBoundary />}
+
+      {/* Authentication Modals */}
+      <Modal isOpen={showLoginModal} onClose={handleLoginModalClose}>
+        <LoginForm onSuccess={handleLoginSuccess} />
+      </Modal>
+
+      <Modal isOpen={showSignupModal} onClose={handleSignupModalClose}>
+        <SignupForm onSuccess={handleSignupSuccess} />
+      </Modal>
+
+      {/* Unauthorized Action Modal */}
+      <Modal
+        isOpen={showUnauthorizedModal}
+        onClose={handleUnauthorizedModalClose}
+      >
+        <div
+          css={{
+            textAlign: 'center',
+            padding: '20px'
+          }}
         >
-          <Outlet />
-        </Main>
-        <Footer />
-        {error && <ErrorBoundary />}
-
-        {/* Authentication Modals */}
-        <Modal isOpen={showLoginModal} onClose={handleLoginModalClose}>
-          <LoginForm onSuccess={handleLoginSuccess} />
-        </Modal>
-
-        <Modal isOpen={showSignupModal} onClose={handleSignupModalClose}>
-          <SignupForm onSuccess={handleSignupSuccess} />
-        </Modal>
-
-        {/* Unauthorized Action Modal */}
-        <Modal
-          isOpen={showUnauthorizedModal}
-          onClose={handleUnauthorizedModalClose}
-        >
-          <div
+          <h3
             css={{
-              textAlign: 'center',
-              padding: '20px'
+              color: '#f39c12',
+              marginBottom: '16px',
+              fontSize: '1.2em'
             }}
           >
-            <h3
-              css={{
-                color: '#f39c12',
-                marginBottom: '16px',
-                fontSize: '1.2em'
-              }}
-            >
-              Action Required
-            </h3>
-            <p
-              css={{
-                color: '#e74c3c',
-                marginBottom: '24px',
-                fontSize: '1em'
-              }}
-            >
-              Could not complete your action because you are not logged in.
-            </p>
-            <div
-              css={{
-                display: 'flex',
-                gap: '12px',
-                justifyContent: 'center'
-              }}
-            >
-              <Button onClick={handleUnauthorizedModalLogin} kind="primary">
-                Log In
-              </Button>
-              <Button onClick={handleUnauthorizedModalClose} kind="secondary">
-                Cancel
-              </Button>
-            </div>
+            Action Required
+          </h3>
+          <p
+            css={{
+              color: '#e74c3c',
+              marginBottom: '24px',
+              fontSize: '1em'
+            }}
+          >
+            Could not complete your action because you are not logged in.
+          </p>
+          <div
+            css={{
+              display: 'flex',
+              gap: '12px',
+              justifyContent: 'center'
+            }}
+          >
+            <Button onClick={handleUnauthorizedModalLogin} kind="primary">
+              Log In
+            </Button>
+            <Button onClick={handleUnauthorizedModalClose} kind="secondary">
+              Cancel
+            </Button>
           </div>
-        </Modal>
-      </div>
+        </div>
+      </Modal>
     </>
     // </ThemeProvider>
   );
@@ -198,11 +171,6 @@ export const App = () => {
 
 const baphStyles = (backgroundImage?: string) =>
   ({
-    scrollDiv: {
-      overflowX: 'hidden',
-      height: '100vh',
-      scrollbarWidth: 'thin'
-    },
     main: {
       position: 'relative',
       '&::before': {
