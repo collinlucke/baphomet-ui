@@ -241,15 +241,17 @@ export const Heading: React.FC<HeadingProps> = ({
 
                   {isAuthenticated && user.role === 'admin' && (
                     <div css={baphStyles.mobileNavSection}>
-                      <Button
-                        size="medium"
-                        kind="secondary"
-                        onClick={handleAddMovies}
-                        icon={<PlusSignIcon size={20} strokeWidth={'3px'} />}
-                        className={{ button: baphStyles.mobileNavButton }}
-                      >
-                        Add new movie
-                      </Button>
+                      <Link to="/add-movies">
+                        <Button
+                          size="medium"
+                          kind="secondary"
+                          onClick={handleAddMovies}
+                          icon={<PlusSignIcon size={20} strokeWidth={'3px'} />}
+                          className={{ button: baphStyles.mobileNavButton }}
+                        >
+                          Add new movie
+                        </Button>
+                      </Link>
                       <Button
                         kind="primary"
                         onClick={logOut}

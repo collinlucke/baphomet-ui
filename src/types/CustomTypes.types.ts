@@ -32,12 +32,11 @@ export type CustomErrorTypes = Error & {
   stack?: string;
 };
 
-export type GetAllMoviesQueryVarsObject = {
+export type GetMoviesByTitleQueryVarsObject = {
   variables: {
     limit: number;
     searchTerm: string | number | undefined;
     cursor: string;
-    loadAction: 'scroll';
     endOfResults: boolean;
   };
 };

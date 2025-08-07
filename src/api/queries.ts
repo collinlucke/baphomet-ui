@@ -4,14 +4,14 @@ export const GET_ALL_MOVIES = gql`
   query getAllMovies(
     $limit: Int
     $searchTerm: String
+    $tmdbId: String
     $cursor: String
-    $loadAction: String
   ) {
     movieResults: getAllMovies(
       limit: $limit
       searchTerm: $searchTerm
+      tmdbId: $tmdbId
       cursor: $cursor
-      loadAction: $loadAction
     ) {
       searchResults {
         id
@@ -34,8 +34,53 @@ export const GET_ALL_MOVIES = gql`
       }
       newTotalMovieCount
       newCursor
-      loadAction
       endOfResults
+    }
+  }
+`;
+
+export const GET_MOVIES_BY_TITLE = gql`
+  query getMoviesByTitle($title: String, $limit: Int, $cursor: String) {
+    movieResults: getMoviesByTitle(
+      title: $title
+      limit: $limit
+      cursor: $cursor
+    ) {
+      searchResults {
+        id
+        title
+        rated
+        releaseDate
+        overview
+        genres
+        revenue
+        posterUrl
+        backdropUrl
+        tmdbId
+        addedBy
+        lastUpdated
+        createdAt
+        totalWins
+        totalLosses
+        winningPercentage
+        totalComparisons
+      }
+      newTotalMovieCount
+      newCursor
+      endOfResults
+    }
+  }
+`;
+
+export const GET_MOVIE_BY_TMDB_ID = gql`
+  query getMovieByTmdbId($tmdbId: String!) {
+    movieResults: getMovieByTmdbId(tmdbId: $tmdbId) {
+      searchResults {
+        id
+        title
+        posterUrl
+        winningPercentage
+      }
     }
   }
 `;
@@ -65,7 +110,7 @@ export const CHECK_AUTH = gql`
 
 export const CHECK_MOVIE_BY_TMDB_ID = gql`
   query checkMovieByTmdbId($tmdbId: String!) {
-    movieResults: getAllMovies(searchTerm: $tmdbId) {
+    movieResults: getAllMovies(tmdbId: $tmdbId) {
       searchResults {
         id
         title
