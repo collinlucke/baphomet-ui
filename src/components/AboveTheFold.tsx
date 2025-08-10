@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { Block, InnerWidth } from '@collinlucke/phantomartist';
 import { CSSObject } from '@emotion/react';
 
@@ -6,38 +5,16 @@ type AboveTheFoldProps = {
   children: React.ReactNode;
   innerWidthSize?: 'full' | 'large' | 'medium' | 'small';
   pageSlug?: string;
-  fetchMoreResults?: () => void;
-  onScroll?: () => void;
 };
 
 export const AboveTheFold: React.FC<AboveTheFoldProps> = ({
   children,
   innerWidthSize,
-  pageSlug = 'above-the-fold',
-  onScroll
+  pageSlug = 'above-the-fold'
 }: AboveTheFoldProps) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const onScrollHandler = () => {
-    const el = scrollRef.current;
-    if (!el) return;
-
-    const nearBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 150;
-
-    if (nearBottom) {
-      onScroll?.();
-    }
-  };
-
   return (
     <Block className={{ block: baphStyles.container }} dataTestId={pageSlug}>
-      <section
-        // css={baphStyles.aboveTheFoldSection}
-        onScroll={onScrollHandler}
-        ref={scrollRef}
-        css={{ ...baphStyles.scrollWrapper, ...baphStyles.aboveTheFoldSection }}
-        className="new-baph-scroll-wrapper"
-      >
+      <section css={baphStyles.aboveTheFoldSection} className="">
         <InnerWidth
           size={innerWidthSize}
           className={{ innerWidth: baphStyles.aboveTheFoldContainer }}
@@ -73,16 +50,5 @@ const baphStyles: { [key: string]: CSSObject } = {
     flexDirection: 'column' as const,
     gap: '35px',
     marginTop: '1rem'
-  },
-  innerWidth: {},
-  scrollWrapper: {
-    display: 'flex',
-    flexDirection: 'column' as const,
-    width: '100%',
-    marginTop: '35px',
-    overflowY: 'scroll',
-    scrollbarWidth: 'none',
-    height: '100vh',
-    overScrollBehavior: 'contain'
   }
 };

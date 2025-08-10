@@ -38,7 +38,7 @@ export const MovieListItem: React.FC<MovieListItemProps> = ({ movie }) => {
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
       >
-        <img src={movie.posterUrl} alt={movie.title} css={poster} />
+        <img src={movie?.posterUrl} alt={movie.title} css={poster} />
         <div css={scoreWrapper}>
           <span css={majorStyle}>{major || '00'}.</span>
           <span css={minorStyle}>{minor || '00'}</span>

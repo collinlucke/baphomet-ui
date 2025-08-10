@@ -95,27 +95,6 @@ export const AllMoviesPage: React.FC = () => {
     });
   }, []);
 
-  // const onSearchHandler = {
-  //   searchTerm
-  // }:  onScroll
-  // {
-  //   searchTerm: string;
-  // onScroll: (e: UIEvent<HTMLDivElement>) => void;
-  // }) => {
-  //   console.log('Search term:', searchTerm);
-  //   // Reset cursor and set new search flag
-  //   setCursor('');
-  //   setHasMore(true);
-  //   isNewSearchRef.current = true;
-  //   fetchMovies({
-  //     variables: {
-  //       title: searchTerm,
-  //       limit: 28,
-  //       cursor: ''
-  //     }
-  //   });
-  // };
-
   const setSearchTermHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const term = e.target.value;
     setSearchTerm(term);
@@ -132,7 +111,7 @@ export const AllMoviesPage: React.FC = () => {
   };
 
   return (
-    <AboveTheFold pageSlug="all-movies" onScroll={fetchMoreMovies}>
+    <AboveTheFold pageSlug="all-movies">
       <div css={styles.listContainer}>
         <div css={styles.welcomeTitle}>All Movies</div>
         <div>Here's a big ol' list of movies.</div>
@@ -142,37 +121,11 @@ export const AllMoviesPage: React.FC = () => {
         totalMovieCount={totalMovieCount.toString()}
         setSearchTerm={setSearchTermHandler}
         searchTerm={searchTerm}
-        // onSearch={onSearchHandler}
+        onScroll={fetchMoreMovies}
+        isLoadingMore={isLoadingMore}
+        hasMore={hasMore}
         // openDeleteModal={() => {}}
       />
-
-      {/* Loading indicator for lazy loading */}
-      {isLoadingMore && (
-        <div css={styles.loadingContainer}>
-          <div css={styles.loadingText}>Loading more movies...</div>
-        </div>
-      )}
-
-      {/* End of results indicator */}
-      {!hasMore && allMovies.length > 0 && (
-        <div css={styles.endContainer}>
-          <div css={styles.endText}>You've reached the end! 🎬</div>
-        </div>
-      )}
-
-      {/* Loading indicator for lazy loading */}
-      {isLoadingMore && (
-        <div css={styles.loadingContainer}>
-          <div css={styles.loadingText}>Loading more movies...</div>
-        </div>
-      )}
-
-      {/* End of results indicator */}
-      {!hasMore && allMovies.length > 0 && (
-        <div css={styles.endContainer}>
-          <div css={styles.endText}>You've reached the end! 🎬</div>
-        </div>
-      )}
     </AboveTheFold>
   );
 };
@@ -192,38 +145,5 @@ const styles: { [key: string]: CSSObject } = {
     ...baphTypography.styles.h1,
     color: baphColors.lightText,
     display: 'inline'
-  },
-  loadingContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: '2rem',
-    marginTop: '2rem'
-  },
-  loadingText: {
-    color: baphColors.lightText,
-    fontSize: '1.1rem',
-    fontWeight: 'bold',
-    opacity: 0.8,
-    '@keyframes pulse': {
-      '0%': { opacity: 0.4 },
-      '50%': { opacity: 1 },
-      '100%': { opacity: 0.4 }
-    },
-    animation: 'pulse 2s infinite'
-  },
-  endContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: '3rem 2rem',
-    marginTop: '2rem'
-  },
-  endText: {
-    color: baphColors.lightText,
-    fontSize: '1.2rem',
-    fontWeight: 'bold',
-    opacity: 0.6,
-    textAlign: 'center' as const
   }
 };

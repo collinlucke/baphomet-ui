@@ -70,7 +70,7 @@ export const Heading: React.FC<HeadingProps> = ({
           >
             <h1 css={baphStyles.title}>Baphomet</h1>
             <img
-              src="/baphy-favicon.png"
+              src="/baphy-favicon-tiny.png"
               alt="Baphomet logo"
               css={baphStyles.favicon}
               role="presentation"

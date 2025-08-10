@@ -1,7 +1,17 @@
 import { CSSObject } from '@emotion/react';
 import { AboveTheFold } from '../../components/AboveTheFold';
+import { MovieList } from '../../components/MovieList/MovieList';
+import { GET_MOVIES_BY_TITLE } from '../../api/queries';
+import { useQuery } from '@apollo/client';
+import { Button } from '@collinlucke/phantomartist';
+import { Link } from 'react-router-dom';
 
 export const HomePage: React.FC = () => {
+  const { data } = useQuery(GET_MOVIES_BY_TITLE, {
+    variables: { title: '', limit: 21 }, // At full width, this will show 3 full rows of movies
+    fetchPolicy: 'cache-and-network' // Use cache first, then network
+  });
+
   return (
     <AboveTheFold>
       <div>
@@ -20,12 +30,58 @@ export const HomePage: React.FC = () => {
         and log out.
       </div>
       <h2>Best Movies Ever!... So far.</h2>
+      <MovieList
+        movies={data?.movieResults?.searchResults}
+        showSearch={false}
+        className={{
+          movieListWrapper: baphStyles.movieListWrapper,
+          listWrapper: baphStyles.listWrapper
+        }}
+      />
+      <div>
+        <h2>Well... What now?</h2>
+        <p>
+          If you want to see all the movies, click the button below. If you want
+          to go to the arena and start ranking movies, click that button.
+        </p>
+        <div>
+          <Link to="/all-movies">
+            <Button
+              kind="primary"
+              size="large"
+              className={{ button: baphStyles.button }}
+            >
+              View All Movies
+            </Button>
+          </Link>
+        </div>
+        <div></div>
+        <Link to="/arena">
+          <Button
+            kind="secondary"
+            size="large"
+            className={{ button: baphStyles.button }}
+          >
+            Go to Arena
+          </Button>
+        </Link>
+      </div>
     </AboveTheFold>
   );
 };
 
 const baphStyles: { [key: string]: CSSObject } = {
   welcomeTitle: {
+    display: 'inline'
+  },
+  movieListWrapper: {
+    marginTop: '0'
+  },
+  listWrapper: {
+    marginTop: '0'
+  },
+  button: {
+    marginTop: '20px',
     display: 'inline'
   }
 };

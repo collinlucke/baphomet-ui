@@ -131,10 +131,10 @@ export const AddMoviesPage: React.FC = () => {
         revenue: data.revenue ? `$${data.revenue.toLocaleString()} USD` : '',
         overview: data.overview || '',
         posterUrl: data.poster_path
-          ? `https://image.tmdb.org/t/p/original${data.poster_path}`
+          ? `https://image.tmdb.org/t/p/w300${data.poster_path}`
           : '',
         backdropUrl: data.backdrop_path
-          ? `https://image.tmdb.org/t/p/original${data.backdrop_path}`
+          ? `https://image.tmdb.org/t/p/w1280${data.backdrop_path}`
           : '',
         tmdbId: idToFetch
       });
