@@ -178,11 +178,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
         {isLoading ? 'Signing In...' : 'Sign In'}
       </Button>
 
-      <div css={baphStyles.footer}>
+      {/* <div css={baphStyles.footer}>
         <a href="#" css={baphStyles.forgotLink}>
           Forgot your password?
         </a>
-      </div>
+      </div> */}
     </form>
   );
 };

@@ -135,3 +135,21 @@ export const DELETE_MOVIE = gql`
     deleteMovie(id: $id)
   }
 `;
+
+export const SUBMIT_VOTE = gql`
+  mutation submitVote($movie1Id: ID!, $movie2Id: ID!, $winnerId: ID!) {
+    submitVote(movie1Id: $movie1Id, movie2Id: $movie2Id, winnerId: $winnerId) {
+      success
+      message
+      comparison {
+        id
+        movie1Id
+        movie2Id
+        movie1Wins
+        movie2Wins
+        totalVotes
+        updatedAt
+      }
+    }
+  }
+`;

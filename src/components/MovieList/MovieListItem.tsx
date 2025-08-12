@@ -75,16 +75,16 @@ const baphStyles = (posterUrl: string): { [key: string]: CSSObject } => ({
   },
   major: {
     color: baseColors.primary[500],
-    fontSize: '3rem',
+    fontSize: '2rem',
     fontWeight: 'bold',
-    WebkitTextStroke: `5px ${baseVibrantColors.primary[500]}`,
+    WebkitTextStroke: `3px ${baseVibrantColors.primary[500]}`,
     paintOrder: 'stroke fill'
   },
   minor: {
     color: baseColors.primary[500],
-    fontSize: '2rem',
+    fontSize: '1rem',
     fontWeight: 'bold',
-    WebkitTextStroke: `5px ${baseVibrantColors.primary[500]}`,
+    WebkitTextStroke: `3px ${baseVibrantColors.primary[500]}`,
     paintOrder: 'stroke fill',
     marginLeft: '2px'
   },
@@ -99,7 +99,7 @@ const baphStyles = (posterUrl: string): { [key: string]: CSSObject } => ({
     boxShadow: `0 2px 8px ${baseColors.primary[500]}`,
     whiteSpace: 'nowrap',
     position: 'absolute',
-    right: '-50px',
+    left: '100%',
     zIndex: 10,
     '&:after': {
       content: '""',

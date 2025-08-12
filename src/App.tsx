@@ -8,12 +8,11 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import {
   errorVar,
   showHeadingVar,
-  // cursorVar,
-  // searchTermVar,
-  // endOfResultsVar,
-  // getMoviesByTitleQueryVar,
   isAuthenticatedVar,
-  showUnauthorizedModalVar
+  showUnauthorizedModalVar,
+  isMobileVar,
+  isLandscapeVar,
+  isMobileAndLandscapeVar
 } from './reactiveVars';
 import { useReactiveVar, useLazyQuery } from '@apollo/client';
 import { CSSObject } from '@emotion/react';
@@ -24,12 +23,40 @@ import { LoginForm } from './components/LoginForm';
 export const App = () => {
   const showHeading = useReactiveVar(showHeadingVar);
   const error = useReactiveVar(errorVar);
-  // const cursor = useReactiveVar(cursorVar);
-  // const searchTerm = useReactiveVar(searchTermVar);
-  // const endOfResults = useReactiveVar(endOfResultsVar);
   const showUnauthorizedModal = useReactiveVar(showUnauthorizedModalVar);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
+
+  // Function to check and update mobile/landscape state
+  const updateDeviceState = () => {
+    const isMobile =
+      window.innerWidth <= 768 || navigator.userAgent.includes('Mobile');
+    const isLandscape = window.innerHeight < window.innerWidth;
+    const isMobileAndLandscape = isMobile && isLandscape;
+
+    isMobileVar(isMobile);
+    isLandscapeVar(isLandscape);
+    isMobileAndLandscapeVar(isMobileAndLandscape);
+  };
+
+  // Check device state on mount and orientation change
+  useEffect(() => {
+    updateDeviceState();
+
+    const handleResize = () => updateDeviceState();
+    const handleOrientationChange = () => {
+      // Small delay to ensure orientation change has completed
+      setTimeout(updateDeviceState, 100);
+    };
+
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleOrientationChange);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleOrientationChange);
+    };
+  }, []);
 
   const [checkAuth] = useLazyQuery(CHECK_AUTH, {
     onCompleted: data => {
@@ -148,6 +175,7 @@ const baphStyles = (backgroundImage?: string) =>
   ({
     main: {
       position: 'relative',
+      zIndex: 0,
       '&::before': {
         content: '""',
         position: 'absolute',
@@ -162,7 +190,7 @@ const baphStyles = (backgroundImage?: string) =>
         backgroundAttachment: 'fixed',
         filter: 'grayscale(100%)',
         opacity: 0.03,
-        zIndex: 1
+        zIndex: -1
       }
     },
     unauthorizedModalContent: {
