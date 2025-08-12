@@ -1,13 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { MovieList } from '../../components/MovieList/MovieList';
 import { GET_MOVIES_BY_TITLE } from '../../api/queries';
-import { CSSObject } from '@emotion/react';
-import {
-  baphSemanticColors,
-  baphTypography,
-  baphColors
-} from '../../styling/baphTheme';
-import { AboveTheFold } from '../../components/AboveTheFold';
+import { BodySection } from '../../components/BodySection';
+import { PageHeading } from '../../components/PageHeading';
 import { useLazyQuery } from '@apollo/client';
 
 type Movie = {
@@ -111,11 +106,11 @@ export const AllMoviesPage: React.FC = () => {
   };
 
   return (
-    <AboveTheFold pageSlug="all-movies">
-      <div css={styles.listContainer}>
-        <div css={styles.welcomeTitle}>All Movies</div>
-        <div>Here's a big ol' list of movies.</div>
-      </div>
+    <BodySection pageSlug="all-movies">
+      <PageHeading
+        title="All Movies"
+        subtitle="Here's a big ol' list of movies."
+      />
       <MovieList
         movies={allMovies}
         totalMovieCount={totalMovieCount.toString()}
@@ -126,24 +121,6 @@ export const AllMoviesPage: React.FC = () => {
         hasMore={hasMore}
         // openDeleteModal={() => {}}
       />
-    </AboveTheFold>
+    </BodySection>
   );
-};
-const styles: { [key: string]: CSSObject } = {
-  container: {
-    flexDirection: 'column' as const,
-    width: '100%',
-    backgroundColor: baphSemanticColors.background.primary
-  },
-  listContainer: {
-    maxWidth: '1720px',
-    width: '100%',
-    color: baphColors.lightText,
-    marginTop: '1rem'
-  },
-  welcomeTitle: {
-    ...baphTypography.styles.h1,
-    color: baphColors.lightText,
-    display: 'inline'
-  }
 };

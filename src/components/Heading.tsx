@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Button,
   ButtonGroup,
@@ -5,11 +6,10 @@ import {
   mediaQueries
 } from '@collinlucke/phantomartist';
 import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { PlusSignIcon, Menu01Icon, Cancel01Icon } from 'hugeicons-react';
-import { isAuthenticatedVar } from '../reactiveVars';
+import { isAuthenticatedVar, isMobileAndLandscapeVar } from '../reactiveVars';
 import { useReactiveVar } from '@apollo/client';
-import { useState } from 'react';
 import { CSSObject } from '@emotion/react';
 
 type HeadingProps = {
@@ -22,8 +22,12 @@ export const Heading: React.FC<HeadingProps> = ({
   setShowSignupModal
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  console.log(location);
   const isAuthenticated = useReactiveVar(isAuthenticatedVar);
+  const isMobileAndLandscape = useReactiveVar(isMobileAndLandscapeVar);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isFloatingMenuOpen, setIsFloatingMenuOpen] = useState(false);
   const user = localStorage.getItem('baphomet-user')
     ? JSON.parse(localStorage.getItem('baphomet-user') || '{}')
     : null;
@@ -58,6 +62,143 @@ export const Heading: React.FC<HeadingProps> = ({
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  const toggleFloatingMenu = () => {
+    setIsFloatingMenuOpen(!isFloatingMenuOpen);
+  };
+  // If mobile landscape, render floating hamburger menu instead
+  if (isMobileAndLandscape && location.pathname === '/arena') {
+    return (
+      <>
+        {/* Floating Hamburger Button */}
+        <div css={baphStyles.floatingMenuButton}>
+          <Button
+            kind="primary"
+            size="small"
+            iconOnly
+            icon={
+              isFloatingMenuOpen ? (
+                <Cancel01Icon size={20} />
+              ) : (
+                <Menu01Icon size={20} />
+              )
+            }
+            onClick={toggleFloatingMenu}
+            ariaLabel={isFloatingMenuOpen ? 'Close menu' : 'Open menu'}
+          />
+        </div>
+
+        {/* Floating Menu Overlay */}
+        {isFloatingMenuOpen && (
+          <div
+            css={baphStyles.floatingMenuOverlay}
+            className="floating-menu-overlay"
+            onClick={() => setIsFloatingMenuOpen(false)}
+          >
+            <div
+              css={baphStyles.floatingMenu}
+              onClick={e => e.stopPropagation()}
+            >
+              {/* Logo/Title */}
+              <div css={baphStyles.floatingMenuHeader}>
+                <Link
+                  to={'/'}
+                  css={baphStyles.floatingLogoLink}
+                  onClick={() => setIsFloatingMenuOpen(false)}
+                >
+                  <h2 css={baphStyles.floatingTitle}>Baphomet</h2>
+                  <img
+                    src="/baphy-favicon.png"
+                    alt="Baphomet logo"
+                    css={baphStyles.floatingFavicon}
+                  />
+                </Link>
+              </div>
+
+              {/* Navigation */}
+              <nav css={baphStyles.floatingNav}>
+                <div css={baphStyles.floatingNavSection}>
+                  <Button
+                    size="medium"
+                    kind="ghostOnDark"
+                    onClick={() => handleNavigation('/arena')}
+                    className={{ button: baphStyles.floatingNavButton }}
+                  >
+                    Arena
+                  </Button>
+                  <Button
+                    size="medium"
+                    kind="ghostOnDark"
+                    onClick={() => handleNavigation('/leaderboards')}
+                    disabled
+                    className={{ button: baphStyles.floatingNavButton }}
+                  >
+                    Leader Boards
+                  </Button>
+                  <Button
+                    size="medium"
+                    kind="ghostOnDark"
+                    onClick={() => handleNavigation('/all-movies')}
+                    className={{ button: baphStyles.floatingNavButton }}
+                  >
+                    All Movies
+                  </Button>
+                </div>
+
+                {isAuthenticated && user.role === 'admin' && (
+                  <div css={baphStyles.floatingNavSection}>
+                    <Button
+                      size="medium"
+                      kind="secondary"
+                      onClick={() => {
+                        handleNavigation('/add-movies');
+                        handleAddMovies();
+                      }}
+                      icon={<PlusSignIcon size={20} strokeWidth={'3px'} />}
+                      className={{ button: baphStyles.floatingNavButton }}
+                    >
+                      Add new movie
+                    </Button>
+                    <Button
+                      kind="primary"
+                      onClick={logOut}
+                      size="medium"
+                      className={{ button: baphStyles.floatingNavButton }}
+                    >
+                      Log out
+                    </Button>
+                  </div>
+                )}
+
+                {!isAuthenticated && (
+                  <div css={baphStyles.floatingNavSection}>
+                    <Button
+                      onClick={openSignupModal}
+                      kind="secondary"
+                      size="medium"
+                      className={{ button: baphStyles.floatingNavButton }}
+                    >
+                      Sign Up
+                    </Button>
+                    <Button
+                      onClick={openLoginModal}
+                      kind="primary"
+                      size="medium"
+                      className={{ button: baphStyles.floatingNavButton }}
+                    >
+                      Log in
+                    </Button>
+                  </div>
+                )}
+              </nav>
+            </div>
+          </div>
+        )}
+      </>
+    );
+  }
+
+  // Regular header for non-mobile-landscape devices
+
   return (
     <Header>
       {[
@@ -70,7 +211,7 @@ export const Heading: React.FC<HeadingProps> = ({
           >
             <h1 css={baphStyles.title}>Baphomet</h1>
             <img
-              src="/baphy-favicon-tiny.png"
+              src="/baphy-favicon.png"
               alt="Baphomet logo"
               css={baphStyles.favicon}
               role="presentation"
@@ -96,16 +237,16 @@ export const Heading: React.FC<HeadingProps> = ({
                     Arena
                   </Button>
                 </Link>
-                <Link to="/leaderboards">
-                  <Button
-                    size="small"
-                    kind="ghostOnDark"
-                    ariaLabel="Go to Leader Boards page"
-                    disabled
-                  >
-                    Leader Boards
-                  </Button>
-                </Link>
+                {/* <Link to="/leaderboards" > */}
+                <Button
+                  size="small"
+                  kind="ghostOnDark"
+                  ariaLabel="Go to Leader Boards page"
+                  disabled
+                >
+                  Leader Boards
+                </Button>
+                {/* </Link> */}
                 <Link to="/all-movies">
                   <Button
                     size="small"
@@ -419,5 +560,84 @@ const baphStyles: { [key: string]: CSSObject } = {
   srOnly: {
     position: 'absolute' as const,
     visibility: 'hidden' as const
+  },
+
+  // Floating menu styles for mobile landscape
+  floatingMenuButton: {
+    position: 'fixed' as const,
+    top: '10px',
+    right: '10px',
+    zIndex: 1001,
+    backgroundColor: 'rgba(11, 24, 40, 0.9)', // Semi-transparent primary color
+    borderRadius: '50%',
+    padding: '8px',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
+  },
+  floatingMenuOverlay: {
+    position: 'fixed' as const,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    zIndex: 1000,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  floatingMenu: {
+    backgroundColor: '#0B1828',
+    borderRadius: '12px',
+    padding: '20px',
+    maxWidth: '320px',
+    width: '90%',
+    maxHeight: '80vh',
+    overflowY: 'auto' as const,
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
+    border: '1px solid rgba(255, 255, 255, 0.1)'
+  },
+  floatingMenuHeader: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginBottom: '20px',
+    paddingBottom: '15px',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+  },
+  floatingLogoLink: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    textDecoration: 'none',
+    color: 'inherit'
+  },
+  floatingTitle: {
+    margin: 0,
+    fontSize: '1.4rem',
+    color: '#FFFFFF'
+  },
+  floatingFavicon: {
+    width: '32px',
+    height: '32px',
+    objectFit: 'contain' as const
+  },
+  floatingNav: {
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: '15px'
+  },
+  floatingNavSection: {
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: '10px',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+    paddingBottom: '15px',
+    '&:last-child': {
+      borderBottom: 'none',
+      paddingBottom: 0
+    }
+  },
+  floatingNavButton: {
+    width: '100%',
+    justifyContent: 'flex-start'
   }
 };

@@ -32,3 +32,6 @@ set-pnpmrc.sh
 *.pem
 *.cer
 *.key
+
+MONGODB_SCHEMA.md
+art_icons.txt

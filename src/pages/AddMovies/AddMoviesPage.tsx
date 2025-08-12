@@ -10,7 +10,7 @@ import {
   baseVibrantColors,
   mediaQueries
 } from '@collinlucke/phantomartist';
-import { AboveTheFold } from '../../components/AboveTheFold';
+import { BodySection } from '../../components/BodySection';
 import { CSSObject } from '@emotion/react';
 import { ADD_MOVIE } from '../../api/mutations';
 import { CHECK_MOVIE_BY_TMDB_ID } from '../../api/queries';
@@ -231,7 +231,7 @@ export const AddMoviesPage: React.FC = () => {
   };
 
   return (
-    <AboveTheFold>
+    <BodySection>
       <h1>Add Movies</h1>
       {(showSuccess || duplicateError) && (
         <div css={baphStyles.messageContainer}>
@@ -447,7 +447,7 @@ export const AddMoviesPage: React.FC = () => {
           </div>
         </div>
       </Modal>
-    </AboveTheFold>
+    </BodySection>
   );
 };
 

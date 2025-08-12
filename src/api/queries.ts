@@ -119,3 +119,33 @@ export const CHECK_MOVIE_BY_TMDB_ID = gql`
     }
   }
 `;
+
+export const GET_RANDOM_MATCHUP = gql`
+  query getRandomMovieMatchup {
+    getRandomMovieMatchup {
+      movie1 {
+        id
+        title
+        posterUrl
+        releaseDate
+        genres
+        winningPercentage
+        totalWins
+        totalLosses
+        totalComparisons
+      }
+      movie2 {
+        id
+        title
+        posterUrl
+        releaseDate
+        genres
+        winningPercentage
+        totalWins
+        totalLosses
+        totalComparisons
+      }
+      comparisonId
+    }
+  }
+`;

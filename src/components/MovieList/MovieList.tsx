@@ -27,6 +27,7 @@ type MovieData = {
   cursor?: string;
   isLoadingMore?: boolean;
   hasMore?: boolean;
+  sortBy?: 'winningPercentage' | 'title' | 'releaseDate';
 
   onScroll?: () => void;
   onSearch?: (searchTerm: string) => void;

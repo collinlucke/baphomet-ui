@@ -1,0 +1,161 @@
+import {
+  baseVibrantColors,
+  mediaQueries,
+  baseColors,
+  Button
+} from '@collinlucke/phantomartist';
+import { CSSObject } from '@emotion/react';
+import { isMobileAndLandscapeVar } from '../reactiveVars';
+import { useReactiveVar } from '@apollo/client';
+
+type MovieCardProps = {
+  isVoting?: boolean;
+  movie: {
+    id: string;
+    title: string;
+    posterUrl?: string;
+    releaseDate?: string;
+  };
+  handleVote: (movieId: string) => void;
+};
+
+export const MovieCard: React.FC<MovieCardProps> = ({
+  isVoting,
+  movie,
+  handleVote
+}) => {
+  const isMobileAndLandscape = useReactiveVar(isMobileAndLandscapeVar);
+
+  return (
+    <div
+      css={baphStyles.movieContainer}
+      data-testid={`movie-container-left-${movie.id}`}
+    >
+      <div
+        css={[baphStyles.movieCard, isVoting && baphStyles.movieCardDisabled]}
+        onClick={() => handleVote(movie.id)}
+        data-testid={`movie-card-left-${movie.id}`}
+      >
+        {movie.posterUrl ? (
+          <img
+            src={movie.posterUrl}
+            alt={`${movie.title} poster`}
+            css={baphStyles.posterImage}
+          />
+        ) : (
+          <div css={baphStyles.noPosterPlaceholder}>No Poster</div>
+        )}
+
+        <div css={baphStyles.movieOverlay}>
+          <h3 css={baphStyles.movieTitle}>{movie.title}</h3>
+          {movie.releaseDate && (
+            <p css={baphStyles.movieYear}>
+              {new Date(movie.releaseDate).getFullYear()}
+            </p>
+          )}
+        </div>
+      </div>
+      {!isMobileAndLandscape && (
+        <div css={baphStyles.actionButtonContainer}>
+          <Button
+            kind="primary"
+            size="large"
+            onClick={() => handleVote(movie.id)}
+            disabled={isVoting}
+          >
+            {isVoting ? 'Voting...' : 'Choose This Movie'}
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const baphStyles: { [key: string]: CSSObject } = {
+  movieCard: {
+    position: 'relative',
+    width: '150px',
+    height: 'auto',
+    borderRadius: '12px',
+    overflow: 'hidden',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    border: `2px solid ${baseColors.tertiary[600]}`,
+    '&:hover': {
+      transform: 'scale(1.05)',
+      border: `2px solid ${baseVibrantColors.primary[500]}`,
+      boxShadow: `0 8px 32px rgba(${baseVibrantColors.primary[500]}, 0.3)`
+    },
+    [mediaQueries.maxWidth.sm]: {
+      width: '250px',
+      height: '375px'
+    }
+  },
+  movieCardDisabled: {
+    cursor: 'not-allowed',
+    opacity: 0.7,
+    '&:hover': {
+      transform: 'none',
+      border: `2px solid ${baseColors.tertiary[600]}`,
+      boxShadow: 'none'
+    }
+  },
+  posterImage: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover'
+  },
+  noPosterPlaceholder: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: baseColors.secondary[600],
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: baseColors.tertiary[400],
+    fontSize: '1.2rem',
+    textAlign: 'center'
+  },
+  movieOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    background: 'linear-gradient(transparent, rgba(0, 0, 0, 0.9))',
+    padding: '.5rem',
+    color: 'white'
+  },
+  movieTitle: {
+    margin: 0,
+    fontSize: '0.875rem',
+    fontWeight: '400',
+    textShadow:
+      '-1px -1px 3px black, 1px -1px 3px black, -1px 1px 3px black, 1px 1px 3px black',
+    lineHeight: '1.2',
+    display: '-webkit-box',
+    WebkitLineClamp: 3,
+    WebkitBoxOrient: 'vertical',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
+  },
+  movieYear: {
+    margin: '0.25rem 0 0',
+    fontSize: '0.75rem',
+    color: baseColors.tertiary[300],
+    textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)'
+  },
+  movieContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '1.5rem',
+    flex: 1,
+    maxWidth: '400px'
+  },
+  actionButtonContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: '1rem',
+    zIndex: 10
+  }
+};
