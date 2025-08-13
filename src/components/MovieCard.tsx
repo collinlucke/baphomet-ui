@@ -1,6 +1,5 @@
 import {
   baseVibrantColors,
-  mediaQueries,
   baseColors,
   Button
 } from '@collinlucke/phantomartist';
