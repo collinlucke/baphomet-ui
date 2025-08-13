@@ -6,6 +6,7 @@ import { baphColors } from '../styling/baphTheme';
 import { SIGNUP } from '../api/mutations';
 import { SignupFormData, SignupFormProps } from '../types/auth.types';
 import { isAuthenticatedVar } from '../reactiveVars';
+import { ModalContent } from './ModalContent';
 
 export const SignupForm: React.FC<SignupFormProps> = ({
   onSuccess,
@@ -146,97 +147,98 @@ export const SignupForm: React.FC<SignupFormProps> = ({
   };
 
   return (
-    <form
-      css={baphStyles.form}
-      onSubmit={handleSubmit}
-      noValidate
-      data-testid="signup-form"
+    <ModalContent
+      title="Create Your Account"
+      subtitle="Join the movie ranking community!"
     >
-      <div css={baphStyles.header}>
-        <p css={baphStyles.subtitle}>Join the movie ranking community!</p>
-      </div>
-
-      <div css={baphStyles.fields}>
-        <InputField
-          label="Username"
-          value={formData.username}
-          onChange={updateField}
-          placeholder="Enter your username"
-          required
-          error={errors.username}
-          disabled={isLoading}
-          data-testid="signup-username-input"
-          name="username"
-        />
-
-        <InputField
-          label="Display Name"
-          value={formData.displayName}
-          onChange={updateField}
-          placeholder="How should we display your name?"
-          required
-          error={errors.displayName}
-          disabled={isLoading}
-          data-testid="signup-display-name-input"
-          name="displayName"
-        />
-
-        <InputField
-          label="Email"
-          type="email"
-          value={formData.email}
-          onChange={updateField}
-          placeholder="Enter your email address"
-          required
-          error={errors.email}
-          disabled={isLoading}
-          data-testid="signup-email-input"
-          name="email"
-        />
-
-        <InputField
-          label="Password"
-          type="password"
-          value={formData.password}
-          onChange={updateField}
-          placeholder="Create a secure password"
-          required
-          error={errors.password}
-          disabled={isLoading}
-          data-testid="signup-password-input"
-          name="password"
-        />
-
-        <InputField
-          label="Confirm Password"
-          type="password"
-          value={formData.confirmPassword}
-          onChange={updateField}
-          placeholder="Confirm your password"
-          required
-          error={errors.confirmPassword}
-          disabled={isLoading}
-          data-testid="signup-confirm-password-input"
-          name="confirmPassword"
-        />
-      </div>
-
-      {generalError && (
-        <div css={baphStyles.generalError} data-testid="signup-general-error">
-          {generalError}
-        </div>
-      )}
-
-      <Button
-        type="submit"
-        kind="primary"
-        disabled={isLoading}
-        dataTestId="signup-submit-button"
-        className={{ button: baphStyles.signUpButton }}
+      <form
+        css={baphStyles.form}
+        onSubmit={handleSubmit}
+        noValidate
+        data-testid="signup-form"
       >
-        {isLoading ? 'Creating Account...' : 'Create Account'}
-      </Button>
-    </form>
+        <div css={baphStyles.fields}>
+          <InputField
+            label="Username"
+            value={formData.username}
+            onChange={updateField}
+            placeholder="Enter your username"
+            required
+            error={errors.username}
+            disabled={isLoading}
+            data-testid="signup-username-input"
+            name="username"
+          />
+
+          <InputField
+            label="Display Name"
+            value={formData.displayName}
+            onChange={updateField}
+            placeholder="How should we display your name?"
+            required
+            error={errors.displayName}
+            disabled={isLoading}
+            data-testid="signup-display-name-input"
+            name="displayName"
+          />
+
+          <InputField
+            label="Email"
+            type="email"
+            value={formData.email}
+            onChange={updateField}
+            placeholder="Enter your email address"
+            required
+            error={errors.email}
+            disabled={isLoading}
+            data-testid="signup-email-input"
+            name="email"
+          />
+
+          <InputField
+            label="Password"
+            type="password"
+            value={formData.password}
+            onChange={updateField}
+            placeholder="Create a secure password"
+            required
+            error={errors.password}
+            disabled={isLoading}
+            data-testid="signup-password-input"
+            name="password"
+          />
+
+          <InputField
+            label="Confirm Password"
+            type="password"
+            value={formData.confirmPassword}
+            onChange={updateField}
+            placeholder="Confirm your password"
+            required
+            error={errors.confirmPassword}
+            disabled={isLoading}
+            data-testid="signup-confirm-password-input"
+            name="confirmPassword"
+          />
+        </div>
+
+        {generalError && (
+          <div css={baphStyles.generalError} data-testid="signup-general-error">
+            {generalError}
+          </div>
+        )}
+
+        <Button
+          type="submit"
+          kind="primary"
+          disabled={isLoading}
+          dataTestId="signup-submit-button"
+          className={{ button: baphStyles.signUpButton }}
+        >
+          {isLoading ? 'Creating Account...' : 'Create Account'}
+        </Button>
+      </form>
+    </ModalContent>
   );
 };
 

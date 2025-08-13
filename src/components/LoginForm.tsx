@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { InputField, Button } from '@collinlucke/phantomartist';
 import { CSSObject } from '@emotion/react';
-// import { baphColors, baphTypography } from '../styling/baphTheme';
 import { LOGIN } from '../api/mutations';
 import { LoginFormData, LoginFormProps } from '../types/auth.types';
 import { isAuthenticatedVar } from '../reactiveVars';
+import { ModalContent } from './ModalContent';
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
   const [formData, setFormData] = useState<LoginFormData>({
@@ -124,66 +124,63 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
   };
 
   return (
-    <form
-      css={baphStyles.form}
-      onSubmit={handleSubmit}
-      data-testid="login-form"
-    >
-      <div css={baphStyles.header}>
-        <h2 css={baphStyles.title}>Welcome Back!</h2>
-        <p css={baphStyles.subtitle}>Sign in to your account</p>
-      </div>
-
-      <div css={baphStyles.fields}>
-        <InputField
-          label="Email"
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={updateField}
-          placeholder="Enter your email address"
-          required
-          error={errors.email}
-          disabled={isLoading}
-          data-testid="login-email-input"
-        />
-
-        <InputField
-          label="Password"
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={updateField}
-          placeholder="Enter your password"
-          required
-          error={errors.password}
-          disabled={isLoading}
-          data-testid="login-password-input"
-        />
-      </div>
-
-      {generalError && (
-        <div css={baphStyles.generalError} data-testid="login-general-error">
-          {generalError}
-        </div>
-      )}
-
-      <Button
-        type="submit"
-        kind="primary"
-        disabled={isLoading}
-        dataTestId="login-submit-button"
-        className={{ button: baphStyles.logInButton }}
+    <ModalContent title="Welcome Back!" subtitle="Sign in to your account">
+      <form
+        css={baphStyles.form}
+        onSubmit={handleSubmit}
+        data-testid="login-form"
       >
-        {isLoading ? 'Signing In...' : 'Sign In'}
-      </Button>
+        <div css={baphStyles.fields}>
+          <InputField
+            label="Email"
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={updateField}
+            placeholder="Enter your email address"
+            required
+            error={errors.email}
+            disabled={isLoading}
+            data-testid="login-email-input"
+          />
 
-      {/* <div css={baphStyles.footer}>
+          <InputField
+            label="Password"
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={updateField}
+            placeholder="Enter your password"
+            required
+            error={errors.password}
+            disabled={isLoading}
+            data-testid="login-password-input"
+          />
+        </div>
+
+        {generalError && (
+          <div css={baphStyles.generalError} data-testid="login-general-error">
+            {generalError}
+          </div>
+        )}
+
+        <Button
+          type="submit"
+          kind="primary"
+          disabled={isLoading}
+          dataTestId="login-submit-button"
+          className={{ button: baphStyles.logInButton }}
+        >
+          {isLoading ? 'Signing In...' : 'Sign In'}
+        </Button>
+
+        {/* <div css={baphStyles.footer}>
         <a href="#" css={baphStyles.forgotLink}>
           Forgot your password?
         </a>
       </div> */}
-    </form>
+      </form>
+    </ModalContent>
   );
 };
 

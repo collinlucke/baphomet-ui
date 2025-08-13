@@ -26,6 +26,14 @@ export const MovieCard: React.FC<MovieCardProps> = ({
 }) => {
   const isMobileAndLandscape = useReactiveVar(isMobileAndLandscapeVar);
 
+  const getMoviePosterStyles = (): CSSObject => {
+    return {
+      ...baphStyles.posterImage,
+      width: isMobileAndLandscape ? '275px' : '250px',
+      height: isMobileAndLandscape ? '275px' : '375px'
+    };
+  };
+
   return (
     <div
       css={baphStyles.movieContainer}
@@ -40,7 +48,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
           <img
             src={movie.posterUrl}
             alt={`${movie.title} poster`}
-            css={baphStyles.posterImage}
+            css={getMoviePosterStyles()}
           />
         ) : (
           <div css={baphStyles.noPosterPlaceholder}>No Poster</div>
@@ -74,7 +82,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
 const baphStyles: { [key: string]: CSSObject } = {
   movieCard: {
     position: 'relative',
-    width: '150px',
+    width: '250px',
     height: 'auto',
     borderRadius: '12px',
     overflow: 'hidden',
@@ -85,10 +93,6 @@ const baphStyles: { [key: string]: CSSObject } = {
       transform: 'scale(1.05)',
       border: `2px solid ${baseVibrantColors.primary[500]}`,
       boxShadow: `0 8px 32px rgba(${baseVibrantColors.primary[500]}, 0.3)`
-    },
-    [mediaQueries.maxWidth.sm]: {
-      width: '250px',
-      height: '375px'
     }
   },
   movieCardDisabled: {

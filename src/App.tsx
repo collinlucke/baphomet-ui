@@ -10,6 +10,7 @@ import {
   showHeadingVar,
   isAuthenticatedVar,
   showUnauthorizedModalVar,
+  showFeedbackModalVar,
   isMobileVar,
   isLandscapeVar,
   isMobileAndLandscapeVar
@@ -19,11 +20,13 @@ import { CSSObject } from '@emotion/react';
 import { CHECK_AUTH } from './api/queries';
 import { SignupForm } from './components/SignupForm';
 import { LoginForm } from './components/LoginForm';
+import { FeedbackForm } from './components/FeedbackForm';
 
 export const App = () => {
   const showHeading = useReactiveVar(showHeadingVar);
   const error = useReactiveVar(errorVar);
   const showUnauthorizedModal = useReactiveVar(showUnauthorizedModalVar);
+  const showFeedbackModal = useReactiveVar(showFeedbackModalVar);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
 
@@ -117,6 +120,15 @@ export const App = () => {
     setShowSignupModal(false);
   };
 
+  const handleFeedbackModalClose = () => {
+    showFeedbackModalVar(false);
+  };
+
+  const handleFeedbackSuccess = () => {
+    showFeedbackModalVar(false);
+    // Could show a success message here in the future
+  };
+
   return (
     // <ThemeProvider theme={baphTheme}>
     <>
@@ -144,6 +156,11 @@ export const App = () => {
 
       <Modal isOpen={showSignupModal} onClose={handleSignupModalClose}>
         <SignupForm onSuccess={handleSignupSuccess} />
+      </Modal>
+
+      {/* Feedback Modal */}
+      <Modal isOpen={showFeedbackModal} onClose={handleFeedbackModalClose}>
+        <FeedbackForm onSuccess={handleFeedbackSuccess} />
       </Modal>
 
       {/* Unauthorized Action Modal */}

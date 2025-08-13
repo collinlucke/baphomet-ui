@@ -1,5 +1,5 @@
 import { Block, InnerWidth } from '@collinlucke/phantomartist';
-import { isMobileVar, isLandscapeVar } from '../reactiveVars';
+import { isMobileAndLandscapeVar } from '../reactiveVars';
 import { CSSObject } from '@emotion/react';
 
 type BodySectionProps = {
@@ -13,10 +13,7 @@ export const BodySection: React.FC<BodySectionProps> = ({
   innerWidthSize,
   pageSlug = ''
 }: BodySectionProps) => {
-  const isMobile = isMobileVar();
-  const isLandscape = isLandscapeVar();
-  const isMobileAndLandscape = isMobile && isLandscape;
-  console.log('isMobileAndLandscape', isMobileAndLandscape);
+  const isMobileAndLandscape = isMobileAndLandscapeVar();
 
   return (
     <Block
@@ -24,20 +21,17 @@ export const BodySection: React.FC<BodySectionProps> = ({
       dataTestId={`body-section-${pageSlug}`}
     >
       <section
-        css={getBodySectionStyles(isMobileAndLandscape).section}
+        css={baphStyles.section}
         className={`section-wrapper${pageSlug ? `-${pageSlug}` : ''}`}
       >
         <InnerWidth
           size={innerWidthSize}
           className={{
-            innerWidth: baphStyles.sectionInnerWidth
+            innerWidth: getSectionInnerWidthStyles(isMobileAndLandscape)
           }}
           dataTestid={`inner-width-${pageSlug}`}
         >
-          <div
-            css={getBodySectionStyles(isMobileAndLandscape).sectionContent}
-            className="section-content"
-          >
+          <div css={baphStyles.sectionContent} className="section-content">
             {children}
           </div>
         </InnerWidth>
@@ -46,29 +40,15 @@ export const BodySection: React.FC<BodySectionProps> = ({
   );
 };
 
-const getBodySectionStyles = (isMobileAndLandscape: boolean): CSSObject => {
+const getSectionInnerWidthStyles = (isMobileAndLandscape: boolean) => {
   return {
-    section: {
-      ...baphStyles.section
-    },
-    sectionInnerWidth: {
-      padding: isMobileAndLandscape ? '0' : '0 1.5rem',
-      maxWidth: '1720px',
-      width: '100%',
-      display: 'flex',
-      flexDirection: 'column' as const,
-      gap: '35px',
-      marginTop: '1rem'
-    },
-    sectionContent: {
-      ...baphStyles.sectionContent
-    }
+    ...baphStyles.sectionInnerWidth,
+    padding: isMobileAndLandscape ? '0' : '0 1.5rem'
   };
 };
-
 const baphStyles: { [key: string]: CSSObject } = {
   sectionBlock: {
-    // marginBottom: '60px'
+    marginBottom: '60px',
     minHeight: '100vh'
   },
   section: {

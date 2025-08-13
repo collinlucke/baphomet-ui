@@ -1,5 +1,5 @@
 import { CSSObject } from '@emotion/react';
-import { isMobileVar, isLandscapeVar } from '../reactiveVars';
+import { isMobileAndLandscapeVar } from '../reactiveVars';
 
 export const PageHeading: React.FC<{
   title: string;
@@ -7,7 +7,7 @@ export const PageHeading: React.FC<{
   className?: CSSObject;
   slug?: string;
 }> = ({ title, subtitle, className = {}, slug }) => {
-  const isMobileAndLandscape = isMobileVar() && isLandscapeVar();
+  const isMobileAndLandscape = isMobileAndLandscapeVar();
   return (
     <div
       css={`

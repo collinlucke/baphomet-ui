@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { GET_RANDOM_MATCHUP } from '../../api/queries';
 import { SUBMIT_VOTE } from '../../api/mutations';
 import { BodySection } from '../../components/BodySection';
@@ -11,6 +11,7 @@ import {
   baseVibrantColors,
   mediaQueries
 } from '@collinlucke/phantomartist';
+import { isMobileAndLandscapeVar } from '../../reactiveVars';
 import { CSSObject } from '@emotion/react';
 
 type Movie = {
@@ -32,6 +33,7 @@ type Matchup = {
 };
 
 export const ArenaPage: React.FC = () => {
+  const isMobileAndLandscape = useReactiveVar(isMobileAndLandscapeVar);
   const [isVoting, setIsVoting] = useState(false);
   const [voteResult, setVoteResult] = useState<{
     success: boolean;
@@ -95,7 +97,9 @@ export const ArenaPage: React.FC = () => {
           slug="arena"
           className={arenaStyles.pageHeading}
         />
-        <div css={arenaStyles.container}>{children}</div>
+        <div css={arenaStyles.container} className="arena-container">
+          {children}
+        </div>
       </BodySection>
     );
   };
@@ -143,6 +147,13 @@ export const ArenaPage: React.FC = () => {
 
   const matchup: Matchup = data.getRandomMovieMatchup;
 
+  const getMatchupContainerStyles: () => CSSObject = () => {
+    return {
+      ...arenaStyles.matchupContainer,
+      flexDirection: isMobileAndLandscape ? 'row' : 'column'
+    };
+  };
+
   return (
     <ArenaContainer>
       {/* <div>Which bear is best?</div> */}
@@ -158,7 +169,10 @@ export const ArenaPage: React.FC = () => {
         </div>
       )}
 
-      <div css={arenaStyles.matchupContainer}>
+      <div
+        css={getMatchupContainerStyles()}
+        className="arena-matchup-container"
+      >
         {/* Movie 1 */}
 
         <MovieCard
@@ -217,11 +231,13 @@ const arenaStyles: { [key: string]: CSSObject } = {
   },
   container: {
     display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'start',
     gap: '2rem',
-    // padding: '2rem',
-    minHeight: '80vh'
+    minHeight: '80vh',
+    justifyContent: 'center',
+    [mediaQueries.maxWidth.lg]: {
+      alignItems: 'center'
+    }
   },
   title: {
     fontSize: '3rem',
@@ -291,14 +307,14 @@ const arenaStyles: { [key: string]: CSSObject } = {
     justifyContent: 'center',
     maxWidth: '1200px',
     width: '100%',
-    [mediaQueries.maxWidth.lg]: {
-      flexDirection: 'column',
+    flexDirection: 'column',
+    [mediaQueries.minWidth.sm]: {
+      flexDirection: 'row',
       gap: '2rem'
     }
   },
   movieContainer: {
     display: 'flex',
-    flexDirection: 'column',
     alignItems: 'center',
     gap: '1.5rem',
     flex: 1,
@@ -307,10 +323,7 @@ const arenaStyles: { [key: string]: CSSObject } = {
   vsContainer: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-    [mediaQueries.maxWidth.lg]: {
-      transform: 'rotate(90deg)'
-    }
+    justifyContent: 'center'
   },
   vsText: {
     fontSize: '3rem',

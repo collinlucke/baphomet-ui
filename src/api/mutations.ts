@@ -153,3 +153,22 @@ export const SUBMIT_VOTE = gql`
     }
   }
 `;
+
+export const SUBMIT_FEEDBACK = gql`
+  mutation submitFeedback(
+    $email: String
+    $comments: String!
+    $timestamp: DateTime!
+  ) {
+    submitFeedback(email: $email, comments: $comments, timestamp: $timestamp) {
+      success
+      message
+      feedback {
+        id
+        email
+        comments
+        timestamp
+      }
+    }
+  }
+`;
