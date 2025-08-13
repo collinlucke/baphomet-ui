@@ -105,7 +105,24 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
       title="Send Feedback"
       subtitle="We'd love to hear your thoughts!"
     >
-      <form onSubmit={handleSubmit} css={feedbackStyles.form} noValidate>
+      <form 
+        onSubmit={handleSubmit} 
+        css={feedbackStyles.form} 
+        noValidate
+        role="form"
+        aria-label="Send feedback form"
+      >
+        {generalError && (
+          <div 
+            css={feedbackStyles.errorMessage}
+            role="alert"
+            aria-live="polite"
+            data-testid="feedback-general-error"
+          >
+            {generalError}
+          </div>
+        )}
+
         <InputField
           label="Email Address (Optional)"
           type="email"
@@ -115,7 +132,15 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
           disabled={isSubmitting}
           error={errors.email}
           helperText="Leave your email if you'd like us to follow up with you."
+          autoComplete="email"
+          ariaDescribedBy="email-help"
+          ariaInvalid={!!errors.email}
+          data-testid="feedback-email-input"
         />
+        <div id="email-help" css={feedbackStyles.srOnly}>
+          Optional: Provide your email if you would like a response to your feedback
+        </div>
+
         <InputField
           label="Comments"
           type="textarea"
@@ -126,15 +151,25 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
           disabled={isSubmitting}
           error={errors.comments}
           required
+          ariaDescribedBy="comments-help"
+          ariaInvalid={!!errors.comments}
+          data-testid="feedback-comments-input"
         />
+        <div id="comments-help" css={feedbackStyles.srOnly}>
+          Required: Share your thoughts, suggestions, or feedback about the application
+        </div>
 
-        {generalError && (
-          <div css={feedbackStyles.errorMessage}>{generalError}</div>
-        )}
-
-        <Button type="submit" kind="primary" disabled={isSubmitting}>
-          {isSubmitting ? 'Sending...' : 'Send Feedback'}
-        </Button>
+        <div css={feedbackStyles.submitContainer}>
+          <Button 
+            type="submit" 
+            kind="primary" 
+            disabled={isSubmitting || !formData.comments.trim()}
+            ariaLabel={isSubmitting ? 'Sending feedback, please wait' : 'Send your feedback'}
+            data-testid="feedback-submit-button"
+          >
+            {isSubmitting ? 'Sending...' : 'Send Feedback'}
+          </Button>
+        </div>
       </form>
     </ModalContent>
   );
@@ -148,10 +183,25 @@ const feedbackStyles: { [key: string]: CSSObject } = {
   },
   errorMessage: {
     padding: '12px',
-    backgroundColor: '#DC2626',
-    color: '#FFFFFF',
+    backgroundColor: '#fee2e2',
+    color: '#dc2626',
+    border: '1px solid #fecaca',
     borderRadius: '6px',
-    fontSize: '0.9rem',
+    fontSize: '0.875rem',
     textAlign: 'center'
+  },
+  submitContainer: {
+    marginTop: '0.5rem'
+  },
+  srOnly: {
+    position: 'absolute' as const,
+    width: '1px',
+    height: '1px',
+    padding: 0,
+    margin: '-1px',
+    overflow: 'hidden',
+    clip: 'rect(0, 0, 0, 0)',
+    whiteSpace: 'nowrap' as const,
+    border: 0
   }
 };

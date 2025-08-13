@@ -129,7 +129,21 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
         css={baphStyles.form}
         onSubmit={handleSubmit}
         data-testid="login-form"
+        noValidate
+        role="form"
+        aria-label="Login form"
       >
+        {generalError && (
+          <div 
+            css={baphStyles.errorMessage}
+            role="alert"
+            aria-live="polite"
+            data-testid="login-general-error"
+          >
+            {generalError}
+          </div>
+        )}
+        
         <div css={baphStyles.fields}>
           <InputField
             label="Email"
@@ -141,8 +155,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
             required
             error={errors.email}
             disabled={isLoading}
+            autoComplete="email"
+            ariaDescribedBy={errors.email ? 'email-error' : 'email-help'}
+            ariaInvalid={!!errors.email}
             data-testid="login-email-input"
           />
+          <div id="email-help" css={baphStyles.srOnly}>
+            Enter the email address associated with your account
+          </div>
 
           <InputField
             label="Password"
@@ -154,31 +174,28 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
             required
             error={errors.password}
             disabled={isLoading}
+            autoComplete="current-password"
+            ariaDescribedBy={errors.password ? 'password-error' : 'password-help'}
+            ariaInvalid={!!errors.password}
             data-testid="login-password-input"
           />
+          <div id="password-help" css={baphStyles.srOnly}>
+            Enter your account password
+          </div>
         </div>
 
-        {generalError && (
-          <div css={baphStyles.generalError} data-testid="login-general-error">
-            {generalError}
-          </div>
-        )}
-
-        <Button
-          type="submit"
-          kind="primary"
-          disabled={isLoading}
-          dataTestId="login-submit-button"
-          className={{ button: baphStyles.logInButton }}
-        >
-          {isLoading ? 'Signing In...' : 'Sign In'}
-        </Button>
-
-        {/* <div css={baphStyles.footer}>
-        <a href="#" css={baphStyles.forgotLink}>
-          Forgot your password?
-        </a>
-      </div> */}
+        <div css={baphStyles.submitContainer}>
+          <Button
+            type="submit"
+            kind="primary"
+            size="large"
+            disabled={isLoading || !formData.email.trim() || !formData.password}
+            ariaLabel={isLoading ? 'Signing in, please wait' : 'Sign in to your account'}
+            data-testid="login-submit-button"
+          >
+            {isLoading ? 'Signing In...' : 'Sign In'}
+          </Button>
+        </div>
       </form>
     </ModalContent>
   );
@@ -192,23 +209,12 @@ const baphStyles: { [key: string]: CSSObject } = {
     width: '100%',
     maxWidth: '400px'
   },
-  header: {
-    textAlign: 'center' as const,
-    marginBottom: '1rem'
-  },
-  title: {
-    margin: '0 0 0.5rem 0'
-  },
-  subtitle: {
-    margin: 0,
-    color: '#6b7280'
-  },
   fields: {
     display: 'flex',
     flexDirection: 'column' as const,
     gap: '1rem'
   },
-  generalError: {
+  errorMessage: {
     padding: '0.75rem',
     backgroundColor: '#fee2e2',
     color: '#dc2626',
@@ -218,18 +224,18 @@ const baphStyles: { [key: string]: CSSObject } = {
     marginBottom: '1rem',
     textAlign: 'center' as const
   },
-  footer: {
-    textAlign: 'center' as const
+  submitContainer: {
+    marginTop: '0.5rem'
   },
-  forgotLink: {
-    textDecoration: 'none',
-    fontSize: '0.875rem',
-    '&:hover': {
-      textDecoration: 'underline'
-    }
-  },
-  logInButton: {
-    justifyContent: 'center',
-    width: '100%'
+  srOnly: {
+    position: 'absolute' as const,
+    width: '1px',
+    height: '1px',
+    padding: 0,
+    margin: '-1px',
+    overflow: 'hidden',
+    clip: 'rect(0, 0, 0, 0)',
+    whiteSpace: 'nowrap' as const,
+    border: 0
   }
 };

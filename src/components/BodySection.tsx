@@ -6,23 +6,40 @@ type BodySectionProps = {
   children: React.ReactNode;
   innerWidthSize?: 'full' | 'large' | 'medium' | 'small';
   pageSlug?: string;
+  ariaLabel?: string;
+  ariaLabelledBy?: string;
+  ariaDescribedBy?: string;
+  role?: string;
 };
 
 export const BodySection: React.FC<BodySectionProps> = ({
   children,
   innerWidthSize,
-  pageSlug = ''
+  pageSlug = '',
+  ariaLabel,
+  ariaLabelledBy,
+  ariaDescribedBy,
+  role
 }: BodySectionProps) => {
   const isMobileAndLandscape = isMobileAndLandscapeVar();
+  const sectionId = `body-section-${pageSlug}`;
 
   return (
     <Block
       className={{ block: baphStyles.sectionBlock }}
-      dataTestId={`body-section-${pageSlug}`}
+      dataTestId={sectionId}
     >
       <section
         css={baphStyles.section}
         className={`section-wrapper${pageSlug ? `-${pageSlug}` : ''}`}
+        role={role}
+        aria-label={
+          ariaLabel ||
+          `${pageSlug ? pageSlug.replace('-', ' ') : 'main'} content section`
+        }
+        aria-labelledby={ariaLabelledBy}
+        aria-describedby={ariaDescribedBy}
+        id={sectionId}
       >
         <InnerWidth
           size={innerWidthSize}
@@ -31,7 +48,12 @@ export const BodySection: React.FC<BodySectionProps> = ({
           }}
           dataTestid={`inner-width-${pageSlug}`}
         >
-          <div css={baphStyles.sectionContent} className="section-content">
+          <div
+            css={baphStyles.sectionContent}
+            className="section-content"
+            role="region"
+            aria-label="Content area"
+          >
             {children}
           </div>
         </InnerWidth>

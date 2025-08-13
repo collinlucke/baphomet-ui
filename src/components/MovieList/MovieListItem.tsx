@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { CSSObject } from '@emotion/react';
 import { baseColors, baseVibrantColors } from '@collinlucke/phantomartist';
 
-export interface MovieListItemProps {
+export type MovieListItemProps = {
   movie: {
     id: string;
     title: string;
     posterUrl?: string;
     winningPercentage: number;
   };
-}
+};
 
 export const MovieListItem: React.FC<MovieListItemProps> = ({ movie }) => {
   const winningPercentage = movie.winningPercentage?.toFixed(2) || '0.00';

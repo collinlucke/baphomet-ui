@@ -16,14 +16,55 @@ type MovieCardProps = {
     releaseDate?: string;
   };
   handleVote: (movieId: string) => void;
+  // Accessibility props
+  ariaLabel?: string;
+  ariaDescribedBy?: string;
+  tabIndex?: number;
+  role?: string;
+  dataTestId?: string;
+  autoFocus?: boolean;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
+  onFocus?: (event: React.FocusEvent<HTMLDivElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
 };
 
 export const MovieCard: React.FC<MovieCardProps> = ({
   isVoting,
   movie,
-  handleVote
+  handleVote,
+  ariaLabel,
+  ariaDescribedBy,
+  tabIndex = 0,
+  role = 'button',
+  dataTestId,
+  autoFocus = false,
+  onKeyDown,
+  onFocus,
+  onBlur
 }) => {
   const isMobileAndLandscape = useReactiveVar(isMobileAndLandscapeVar);
+
+  // Handle keyboard interaction for voting
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      if (!isVoting) {
+        handleVote(movie.id);
+      }
+    }
+    onKeyDown?.(event);
+  };
+
+  // Generate accessible label
+  const generateAriaLabel = (): string => {
+    if (ariaLabel) return ariaLabel;
+    
+    const year = movie.releaseDate ? new Date(movie.releaseDate).getFullYear() : '';
+    const yearText = year ? ` from ${year}` : '';
+    const voteText = isVoting ? ' (voting in progress)' : ', click to vote for this movie';
+    
+    return `${movie.title}${yearText}${voteText}`;
+  };
 
   const getMoviePosterStyles = (): CSSObject => {
     return {
@@ -36,21 +77,37 @@ export const MovieCard: React.FC<MovieCardProps> = ({
   return (
     <div
       css={baphStyles.movieContainer}
-      data-testid={`movie-container-left-${movie.id}`}
+      data-testid={dataTestId || `movie-container-${movie.id}`}
     >
       <div
         css={[baphStyles.movieCard, isVoting && baphStyles.movieCardDisabled]}
-        onClick={() => handleVote(movie.id)}
-        data-testid={`movie-card-left-${movie.id}`}
+        onClick={() => !isVoting && handleVote(movie.id)}
+        onKeyDown={handleKeyDown}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        tabIndex={isVoting ? -1 : tabIndex}
+        role={role}
+        aria-label={generateAriaLabel()}
+        aria-describedby={ariaDescribedBy}
+        aria-disabled={isVoting}
+        autoFocus={autoFocus}
+        data-testid={`movie-card-${movie.id}`}
       >
         {movie.posterUrl ? (
           <img
             src={movie.posterUrl}
-            alt={`${movie.title} poster`}
+            alt={`${movie.title} movie poster`}
             css={getMoviePosterStyles()}
+            loading="lazy"
+            decoding="async"
           />
         ) : (
-          <div css={baphStyles.noPosterPlaceholder}>No Poster</div>
+          <div 
+            css={baphStyles.noPosterPlaceholder}
+            aria-hidden="true"
+          >
+            No Poster
+          </div>
         )}
 
         <div css={baphStyles.movieOverlay}>
@@ -69,6 +126,8 @@ export const MovieCard: React.FC<MovieCardProps> = ({
             size="large"
             onClick={() => handleVote(movie.id)}
             disabled={isVoting}
+            ariaLabel={`Vote for ${movie.title}`}
+            dataTestId={`vote-button-${movie.id}`}
           >
             {isVoting ? 'Voting...' : 'Choose This Movie'}
           </Button>

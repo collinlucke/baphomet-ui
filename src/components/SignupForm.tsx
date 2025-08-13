@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { InputField, Button } from '@collinlucke/phantomartist';
 import { CSSObject } from '@emotion/react';
-import { baphColors } from '../styling/baphTheme';
 import { SIGNUP } from '../api/mutations';
 import { SignupFormData, SignupFormProps } from '../types/auth.types';
 import { isAuthenticatedVar } from '../reactiveVars';
@@ -156,7 +155,20 @@ export const SignupForm: React.FC<SignupFormProps> = ({
         onSubmit={handleSubmit}
         noValidate
         data-testid="signup-form"
+        role="form"
+        aria-label="Create account form"
       >
+        {generalError && (
+          <div 
+            css={baphStyles.generalError} 
+            data-testid="signup-general-error"
+            role="alert"
+            aria-live="polite"
+          >
+            {generalError}
+          </div>
+        )}
+
         <div css={baphStyles.fields}>
           <InputField
             label="Username"
@@ -168,7 +180,13 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             disabled={isLoading}
             data-testid="signup-username-input"
             name="username"
+            autoComplete="username"
+            ariaDescribedBy="username-help"
+            ariaInvalid={!!errors.username}
           />
+          <div id="username-help" css={baphStyles.srOnly}>
+            Choose a unique username for your account, minimum 3 characters
+          </div>
 
           <InputField
             label="Display Name"
@@ -180,7 +198,12 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             disabled={isLoading}
             data-testid="signup-display-name-input"
             name="displayName"
+            ariaDescribedBy="displayname-help"
+            ariaInvalid={!!errors.displayName}
           />
+          <div id="displayname-help" css={baphStyles.srOnly}>
+            Enter the name that will be shown to other users
+          </div>
 
           <InputField
             label="Email"
@@ -193,7 +216,13 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             disabled={isLoading}
             data-testid="signup-email-input"
             name="email"
+            autoComplete="email"
+            ariaDescribedBy="email-help"
+            ariaInvalid={!!errors.email}
           />
+          <div id="email-help" css={baphStyles.srOnly}>
+            Enter a valid email address for account verification and updates
+          </div>
 
           <InputField
             label="Password"
@@ -206,7 +235,13 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             disabled={isLoading}
             data-testid="signup-password-input"
             name="password"
+            autoComplete="new-password"
+            ariaDescribedBy="password-help"
+            ariaInvalid={!!errors.password}
           />
+          <div id="password-help" css={baphStyles.srOnly}>
+            Create a secure password with at least 6 characters
+          </div>
 
           <InputField
             label="Confirm Password"
@@ -219,24 +254,28 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             disabled={isLoading}
             data-testid="signup-confirm-password-input"
             name="confirmPassword"
+            autoComplete="new-password"
+            ariaDescribedBy="confirm-password-help"
+            ariaInvalid={!!errors.confirmPassword}
           />
+          <div id="confirm-password-help" css={baphStyles.srOnly}>
+            Re-enter your password to confirm it matches
+          </div>
         </div>
 
-        {generalError && (
-          <div css={baphStyles.generalError} data-testid="signup-general-error">
-            {generalError}
-          </div>
-        )}
-
-        <Button
-          type="submit"
-          kind="primary"
-          disabled={isLoading}
-          dataTestId="signup-submit-button"
-          className={{ button: baphStyles.signUpButton }}
-        >
-          {isLoading ? 'Creating Account...' : 'Create Account'}
-        </Button>
+        <div css={baphStyles.submitContainer}>
+          <Button
+            type="submit"
+            kind="primary"
+            disabled={isLoading || !formData.username.trim() || !formData.email.trim() || 
+                     !formData.password || !formData.confirmPassword || !formData.displayName.trim()}
+            dataTestId="signup-submit-button"
+            className={{ button: baphStyles.signUpButton }}
+            ariaLabel={isLoading ? 'Creating account, please wait' : 'Create your account'}
+          >
+            {isLoading ? 'Creating Account...' : 'Create Account'}
+          </Button>
+        </div>
       </form>
     </ModalContent>
   );
@@ -249,18 +288,6 @@ const baphStyles: { [key: string]: CSSObject } = {
     gap: '1.5rem',
     width: '100%',
     maxWidth: '400px'
-  },
-  header: {
-    textAlign: 'center' as const,
-    marginBottom: '1rem'
-  },
-  title: {
-    margin: '0 0 0.5rem 0',
-    color: baphColors.primary
-  },
-  subtitle: {
-    margin: 0,
-    color: baphColors.primary
   },
   fields: {
     display: 'flex',
@@ -278,8 +305,22 @@ const baphStyles: { [key: string]: CSSObject } = {
     marginBottom: '1rem',
     textAlign: 'center' as const
   },
+  submitContainer: {
+    marginTop: '0.5rem'
+  },
   signUpButton: {
     justifyContent: 'center',
     width: '100%'
+  },
+  srOnly: {
+    position: 'absolute' as const,
+    width: '1px',
+    height: '1px',
+    padding: 0,
+    margin: '-1px',
+    overflow: 'hidden',
+    clip: 'rect(0, 0, 0, 0)',
+    whiteSpace: 'nowrap' as const,
+    border: 0
   }
 };
