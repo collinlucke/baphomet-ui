@@ -58,11 +58,15 @@ export const MovieCard: React.FC<MovieCardProps> = ({
   // Generate accessible label
   const generateAriaLabel = (): string => {
     if (ariaLabel) return ariaLabel;
-    
-    const year = movie.releaseDate ? new Date(movie.releaseDate).getFullYear() : '';
+
+    const year = movie.releaseDate
+      ? new Date(movie.releaseDate).getFullYear()
+      : '';
     const yearText = year ? ` from ${year}` : '';
-    const voteText = isVoting ? ' (voting in progress)' : ', click to vote for this movie';
-    
+    const voteText = isVoting
+      ? ' (voting in progress)'
+      : ', click to vote for this movie';
+
     return `${movie.title}${yearText}${voteText}`;
   };
 
@@ -102,10 +106,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
             decoding="async"
           />
         ) : (
-          <div 
-            css={baphStyles.noPosterPlaceholder}
-            aria-hidden="true"
-          >
+          <div css={baphStyles.noPosterPlaceholder} aria-hidden="true">
             No Poster
           </div>
         )}

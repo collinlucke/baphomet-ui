@@ -9,11 +9,11 @@ export const PageHeading: React.FC<{
   level?: 1 | 2 | 3 | 4 | 5 | 6;
   ariaLabelledBy?: string;
   ariaDescribedBy?: string;
-}> = ({ 
-  title, 
-  subtitle, 
-  className = {}, 
-  slug, 
+}> = ({
+  title,
+  subtitle,
+  className = {},
+  slug,
   level = 1,
   ariaLabelledBy,
   ariaDescribedBy
@@ -21,7 +21,7 @@ export const PageHeading: React.FC<{
   const isMobileAndLandscape = isMobileAndLandscapeVar();
   const HeadingTag = `h${level}` as keyof JSX.IntrinsicElements;
   const headingId = `heading-${slug || 'page'}`;
-  
+
   return (
     <div
       css={`
@@ -35,14 +35,14 @@ export const PageHeading: React.FC<{
       aria-labelledby={ariaLabelledBy || headingId}
       aria-describedby={subtitle ? `${headingId}-subtitle` : ariaDescribedBy}
     >
-      <HeadingTag 
+      <HeadingTag
         css={getPageHeadingStyles(isMobileAndLandscape, level).heading}
         id={headingId}
       >
         {title}
       </HeadingTag>
       {subtitle && (
-        <h4 
+        <h4
           css={getPageHeadingStyles(isMobileAndLandscape, level).subtitle}
           id={`${headingId}-subtitle`}
           aria-label={`Subtitle: ${subtitle}`}
@@ -54,7 +54,10 @@ export const PageHeading: React.FC<{
   );
 };
 
-const getPageHeadingStyles = (isMobileAndLandscape: boolean, level: number = 1): CSSObject => {
+const getPageHeadingStyles = (
+  isMobileAndLandscape: boolean,
+  level: number = 1
+): CSSObject => {
   const getFontSize = (level: number) => {
     const sizes = {
       1: isMobileAndLandscape ? '1.5rem' : '2rem',

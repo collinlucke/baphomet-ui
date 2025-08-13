@@ -134,7 +134,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
         aria-label="Login form"
       >
         {generalError && (
-          <div 
+          <div
             css={baphStyles.errorMessage}
             role="alert"
             aria-live="polite"
@@ -143,7 +143,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
             {generalError}
           </div>
         )}
-        
+
         <div css={baphStyles.fields}>
           <InputField
             label="Email"
@@ -175,7 +175,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
             error={errors.password}
             disabled={isLoading}
             autoComplete="current-password"
-            ariaDescribedBy={errors.password ? 'password-error' : 'password-help'}
+            ariaDescribedBy={
+              errors.password ? 'password-error' : 'password-help'
+            }
             ariaInvalid={!!errors.password}
             data-testid="login-password-input"
           />
@@ -190,7 +192,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
             kind="primary"
             size="large"
             disabled={isLoading || !formData.email.trim() || !formData.password}
-            ariaLabel={isLoading ? 'Signing in, please wait' : 'Sign in to your account'}
+            ariaLabel={
+              isLoading ? 'Signing in, please wait' : 'Sign in to your account'
+            }
             data-testid="login-submit-button"
           >
             {isLoading ? 'Signing In...' : 'Sign In'}

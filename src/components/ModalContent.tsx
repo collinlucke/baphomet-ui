@@ -20,21 +20,18 @@ export const ModalContent: React.FC<ModalContentProps> = ({
   const generatedSubtitleId = subtitleId || `modal-subtitle-${Date.now()}`;
 
   return (
-    <div 
+    <div
       css={baphStyles.modalContent}
       role="dialog"
       aria-labelledby={generatedTitleId}
       aria-describedby={subtitle ? generatedSubtitleId : undefined}
     >
       <div css={baphStyles.header}>
-        <HeadingTag 
-          css={baphStyles.title}
-          id={generatedTitleId}
-        >
+        <HeadingTag css={baphStyles.title} id={generatedTitleId}>
           {title}
         </HeadingTag>
         {subtitle && (
-          <p 
+          <p
             css={baphStyles.subtitle}
             id={generatedSubtitleId}
             role="doc-subtitle"

@@ -5,13 +5,17 @@ import { Link } from 'react-router-dom';
 
 export const Footer: React.FC = () => {
   const handleFeedbackClick = (e: React.KeyboardEvent | React.MouseEvent) => {
-    if (e.type === 'click' || (e as React.KeyboardEvent).key === 'Enter' || (e as React.KeyboardEvent).key === ' ') {
+    if (
+      e.type === 'click' ||
+      (e as React.KeyboardEvent).key === 'Enter' ||
+      (e as React.KeyboardEvent).key === ' '
+    ) {
       showFeedbackModalVar(true);
     }
   };
 
   return (
-    <footer 
+    <footer
       css={baphStyles.footerStyles}
       role="contentinfo"
       aria-label="Site footer"

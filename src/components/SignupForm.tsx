@@ -159,8 +159,8 @@ export const SignupForm: React.FC<SignupFormProps> = ({
         aria-label="Create account form"
       >
         {generalError && (
-          <div 
-            css={baphStyles.generalError} 
+          <div
+            css={baphStyles.generalError}
             data-testid="signup-general-error"
             role="alert"
             aria-live="polite"
@@ -267,11 +267,21 @@ export const SignupForm: React.FC<SignupFormProps> = ({
           <Button
             type="submit"
             kind="primary"
-            disabled={isLoading || !formData.username.trim() || !formData.email.trim() || 
-                     !formData.password || !formData.confirmPassword || !formData.displayName.trim()}
+            disabled={
+              isLoading ||
+              !formData.username.trim() ||
+              !formData.email.trim() ||
+              !formData.password ||
+              !formData.confirmPassword ||
+              !formData.displayName.trim()
+            }
             dataTestId="signup-submit-button"
             className={{ button: baphStyles.signUpButton }}
-            ariaLabel={isLoading ? 'Creating account, please wait' : 'Create your account'}
+            ariaLabel={
+              isLoading
+                ? 'Creating account, please wait'
+                : 'Create your account'
+            }
           >
             {isLoading ? 'Creating Account...' : 'Create Account'}
           </Button>

@@ -105,15 +105,15 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
       title="Send Feedback"
       subtitle="We'd love to hear your thoughts!"
     >
-      <form 
-        onSubmit={handleSubmit} 
-        css={feedbackStyles.form} 
+      <form
+        onSubmit={handleSubmit}
+        css={feedbackStyles.form}
         noValidate
         role="form"
         aria-label="Send feedback form"
       >
         {generalError && (
-          <div 
+          <div
             css={feedbackStyles.errorMessage}
             role="alert"
             aria-live="polite"
@@ -138,7 +138,8 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
           data-testid="feedback-email-input"
         />
         <div id="email-help" css={feedbackStyles.srOnly}>
-          Optional: Provide your email if you would like a response to your feedback
+          Optional: Provide your email if you would like a response to your
+          feedback
         </div>
 
         <InputField
@@ -156,15 +157,20 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
           data-testid="feedback-comments-input"
         />
         <div id="comments-help" css={feedbackStyles.srOnly}>
-          Required: Share your thoughts, suggestions, or feedback about the application
+          Required: Share your thoughts, suggestions, or feedback about the
+          application
         </div>
 
         <div css={feedbackStyles.submitContainer}>
-          <Button 
-            type="submit" 
-            kind="primary" 
+          <Button
+            type="submit"
+            kind="primary"
             disabled={isSubmitting || !formData.comments.trim()}
-            ariaLabel={isSubmitting ? 'Sending feedback, please wait' : 'Send your feedback'}
+            ariaLabel={
+              isSubmitting
+                ? 'Sending feedback, please wait'
+                : 'Send your feedback'
+            }
             data-testid="feedback-submit-button"
           >
             {isSubmitting ? 'Sending...' : 'Send Feedback'}
