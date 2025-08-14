@@ -55,7 +55,7 @@ const baphStyles = (posterUrl: string): { [key: string]: CSSObject } => ({
   },
   posterWrapper: {
     position: 'relative',
-    minWidth: '100px',
+    flex: '1',
     aspectRatio: '2 / 3'
   },
   poster: {
@@ -68,25 +68,28 @@ const baphStyles = (posterUrl: string): { [key: string]: CSSObject } => ({
   },
   scoreWrapper: {
     position: 'absolute',
-    bottom: '-25px',
-    right: '-20px',
+    bottom: 0,
+    right: '10px',
     display: 'flex',
-    alignItems: 'baseline'
+    alignItems: 'baseline',
+    lineHeight: 'normal'
   },
   major: {
-    color: baseColors.primary[500],
-    fontSize: '2rem',
+    color: baseVibrantColors.primary[500],
+    fontSize: '4rem',
     fontWeight: 'bold',
-    WebkitTextStroke: `3px ${baseVibrantColors.primary[500]}`,
-    paintOrder: 'stroke fill'
+    WebkitTextStroke: `2px white`,
+    paintOrder: 'stroke fill',
+    textShadow: '2px 2px 4px rgba(0, 0, 0, 1)'
   },
   minor: {
-    color: baseColors.primary[500],
-    fontSize: '1rem',
+    color: baseVibrantColors.primary[500],
+    fontSize: '3rem',
     fontWeight: 'bold',
-    WebkitTextStroke: `3px ${baseVibrantColors.primary[500]}`,
+    WebkitTextStroke: `2px white`,
     paintOrder: 'stroke fill',
-    marginLeft: '2px'
+    marginLeft: '2px',
+    textShadow: '2px 2px 4px rgba(0, 0, 0, 1)'
   },
   tooltip: {
     width: 'max-content',

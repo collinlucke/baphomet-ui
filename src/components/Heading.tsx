@@ -23,7 +23,6 @@ export const Heading: React.FC<HeadingProps> = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(location);
   const isAuthenticated = useReactiveVar(isAuthenticatedVar);
   const isMobileAndLandscape = useReactiveVar(isMobileAndLandscapeVar);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

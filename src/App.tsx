@@ -15,9 +15,9 @@ import {
   isLandscapeVar,
   isMobileAndLandscapeVar
 } from './reactiveVars';
-import { useReactiveVar, useLazyQuery } from '@apollo/client';
+import { useReactiveVar, useLazyQuery, useQuery } from '@apollo/client';
 import { CSSObject } from '@emotion/react';
-import { CHECK_AUTH } from './api/queries';
+import { CHECK_AUTH, GET_RANDOM_BACKDROP_IMAGE } from './api/queries';
 import { SignupForm } from './components/SignupForm';
 import { LoginForm } from './components/LoginForm';
 import { FeedbackForm } from './components/FeedbackForm';
@@ -29,7 +29,23 @@ export const App = () => {
   const showFeedbackModal = useReactiveVar(showFeedbackModalVar);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
+  const [backdrop, setBackdrop] = useState<string>('');
 
+  useQuery(GET_RANDOM_BACKDROP_IMAGE, {
+    onCompleted: data => {
+      console.log('Fetched random backdrop image:', data);
+      const backdropUrl = data.getRandomBackdropImage?.backdropUrl;
+      console.log('Backdrop URL:', backdropUrl);
+      if (backdropUrl) {
+        setBackdrop(backdropUrl);
+      } else {
+        console.warn('No backdrop image found');
+      }
+    },
+    onError: error => {
+      console.error('Error fetching random backdrop image:', error);
+    }
+  });
   // Function to check and update mobile/landscape state
   const updateDeviceState = () => {
     const isMobile =
@@ -92,8 +108,6 @@ export const App = () => {
     }
   }, [checkAuth]);
 
-  const backgroundImage = '/back-to-the-future-backdrop.jpg';
-
   // Modal handlers
   const handleLoginModalClose = () => {
     setShowLoginModal(false);
@@ -140,10 +154,7 @@ export const App = () => {
           setShowSignupModal={setShowSignupModal}
         />
       )}
-      <Main
-        isDark={true}
-        className={{ main: baphStyles(backgroundImage).main }}
-      >
+      <Main isDark={true} className={{ main: baphStyles(backdrop).main }}>
         <Outlet />
       </Main>
       <Footer />
@@ -188,7 +199,7 @@ export const App = () => {
   );
 };
 
-const baphStyles = (backgroundImage?: string) =>
+const baphStyles = (backdrop?: string) =>
   ({
     main: {
       position: 'relative',
@@ -200,13 +211,13 @@ const baphStyles = (backgroundImage?: string) =>
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundImage: `url(${backgroundImage})`,
+        backgroundImage: `url(${backdrop})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         backgroundAttachment: 'fixed',
         filter: 'grayscale(100%)',
-        opacity: 0.03,
+        opacity: 0.05,
         zIndex: -1
       }
     },

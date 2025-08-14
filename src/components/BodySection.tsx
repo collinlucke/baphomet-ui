@@ -70,13 +70,12 @@ const getSectionInnerWidthStyles = (isMobileAndLandscape: boolean) => {
 };
 const baphStyles: { [key: string]: CSSObject } = {
   sectionBlock: {
-    marginBottom: '60px',
-    minHeight: '100vh'
+    marginBottom: '60px'
   },
   section: {
     display: 'flex',
     flexDirection: 'column' as const,
-    padding: '0 2rem'
+    padding: '2rem'
   },
   sectionInnerWidth: {
     maxWidth: '1720px',
@@ -84,7 +83,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     display: 'flex',
     flexDirection: 'column' as const,
     gap: '35px',
-    marginTop: '1.5rem'
+    margin: '1.5rem auto'
   },
   sectionContent: {
     display: 'flex',

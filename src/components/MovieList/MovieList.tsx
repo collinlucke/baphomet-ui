@@ -100,41 +100,39 @@ export const MovieList: React.FC<MovieData> = ({
           }}
         />
       )}
-      <div>
-        {movies?.length ? (
-          <>
-            <List className={{ ui: baphStyles.ul }} date-testid="movie-list">
-              {movies &&
-                movies.map(mov => (
-                  <MovieListItem
-                    movie={mov}
-                    key={mov.id}
-                    // openDeleteModal={openDeleteModal || (() => {})}
-                  />
-                ))}
-              {/* Loading indicator for lazy loading */}
-              {isLoadingMore && (
-                <div css={baphStyles.loadingContainer}>
-                  <div css={baphStyles.loadingText}>Loading more movies...</div>
-                </div>
-              )}
+      {movies?.length ? (
+        <>
+          <List className={{ ...baphStyles.list }} date-testid="movie-list">
+            {movies &&
+              movies.map(mov => (
+                <MovieListItem
+                  movie={mov}
+                  key={mov.id}
+                  // openDeleteModal={openDeleteModal || (() => {})}
+                />
+              ))}
+            {/* Loading indicator for lazy loading */}
+            {isLoadingMore && (
+              <div css={baphStyles.loadingContainer}>
+                <div css={baphStyles.loadingText}>Loading more movies...</div>
+              </div>
+            )}
 
-              {/* End of results indicator */}
-              {!hasMore && movies.length > 0 && (
-                <div css={baphStyles.endContainer}>
-                  <div css={baphStyles.endText}>You've reached the end! 🎬</div>
-                </div>
-              )}
-            </List>
-          </>
-        ) : (
-          <div css={[baphStyles.noResults]}>
-            <h2>Real sorry to tell you this, but...</h2>
-            <div>No movies match your search</div>
-          </div>
-        )}
-        <div ref={sentinelRef} css={baphStyles.sentinel} />
-      </div>
+            {/* End of results indicator */}
+          </List>
+          {!hasMore && movies.length > 0 && (
+            <div css={baphStyles.endContainer}>
+              <div css={baphStyles.endText}>You've reached the end! 🎬</div>
+            </div>
+          )}
+        </>
+      ) : (
+        <div css={[baphStyles.noResults]}>
+          <h2>Real sorry to tell you this, but...</h2>
+          <div>No movies match your search</div>
+        </div>
+      )}
+      <div ref={sentinelRef} css={baphStyles.sentinel} />
     </div>
   );
 };
@@ -151,7 +149,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     zIndex: 10,
     top: 0,
     padding: '35px 0',
-    marginBottom: '35px',
+    justifyContent: 'end',
     '&:after': {
       content: '""',
       display: 'block',
@@ -175,15 +173,14 @@ const baphStyles: { [key: string]: CSSObject } = {
     marginTop: '30px',
     color: baphColorVariations.tertiary[50]
   },
-  ul: {
+  list: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
     gap: '35px',
     listStyleType: 'none',
     paddingInlineStart: 0,
     margin: 0,
-    width: '100%',
-    justifyContent: 'center'
+    width: '100%'
   },
   movieListWrapper: {
     display: 'flex',

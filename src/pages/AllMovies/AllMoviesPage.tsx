@@ -30,7 +30,6 @@ export const AllMoviesPage: React.FC = () => {
 
   const [fetchMovies] = useLazyQuery(GET_MOVIES_BY_TITLE, {
     onCompleted: data => {
-      console.log('Movies fetched:', data);
       const { searchResults, newCursor, endOfResults, newTotalMovieCount } =
         data.movieResults;
 
@@ -39,11 +38,9 @@ export const AllMoviesPage: React.FC = () => {
 
       // Use ref to get the current state and avoid closure issues
       if (isNewSearchRef.current) {
-        console.log('Setting new movie list (new search)');
         setAllMovies(searchResults || []);
         isNewSearchRef.current = false; // Reset flag after handling new search
       } else {
-        console.log('Appending to existing movie list (lazy load)');
         setAllMovies(prev => {
           const incoming = searchResults || [];
           const existingIds = new Set(prev.map(m => m.id));

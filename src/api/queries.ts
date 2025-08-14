@@ -149,3 +149,11 @@ export const GET_RANDOM_MATCHUP = gql`
     }
   }
 `;
+
+export const GET_RANDOM_BACKDROP_IMAGE = gql`
+  query getRandomBackdropImage {
+    getRandomBackdropImage {
+      backdropUrl
+    }
+  }
+`;
