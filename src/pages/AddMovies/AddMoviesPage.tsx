@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useMutation, useLazyQuery } from '@apollo/client';
 import { getMovieByTMDBId, getMoviesByTitle } from '../../api/tmdbApi';
 import {
@@ -82,7 +82,7 @@ export const AddMoviesPage: React.FC = () => {
   const [addMovieMutation, { loading: isLoading }] = useMutation(ADD_MOVIE, {
     onCompleted: () => {
       setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 3000); // Hide success message after 3 seconds
+      setTimeout(() => setShowSuccess(false), 3000);
     },
     onError: error => {
       console.error('Error adding movie:', error);
@@ -93,15 +93,14 @@ export const AddMoviesPage: React.FC = () => {
     onCompleted: data => {
       console.log(data);
       const { searchResults } = data?.movieResults || {};
-      // If movies are found with this TMDB ID, prevent adding
+
       if (searchResults && searchResults.length > 0) {
         setDuplicateError(
           `Ope! "${searchResults[0].title}" has already been added`
         );
-        setTimeout(() => setDuplicateError(''), 3000); // Clear error after 3 seconds
+        setTimeout(() => setDuplicateError(''), 3000);
         return;
       } else {
-        // If no duplicates are found, proceed to add the movie
         addMovieMutation({
           variables: {
             ...newMovie,
@@ -126,7 +125,7 @@ export const AddMoviesPage: React.FC = () => {
         ...newMovie,
         title: data.title || '',
         releaseDate: data.release_date || '',
-        // directors: [], // Directors are fetched from TMDB's credits endpoint
+
         genres: data.genres?.map((genre: TMDBGenre) => genre.name) || [],
         revenue: data.revenue ? `$${data.revenue.toLocaleString()} USD` : '',
         overview: data.overview || '',
@@ -480,7 +479,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     gap: '2rem',
     display: 'flex',
     width: '100%',
-    maxWidth: '800px', // Add max width to prevent overflow
+    maxWidth: '800px',
     flexDirection: 'column' as const,
     alignItems: 'center',
     [mediaQueries.minWidth.md]: {
@@ -491,7 +490,7 @@ const baphStyles: { [key: string]: CSSObject } = {
   posterImg: {
     maxHeight: '300px',
     aspectRatio: '2/3',
-    width: '200px', // Set explicit width
+    width: '200px',
     borderRadius: '4px',
     objectFit: 'cover' as const,
     backgroundColor: paColors.secondary[500],
@@ -503,8 +502,8 @@ const baphStyles: { [key: string]: CSSObject } = {
   backdropImg: {
     maxHeight: '300px',
     aspectRatio: '16/9',
-    width: 'calc(100% - 232px)', // Subtract poster width + gap
-    minWidth: '0', // Allow shrinking
+    width: 'calc(100% - 232px)',
+    minWidth: '0',
     borderRadius: '4px',
     objectFit: 'cover' as const,
     backgroundColor: paColors.secondary[500],
@@ -513,11 +512,10 @@ const baphStyles: { [key: string]: CSSObject } = {
     alignItems: 'center',
     justifyContent: 'center',
     [mediaQueries.maxWidth.md]: {
-      width: '100%' // Full width on mobile
+      width: '100%'
     }
   },
 
-  // Modal styles
   modalContent: {
     maxHeight: '70vh',
     overflowY: 'auto' as const

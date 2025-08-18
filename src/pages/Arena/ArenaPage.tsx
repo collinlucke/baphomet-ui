@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { GET_RANDOM_MATCHUP } from '../../api/queries';
 import { SUBMIT_VOTE } from '../../api/mutations';
@@ -95,9 +95,9 @@ export const ArenaPage: React.FC = () => {
         <PageHeading
           title="Movie Arena"
           slug="arena"
-          className={arenaStyles.pageHeading}
+          className={baphStyles.pageHeading}
         />
-        <div css={arenaStyles.container} className="arena-container">
+        <div css={baphStyles.container} className="arena-container">
           {children}
         </div>
       </BodySection>
@@ -108,8 +108,8 @@ export const ArenaPage: React.FC = () => {
     console.log('Loading matchup...');
     return (
       <ArenaContainer>
-        <div css={arenaStyles.loadingContainer}>
-          <p css={arenaStyles.loadingText}>Loading next matchup...</p>
+        <div css={baphStyles.loadingContainer}>
+          <p css={baphStyles.loadingText}>Loading next matchup...</p>
         </div>
       </ArenaContainer>
     );
@@ -118,8 +118,8 @@ export const ArenaPage: React.FC = () => {
   if (error) {
     return (
       <ArenaContainer>
-        <div css={arenaStyles.errorContainer}>
-          <p css={arenaStyles.errorText}>
+        <div css={baphStyles.errorContainer}>
+          <p css={baphStyles.errorText}>
             {error.message.includes('Not enough movies')
               ? 'Not enough movies available for matchups. Add more movies to get started!'
               : 'Failed to load matchup. Please try again.'}
@@ -135,8 +135,8 @@ export const ArenaPage: React.FC = () => {
   if (!data?.getRandomMovieMatchup) {
     return (
       <ArenaContainer>
-        <div css={arenaStyles.errorContainer}>
-          <p css={arenaStyles.errorText}>No matchup available</p>
+        <div css={baphStyles.errorContainer}>
+          <p css={baphStyles.errorText}>No matchup available</p>
           <Button kind="primary" size="medium" onClick={() => refetch()}>
             Get Matchup
           </Button>
@@ -149,20 +149,18 @@ export const ArenaPage: React.FC = () => {
 
   const getMatchupContainerStyles: () => CSSObject = () => {
     return {
-      ...arenaStyles.matchupContainer,
+      ...baphStyles.matchupContainer,
       flexDirection: isMobileAndLandscape ? 'row' : 'column'
     };
   };
 
   return (
     <ArenaContainer>
-      {/* <div>Which bear is best?</div> */}
-
       {voteResult && (
         <div
           css={[
-            arenaStyles.voteResult,
-            voteResult.success ? arenaStyles.voteSuccess : arenaStyles.voteError
+            baphStyles.voteResult,
+            voteResult.success ? baphStyles.voteSuccess : baphStyles.voteError
           ]}
         >
           {voteResult.message}
@@ -173,20 +171,17 @@ export const ArenaPage: React.FC = () => {
         css={getMatchupContainerStyles()}
         className="arena-matchup-container"
       >
-        {/* Movie 1 */}
-
         <MovieCard
           movie={matchup.movie1}
           isVoting={isVoting}
           handleVote={handleVote}
         />
 
-        {/* VS Divider */}
-        <div css={arenaStyles.vsAndSkipContainer}>
-          <div css={arenaStyles.vsContainer}>
-            <div css={arenaStyles.vsText}>VS</div>
+        <div css={baphStyles.vsAndSkipContainer}>
+          <div css={baphStyles.vsContainer}>
+            <div css={baphStyles.vsText}>VS</div>
           </div>
-          <div css={arenaStyles.actionButtons}>
+          <div css={baphStyles.actionButtons}>
             <Button
               kind="outline"
               size="medium"
@@ -198,30 +193,17 @@ export const ArenaPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Movie 2 */}
-
         <MovieCard
           movie={matchup.movie2}
           isVoting={isVoting}
           handleVote={handleVote}
         />
       </div>
-
-      {/* <div css={arenaStyles.actionButtons}>
-        <Button
-          kind="outline"
-          size="medium"
-          onClick={handleSkip}
-          disabled={isVoting}
-        >
-          Skip This Matchup
-        </Button>
-      </div> */}
     </ArenaContainer>
   );
 };
 
-const arenaStyles: { [key: string]: CSSObject } = {
+const baphStyles: { [key: string]: CSSObject } = {
   vsAndSkipContainer: {
     display: 'flex',
     flexDirection: 'column',
@@ -238,23 +220,6 @@ const arenaStyles: { [key: string]: CSSObject } = {
     [mediaQueries.maxWidth.lg]: {
       alignItems: 'center'
     }
-  },
-  title: {
-    fontSize: '3rem',
-    fontWeight: 'bold',
-    color: baseVibrantColors.primary[300],
-    textAlign: 'center',
-    margin: 0,
-    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-    [mediaQueries.maxWidth.md]: {
-      fontSize: '2.5rem'
-    }
-  },
-  subtitle: {
-    textAlign: 'center',
-    color: baseColors.tertiary[200],
-    fontSize: '1.2rem',
-    margin: 0
   },
   loadingContainer: {
     display: 'flex',
@@ -312,13 +277,6 @@ const arenaStyles: { [key: string]: CSSObject } = {
       flexDirection: 'row',
       gap: '2rem'
     }
-  },
-  movieContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '1.5rem',
-    flex: 1,
-    maxWidth: '400px'
   },
   vsContainer: {
     display: 'flex',

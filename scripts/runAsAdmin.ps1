@@ -1,1 +1,0 @@
-Start-Process powershell -Verb runAs -ArgumentList @("-NoExit", "-Command", "docker pull collinlucke/baphomet-ui:latest", "docker rm -f baphomet-ui-container", "docker run -d -p 80:80 -p 443:443 collinlucke/baphomet-ui")  

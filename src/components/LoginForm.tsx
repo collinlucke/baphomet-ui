@@ -18,38 +18,30 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
 
   const [loginMutation, { loading: isLoading }] = useMutation(LOGIN, {
     onCompleted: data => {
-      // Clear any previous errors
       setGeneralError('');
       setErrors({});
 
-      // Store token in localStorage
       localStorage.setItem('baphomet-token', data.login.token);
       localStorage.setItem('baphomet-user', JSON.stringify(data.login.user));
       isAuthenticatedVar(true);
 
-      // Call success callback
       if (onSuccess) {
         onSuccess(data.login);
       }
     },
     onError: error => {
-      // Handle different types of errors
       let errorMessage = 'An error occurred during login';
 
       if (error.networkError) {
-        // Network errors (like CORS, server down, etc.)
         errorMessage =
           'Unable to connect to server. Please check your connection and try again.';
       } else if (error.graphQLErrors && error.graphQLErrors.length > 0) {
-        // GraphQL errors (validation, business logic)
         errorMessage = error.graphQLErrors[0].message;
       } else if (error.message) {
-        // Other Apollo errors
         errorMessage = error.message;
       }
       console.log(error);
 
-      // If it's a specific field error, show it on the field
       if (errorMessage.toLowerCase().includes('password')) {
         setErrors(prev => ({ ...prev, password: errorMessage }));
         setGeneralError('');
@@ -60,11 +52,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
         setErrors(prev => ({ ...prev, email: errorMessage }));
         setGeneralError('');
       } else {
-        // Show general error for network issues, server errors, etc.
         setGeneralError(errorMessage);
       }
 
-      // Call error callback
       if (onError) {
         onError(errorMessage);
       }
@@ -103,7 +93,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
         }
       });
     } catch (error) {
-      // Error handling is done in the onError callback above
       console.error('Login error:', error);
     }
   };
@@ -113,11 +102,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
   ) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear field error when user starts typing
+
     if (errors[name as keyof LoginFormData]) {
       setErrors(prev => ({ ...prev, [name]: undefined }));
     }
-    // Clear general error when user starts typing
+
     if (generalError) {
       setGeneralError('');
     }

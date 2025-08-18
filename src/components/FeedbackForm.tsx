@@ -32,7 +32,6 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
     }
   });
 
-  // Sanitize input to prevent XSS
   const sanitizeInput = (input: string): string => {
     return input
       .replace(/</g, '&lt;')
@@ -46,13 +45,11 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
   const validateForm = (): boolean => {
     const newErrors: { email?: string; comments?: string } = {};
 
-    // Validate comments are required
     if (!formData.comments.trim()) {
       newErrors.comments =
         'Comments are required. Please tell us what you think!';
     }
 
-    // Validate email format if provided
     if (formData.email.trim()) {
       newErrors.email = 'Please enter a valid email address or leave it blank.';
     }
@@ -67,12 +64,10 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
 
-    // Clear field error when user starts typing
     if (errors[name as keyof typeof errors]) {
       setErrors(prev => ({ ...prev, [name]: undefined }));
     }
 
-    // Clear general error when user starts typing
     if (generalError) {
       setGeneralError('');
     }
@@ -88,7 +83,6 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
 
     setIsSubmitting(true);
 
-    // Sanitize Comments
     const sanitizedComments = sanitizeInput(formData.comments);
 
     submitFeedback({
@@ -107,14 +101,14 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
     >
       <form
         onSubmit={handleSubmit}
-        css={feedbackStyles.form}
+        css={baphStyles.form}
         noValidate
         role="form"
         aria-label="Send feedback form"
       >
         {generalError && (
           <div
-            css={feedbackStyles.errorMessage}
+            css={baphStyles.errorMessage}
             role="alert"
             aria-live="polite"
             data-testid="feedback-general-error"
@@ -137,7 +131,7 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
           ariaInvalid={!!errors.email}
           data-testid="feedback-email-input"
         />
-        <div id="email-help" css={feedbackStyles.srOnly}>
+        <div id="email-help" css={baphStyles.srOnly}>
           Optional: Provide your email if you would like a response to your
           feedback
         </div>
@@ -156,12 +150,12 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
           ariaInvalid={!!errors.comments}
           data-testid="feedback-comments-input"
         />
-        <div id="comments-help" css={feedbackStyles.srOnly}>
+        <div id="comments-help" css={baphStyles.srOnly}>
           Required: Share your thoughts, suggestions, or feedback about the
           application
         </div>
 
-        <div css={feedbackStyles.submitContainer}>
+        <div css={baphStyles.submitContainer}>
           <Button
             type="submit"
             kind="primary"
@@ -181,7 +175,7 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
   );
 };
 
-const feedbackStyles: { [key: string]: CSSObject } = {
+const baphStyles: { [key: string]: CSSObject } = {
   form: {
     display: 'flex',
     flexDirection: 'column',

@@ -24,7 +24,6 @@ type MovieData = {
   totalMovieCount?: string;
   showSearch?: boolean;
   className?: CSSObject;
-  cursor?: string;
   isLoadingMore?: boolean;
   hasMore?: boolean;
   sortBy?: 'winningPercentage' | 'title' | 'releaseDate';
@@ -32,7 +31,6 @@ type MovieData = {
   onScroll?: () => void;
   onSearch?: (searchTerm: string) => void;
   setSearchTerm?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  // openDeleteModal?: ({ id, title }: { id: string; title: string }) => void;
 };
 
 export const MovieList: React.FC<MovieData> = ({
@@ -102,23 +100,15 @@ export const MovieList: React.FC<MovieData> = ({
       )}
       {movies?.length ? (
         <>
-          <List className={{ ...baphStyles.list }} date-testid="movie-list">
+          <List className={baphStyles.list} data-testid="movie-list">
             {movies &&
-              movies.map(mov => (
-                <MovieListItem
-                  movie={mov}
-                  key={mov.id}
-                  // openDeleteModal={openDeleteModal || (() => {})}
-                />
-              ))}
+              movies.map(mov => <MovieListItem movie={mov} key={mov.id} />)}
             {/* Loading indicator for lazy loading */}
             {isLoadingMore && (
               <div css={baphStyles.loadingContainer}>
                 <div css={baphStyles.loadingText}>Loading more movies...</div>
               </div>
             )}
-
-            {/* End of results indicator */}
           </List>
           {!hasMore && movies.length > 0 && (
             <div css={baphStyles.endContainer}>
@@ -162,7 +152,7 @@ const baphStyles: { [key: string]: CSSObject } = {
 
       zIndex: -1,
       backdropFilter: 'blur(50px)',
-      WebkitBackdropFilter: 'blur(50px)' // for Safari
+      WebkitBackdropFilter: 'blur(50px)'
     }
   },
   noResults: {

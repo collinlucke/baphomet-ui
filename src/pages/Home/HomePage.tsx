@@ -4,12 +4,16 @@ import { MovieList } from '../../components/MovieList/MovieList';
 import { GET_MOVIES_BY_TITLE } from '../../api/queries';
 import { useQuery } from '@apollo/client';
 import { showFeedbackModalVar } from '../../reactiveVars';
-// import { Button } from '@collinlucke/phantomartist';
 import { Link } from 'react-router-dom';
 
 export const HomePage: React.FC = () => {
   const { data } = useQuery(GET_MOVIES_BY_TITLE, {
-    variables: { title: '', limit: 26 },
+    variables: {
+      title: '',
+      limit: 26,
+      sortBy: 'winningPercentage',
+      sortOrder: 'desc'
+    },
     fetchPolicy: 'cache-and-network' // Use cache first, then network
   });
 
@@ -43,7 +47,6 @@ export const HomePage: React.FC = () => {
       </div>
       <div css={baphStyles.movieListContainer}>
         <MovieList
-          sortBy="winningPercentage"
           movies={data?.movieResults?.searchResults}
           showSearch={false}
           className={{
@@ -67,44 +70,14 @@ const baphStyles: { [key: string]: CSSObject } = {
     display: 'inline',
     fontSize: '2rem'
   },
-  link: {
-    textDecoration: 'underline',
-    cursor: 'pointer',
-    color: '#1d4ed8',
-    '&:hover': {
-      color: '#1d4ed8',
-      textDecoration: 'underline'
-    },
-    '&:visited': {
-      color: 'inherit'
-    }
-  },
   movieListContainer: {
-    position: 'relative',
-    '&: before': {
-      content: '"For Display Purposes Only"',
-      position: 'absolute',
-      display: 'flex',
-      width: '100%',
-      height: '100%',
-      alignItems: 'center',
-      justifyContent: 'center',
-      textAlign: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      fontSize: '3rem',
-      transform: 'rotate(-3deg)',
-      zIndex: 1
-    }
+    position: 'relative'
   },
   movieListWrapper: {
     marginTop: '0'
   },
   listWrapper: {
     marginTop: '0'
-  },
-  button: {
-    marginTop: '20px',
-    display: 'inline'
   },
   feedback: {
     textDecoration: 'underline',

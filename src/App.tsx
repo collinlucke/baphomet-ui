@@ -33,9 +33,7 @@ export const App = () => {
 
   useQuery(GET_RANDOM_BACKDROP_IMAGE, {
     onCompleted: data => {
-      console.log('Fetched random backdrop image:', data);
-      const backdropUrl = data.getRandomBackdropImage?.backdropUrl;
-      console.log('Backdrop URL:', backdropUrl);
+      const { backdropUrl } = data.getRandomBackdropImage;
       if (backdropUrl) {
         setBackdrop(backdropUrl);
       } else {
@@ -46,7 +44,6 @@ export const App = () => {
       console.error('Error fetching random backdrop image:', error);
     }
   });
-  // Function to check and update mobile/landscape state
   const updateDeviceState = () => {
     const isMobile =
       window.innerWidth <= 768 || navigator.userAgent.includes('Mobile');
@@ -58,13 +55,11 @@ export const App = () => {
     isMobileAndLandscapeVar(isMobileAndLandscape);
   };
 
-  // Check device state on mount and orientation change
   useEffect(() => {
     updateDeviceState();
 
     const handleResize = () => updateDeviceState();
     const handleOrientationChange = () => {
-      // Small delay to ensure orientation change has completed
       setTimeout(updateDeviceState, 100);
     };
 
@@ -82,33 +77,27 @@ export const App = () => {
       if (data.checkAuth.isValid) {
         isAuthenticatedVar(true);
       } else {
-        // Token is invalid, clear localStorage
         localStorage.removeItem('baphomet-token');
         localStorage.removeItem('baphomet-user');
         isAuthenticatedVar(false);
       }
     },
     onError: () => {
-      // Error checking token, assume invalid
       localStorage.removeItem('baphomet-token');
       localStorage.removeItem('baphomet-user');
       isAuthenticatedVar(false);
     }
   });
 
-  // Check authentication state on app initialization
   useEffect(() => {
     const token = localStorage.getItem('baphomet-token');
     if (token) {
-      // Token exists, verify it with the server
       checkAuth({ variables: { token } });
     } else {
-      // No token, user is not authenticated
       isAuthenticatedVar(false);
     }
   }, [checkAuth]);
 
-  // Modal handlers
   const handleLoginModalClose = () => {
     setShowLoginModal(false);
   };
@@ -140,7 +129,6 @@ export const App = () => {
 
   const handleFeedbackSuccess = () => {
     showFeedbackModalVar(false);
-    // Could show a success message here in the future
   };
 
   return (
@@ -154,13 +142,12 @@ export const App = () => {
           setShowSignupModal={setShowSignupModal}
         />
       )}
-      <Main isDark={true} className={{ main: baphStyles(backdrop).main }}>
+      <Main isDark={true} className={{ main: getMainStyles(backdrop) }}>
         <Outlet />
       </Main>
       <Footer />
       {error && <ErrorBoundary />}
 
-      {/* Authentication Modals */}
       <Modal isOpen={showLoginModal} onClose={handleLoginModalClose}>
         <LoginForm onSuccess={handleLoginSuccess} />
       </Modal>
@@ -169,22 +156,20 @@ export const App = () => {
         <SignupForm onSuccess={handleSignupSuccess} />
       </Modal>
 
-      {/* Feedback Modal */}
       <Modal isOpen={showFeedbackModal} onClose={handleFeedbackModalClose}>
         <FeedbackForm onSuccess={handleFeedbackSuccess} />
       </Modal>
 
-      {/* Unauthorized Action Modal */}
       <Modal
         isOpen={showUnauthorizedModal}
         onClose={handleUnauthorizedModalClose}
       >
-        <div css={baphStyles().unauthorizedModalContent}>
-          <h3 css={baphStyles().actionRequiredHeading}>Action Required</h3>
-          <p css={baphStyles().unauthorizedMessage}>
+        <div css={baphStyles.unauthorizedModalContent}>
+          <h3 css={baphStyles.actionRequiredHeading}>Action Required</h3>
+          <p css={baphStyles.unauthorizedMessage}>
             Could not complete your action because you are not logged in.
           </p>
-          <div css={baphStyles().unauthorizedModalActions}>
+          <div css={baphStyles.unauthorizedModalActions}>
             <Button onClick={handleUnauthorizedModalLogin} kind="primary">
               Log In
             </Button>
@@ -199,47 +184,55 @@ export const App = () => {
   );
 };
 
-const baphStyles = (backdrop?: string) =>
-  ({
-    main: {
-      position: 'relative',
-      zIndex: 0,
-      '&::before': {
-        content: '""',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundImage: `url(${backdrop})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
-        filter: 'grayscale(100%)',
-        opacity: 0.05,
-        zIndex: -1
-      }
-    },
-    unauthorizedModalContent: {
-      textAlign: 'center',
-      padding: '20px'
-    },
-    actionRequiredHeading: {
-      color: '#f39c12',
-      marginBottom: '16px',
-      fontSize: '1.2em'
-    },
-    unauthorizedMessage: {
-      color: '#e74c3c',
-      marginBottom: '24px',
-      fontSize: '1em'
-    },
-    unauthorizedModalActions: {
-      display: 'flex',
-      gap: '12px',
-      justifyContent: 'center'
+const getMainStyles = (backdrop?: string) => ({
+  ...baphStyles.main,
+  '&::before': {
+    ...(typeof baphStyles.main['&::before'] === 'object'
+      ? baphStyles.main['&::before']
+      : {}),
+    backgroundImage: `url(${backdrop})`
+  }
+});
+
+const baphStyles: { [key: string]: CSSObject } = {
+  main: {
+    position: 'relative',
+    zIndex: 0,
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      backgroundAttachment: 'fixed',
+      filter: 'grayscale(100%)',
+      opacity: 0.05,
+      zIndex: -1
     }
-  } as { [key: string]: CSSObject });
+  },
+  unauthorizedModalContent: {
+    textAlign: 'center',
+    padding: '20px'
+  },
+  actionRequiredHeading: {
+    color: '#f39c12',
+    marginBottom: '16px',
+    fontSize: '1.2em'
+  },
+  unauthorizedMessage: {
+    color: '#e74c3c',
+    marginBottom: '24px',
+    fontSize: '1em'
+  },
+  unauthorizedModalActions: {
+    display: 'flex',
+    gap: '12px',
+    justifyContent: 'center'
+  }
+};
 
 export default App;

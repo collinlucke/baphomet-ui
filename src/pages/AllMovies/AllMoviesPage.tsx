@@ -28,18 +28,18 @@ export const AllMoviesPage: React.FC = () => {
   const [totalMovieCount, setTotalMovieCount] = useState(0);
   const isNewSearchRef = useRef(true);
 
+  console.log('AllMoviesPage mounted');
+
   const [fetchMovies] = useLazyQuery(GET_MOVIES_BY_TITLE, {
     onCompleted: data => {
       const { searchResults, newCursor, endOfResults, newTotalMovieCount } =
         data.movieResults;
 
-      // Update total count
       setTotalMovieCount(newTotalMovieCount || 0);
 
-      // Use ref to get the current state and avoid closure issues
       if (isNewSearchRef.current) {
         setAllMovies(searchResults || []);
-        isNewSearchRef.current = false; // Reset flag after handling new search
+        isNewSearchRef.current = false;
       } else {
         setAllMovies(prev => {
           const incoming = searchResults || [];
@@ -62,11 +62,9 @@ export const AllMoviesPage: React.FC = () => {
     }
   });
 
-  // Set it off
   const fetchMoreMovies = async () => {
     if (isLoadingMore || !hasMore) return;
     setIsLoadingMore(true);
-    // Use GraphQL query for loading more movies
     fetchMovies({
       variables: {
         title: searchTerm,
@@ -116,7 +114,6 @@ export const AllMoviesPage: React.FC = () => {
         onScroll={fetchMoreMovies}
         isLoadingMore={isLoadingMore}
         hasMore={hasMore}
-        // openDeleteModal={() => {}}
       />
     </BodySection>
   );

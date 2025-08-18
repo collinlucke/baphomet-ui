@@ -12,15 +12,13 @@ import routes from './routes';
 import { logEnvironmentInfo } from './utils/environment';
 import 'dotenv';
 
-// Log environment info in development
 logEnvironmentInfo();
 
-// Import accessibility analysis for development
-if (import.meta.env.DEV) {
-  import('./utils/accessibilitySetup');
-}
+// Not using contrast checks for now
+// if (import.meta.env.DEV) {
+//   import('./utils/accessibilitySetup');
+// }
 
-// Handle redirect from 404.html before creating router
 const redirectPath = sessionStorage.getItem('redirectPath');
 if (redirectPath && redirectPath !== '/') {
   sessionStorage.removeItem('redirectPath');
@@ -31,7 +29,6 @@ const getBackendUrl = () => {
   if (import.meta.env.MODE === 'development') {
     return `http://${window.location.hostname}:5050/graphql`;
   }
-  // Production: Use your Render backend URL
   return (
     import.meta.env.GRAPHQL_BAPHOMET_SERVER_RENDER_URL ||
     'https://baphomet-server.onrender.com/graphql'

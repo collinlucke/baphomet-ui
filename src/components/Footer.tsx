@@ -70,11 +70,6 @@ const baphStyles: { [key: string]: CSSObject } = {
     backgroundColor: baseColors.secondary[800],
     display: 'flex'
   },
-  footerContentStyles: {
-    maxWidth: '1200px',
-    margin: '0 auto',
-    textAlign: 'center'
-  },
   footerSection: {
     flex: 1,
     color: baseColors.tertiary[100],

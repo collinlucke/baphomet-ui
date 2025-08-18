@@ -16,7 +16,6 @@ describe('SignupForm - Realistic Tests', () => {
         </MockedProvider>
       );
 
-      // Check all input fields are present
       expect(screen.getByTestId('signup-username-input')).toBeInTheDocument();
       expect(
         screen.getByTestId('signup-display-name-input')
@@ -27,7 +26,6 @@ describe('SignupForm - Realistic Tests', () => {
         screen.getByTestId('signup-confirm-password-input')
       ).toBeInTheDocument();
 
-      // Check submit button
       expect(screen.getByTestId('signup-submit-button')).toBeInTheDocument();
     });
 
@@ -111,7 +109,6 @@ describe('SignupForm - Realistic Tests', () => {
         </MockedProvider>
       );
 
-      // Fill out the form
       await user.type(screen.getByTestId('signup-username-input'), 'testuser');
       await user.type(
         screen.getByTestId('signup-display-name-input'),
@@ -130,7 +127,6 @@ describe('SignupForm - Realistic Tests', () => {
         'password123'
       );
 
-      // Submit the form
       const submitButton = screen.getByTestId('signup-submit-button');
       await user.click(submitButton);
 
@@ -180,7 +176,6 @@ describe('SignupForm - Realistic Tests', () => {
         </MockedProvider>
       );
 
-      // Fill out the form with existing user data
       await user.type(
         screen.getByTestId('signup-username-input'),
         'existinguser'
@@ -202,7 +197,6 @@ describe('SignupForm - Realistic Tests', () => {
         'password123'
       );
 
-      // Submit the form
       const submitButton = screen.getByTestId('signup-submit-button');
       await user.click(submitButton);
 
@@ -235,7 +229,6 @@ describe('SignupForm - Realistic Tests', () => {
         </MockedProvider>
       );
 
-      // Fill out the form
       await user.type(screen.getByTestId('signup-username-input'), 'testuser');
       await user.type(
         screen.getByTestId('signup-display-name-input'),
@@ -254,12 +247,10 @@ describe('SignupForm - Realistic Tests', () => {
         'password123'
       );
 
-      // Submit the form
       const submitButton = screen.getByTestId('signup-submit-button');
       await user.click(submitButton);
 
       await waitFor(() => {
-        // Should show the network error message
         expect(
           screen.getByText(
             'Unable to connect to server. Please check your connection and try again.'
@@ -298,7 +289,7 @@ describe('SignupForm - Realistic Tests', () => {
               }
             }
           },
-          delay: 100 // Add delay to see loading state
+          delay: 100
         }
       ];
 
@@ -308,7 +299,6 @@ describe('SignupForm - Realistic Tests', () => {
         </MockedProvider>
       );
 
-      // Fill out the form
       await user.type(screen.getByTestId('signup-username-input'), 'testuser');
       await user.type(
         screen.getByTestId('signup-display-name-input'),
@@ -327,11 +317,9 @@ describe('SignupForm - Realistic Tests', () => {
         'password123'
       );
 
-      // Submit the form
       const submitButton = screen.getByTestId('signup-submit-button');
       await user.click(submitButton);
 
-      // Check loading state
       await waitFor(() => {
         expect(screen.getByTestId('signup-submit-button')).toBeInTheDocument();
         expect(screen.getByTestId('signup-submit-button')).toBeDisabled();
@@ -353,10 +341,8 @@ describe('SignupForm - Realistic Tests', () => {
       const submitButton = screen.getByTestId('signup-submit-button');
       await user.click(submitButton);
 
-      // Wait a bit to ensure no GraphQL operations are triggered
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      // No GraphQL operations should have been called due to validation
       expect(mockOnError).not.toHaveBeenCalled();
       expect(mockOnSuccess).not.toHaveBeenCalled();
     });
@@ -371,7 +357,6 @@ describe('SignupForm - Realistic Tests', () => {
         </MockedProvider>
       );
 
-      // Fill out form with mismatched passwords
       await user.type(screen.getByTestId('signup-username-input'), 'testuser');
       await user.type(
         screen.getByTestId('signup-display-name-input'),
@@ -393,10 +378,8 @@ describe('SignupForm - Realistic Tests', () => {
       const submitButton = screen.getByTestId('signup-submit-button');
       await user.click(submitButton);
 
-      // Wait a bit to ensure no GraphQL operations are triggered
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      // No GraphQL operations should have been called due to validation
       expect(mockOnError).not.toHaveBeenCalled();
       expect(mockOnSuccess).not.toHaveBeenCalled();
     });

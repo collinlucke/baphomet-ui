@@ -16,11 +16,9 @@ describe('LoginForm Tests', () => {
         </MockedProvider>
       );
 
-      // Check all input fields are present
       expect(screen.getByTestId('login-email-input')).toBeInTheDocument();
       expect(screen.getByTestId('login-password-input')).toBeInTheDocument();
 
-      // Check submit button
       expect(screen.getByTestId('login-submit-button')).toBeInTheDocument();
     });
 
@@ -90,7 +88,6 @@ describe('LoginForm Tests', () => {
         </MockedProvider>
       );
 
-      // Fill out the form
       await user.type(
         screen.getByTestId('login-email-input'),
         'test@example.com'
@@ -100,7 +97,6 @@ describe('LoginForm Tests', () => {
         'password123'
       );
 
-      // Submit the form
       const submitButton = screen.getByTestId('login-submit-button');
       await user.click(submitButton);
 
@@ -148,7 +144,6 @@ describe('LoginForm Tests', () => {
         </MockedProvider>
       );
 
-      // Fill out the form with wrong credentials
       await user.type(
         screen.getByTestId('login-email-input'),
         'wrong@example.com'
@@ -158,7 +153,6 @@ describe('LoginForm Tests', () => {
         'wrongpassword'
       );
 
-      // Submit the form
       const submitButton = screen.getByTestId('login-submit-button');
       await user.click(submitButton);
 
@@ -189,7 +183,6 @@ describe('LoginForm Tests', () => {
         </MockedProvider>
       );
 
-      // Fill out the form
       await user.type(
         screen.getByTestId('login-email-input'),
         'test@example.com'
@@ -199,12 +192,10 @@ describe('LoginForm Tests', () => {
         'password123'
       );
 
-      // Submit the form
       const submitButton = screen.getByTestId('login-submit-button');
       await user.click(submitButton);
 
       await waitFor(() => {
-        // Should show the network error message
         expect(
           screen.getByText(
             'Unable to connect to server. Please check your connection and try again.'
@@ -241,7 +232,7 @@ describe('LoginForm Tests', () => {
               }
             }
           },
-          delay: 100 // Add delay to see loading state
+          delay: 100
         }
       ];
 
@@ -251,7 +242,6 @@ describe('LoginForm Tests', () => {
         </MockedProvider>
       );
 
-      // Fill out the form
       await user.type(
         screen.getByTestId('login-email-input'),
         'test@example.com'
@@ -261,11 +251,9 @@ describe('LoginForm Tests', () => {
         'password123'
       );
 
-      // Submit the form
       const submitButton = screen.getByTestId('login-submit-button');
       await user.click(submitButton);
 
-      // Check loading state
       await waitFor(() => {
         expect(screen.getByTestId('login-submit-button')).toBeInTheDocument();
         expect(screen.getByTestId('login-submit-button')).toBeDisabled();
@@ -287,10 +275,8 @@ describe('LoginForm Tests', () => {
       const submitButton = screen.getByTestId('login-submit-button');
       await user.click(submitButton);
 
-      // Wait a bit to ensure no GraphQL operations are triggered
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      // No GraphQL operations should have been called due to validation
       expect(mockOnError).not.toHaveBeenCalled();
       expect(mockOnSuccess).not.toHaveBeenCalled();
     });

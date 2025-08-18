@@ -1,7 +1,5 @@
 export const getMoviesByTitle = async (title: string) => {
-  // Vite exposes env vars as import.meta.env
   const apiKey = import.meta.env.VITE_TMDB_API_KEY;
-  // console.log(title);
   const response = await fetch(
     `https://api.themoviedb.org/3/search/movie?query=${title}&include_adult=false&language=en-US&page=1&api_key=${apiKey}`
   );

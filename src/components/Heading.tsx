@@ -32,29 +32,29 @@ export const Heading: React.FC<HeadingProps> = ({
     : null;
 
   const handleAddMovies = () => {
-    setIsMobileMenuOpen(false); // Close menu after navigation
+    setIsMobileMenuOpen(false);
   };
 
   const openSignupModal = () => {
     setShowSignupModal(true);
-    setIsMobileMenuOpen(false); // Close menu after action
+    setIsMobileMenuOpen(false);
   };
 
   const openLoginModal = () => {
     setShowLoginModal(true);
-    setIsMobileMenuOpen(false); // Close menu after action
+    setIsMobileMenuOpen(false);
   };
 
   const logOut = () => {
     localStorage.removeItem('baphomet-token');
     localStorage.removeItem('baphomet-user');
     isAuthenticatedVar(false);
-    setIsMobileMenuOpen(false); // Close menu after action
+    setIsMobileMenuOpen(false);
   };
 
   const handleNavigation = (path: string) => {
     navigate(path);
-    setIsMobileMenuOpen(false); // Close menu after navigation
+    setIsMobileMenuOpen(false);
   };
 
   const toggleMobileMenu = () => {
@@ -64,7 +64,7 @@ export const Heading: React.FC<HeadingProps> = ({
   const toggleFloatingMenu = () => {
     setIsFloatingMenuOpen(!isFloatingMenuOpen);
   };
-  // If mobile landscape, render floating hamburger menu instead
+
   if (isMobileAndLandscape && location.pathname === '/arena') {
     return (
       <>
@@ -195,8 +195,6 @@ export const Heading: React.FC<HeadingProps> = ({
       </>
     );
   }
-
-  // Regular header for non-mobile-landscape devices
 
   return (
     <Header>
@@ -433,7 +431,6 @@ export const Heading: React.FC<HeadingProps> = ({
   );
 };
 
-// Define base styles with mobile responsiveness
 const baphStyles: { [key: string]: CSSObject } = {
   headerContent: {
     display: 'flex',
@@ -491,13 +488,13 @@ const baphStyles: { [key: string]: CSSObject } = {
     }
   },
   rightSideContent: {
-    display: 'none', // Hidden on mobile by default
+    display: 'none',
     alignItems: 'center',
     gap: '15px',
     flex: 1,
     justifyContent: 'flex-end',
     [mediaQueries.minWidth.md]: {
-      display: 'flex', // Show on desktop (640px+)
+      display: 'flex',
       gap: '20px'
     }
   },
@@ -510,10 +507,10 @@ const baphStyles: { [key: string]: CSSObject } = {
     }
   },
   mobileControls: {
-    display: 'flex', // Show on mobile by default
+    display: 'flex',
     alignItems: 'center',
     [mediaQueries.minWidth.md]: {
-      display: 'none' // Hide on desktop (640px+)
+      display: 'none'
     }
   },
   mobileMenuOverlay: {
@@ -528,7 +525,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     justifyContent: 'flex-end'
   },
   mobileMenu: {
-    backgroundColor: '#0B1828', // Using primary color
+    backgroundColor: '#0B1828',
     width: '280px',
     height: '100%',
     padding: '20px',
@@ -539,7 +536,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     display: 'flex',
     flexDirection: 'column' as const,
     gap: '20px',
-    paddingTop: '60px' // Account for header height
+    paddingTop: '60px'
   },
   mobileNavSection: {
     display: 'flex',
@@ -561,13 +558,12 @@ const baphStyles: { [key: string]: CSSObject } = {
     visibility: 'hidden' as const
   },
 
-  // Floating menu styles for mobile landscape
   floatingMenuButton: {
     position: 'fixed' as const,
     top: '10px',
     right: '10px',
     zIndex: 1001,
-    backgroundColor: 'rgba(11, 24, 40, 0.9)', // Semi-transparent primary color
+    backgroundColor: 'rgba(11, 24, 40, 0.9)',
     borderRadius: '50%',
     padding: '8px',
     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'

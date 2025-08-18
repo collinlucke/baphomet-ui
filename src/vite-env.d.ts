@@ -9,6 +9,5 @@ interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
 
-// Global constants defined by Vite
 declare const __USE_LOCAL_PHANTOMARTIST__: boolean;
 declare const __DEV_MODE__: boolean;

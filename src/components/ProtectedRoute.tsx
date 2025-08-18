@@ -30,14 +30,14 @@ export const ProtectedRoute: React.FC<ProtectedRouteTypes> = ({
     variables: {
       token: baphToken
     },
-    skip: !baphToken, // Skip the query if there's no token
+    skip: !baphToken,
     onCompleted: data => {
       setAuthCheckCompleted(true);
       if (data.checkAuth.isValid) {
         isAuthenticatedVar(true);
       } else {
         isAuthenticatedVar(false);
-        // Only show modal after auth check is complete and user is not authenticated
+
         showUnauthorizedModalVar(true);
       }
     },
@@ -59,12 +59,11 @@ export const ProtectedRoute: React.FC<ProtectedRouteTypes> = ({
       errorVar(titledError);
 
       isAuthenticatedVar(false);
-      // Only show modal after auth check fails
+
       showUnauthorizedModalVar(true);
     }
   });
 
-  // Handle case where there's no token (immediate unauthenticated state)
   useEffect(() => {
     if (!baphToken) {
       setAuthCheckCompleted(true);
@@ -82,7 +81,6 @@ export const ProtectedRoute: React.FC<ProtectedRouteTypes> = ({
   return (
     <>
       {!authCheckCompleted ? (
-        // Show loading while checking authentication
         <div style={{ padding: '20px', textAlign: 'center' }}>
           Checking authentication...
         </div>

@@ -40,11 +40,19 @@ export const GET_ALL_MOVIES = gql`
 `;
 
 export const GET_MOVIES_BY_TITLE = gql`
-  query getMoviesByTitle($title: String, $limit: Int, $cursor: String) {
+  query getMoviesByTitle(
+    $title: String
+    $limit: Int
+    $cursor: String
+    $sortBy: String
+    $sortOrder: String
+  ) {
     movieResults: getMoviesByTitle(
       title: $title
       limit: $limit
       cursor: $cursor
+      sortBy: $sortBy
+      sortOrder: $sortOrder
     ) {
       searchResults {
         id

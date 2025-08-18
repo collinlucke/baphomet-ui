@@ -35,3 +35,4 @@ set-pnpmrc.sh
 
 MONGODB_SCHEMA.md
 art_icons.txt
+accessibilitySetup.ts

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { CSSObject } from '@emotion/react';
 import { baseColors, baseVibrantColors } from '@collinlucke/phantomartist';
 
@@ -15,59 +15,53 @@ export const MovieListItem: React.FC<MovieListItemProps> = ({ movie }) => {
   const winningPercentage = movie.winningPercentage?.toFixed(2) || '0.00';
   const [major, minor] = winningPercentage.split('.');
   const [showTooltip, setShowTooltip] = useState(false);
-  const {
-    container,
-    posterWrapper,
-    poster,
-    scoreWrapper,
-    tooltip,
-
-    major: majorStyle,
-    minor: minorStyle
-  } = baphStyles(movie.posterUrl || '');
 
   return (
-    <div css={container} key={movie.id}>
+    <li css={getContainerStyles(movie.posterUrl || '')}>
       {showTooltip && movie.title && (
-        <div css={tooltip}>
-          <span>{movie.title || ''}</span>
+        <div css={baphStyles.tooltip}>
+          <span>{movie.title}</span>
         </div>
       )}
       <div
-        css={posterWrapper}
+        css={baphStyles.posterWrapper}
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
       >
-        <img src={movie?.posterUrl} alt={movie.title} css={poster} />
-        <div css={scoreWrapper}>
-          <span css={majorStyle}>{major || '00'}.</span>
-          <span css={minorStyle}>{minor || '00'}</span>
+        <img src={movie.posterUrl} alt={movie.title} css={baphStyles.poster} />
+        <div css={baphStyles.scoreWrapper}>
+          <span css={baphStyles.major}>{major}.</span>
+          <span css={baphStyles.minor}>{minor}</span>
         </div>
       </div>
-    </div>
+    </li>
   );
 };
 
-const baphStyles = (posterUrl: string): { [key: string]: CSSObject } => ({
+const getContainerStyles = (posterUrl: string): CSSObject => ({
+  ...baphStyles.container,
+  backgroundImage: posterUrl ? `url(${posterUrl})` : 'none'
+});
+
+const baphStyles = {
   container: {
-    position: 'relative',
+    position: 'relative' as const,
     display: 'flex'
   },
   posterWrapper: {
-    position: 'relative',
+    position: 'relative' as const,
     flex: '1',
     aspectRatio: '2 / 3'
   },
   poster: {
     width: '100%',
     height: '100%',
-    backgroundImage: posterUrl ? `url(${posterUrl})` : 'none',
     backgroundColor: '#ccc',
     backgroundSize: 'cover',
     border: `2px solid ${baseVibrantColors.primary[500]}`
   },
   scoreWrapper: {
-    position: 'absolute',
+    position: 'absolute' as const,
     bottom: 0,
     right: '10px',
     display: 'flex',
@@ -101,12 +95,12 @@ const baphStyles = (posterUrl: string): { [key: string]: CSSObject } => ({
     borderRadius: '2px',
     boxShadow: `0 2px 8px ${baseColors.primary[500]}`,
     whiteSpace: 'nowrap',
-    position: 'absolute',
+    position: 'absolute' as const,
     left: '100%',
     zIndex: 10,
     '&:after': {
       content: '""',
-      position: 'absolute',
+      position: 'absolute' as const,
       right: '100%',
       top: '25%',
       rotate: '90deg',
@@ -115,4 +109,4 @@ const baphStyles = (posterUrl: string): { [key: string]: CSSObject } => ({
       borderColor: `${baseColors.tertiary[50]} transparent transparent transparent`
     }
   }
-});
+};

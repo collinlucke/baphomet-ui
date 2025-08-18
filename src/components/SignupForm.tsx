@@ -24,39 +24,30 @@ export const SignupForm: React.FC<SignupFormProps> = ({
 
   const [signupMutation, { loading: isLoading }] = useMutation(SIGNUP, {
     onCompleted: data => {
-      // Clear any previous errors
       setGeneralError('');
       setErrors({});
 
-      // Store token and user data in localStorage
       localStorage.setItem('baphomet-token', data.signup.token);
       localStorage.setItem('baphomet-user', JSON.stringify(data.signup.user));
 
-      // Update authentication state immediately
       isAuthenticatedVar(true);
 
-      // Call success callback
       if (onSuccess) {
         onSuccess(data.signup);
       }
     },
     onError: error => {
-      // Handle different types of errors
       let errorMessage = 'An error occurred during signup';
 
       if (error.networkError) {
-        // Network errors (like CORS, server down, etc.)
         errorMessage =
           'Unable to connect to server. Please check your connection and try again.';
       } else if (error.graphQLErrors && error.graphQLErrors.length > 0) {
-        // GraphQL errors (validation, business logic)
         errorMessage = error.graphQLErrors[0].message;
       } else if (error.message) {
-        // Other Apollo errors
         errorMessage = error.message;
       }
 
-      // If it's a specific field error, show it on the field
       if (errorMessage.toLowerCase().includes('username')) {
         setErrors(prev => ({ ...prev, username: errorMessage }));
         setGeneralError('');
@@ -64,11 +55,9 @@ export const SignupForm: React.FC<SignupFormProps> = ({
         setErrors(prev => ({ ...prev, email: errorMessage }));
         setGeneralError('');
       } else {
-        // Show general error for network issues, server errors, etc.
         setGeneralError(errorMessage);
       }
 
-      // Call error callback
       if (onError) {
         onError(errorMessage);
       }
@@ -125,7 +114,6 @@ export const SignupForm: React.FC<SignupFormProps> = ({
         }
       });
     } catch (error) {
-      // Error handling is done in the onError callback above
       console.error('Signup error:', error);
     }
   };
@@ -135,11 +123,11 @@ export const SignupForm: React.FC<SignupFormProps> = ({
   ) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear field error when user starts typing
+
     if (errors[name as keyof SignupFormData]) {
       setErrors(prev => ({ ...prev, [name]: undefined }));
     }
-    // Clear general error when user starts typing
+
     if (generalError) {
       setGeneralError('');
     }

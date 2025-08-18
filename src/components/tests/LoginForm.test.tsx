@@ -8,7 +8,6 @@ import { LoginForm } from '../LoginForm';
 import { LOGIN } from '../../api/mutations';
 import { mockLocalStorage } from '../__mocks__/mockLocalStorage';
 
-// Mock localStorage
 beforeEach(() => {
   mockLocalStorage();
 });
@@ -156,7 +155,6 @@ describe('LoginForm', () => {
         </MockedProvider>
       );
 
-      // Trigger validation error first
       const submitButton = screen.getByRole('button', { name: /log in/i });
       await user.click(submitButton);
 
@@ -164,11 +162,9 @@ describe('LoginForm', () => {
         expect(screen.getByText('Email is required')).toBeInTheDocument();
       });
 
-      // Start typing in email field
       const emailField = screen.getByLabelText(/email/i);
       await user.type(emailField, 'test@');
 
-      // Error should be cleared
       await waitFor(() => {
         expect(screen.queryByText('Email is required')).not.toBeInTheDocument();
       });
@@ -186,15 +182,12 @@ describe('LoginForm', () => {
         </MockedProvider>
       );
 
-      // Fill out the form
       await user.type(screen.getByLabelText(/email/i), 'test@example.com');
       await user.type(screen.getByLabelText(/password/i), 'password123');
 
-      // Submit the form
       const submitButton = screen.getByRole('button', { name: /log in/i });
       await user.click(submitButton);
 
-      // Wait for success
       await waitFor(() => {
         expect(mockOnSuccess).toHaveBeenCalledWith({
           token: 'mock-jwt-token',
@@ -211,7 +204,6 @@ describe('LoginForm', () => {
         });
       });
 
-      // Check that token was stored in localStorage
       expect(localStorage.getItem('baphomet-token')).toBe('mock-jwt-token');
     });
 
@@ -224,7 +216,6 @@ describe('LoginForm', () => {
         </MockedProvider>
       );
 
-      // First trigger an error by submitting empty form
       const submitButton = screen.getByRole('button', { name: /log in/i });
       await user.click(submitButton);
 
@@ -232,12 +223,10 @@ describe('LoginForm', () => {
         expect(screen.getByText('Email is required')).toBeInTheDocument();
       });
 
-      // Now fill out form and submit successfully
       await user.type(screen.getByLabelText(/email/i), 'test@example.com');
       await user.type(screen.getByLabelText(/password/i), 'password123');
       await user.click(submitButton);
 
-      // Errors should be cleared
       await waitFor(() => {
         expect(screen.queryByText('Email is required')).not.toBeInTheDocument();
         expect(
@@ -420,17 +409,14 @@ describe('LoginForm', () => {
         </MockedProvider>
       );
 
-      // Fill out form
       await user.type(screen.getByLabelText(/email/i), 'test@example.com');
       await user.type(screen.getByLabelText(/password/i), 'password123');
 
       const submitButton = screen.getByRole('button', { name: /log in/i });
       await user.click(submitButton);
 
-      // Check that button is disabled during submission
       expect(submitButton).toBeDisabled();
 
-      // Form fields should also be disabled
       expect(screen.getByLabelText(/email/i)).toBeDisabled();
       expect(screen.getByLabelText(/password/i)).toBeDisabled();
     });
@@ -450,7 +436,6 @@ describe('LoginForm', () => {
       const submitButton = screen.getByRole('button', { name: /log in/i });
       await user.click(submitButton);
 
-      // Button text should change to loading state
       expect(
         screen.getByRole('button', { name: /logging in.../i })
       ).toBeInTheDocument();

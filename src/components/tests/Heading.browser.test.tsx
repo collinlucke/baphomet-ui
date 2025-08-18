@@ -10,7 +10,6 @@ import { isAuthenticatedVar } from '../../reactiveVars';
 
 beforeEach(() => {
   mockLocalStorage();
-  // Reset authentication state
   isAuthenticatedVar(false);
 });
 
@@ -104,7 +103,6 @@ describe('Heading', () => {
 
       await user.click(screen.getByTestId('signup-button'));
 
-      // Verify the callback was called with true to open the modal
       expect(mockSetShowSignupModal).toHaveBeenCalledWith(true);
       expect(mockSetShowLoginModal).not.toHaveBeenCalled();
     });
@@ -127,7 +125,6 @@ describe('Heading', () => {
 
       await user.click(screen.getByTestId('login-button'));
 
-      // Verify the callback was called with true to open the modal
       expect(mockSetShowLoginModal).toHaveBeenCalledWith(true);
       expect(mockSetShowSignupModal).not.toHaveBeenCalled();
     });
@@ -200,7 +197,6 @@ describe('Heading', () => {
 
       await user.click(screen.getByText('Log out'));
 
-      // Wait for the reactive variable to update and component to re-render
       await waitFor(() => {
         expect(screen.getByText('Sign Up')).toBeVisible();
         expect(screen.getByText('Log in')).toBeVisible();

@@ -16,7 +16,7 @@ type MovieCardProps = {
     releaseDate?: string;
   };
   handleVote: (movieId: string) => void;
-  // Accessibility props
+
   ariaLabel?: string;
   ariaDescribedBy?: string;
   tabIndex?: number;
@@ -44,7 +44,6 @@ export const MovieCard: React.FC<MovieCardProps> = ({
 }) => {
   const isMobileAndLandscape = useReactiveVar(isMobileAndLandscapeVar);
 
-  // Handle keyboard interaction for voting
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
@@ -55,7 +54,6 @@ export const MovieCard: React.FC<MovieCardProps> = ({
     onKeyDown?.(event);
   };
 
-  // Generate accessible label
   const generateAriaLabel = (): string => {
     if (ariaLabel) return ariaLabel;
 
