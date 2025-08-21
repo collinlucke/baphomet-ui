@@ -260,7 +260,7 @@ export const Heading: React.FC<HeadingProps> = ({
               <ButtonGroup ariaLabel="User actions">
                 <Link to="/add-movies">
                   <Button
-                    dataTestId="add-new-movie-button"
+                    testId="add-new-movie-button"
                     size="small"
                     icon={<PlusSignIcon size={17} strokeWidth={'3px'} />}
                     kind="secondary"
@@ -275,7 +275,7 @@ export const Heading: React.FC<HeadingProps> = ({
                   onClick={logOut}
                   size="small"
                   ariaLabel="Sign out of your account"
-                  dataTestId="logout-button"
+                  testId="logout-button"
                 >
                   Log out
                 </Button>
@@ -291,7 +291,7 @@ export const Heading: React.FC<HeadingProps> = ({
                     size="small"
                     ariaLabel="Open sign up form"
                     ariaDescribedBy="signup-help"
-                    dataTestId="signup-button"
+                    testId="signup-button"
                   >
                     Sign Up
                   </Button>
@@ -301,7 +301,7 @@ export const Heading: React.FC<HeadingProps> = ({
                     size="small"
                     ariaLabel="Open log in form"
                     ariaDescribedBy="login-help"
-                    dataTestId="login-button"
+                    testId="login-button"
                   >
                     Log in
                   </Button>

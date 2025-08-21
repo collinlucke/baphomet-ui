@@ -126,7 +126,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
             onClick={() => handleVote(movie.id)}
             disabled={isVoting}
             ariaLabel={`Vote for ${movie.title}`}
-            dataTestId={`vote-button-${movie.id}`}
+            testId={`vote-button-${movie.id}`}
           >
             {isVoting ? 'Voting...' : 'Choose This Movie'}
           </Button>

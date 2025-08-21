@@ -83,27 +83,23 @@ export const GET_MOVIES_BY_TITLE = gql`
 export const GET_MOVIE_BY_TMDB_ID = gql`
   query getMovieByTmdbId($tmdbId: String!) {
     movieResults: getMovieByTmdbId(tmdbId: $tmdbId) {
-      searchResults {
-        id
-        title
-        posterUrl
-        winningPercentage
-      }
-    }
-  }
-`;
-
-export const GET_MOVIE = gql`
-  query getMovie($id: ID!) {
-    movie: getMovie(id: $id) {
-      posterUrl
+      id
+      title
+      rated
+      releaseDate
       overview
       genres
-      title
-      releaseDate
-      rated
-      id
-      overview
+      revenue
+      posterUrl
+      backdropUrl
+      tmdbId
+      addedBy
+      lastUpdated
+      createdAt
+      totalWins
+      totalLosses
+      winningPercentage
+      totalComparisons
     }
   }
 `;

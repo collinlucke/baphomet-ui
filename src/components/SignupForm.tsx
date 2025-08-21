@@ -263,7 +263,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
               !formData.confirmPassword ||
               !formData.displayName.trim()
             }
-            dataTestId="signup-submit-button"
+            testId="signup-submit-button"
             className={{ button: baphStyles.signUpButton }}
             ariaLabel={
               isLoading

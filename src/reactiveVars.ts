@@ -20,3 +20,4 @@ export const totalMovieCountVar = makeVar('');
 export const isMobileVar = makeVar(false);
 export const isLandscapeVar = makeVar(false);
 export const isMobileAndLandscapeVar = makeVar(false);
+export const showMovieDetailsVar = makeVar(false);

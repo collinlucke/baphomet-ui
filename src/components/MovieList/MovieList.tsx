@@ -1,5 +1,13 @@
 import { useEffect, useRef } from 'react';
-import { List, Search, baseColors } from '@collinlucke/phantomartist';
+import { useLazyQuery } from '@apollo/client';
+import {
+  List,
+  Search,
+  baseColors,
+  mediaQueries,
+  Modal
+} from '@collinlucke/phantomartist';
+import { GET_MOVIE_BY_TMDB_ID } from '../../api/queries';
 import { MovieListItem } from './MovieListItem';
 import { baphColorVariations } from '../../styling/baphTheme';
 import { CSSObject } from '@emotion/react';
@@ -15,7 +23,7 @@ type Movie = {
   genres?: string[];
   revenue?: number;
   backdropUrl?: string;
-  tmdbId?: number;
+  tmdbId: string;
 };
 
 type MovieData = {
@@ -51,6 +59,16 @@ export const MovieList: React.FC<MovieData> = ({
     onSearch?.(searchTerm);
   };
 
+  const [fetchMovieDetails] = useLazyQuery(GET_MOVIE_BY_TMDB_ID, {
+    onCompleted: data => {
+      const movieDetails = data.movieDetails;
+      if (movieDetails) {
+        console.log('Movie details fetched:', movieDetails);
+        // TODO - Open movie details modal
+      }
+    }
+  });
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       entries => {
@@ -78,52 +96,71 @@ export const MovieList: React.FC<MovieData> = ({
     setSearchTerm?.(e);
   };
 
+  const openMovieDetailsHandler = (tmdbId: string) => {
+    console.log(`Opening movie details for TMDB ID: ${tmdbId}`);
+    fetchMovieDetails({
+      variables: { tmdbId }
+    });
+  };
+
   return (
-    <div
-      css={[baphStyles.movieListWrapper, className?.movieListWrapper]}
-      className="baph-movie-list"
-    >
-      {showSearch && (
-        <Search
-          onSearch={onSearchHandler}
-          searchTerm={searchTerm}
-          searchLabel="Search Movies"
-          setSearchTerm={setSearchTermHandler}
-          useSearchButton={false}
-          totalResultsCount={totalMovieCount}
-          className={{
-            searchWrapper: baphStyles.searchWrapper,
-            resultsText: baphStyles.resultsText,
-            searchForm: baphStyles.searchForm
-          }}
-        />
-      )}
-      {movies?.length ? (
-        <>
-          <List className={baphStyles.list} data-testid="movie-list">
-            {movies &&
-              movies.map(mov => <MovieListItem movie={mov} key={mov.id} />)}
-            {/* Loading indicator for lazy loading */}
-            {isLoadingMore && (
-              <div css={baphStyles.loadingContainer}>
-                <div css={baphStyles.loadingText}>Loading more movies...</div>
+    <>
+      <div
+        css={[baphStyles.movieListWrapper, className?.movieListWrapper]}
+        data-testid="baph-movie-list"
+      >
+        {showSearch && (
+          <Search
+            onSearch={onSearchHandler}
+            searchTerm={searchTerm}
+            searchLabel="Search Movies"
+            setSearchTerm={setSearchTermHandler}
+            showSearchButton={false}
+            totalResultsCount={totalMovieCount}
+            testId="baph-search"
+            className={{
+              searchWrapper: baphStyles.searchWrapper,
+              resultsText: baphStyles.resultsText,
+              searchForm: baphStyles.searchForm
+            }}
+          />
+        )}
+
+        {movies?.length ? (
+          <>
+            <List className={baphStyles.list} data-testid="movie-list">
+              {movies &&
+                movies.map(mov => (
+                  <MovieListItem
+                    movie={mov}
+                    key={mov.id}
+                    openMovieDetails={openMovieDetailsHandler}
+                  />
+                ))}
+              {isLoadingMore && (
+                <div css={baphStyles.loadingContainer}>
+                  <div css={baphStyles.loadingText}>Loading more movies...</div>
+                </div>
+              )}
+            </List>
+            {!hasMore && movies.length > 0 && (
+              <div css={baphStyles.endContainer}>
+                <div css={baphStyles.endText}>You've reached the end! 🎬</div>
               </div>
             )}
-          </List>
-          {!hasMore && movies.length > 0 && (
-            <div css={baphStyles.endContainer}>
-              <div css={baphStyles.endText}>You've reached the end! 🎬</div>
-            </div>
-          )}
-        </>
-      ) : (
-        <div css={[baphStyles.noResults]}>
-          <h2>Real sorry to tell you this, but...</h2>
-          <div>No movies match your search</div>
-        </div>
-      )}
-      <div ref={sentinelRef} css={baphStyles.sentinel} />
-    </div>
+          </>
+        ) : (
+          <div css={[baphStyles.noResults]}>
+            <h2>Real sorry to tell you this, but...</h2>
+            <div>No movies match your search</div>
+          </div>
+        )}
+        <div ref={sentinelRef} css={baphStyles.sentinel} />
+      </div>
+      <Modal isOpen={false} onClose={() => {}} title="Movie Details">
+        modal stuff
+      </Modal>
+    </>
   );
 };
 
@@ -165,12 +202,24 @@ const baphStyles: { [key: string]: CSSObject } = {
   },
   list: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-    gap: '35px',
+    gap: '15px',
     listStyleType: 'none',
     paddingInlineStart: 0,
     margin: 0,
-    width: '100%'
+    width: '100%',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))',
+    [mediaQueries.minWidth.md]: {
+      gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))',
+      gap: '20px'
+    },
+    [mediaQueries.minWidth.lg]: {
+      gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+      gap: '25px'
+    },
+    [mediaQueries.minWidth.xl]: {
+      gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+      gap: '35px'
+    }
   },
   movieListWrapper: {
     display: 'flex',

@@ -16,7 +16,7 @@ type Movie = {
   genres?: string[];
   revenue?: number;
   backdropUrl?: string;
-  tmdbId?: number;
+  tmdbId: string;
 };
 
 export const AllMoviesPage: React.FC = () => {

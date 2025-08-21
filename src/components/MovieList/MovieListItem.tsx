@@ -8,16 +8,41 @@ export type MovieListItemProps = {
     title: string;
     posterUrl?: string;
     winningPercentage: number;
+    tmdbId: string;
   };
+  openMovieDetails: (tmdbId: string) => void;
 };
 
-export const MovieListItem: React.FC<MovieListItemProps> = ({ movie }) => {
+export const MovieListItem: React.FC<MovieListItemProps> = ({
+  movie,
+  openMovieDetails
+}) => {
   const winningPercentage = movie.winningPercentage?.toFixed(2) || '0.00';
   const [major, minor] = winningPercentage.split('.');
   const [showTooltip, setShowTooltip] = useState(false);
 
+  const openMovieDetailsHandler = (
+    e: React.MouseEvent | React.KeyboardEvent
+  ) => {
+    if (
+      (e.type === 'keydown' && (e as React.KeyboardEvent).key === 'Enter') ||
+      e.type === 'click'
+    ) {
+      console.log(`Opening details for movie with TMDB ID: ${movie.tmdbId}`);
+      openMovieDetails(movie.tmdbId || '');
+    }
+  };
+  console.log(movie);
   return (
-    <li css={getContainerStyles(movie.posterUrl || '')}>
+    <li
+      css={getContainerStyles(movie.posterUrl || '')}
+      role="button"
+      tabIndex={0}
+      onClick={openMovieDetailsHandler}
+      onKeyDown={openMovieDetailsHandler}
+      aria-label={`Open details for ${movie.title}`}
+      data-testid={`movie-item-${movie.tmdbId}`}
+    >
       {showTooltip && movie.title && (
         <div css={baphStyles.tooltip}>
           <span>{movie.title}</span>
@@ -46,7 +71,8 @@ const getContainerStyles = (posterUrl: string): CSSObject => ({
 const baphStyles = {
   container: {
     position: 'relative' as const,
-    display: 'flex'
+    display: 'flex',
+    cursor: 'pointer'
   },
   posterWrapper: {
     position: 'relative' as const,
@@ -70,17 +96,17 @@ const baphStyles = {
   },
   major: {
     color: baseVibrantColors.primary[500],
-    fontSize: '4rem',
+    fontSize: '2.5rem',
     fontWeight: 'bold',
-    WebkitTextStroke: `2px white`,
+    WebkitTextStroke: `1px ${baseColors.primary[700]}`,
     paintOrder: 'stroke fill',
     textShadow: '2px 2px 4px rgba(0, 0, 0, 1)'
   },
   minor: {
     color: baseVibrantColors.primary[500],
-    fontSize: '3rem',
+    fontSize: '1.5rem',
     fontWeight: 'bold',
-    WebkitTextStroke: `2px white`,
+    WebkitTextStroke: `1px ${baseColors.primary[700]}`,
     paintOrder: 'stroke fill',
     marginLeft: '2px',
     textShadow: '2px 2px 4px rgba(0, 0, 0, 1)'

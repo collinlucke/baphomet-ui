@@ -1,0 +1,503 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`MovieList Component - Unit Tests > Snapshot Tests > should match snapshot with default props 1`] = `
+<div
+  class="css-hhk6j-MovieList"
+  data-testid="baph-movie-list"
+>
+  <div
+    aria-label="Search"
+    class="pa-search-form css-m5jsbo"
+    data-testid="baph-search"
+    role="search"
+  >
+    <div
+      class="pa-search-wrapper css-114f50u"
+    >
+      <div
+        aria-atomic="true"
+        aria-live="polite"
+        class="css-19gqcwz"
+        data-testid="total-results"
+        role="status"
+      >
+        Total Results:
+         
+        3
+      </div>
+      <div
+        class="css-1jlnwea"
+      >
+        <div
+          class="css-1mmmoc7"
+        >
+          <input
+            aria-describedby="search-results-count"
+            aria-invalid="false"
+            aria-label="Search Movies"
+            aria-required="false"
+            class="css-jcn22a"
+            data-testid="search-input"
+            id="input-searchTerm"
+            name="searchTerm"
+            placeholder="Search Movies"
+            type="search"
+            value=""
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <ul
+    class="pa-list css-179vcy7"
+    role="list"
+  >
+    <li
+      aria-label="Open details for The Matrix"
+      class="css-zq0ncc"
+      data-testid="movie-item-603"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="css-1u0mlrb"
+      >
+        <img
+          alt="The Matrix"
+          class="css-1u6rrjb"
+          src="https://example.com/matrix-poster.jpg"
+        />
+        <div
+          class="css-seut52"
+        >
+          <span
+            class="css-2y6i2r"
+          >
+            85
+            .
+          </span>
+          <span
+            class="css-i0h9c4"
+          >
+            50
+          </span>
+        </div>
+      </div>
+    </li>
+    <li
+      aria-label="Open details for The Godfather"
+      class="css-10225se"
+      data-testid="movie-item-238"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="css-1u0mlrb"
+      >
+        <img
+          alt="The Godfather"
+          class="css-1u6rrjb"
+          src="https://example.com/godfather-poster.jpg"
+        />
+        <div
+          class="css-seut52"
+        >
+          <span
+            class="css-2y6i2r"
+          >
+            92
+            .
+          </span>
+          <span
+            class="css-i0h9c4"
+          >
+            10
+          </span>
+        </div>
+      </div>
+    </li>
+    <li
+      aria-label="Open details for Pulp Fiction"
+      class="css-1a9vumo"
+      data-testid="movie-item-680"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="css-1u0mlrb"
+      >
+        <img
+          alt="Pulp Fiction"
+          class="css-1u6rrjb"
+          src="https://example.com/pulpfiction-poster.jpg"
+        />
+        <div
+          class="css-seut52"
+        >
+          <span
+            class="css-2y6i2r"
+          >
+            89
+            .
+          </span>
+          <span
+            class="css-i0h9c4"
+          >
+            30
+          </span>
+        </div>
+      </div>
+    </li>
+  </ul>
+  <div
+    class="css-hi4v9c"
+  />
+</div>
+`;
+
+exports[`MovieList Component - Unit Tests > Snapshot Tests > should match snapshot with empty movies list 1`] = `
+<div
+  class="css-hhk6j-MovieList"
+  data-testid="baph-movie-list"
+>
+  <div
+    aria-label="Search"
+    class="pa-search-form css-m5jsbo"
+    data-testid="baph-search"
+    role="search"
+  >
+    <div
+      class="pa-search-wrapper css-114f50u"
+    >
+      <div
+        aria-atomic="true"
+        aria-live="polite"
+        class="css-19gqcwz"
+        data-testid="total-results"
+        role="status"
+      >
+        Total Results:
+         
+        3
+      </div>
+      <div
+        class="css-1jlnwea"
+      >
+        <div
+          class="css-1mmmoc7"
+        >
+          <input
+            aria-describedby="search-results-count"
+            aria-invalid="false"
+            aria-label="Search Movies"
+            aria-required="false"
+            class="css-jcn22a"
+            data-testid="search-input"
+            id="input-searchTerm"
+            name="searchTerm"
+            placeholder="Search Movies"
+            type="search"
+            value=""
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="css-15vh70y-MovieList"
+  >
+    <h2>
+      Real sorry to tell you this, but...
+    </h2>
+    <div>
+      No movies match your search
+    </div>
+  </div>
+  <div
+    class="css-hi4v9c"
+  />
+</div>
+`;
+
+exports[`MovieList Component - Unit Tests > Snapshot Tests > should match snapshot with loading state 1`] = `
+<div
+  class="css-hhk6j-MovieList"
+  data-testid="baph-movie-list"
+>
+  <div
+    aria-label="Search"
+    class="pa-search-form css-m5jsbo"
+    data-testid="baph-search"
+    role="search"
+  >
+    <div
+      class="pa-search-wrapper css-114f50u"
+    >
+      <div
+        aria-atomic="true"
+        aria-live="polite"
+        class="css-19gqcwz"
+        data-testid="total-results"
+        role="status"
+      >
+        Total Results:
+         
+        3
+      </div>
+      <div
+        class="css-1jlnwea"
+      >
+        <div
+          class="css-1mmmoc7"
+        >
+          <input
+            aria-describedby="search-results-count"
+            aria-invalid="false"
+            aria-label="Search Movies"
+            aria-required="false"
+            class="css-jcn22a"
+            data-testid="search-input"
+            id="input-searchTerm"
+            name="searchTerm"
+            placeholder="Search Movies"
+            type="search"
+            value=""
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="css-15vh70y-MovieList"
+  >
+    <h2>
+      Real sorry to tell you this, but...
+    </h2>
+    <div>
+      No movies match your search
+    </div>
+  </div>
+  <div
+    class="css-hi4v9c"
+  />
+</div>
+`;
+
+exports[`MovieList Component - Unit Tests > should match snapshot with loading state 1`] = `
+<div
+  class="css-hhk6j-MovieList"
+  data-testid="baph-movie-list"
+>
+  <div
+    aria-label="Search"
+    class="pa-search-form css-m5jsbo"
+    data-testid="baph-search"
+    role="search"
+  >
+    <div
+      class="pa-search-wrapper css-114f50u"
+    >
+      <div
+        aria-atomic="true"
+        aria-live="polite"
+        class="css-19gqcwz"
+        data-testid="total-results"
+        role="status"
+      >
+        Total Results:
+         
+        3
+      </div>
+      <div
+        class="css-1jlnwea"
+      >
+        <div
+          class="css-1mmmoc7"
+        >
+          <input
+            aria-describedby="search-results-count"
+            aria-invalid="false"
+            aria-label="Search Movies"
+            aria-required="false"
+            class="css-jcn22a"
+            data-testid="search-input"
+            id="input-searchTerm"
+            name="searchTerm"
+            placeholder="Search Movies"
+            type="search"
+            value=""
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="css-15vh70y-MovieList"
+  >
+    <h2>
+      Real sorry to tell you this, but...
+    </h2>
+    <div>
+      No movies match your search
+    </div>
+  </div>
+  <div
+    class="css-hi4v9c"
+  />
+</div>
+`;
+
+exports[`MovieList Component - Unit Tests > should match snapshot with search functionality 1`] = `
+<div
+  class="css-hhk6j-MovieList"
+  data-testid="baph-movie-list"
+>
+  <div
+    aria-label="Search"
+    class="pa-search-form css-m5jsbo"
+    data-testid="baph-search"
+    role="search"
+  >
+    <div
+      class="pa-search-wrapper css-114f50u"
+    >
+      <div
+        aria-atomic="true"
+        aria-live="polite"
+        class="css-19gqcwz"
+        data-testid="total-results"
+        role="status"
+      >
+        Total Results:
+         
+        3
+      </div>
+      <div
+        class="css-1jlnwea"
+      >
+        <div
+          class="css-1mmmoc7"
+        >
+          <input
+            aria-describedby="search-results-count"
+            aria-invalid="false"
+            aria-label="Search Movies"
+            aria-required="false"
+            class="css-jcn22a"
+            data-testid="search-input"
+            id="input-searchTerm"
+            name="searchTerm"
+            placeholder="Search Movies"
+            type="search"
+            value="test search"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <ul
+    class="pa-list css-179vcy7"
+    role="list"
+  >
+    <li
+      aria-label="Open details for The Matrix"
+      class="css-zq0ncc"
+      data-testid="movie-item-603"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="css-1u0mlrb"
+      >
+        <img
+          alt="The Matrix"
+          class="css-1u6rrjb"
+          src="https://example.com/matrix-poster.jpg"
+        />
+        <div
+          class="css-seut52"
+        >
+          <span
+            class="css-2y6i2r"
+          >
+            85
+            .
+          </span>
+          <span
+            class="css-i0h9c4"
+          >
+            50
+          </span>
+        </div>
+      </div>
+    </li>
+    <li
+      aria-label="Open details for The Godfather"
+      class="css-10225se"
+      data-testid="movie-item-238"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="css-1u0mlrb"
+      >
+        <img
+          alt="The Godfather"
+          class="css-1u6rrjb"
+          src="https://example.com/godfather-poster.jpg"
+        />
+        <div
+          class="css-seut52"
+        >
+          <span
+            class="css-2y6i2r"
+          >
+            92
+            .
+          </span>
+          <span
+            class="css-i0h9c4"
+          >
+            10
+          </span>
+        </div>
+      </div>
+    </li>
+    <li
+      aria-label="Open details for Pulp Fiction"
+      class="css-1a9vumo"
+      data-testid="movie-item-680"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="css-1u0mlrb"
+      >
+        <img
+          alt="Pulp Fiction"
+          class="css-1u6rrjb"
+          src="https://example.com/pulpfiction-poster.jpg"
+        />
+        <div
+          class="css-seut52"
+        >
+          <span
+            class="css-2y6i2r"
+          >
+            89
+            .
+          </span>
+          <span
+            class="css-i0h9c4"
+          >
+            30
+          </span>
+        </div>
+      </div>
+    </li>
+  </ul>
+  <div
+    class="css-hi4v9c"
+  />
+</div>
+`;
