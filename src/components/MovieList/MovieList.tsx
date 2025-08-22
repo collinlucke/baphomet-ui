@@ -97,7 +97,6 @@ export const MovieList: React.FC<MovieData> = ({
   };
 
   const openMovieDetailsHandler = (tmdbId: string) => {
-    console.log(`Opening movie details for TMDB ID: ${tmdbId}`);
     fetchMovieDetails({
       variables: { tmdbId }
     });

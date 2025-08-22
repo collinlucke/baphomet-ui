@@ -1,3 +1,5 @@
+import { baseColors } from '@collinlucke/phantomartist';
+
 type ModalContentProps = {
   title: string;
   subtitle?: string;
@@ -16,7 +18,7 @@ export const ModalContent: React.FC<ModalContentProps> = ({
       aria-label={`${title} Modal Content`}
     >
       <div css={baphStyles.header}>
-        <h2>{title}</h2>
+        <h2 css={baphStyles.title}>{title}</h2>
         {subtitle && (
           <p css={baphStyles.subtitle} role="doc-subtitle">
             {subtitle}
@@ -41,8 +43,11 @@ const baphStyles = {
     flexDirection: 'column' as const,
     gap: '0.5rem'
   },
+  title: {
+    color: baseColors.primary[500]
+  },
   subtitle: {
     margin: 0,
-    color: '#6b7280'
+    color: baseColors.secondary[800]
   }
 };

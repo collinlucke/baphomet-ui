@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import {
+  baseColors,
   Button,
   ButtonGroup,
   Header,
-  mediaQueries
+  mediaQueries,
+  hexToRgba
 } from '@collinlucke/phantomartist';
 import { Link } from 'react-router-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -68,8 +70,8 @@ export const Heading: React.FC<HeadingProps> = ({
   if (isMobileAndLandscape && location.pathname === '/arena') {
     return (
       <>
-        {/* Floating Hamburger Button */}
-        <div css={baphStyles.floatingMenuButton}>
+        {/* Floating Menu Button */}
+        <div css={baphStyles.floatingMenuButtonContainer}>
           <Button
             kind="primary"
             size="small"
@@ -78,11 +80,16 @@ export const Heading: React.FC<HeadingProps> = ({
               isFloatingMenuOpen ? (
                 <Cancel01Icon size={20} />
               ) : (
-                <Menu01Icon size={20} />
+                <img
+                  src="/baphy-favicon.png"
+                  alt="Baphomet logo"
+                  css={baphStyles.floatingFavicon}
+                />
               )
             }
             onClick={toggleFloatingMenu}
             ariaLabel={isFloatingMenuOpen ? 'Close menu' : 'Open menu'}
+            className={{ button: baphStyles.floatingMenuButton }}
           />
         </div>
 
@@ -459,10 +466,7 @@ const baphStyles: { [key: string]: CSSObject } = {
   },
   title: {
     margin: 0,
-    fontSize: '1.2rem',
-    [mediaQueries.minWidth.sm]: {
-      fontSize: '1.4rem'
-    },
+    fontSize: '1.5rem',
     [mediaQueries.minWidth.md]: {
       fontSize: '1.6rem'
     },
@@ -471,13 +475,9 @@ const baphStyles: { [key: string]: CSSObject } = {
     }
   },
   favicon: {
-    width: '32px',
-    height: '32px',
+    width: '40px',
+    height: '40px',
     objectFit: 'contain' as const,
-    [mediaQueries.minWidth.sm]: {
-      width: '40px',
-      height: '40px'
-    },
     [mediaQueries.minWidth.md]: {
       width: '48px',
       height: '48px'
@@ -558,15 +558,19 @@ const baphStyles: { [key: string]: CSSObject } = {
     visibility: 'hidden' as const
   },
 
-  floatingMenuButton: {
+  floatingMenuButtonContainer: {
     position: 'fixed' as const,
     top: '10px',
     right: '10px',
     zIndex: 1001,
-    backgroundColor: 'rgba(11, 24, 40, 0.9)',
+    backgroundColor: hexToRgba(baseColors.secondary[600], 0.5),
     borderRadius: '50%',
     padding: '8px',
     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
+  },
+  floatingMenuButton: {
+    backgroundColor: 'transparent',
+    padding: '0'
   },
   floatingMenuOverlay: {
     position: 'fixed' as const,
@@ -611,9 +615,10 @@ const baphStyles: { [key: string]: CSSObject } = {
     color: '#FFFFFF'
   },
   floatingFavicon: {
-    width: '32px',
-    height: '32px',
-    objectFit: 'contain' as const
+    width: '30px',
+    height: '30px',
+    objectFit: 'contain' as const,
+    backgroundColor: 'transparent'
   },
   floatingNav: {
     display: 'flex',

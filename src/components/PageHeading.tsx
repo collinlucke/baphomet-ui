@@ -1,3 +1,4 @@
+import { mediaQueries } from '@collinlucke/phantomartist';
 import { CSSObject } from '@emotion/react';
 
 export const PageHeading: React.FC<{
@@ -42,7 +43,11 @@ export const PageHeading: React.FC<{
 const baphStyles = {
   heading: {
     margin: 0,
-    lineHeight: '1.2'
+    lineHeight: '1.2',
+    fontSize: '1.75rem',
+    [mediaQueries.minWidth.md]: {
+      fontSize: '2rem'
+    }
   },
   subtitle: {
     margin: '0.5rem 0 0 0',

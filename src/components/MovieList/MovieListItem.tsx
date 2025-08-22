@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { CSSObject } from '@emotion/react';
-import { baseColors, baseVibrantColors } from '@collinlucke/phantomartist';
+import {
+  baseColors,
+  baseVibrantColors,
+  mediaQueries
+} from '@collinlucke/phantomartist';
 
 export type MovieListItemProps = {
   movie: {
@@ -28,11 +32,10 @@ export const MovieListItem: React.FC<MovieListItemProps> = ({
       (e.type === 'keydown' && (e as React.KeyboardEvent).key === 'Enter') ||
       e.type === 'click'
     ) {
-      console.log(`Opening details for movie with TMDB ID: ${movie.tmdbId}`);
       openMovieDetails(movie.tmdbId || '');
     }
   };
-  console.log(movie);
+
   return (
     <li
       css={getContainerStyles(movie.posterUrl || '')}
@@ -96,20 +99,38 @@ const baphStyles = {
   },
   major: {
     color: baseVibrantColors.primary[500],
-    fontSize: '2.5rem',
+    fontSize: '1.85rem',
     fontWeight: 'bold',
     WebkitTextStroke: `1px ${baseColors.primary[700]}`,
     paintOrder: 'stroke fill',
-    textShadow: '2px 2px 4px rgba(0, 0, 0, 1)'
+    textShadow: '2px 2px 4px rgba(0, 0, 0, 1)',
+    [mediaQueries.minWidth.sm]: {
+      fontSize: '2rem'
+    },
+    [mediaQueries.minWidth.lg]: {
+      fontSize: '2.5rem'
+    },
+    [mediaQueries.minWidth.xl]: {
+      fontSize: '3rem'
+    }
   },
   minor: {
     color: baseVibrantColors.primary[500],
-    fontSize: '1.5rem',
+    fontSize: '1.25rem',
     fontWeight: 'bold',
     WebkitTextStroke: `1px ${baseColors.primary[700]}`,
     paintOrder: 'stroke fill',
     marginLeft: '2px',
-    textShadow: '2px 2px 4px rgba(0, 0, 0, 1)'
+    textShadow: '2px 2px 4px rgba(0, 0, 0, 1)',
+    [mediaQueries.minWidth.sm]: {
+      fontSize: '1.5rem'
+    },
+    [mediaQueries.minWidth.lg]: {
+      fontSize: '1.85rem'
+    },
+    [mediaQueries.minWidth.xl]: {
+      fontSize: '2.25rem'
+    }
   },
   tooltip: {
     width: 'max-content',

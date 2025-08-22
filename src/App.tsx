@@ -221,12 +221,12 @@ const baphStyles: { [key: string]: CSSObject } = {
   actionRequiredHeading: {
     color: '#f39c12',
     marginBottom: '16px',
-    fontSize: '1.2em'
+    fontSize: '1.2rem'
   },
   unauthorizedMessage: {
     color: '#e74c3c',
     marginBottom: '24px',
-    fontSize: '1em'
+    fontSize: '1rem'
   },
   unauthorizedModalActions: {
     display: 'flex',

@@ -1,5 +1,4 @@
-import { Block, InnerWidth } from '@collinlucke/phantomartist';
-import { isMobileAndLandscapeVar } from '../reactiveVars';
+import { Block, InnerWidth, mediaQueries } from '@collinlucke/phantomartist';
 import { CSSObject } from '@emotion/react';
 
 type BodySectionProps = {
@@ -21,7 +20,6 @@ export const BodySection: React.FC<BodySectionProps> = ({
   ariaDescribedBy,
   role
 }: BodySectionProps) => {
-  const isMobileAndLandscape = isMobileAndLandscapeVar();
   const sectionId = `body-section-${pageSlug}`;
 
   return (
@@ -44,7 +42,7 @@ export const BodySection: React.FC<BodySectionProps> = ({
         <InnerWidth
           size={innerWidthSize}
           className={{
-            innerWidth: getSectionInnerWidthStyles(isMobileAndLandscape)
+            innerWidth: baphStyles.sectionInnerWidth
           }}
           dataTestid={`inner-width-${pageSlug}`}
         >
@@ -62,12 +60,6 @@ export const BodySection: React.FC<BodySectionProps> = ({
   );
 };
 
-const getSectionInnerWidthStyles = (isMobileAndLandscape: boolean) => {
-  return {
-    ...baphStyles.sectionInnerWidth,
-    padding: isMobileAndLandscape ? '0' : '0 1.5rem'
-  };
-};
 const baphStyles: { [key: string]: CSSObject } = {
   sectionBlock: {
     marginBottom: '60px'
@@ -75,7 +67,10 @@ const baphStyles: { [key: string]: CSSObject } = {
   section: {
     display: 'flex',
     flexDirection: 'column' as const,
-    padding: '2rem'
+    padding: '1rem 2rem',
+    [mediaQueries.minWidth.xl]: {
+      padding: '2rem'
+    }
   },
   sectionInnerWidth: {
     maxWidth: '1720px',
@@ -83,11 +78,14 @@ const baphStyles: { [key: string]: CSSObject } = {
     display: 'flex',
     flexDirection: 'column' as const,
     gap: '35px',
-    margin: '1.5rem auto'
+    margin: '10px auto',
+    [mediaQueries.minWidth.xl]: {
+      margin: '1.5rem auto'
+    }
   },
   sectionContent: {
     display: 'flex',
     flexDirection: 'column' as const,
-    gap: '1.5rem'
+    gap: '2rem'
   }
 };

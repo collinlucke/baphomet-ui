@@ -131,6 +131,7 @@ export const GET_RANDOM_MATCHUP = gql`
         id
         title
         posterUrl
+        backdropUrl
         releaseDate
         genres
         winningPercentage
@@ -142,6 +143,7 @@ export const GET_RANDOM_MATCHUP = gql`
         id
         title
         posterUrl
+        backdropUrl
         releaseDate
         genres
         winningPercentage

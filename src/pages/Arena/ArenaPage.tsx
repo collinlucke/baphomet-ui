@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useQuery, useMutation, useReactiveVar } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { GET_RANDOM_MATCHUP } from '../../api/queries';
 import { SUBMIT_VOTE } from '../../api/mutations';
 import { BodySection } from '../../components/BodySection';
@@ -11,7 +11,6 @@ import {
   baseVibrantColors,
   mediaQueries
 } from '@collinlucke/phantomartist';
-import { isMobileAndLandscapeVar } from '../../reactiveVars';
 import { CSSObject } from '@emotion/react';
 
 type Movie = {
@@ -33,7 +32,6 @@ type Matchup = {
 };
 
 export const ArenaPage: React.FC = () => {
-  const isMobileAndLandscape = useReactiveVar(isMobileAndLandscapeVar);
   const [isVoting, setIsVoting] = useState(false);
   const [voteResult, setVoteResult] = useState<{
     success: boolean;
@@ -147,13 +145,6 @@ export const ArenaPage: React.FC = () => {
 
   const matchup: Matchup = data.getRandomMovieMatchup;
 
-  const getMatchupContainerStyles: () => CSSObject = () => {
-    return {
-      ...baphStyles.matchupContainer,
-      flexDirection: isMobileAndLandscape ? 'row' : 'column'
-    };
-  };
-
   return (
     <ArenaContainer>
       {voteResult && (
@@ -168,7 +159,7 @@ export const ArenaPage: React.FC = () => {
       )}
 
       <div
-        css={getMatchupContainerStyles()}
+        css={baphStyles.matchupContainer}
         className="arena-matchup-container"
       >
         <MovieCard
@@ -181,7 +172,7 @@ export const ArenaPage: React.FC = () => {
           <div css={baphStyles.vsContainer}>
             <div css={baphStyles.vsText}>VS</div>
           </div>
-          <div css={baphStyles.actionButtons}>
+          <div css={baphStyles.actionButtons} className="skip-middle">
             <Button
               kind="outline"
               size="medium"
@@ -198,28 +189,29 @@ export const ArenaPage: React.FC = () => {
           isVoting={isVoting}
           handleVote={handleVote}
         />
+
+        <div css={baphStyles.actionButtons} className="skip-bottom">
+          <Button
+            kind="outline"
+            size="medium"
+            onClick={handleSkip}
+            disabled={isVoting}
+          >
+            Skip This Matchup
+          </Button>
+        </div>
       </div>
     </ArenaContainer>
   );
 };
 
 const baphStyles: { [key: string]: CSSObject } = {
-  vsAndSkipContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '3rem',
-    marginTop: '1rem'
-  },
   container: {
     display: 'flex',
     alignItems: 'start',
     gap: '2rem',
     minHeight: '80vh',
-    justifyContent: 'center',
-    [mediaQueries.maxWidth.lg]: {
-      alignItems: 'center'
-    }
+    justifyContent: 'center'
   },
   loadingContainer: {
     display: 'flex',
@@ -267,16 +259,23 @@ const baphStyles: { [key: string]: CSSObject } = {
   },
   matchupContainer: {
     display: 'flex',
-    gap: '3rem',
+    gap: '2rem',
     alignItems: 'center',
     justifyContent: 'center',
     maxWidth: '1200px',
     width: '100%',
     flexDirection: 'column',
-    [mediaQueries.minWidth.sm]: {
+    [mediaQueries.minWidth.lg]: {
       flexDirection: 'row',
       gap: '2rem'
     }
+  },
+  vsAndSkipContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '3rem'
+    // marginTop: '1rem'
   },
   vsContainer: {
     display: 'flex',
@@ -284,24 +283,40 @@ const baphStyles: { [key: string]: CSSObject } = {
     justifyContent: 'center'
   },
   vsText: {
-    fontSize: '3rem',
+    fontSize: '2rem',
     fontWeight: 'bold',
     color: baseVibrantColors.primary[300],
     textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
     padding: '1rem',
     backgroundColor: baseColors.secondary[700],
     borderRadius: '50%',
-    width: '80px',
-    height: '80px',
+    width: '50px',
+    height: '50px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    border: `2px solid ${baseVibrantColors.primary[500]}`
+    border: `2px solid ${baseVibrantColors.primary[500]}`,
+    [mediaQueries.minWidth.lg]: {
+      fontSize: '3rem',
+      width: '80px',
+      height: '80px'
+    }
   },
   actionButtons: {
     display: 'flex',
     gap: '1rem',
     marginTop: '1rem',
-    zIndex: 10
+    zIndex: 10,
+    '&.skip-bottom': {
+      [mediaQueries.minWidth.lg]: {
+        display: 'none'
+      }
+    },
+    '&.skip-middle': {
+      display: 'none',
+      [mediaQueries.minWidth.lg]: {
+        display: 'flex'
+      }
+    }
   }
 };

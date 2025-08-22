@@ -1,11 +1,12 @@
 import {
   baseVibrantColors,
   baseColors,
-  Button
+  mediaQueries
 } from '@collinlucke/phantomartist';
 import { CSSObject } from '@emotion/react';
 import { isMobileAndLandscapeVar } from '../reactiveVars';
 import { useReactiveVar } from '@apollo/client';
+import { resizeTmdbImage } from '../utils/resizeTmdbImage.ts';
 
 type MovieCardProps = {
   isVoting?: boolean;
@@ -14,13 +15,13 @@ type MovieCardProps = {
     title: string;
     posterUrl?: string;
     releaseDate?: string;
+    backdropUrl?: string;
   };
   handleVote: (movieId: string) => void;
 
   ariaLabel?: string;
   ariaDescribedBy?: string;
   tabIndex?: number;
-  role?: string;
   dataTestId?: string;
   autoFocus?: boolean;
   onKeyDown?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
@@ -35,7 +36,6 @@ export const MovieCard: React.FC<MovieCardProps> = ({
   ariaLabel,
   ariaDescribedBy,
   tabIndex = 0,
-  role = 'button',
   dataTestId,
   autoFocus = false,
   onKeyDown,
@@ -68,13 +68,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
     return `${movie.title}${yearText}${voteText}`;
   };
 
-  const getMoviePosterStyles = (): CSSObject => {
-    return {
-      ...baphStyles.posterImage,
-      width: isMobileAndLandscape ? '275px' : '250px',
-      height: isMobileAndLandscape ? '275px' : '375px'
-    };
-  };
+  const posterImageUrl = resizeTmdbImage(movie.posterUrl ?? '', 'w500');
 
   return (
     <div
@@ -82,33 +76,26 @@ export const MovieCard: React.FC<MovieCardProps> = ({
       data-testid={dataTestId || `movie-container-${movie.id}`}
     >
       <div
-        css={[baphStyles.movieCard, isVoting && baphStyles.movieCardDisabled]}
+        css={[
+          getMovieCardStyles(
+            movie.backdropUrl ?? '',
+            posterImageUrl,
+            isMobileAndLandscape
+          ),
+          isVoting && baphStyles.movieCardDisabled
+        ]}
         onClick={() => !isVoting && handleVote(movie.id)}
         onKeyDown={handleKeyDown}
         onFocus={onFocus}
         onBlur={onBlur}
         tabIndex={isVoting ? -1 : tabIndex}
-        role={role}
+        role="button"
         aria-label={generateAriaLabel()}
         aria-describedby={ariaDescribedBy}
         aria-disabled={isVoting}
         autoFocus={autoFocus}
         data-testid={`movie-card-${movie.id}`}
       >
-        {movie.posterUrl ? (
-          <img
-            src={movie.posterUrl}
-            alt={`${movie.title} movie poster`}
-            css={getMoviePosterStyles()}
-            loading="lazy"
-            decoding="async"
-          />
-        ) : (
-          <div css={baphStyles.noPosterPlaceholder} aria-hidden="true">
-            No Poster
-          </div>
-        )}
-
         <div css={baphStyles.movieOverlay}>
           <h3 css={baphStyles.movieTitle}>{movie.title}</h3>
           {movie.releaseDate && (
@@ -118,34 +105,48 @@ export const MovieCard: React.FC<MovieCardProps> = ({
           )}
         </div>
       </div>
-      {!isMobileAndLandscape && (
-        <div css={baphStyles.actionButtonContainer}>
-          <Button
-            kind="primary"
-            size="large"
-            onClick={() => handleVote(movie.id)}
-            disabled={isVoting}
-            ariaLabel={`Vote for ${movie.title}`}
-            testId={`vote-button-${movie.id}`}
-          >
-            {isVoting ? 'Voting...' : 'Choose This Movie'}
-          </Button>
-        </div>
-      )}
     </div>
   );
 };
 
+const getMovieCardStyles = (
+  backdropUrl: string,
+  posterUrl: string,
+  isMobileAndLandscape: boolean
+) => {
+  return {
+    ...baphStyles.movieCard,
+    backgroundImage: `url(${backdropUrl})`,
+    [mediaQueries.minWidth.lg]: {
+      backgroundImage: `url(${posterUrl})`,
+      aspectRatio: isMobileAndLandscape ? '1.25/1' : '2/3',
+      height: 'unset'
+    }
+  };
+};
+
 const baphStyles: { [key: string]: CSSObject } = {
+  movieContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '1.5rem',
+    flex: 1,
+    width: '100%'
+  },
   movieCard: {
+    width: '100%',
+    height: '180px',
     position: 'relative',
-    width: '250px',
-    height: 'auto',
     borderRadius: '12px',
     overflow: 'hidden',
     cursor: 'pointer',
     transition: 'all 0.3s ease',
     border: `2px solid ${baseColors.tertiary[600]}`,
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    backgroundPositionY: '20%',
+    backgroundPositionX: 'center',
     '&:hover': {
       transform: 'scale(1.05)',
       border: `2px solid ${baseVibrantColors.primary[500]}`,
@@ -161,10 +162,11 @@ const baphStyles: { [key: string]: CSSObject } = {
       boxShadow: 'none'
     }
   },
-  posterImage: {
+  movieImage: {
     width: '100%',
     height: '100%',
-    objectFit: 'cover'
+    objectFit: 'cover',
+    position: 'absolute'
   },
   noPosterPlaceholder: {
     width: '100%',
@@ -204,14 +206,6 @@ const baphStyles: { [key: string]: CSSObject } = {
     fontSize: '0.75rem',
     color: baseColors.tertiary[300],
     textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)'
-  },
-  movieContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '1.5rem',
-    flex: 1,
-    maxWidth: '400px'
   },
   actionButtonContainer: {
     display: 'flex',
