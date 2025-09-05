@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import { Button, InputField } from '@collinlucke/phantomartist';
 import { CSSObject } from '@emotion/react';
@@ -20,6 +20,20 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [generalError, setGeneralError] = useState('');
 
+  useEffect(() => {
+    const userDataString = localStorage.getItem('baphomet-user');
+    if (userDataString) {
+      try {
+        const userData = JSON.parse(userDataString);
+        if (userData.email) {
+          setFormData(prev => ({ ...prev, email: userData.email }));
+        }
+      } catch (error) {
+        console.warn('Error parsing user data from localStorage:', error);
+      }
+    }
+  }, []);
+
   const [submitFeedback] = useMutation(SUBMIT_FEEDBACK, {
     onCompleted: () => {
       setIsSubmitting(false);
@@ -36,10 +50,13 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
     return input
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#x27;')
       .replace(/\//g, '&#x2F;')
       .trim();
+  };
+
+  const isValidEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
   const validateForm = (): boolean => {
@@ -50,7 +67,7 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
         'Comments are required. Please tell us what you think!';
     }
 
-    if (formData.email.trim()) {
+    if (formData.email.trim() && !isValidEmail(formData.email.trim())) {
       newErrors.email = 'Please enter a valid email address or leave it blank.';
     }
 

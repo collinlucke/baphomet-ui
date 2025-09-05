@@ -5,6 +5,7 @@ import { ArenaPage } from './pages/Arena/ArenaPage.tsx';
 import { ProtectedRoute } from './components/ProtectedRoute.tsx';
 import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 import { AddMoviesPage } from './pages/AddMovies/AddMoviesPage.tsx';
+import { LeaderboardPage } from './pages/Leaderboard/LeaderboardPage.tsx';
 
 const routes = [
   {
@@ -17,6 +18,10 @@ const routes = [
       {
         path: 'add-movies',
         element: <ProtectedRoute element={AddMoviesPage} />
+      },
+      {
+        path: 'leaderboard',
+        element: <LeaderboardPage />
       },
       {
         path: 'view/:id'

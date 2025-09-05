@@ -134,11 +134,10 @@ export const Heading: React.FC<HeadingProps> = ({
                   <Button
                     size="medium"
                     kind="ghostOnDark"
-                    onClick={() => handleNavigation('/leaderboards')}
-                    disabled
+                    onClick={() => handleNavigation('/leaderboard')}
                     className={{ button: baphStyles.floatingNavButton }}
                   >
-                    Leader Boards
+                    Leaderboard
                   </Button>
                   <Button
                     size="medium"
@@ -241,16 +240,15 @@ export const Heading: React.FC<HeadingProps> = ({
                     Arena
                   </Button>
                 </Link>
-                {/* <Link to="/leaderboards" > */}
-                <Button
-                  size="small"
-                  kind="ghostOnDark"
-                  ariaLabel="Go to Leader Boards page"
-                  disabled
-                >
-                  Leader Boards
-                </Button>
-                {/* </Link> */}
+                <Link to="/leaderboard">
+                  <Button
+                    size="small"
+                    kind="ghostOnDark"
+                    ariaLabel="Go to Leaderboard page"
+                  >
+                    Leaderboard
+                  </Button>
+                </Link>
                 <Link to="/all-movies">
                   <Button
                     size="small"

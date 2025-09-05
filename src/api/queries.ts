@@ -163,3 +163,38 @@ export const GET_RANDOM_BACKDROP_IMAGE = gql`
     }
   }
 `;
+
+export const GET_USER_DETAILS = gql`
+  query getUserInfo($userId: String!) {
+    user: getUserDetails(userId: $userId) {
+      id
+      username
+      email
+      displayName
+      totalVotes
+      joinDate
+      role
+      emailVerified
+    }
+  }
+`;
+
+export const GET_USER_LEADERBOARD = gql`
+  query getUserLeaderboard($cursor: String) {
+    leaderboard: getUserLeaderboard(cursor: $cursor) {
+      searchResults {
+        id
+        username
+        email
+        displayName
+        totalVotes
+        joinDate
+        role
+        emailVerified
+      }
+      newTotalUserCount
+      newCursor
+      endOfResults
+    }
+  }
+`;
