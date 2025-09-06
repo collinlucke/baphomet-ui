@@ -6,6 +6,7 @@ import { ProtectedRoute } from './components/ProtectedRoute.tsx';
 import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 import { AddMoviesPage } from './pages/AddMovies/AddMoviesPage.tsx';
 import { LeaderboardPage } from './pages/Leaderboard/LeaderboardPage.tsx';
+import { FAQPage } from './pages/FAQ/FAQPage.tsx';
 
 const routes = [
   {
@@ -29,7 +30,11 @@ const routes = [
       {
         path: 'edit/:id'
       },
-      { path: 'arena', element: <ArenaPage /> }
+      { path: 'arena', element: <ArenaPage /> },
+      {
+        path: 'faq',
+        element: <FAQPage />
+      }
     ]
   }
 ];

@@ -3,7 +3,13 @@ import './styling/index.css';
 import { Outlet } from 'react-router-dom';
 import { Heading } from './components/Heading';
 import { Footer } from './components/Footer';
-import { Main, Globals, Modal, Button } from '@collinlucke/phantomartist';
+import {
+  Main,
+  Globals,
+  Modal,
+  Button,
+  mediaQueries
+} from '@collinlucke/phantomartist';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import {
   errorVar,
@@ -132,7 +138,6 @@ export const App = () => {
   };
 
   return (
-    // <ThemeProvider theme={baphTheme}>
     <>
       <Globals />
 
@@ -145,7 +150,9 @@ export const App = () => {
       <Main isDark={true} className={{ main: getMainStyles(backdrop) }}>
         <Outlet />
       </Main>
-      <Footer />
+      <div css={baphStyles.footerWrapper}>
+        <Footer />
+      </div>
       {error && <ErrorBoundary />}
 
       <Modal isOpen={showLoginModal} onClose={handleLoginModalClose}>
@@ -180,7 +187,6 @@ export const App = () => {
         </div>
       </Modal>
     </>
-    // </ThemeProvider>
   );
 };
 
@@ -198,6 +204,7 @@ const baphStyles: { [key: string]: CSSObject } = {
   main: {
     position: 'relative',
     zIndex: 0,
+    minHeight: '100vh',
     '&::before': {
       content: '""',
       position: 'absolute',
@@ -232,6 +239,12 @@ const baphStyles: { [key: string]: CSSObject } = {
     display: 'flex',
     gap: '12px',
     justifyContent: 'center'
+  },
+  footerWrapper: {
+    display: 'none',
+    [mediaQueries.minWidth.lg]: {
+      display: 'block'
+    }
   }
 };
 

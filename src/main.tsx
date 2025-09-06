@@ -14,11 +14,6 @@ import 'dotenv';
 
 logEnvironmentInfo();
 
-// Not using contrast checks for now
-// if (import.meta.env.DEV) {
-//   import('./utils/accessibilitySetup');
-// }
-
 const redirectPath = sessionStorage.getItem('redirectPath');
 if (redirectPath && redirectPath !== '/') {
   sessionStorage.removeItem('redirectPath');

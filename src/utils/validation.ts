@@ -1,42 +1,29 @@
-/**
- * Validation utilities for form inputs
- * Provides reusable validation functions with consistent error messages
- */
+export const emailValidation = ({
+  email,
+  isRequired = false
+}: {
+  email: string;
+  isRequired?: boolean;
+}) => {
+  const trimmedEmail = email?.trim() || '';
+  let errorMessage = '';
 
-export const emailValidation = {
-  /**
-   * Validates email format using RFC-compliant regex
-   * @param email - The email string to validate
-   * @returns true if valid, false otherwise
-   */
-  isValid: (email: string): boolean => {
-    if (!email || typeof email !== 'string') return false;
-    
-    // More comprehensive email regex that handles most valid cases
-    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-    
-    return emailRegex.test(email.trim());
-  },
+  const emailRegex =
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
-  /**
-   * Gets validation error message for email field
-   * @param email - The email string to validate
-   * @param isRequired - Whether the email field is required
-   * @returns Error message string, or empty string if valid
-   */
-  getMessage: (email: string, isRequired: boolean = false): string => {
-    const trimmedEmail = email?.trim() || '';
-    
-    if (!trimmedEmail) {
-      return isRequired ? 'Email address is required' : '';
-    }
-    
-    if (!emailValidation.isValid(trimmedEmail)) {
-      return 'Please enter a valid email address';
-    }
-    
-    return '';
+  if (!trimmedEmail && isRequired) {
+    errorMessage = 'Email address is required';
   }
+
+  if (!emailRegex.test(trimmedEmail)) {
+    if (isRequired) {
+      errorMessage = 'Please enter a valid email address';
+    } else {
+      errorMessage = 'Please enter a valid email address or leave it blank.';
+    }
+  }
+
+  return errorMessage;
 };
 
 export const passwordValidation = {
@@ -69,7 +56,12 @@ export const passwordValidation = {
     const hasNumbers = /\d/.test(password);
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
 
-    const complexityCount = [hasUpperCase, hasLowerCase, hasNumbers, hasSpecialChar].filter(Boolean).length;
+    const complexityCount = [
+      hasUpperCase,
+      hasLowerCase,
+      hasNumbers,
+      hasSpecialChar
+    ].filter(Boolean).length;
 
     if (complexityCount >= 3) {
       result.strength = 'strong';
@@ -89,11 +81,11 @@ export const passwordValidation = {
     if (!password || !password.trim()) {
       return 'Password is required';
     }
-    
+
     if (password.length < 8) {
       return 'Password must be at least 8 characters long';
     }
-    
+
     return '';
   }
 };
@@ -108,25 +100,25 @@ export const textValidation = {
    * @returns Error message string, or empty string if valid
    */
   getMessage: (
-    value: string, 
-    fieldName: string, 
-    minLength?: number, 
+    value: string,
+    fieldName: string,
+    minLength?: number,
     maxLength?: number
   ): string => {
     const trimmedValue = value?.trim() || '';
-    
+
     if (!trimmedValue) {
       return `${fieldName} is required`;
     }
-    
+
     if (minLength && trimmedValue.length < minLength) {
       return `${fieldName} must be at least ${minLength} characters long`;
     }
-    
+
     if (maxLength && trimmedValue.length > maxLength) {
       return `${fieldName} must be no more than ${maxLength} characters long`;
     }
-    
+
     return '';
   }
 };
@@ -139,25 +131,25 @@ export const usernameValidation = {
    */
   getMessage: (username: string): string => {
     const trimmedUsername = username?.trim() || '';
-    
+
     if (!trimmedUsername) {
       return 'Username is required';
     }
-    
+
     if (trimmedUsername.length < 3) {
       return 'Username must be at least 3 characters long';
     }
-    
+
     if (trimmedUsername.length > 20) {
       return 'Username must be no more than 20 characters long';
     }
-    
+
     // Username can contain letters, numbers, underscores, and hyphens
     const usernameRegex = /^[a-zA-Z0-9_-]+$/;
     if (!usernameRegex.test(trimmedUsername)) {
       return 'Username can only contain letters, numbers, underscores, and hyphens';
     }
-    
+
     return '';
   }
 };
@@ -169,7 +161,7 @@ export const usernameValidation = {
  */
 export const sanitizeInput = (input: string): string => {
   if (!input || typeof input !== 'string') return '';
-  
+
   return input
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -185,15 +177,18 @@ export const sanitizeInput = (input: string): string => {
  * @param confirmPassword - Confirmation password
  * @returns Error message string, or empty string if valid
  */
-export const confirmPasswordValidation = (password: string, confirmPassword: string): string => {
+export const confirmPasswordValidation = (
+  password: string,
+  confirmPassword: string
+): string => {
   if (!confirmPassword?.trim()) {
     return 'Please confirm your password';
   }
-  
+
   if (password !== confirmPassword) {
     return 'Passwords do not match';
   }
-  
+
   return '';
 };
 
