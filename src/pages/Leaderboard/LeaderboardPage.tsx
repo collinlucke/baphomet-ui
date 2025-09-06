@@ -55,7 +55,7 @@ export const LeaderboardPage = () => {
   return (
     <BodySection>
       <PageHeading
-        title="Leader Board"
+        title="Leaderboard"
         subtitle="Basically, it's a quantifiable list of who's better than you."
       />
       <Leaderboard

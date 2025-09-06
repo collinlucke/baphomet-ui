@@ -6,6 +6,7 @@ import { SIGNUP } from '../api/mutations';
 import { SignupFormData, SignupFormProps } from '../types/auth.types';
 import { isAuthenticatedVar } from '../reactiveVars';
 import { ModalContent } from './ModalContent';
+import { emailValidation } from '../utils/validation';
 
 export const SignupForm: React.FC<SignupFormProps> = ({
   onSuccess,
@@ -66,15 +67,20 @@ export const SignupForm: React.FC<SignupFormProps> = ({
 
   const validateForm = (): boolean => {
     const newErrors: Partial<SignupFormData> = {};
+    const emailErrorMessage = emailValidation({
+      email: formData.email.trim(),
+      isRequired: true
+    });
+    console.log('Email validation message:', emailErrorMessage);
+
+    if (emailErrorMessage) {
+      newErrors.email = emailErrorMessage;
+    }
 
     if (!formData.username.trim()) {
       newErrors.username = 'Username is required';
     } else if (formData.username.length < 3) {
       newErrors.username = 'Username must be at least 3 characters';
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
     }
 
     if (!formData.password) {

@@ -182,7 +182,7 @@ export const GET_USER_DETAILS = gql`
 export const GET_USER_LEADERBOARD = gql`
   query getUserLeaderboard($cursor: String) {
     leaderboard: getUserLeaderboard(cursor: $cursor) {
-      searchResults {
+      users {
         id
         username
         email

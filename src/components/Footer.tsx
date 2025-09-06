@@ -1,7 +1,8 @@
 import { CSSObject } from '@emotion/react';
 import { showFeedbackModalVar } from '../reactiveVars';
-import { baseColors } from '@collinlucke/phantomartist';
+import { baseColors, mediaQueries } from '@collinlucke/phantomartist';
 import { Link } from 'react-router-dom';
+import { Github01Icon } from 'hugeicons-react';
 
 export const Footer: React.FC = () => {
   const handleFeedbackClick = (e: React.KeyboardEvent | React.MouseEvent) => {
@@ -15,11 +16,21 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer
-      css={baphStyles.footerStyles}
-      role="contentinfo"
-      aria-label="Site footer"
-    >
+    <footer css={baphStyles.footer} role="contentinfo" aria-label="Site footer">
+      <div css={baphStyles.footerSection}>
+        <div>© {new Date().getFullYear()} Baphomet</div>
+        <div>
+          <Link
+            to="https://github.com/collinlucke"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Visit Collin Lucke's GitHub profile"
+          >
+            <Github01Icon />
+          </Link>
+        </div>
+      </div>
+
       <div css={baphStyles.footerSection}>
         Movie Data Provided by TMDb{' '}
         <Link
@@ -37,49 +48,49 @@ export const Footer: React.FC = () => {
       </div>
 
       <div css={baphStyles.footerSection}>
-        <p>
-          © {new Date().getFullYear()} Baphomet Made with ❤️ by{' '}
-          <a
-            href="https://github.com/collinlucke"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Visit Collin Lucke's GitHub profile"
-          >
-            Collin Lucke
-          </a>
-          {' • '}
-          <span
-            css={baphStyles.feedbackLink}
-            onClick={handleFeedbackClick}
-            onKeyDown={handleFeedbackClick}
-            role="button"
-            tabIndex={0}
-            aria-label="Send feedback about the application"
-          >
-            Send Feedback
-          </span>
-        </p>
+        <span
+          css={baphStyles.feedbackLink}
+          onClick={handleFeedbackClick}
+          onKeyDown={handleFeedbackClick}
+          role="button"
+          tabIndex={0}
+          aria-label="Send feedback about the application"
+        >
+          Send Feedback
+        </span>
       </div>
     </footer>
   );
 };
 
 const baphStyles: { [key: string]: CSSObject } = {
-  footerStyles: {
-    padding: '15px',
-    backgroundColor: baseColors.secondary[800],
-    display: 'flex'
+  footer: {
+    // backgroundColor: baseColors.secondary[800],
+    display: 'flex',
+    flexDirection: 'column' as const,
+    justifyContent: 'space-between',
+    gap: '10px',
+    [mediaQueries.minWidth.lg]: {
+      flexDirection: 'row' as const,
+      backgroundColor: baseColors.secondary[800],
+      padding: '15px'
+    }
   },
   footerSection: {
     flex: 1,
     color: baseColors.tertiary[100],
-    fontSize: '0.875rem',
     lineHeight: '1.5',
-    marginBottom: '0.5rem',
     display: 'flex',
-    alignItems: 'end'
+    alignItems: 'center',
+    fontSize: '.75rem',
+    justifyContent: 'space-between',
+    [mediaQueries.minWidth.md]: {
+      fontSize: '0.875rem'
+    }
   },
   feedbackLink: {
+    width: '100%',
+    textAlign: 'center' as const,
     color: '#007bff',
     cursor: 'pointer',
     textDecoration: 'underline',
@@ -97,7 +108,6 @@ const baphStyles: { [key: string]: CSSObject } = {
   tmdbLogo: {
     width: '32px',
     height: '32px',
-    verticalAlign: 'middle',
     marginLeft: '10px'
   }
 };

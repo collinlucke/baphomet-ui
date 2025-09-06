@@ -62,7 +62,8 @@ export const BodySection: React.FC<BodySectionProps> = ({
 
 const baphStyles: { [key: string]: CSSObject } = {
   sectionBlock: {
-    marginBottom: '60px'
+    marginBottom: '60px',
+    justifyContent: 'start'
   },
   section: {
     display: 'flex',

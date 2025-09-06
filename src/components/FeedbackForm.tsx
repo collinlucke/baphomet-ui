@@ -4,6 +4,7 @@ import { Button, InputField } from '@collinlucke/phantomartist';
 import { CSSObject } from '@emotion/react';
 import { ModalContent } from './ModalContent';
 import { SUBMIT_FEEDBACK } from '../api/mutations';
+import { emailValidation } from '../utils/validation';
 
 type FeedbackFormProps = {
   onSuccess: () => void;
@@ -54,11 +55,6 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
       .trim();
   };
 
-  const isValidEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
   const validateForm = (): boolean => {
     const newErrors: { email?: string; comments?: string } = {};
 
@@ -67,8 +63,12 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
         'Comments are required. Please tell us what you think!';
     }
 
-    if (formData.email.trim() && !isValidEmail(formData.email.trim())) {
-      newErrors.email = 'Please enter a valid email address or leave it blank.';
+    const emailErrorMessage = emailValidation({
+      email: formData.email.trim()
+    });
+
+    if (emailErrorMessage) {
+      newErrors.email = emailErrorMessage;
     }
 
     setErrors(newErrors);

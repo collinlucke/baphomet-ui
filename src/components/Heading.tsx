@@ -7,8 +7,8 @@ import {
   mediaQueries,
   hexToRgba
 } from '@collinlucke/phantomartist';
-import { Link } from 'react-router-dom';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Footer } from './Footer';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { PlusSignIcon, Menu01Icon, Cancel01Icon } from 'hugeicons-react';
 import { isAuthenticatedVar, isMobileAndLandscapeVar } from '../reactiveVars';
 import { useReactiveVar } from '@apollo/client';
@@ -93,7 +93,6 @@ export const Heading: React.FC<HeadingProps> = ({
           />
         </div>
 
-        {/* Floating Menu Overlay */}
         {isFloatingMenuOpen && (
           <div
             css={baphStyles.floatingMenuOverlay}
@@ -120,7 +119,6 @@ export const Heading: React.FC<HeadingProps> = ({
                 </Link>
               </div>
 
-              {/* Navigation */}
               <nav css={baphStyles.floatingNav}>
                 <div css={baphStyles.floatingNavSection}>
                   <Button
@@ -222,7 +220,6 @@ export const Heading: React.FC<HeadingProps> = ({
             />
           </Link>
 
-          {/* Desktop Navigation - hidden on mobile via CSS */}
           <div css={baphStyles.rightSideContent}>
             <nav
               css={baphStyles.nav}
@@ -258,23 +255,36 @@ export const Heading: React.FC<HeadingProps> = ({
                     All Movies
                   </Button>
                 </Link>
+                <Link to="/faq">
+                  <Button
+                    size="small"
+                    kind="ghostOnDark"
+                    ariaLabel="Go to FAQ page"
+                  >
+                    FAQ
+                  </Button>
+                </Link>
               </ButtonGroup>
             </nav>
 
-            {isAuthenticated && user.role === 'admin' && (
+            {isAuthenticated && (
               <ButtonGroup ariaLabel="User actions">
-                <Link to="/add-movies">
-                  <Button
-                    testId="add-new-movie-button"
-                    size="small"
-                    icon={<PlusSignIcon size={17} strokeWidth={'3px'} />}
-                    kind="secondary"
-                    ariaLabel="Add new movie"
-                    onClick={handleAddMovies}
-                  >
-                    Add new movie
-                  </Button>
-                </Link>
+                <>
+                  {user.role === 'admin' ? (
+                    <Link to="/add-movies">
+                      <Button
+                        testId="add-new-movie-button"
+                        size="small"
+                        icon={<PlusSignIcon size={17} strokeWidth={'3px'} />}
+                        kind="secondary"
+                        ariaLabel="Add new movie"
+                        onClick={handleAddMovies}
+                      >
+                        Add new movie
+                      </Button>
+                    </Link>
+                  ) : null}
+                </>
                 <Button
                   kind="primary"
                   onClick={logOut}
@@ -321,7 +331,6 @@ export const Heading: React.FC<HeadingProps> = ({
             )}
           </div>
 
-          {/* Mobile Controls - shown only on mobile via CSS */}
           <div css={baphStyles.mobileControls}>
             <Button
               kind="ghostOnDark"
@@ -339,12 +348,21 @@ export const Heading: React.FC<HeadingProps> = ({
             />
           </div>
 
-          {/* Mobile Menu Overlay - shown only when menu is open */}
           {isMobileMenuOpen && (
             <div
               css={baphStyles.mobileMenuOverlay}
               onClick={() => setIsMobileMenuOpen(false)}
             >
+              <Button
+                className={{ button: baphStyles.closeMenuButton }}
+                onClick={toggleMobileMenu}
+                ariaLabel="Close modal"
+                kind="ghost"
+                size="medium"
+                iconOnly
+                icon={<Cancel01Icon size={24} />}
+              />
+
               <div
                 css={baphStyles.mobileMenu}
                 onClick={e => e.stopPropagation()}
@@ -380,21 +398,34 @@ export const Heading: React.FC<HeadingProps> = ({
                     >
                       All Movies
                     </Button>
+                    <Button
+                      size="medium"
+                      kind="ghostOnDark"
+                      onClick={() => handleNavigation('/faq')}
+                      className={{ button: baphStyles.mobileNavButton }}
+                    >
+                      FAQ
+                    </Button>
                   </div>
 
-                  {isAuthenticated && user.role === 'admin' && (
+                  {isAuthenticated && (
                     <div css={baphStyles.mobileNavSection}>
-                      <Link to="/add-movies">
-                        <Button
-                          size="medium"
-                          kind="secondary"
-                          onClick={handleAddMovies}
-                          icon={<PlusSignIcon size={20} strokeWidth={'3px'} />}
-                          className={{ button: baphStyles.mobileNavButton }}
-                        >
-                          Add new movie
-                        </Button>
-                      </Link>
+                      {user.role === 'admin' ? (
+                        <Link to="/add-movies">
+                          <Button
+                            size="medium"
+                            kind="secondary"
+                            onClick={handleAddMovies}
+                            icon={
+                              <PlusSignIcon size={20} strokeWidth={'3px'} />
+                            }
+                            className={{ button: baphStyles.mobileNavButton }}
+                          >
+                            Add new movie
+                          </Button>
+                        </Link>
+                      ) : null}
+
                       <Button
                         kind="primary"
                         onClick={logOut}
@@ -427,6 +458,7 @@ export const Heading: React.FC<HeadingProps> = ({
                     </div>
                   )}
                 </nav>
+                <Footer />
               </div>
             </div>
           )}
@@ -491,7 +523,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     gap: '15px',
     flex: 1,
     justifyContent: 'flex-end',
-    [mediaQueries.minWidth.md]: {
+    [mediaQueries.minWidth.lg]: {
       display: 'flex',
       gap: '20px'
     }
@@ -507,7 +539,7 @@ const baphStyles: { [key: string]: CSSObject } = {
   mobileControls: {
     display: 'flex',
     alignItems: 'center',
-    [mediaQueries.minWidth.md]: {
+    [mediaQueries.minWidth.lg]: {
       display: 'none'
     }
   },
@@ -550,6 +582,12 @@ const baphStyles: { [key: string]: CSSObject } = {
   mobileNavButton: {
     width: '100%',
     justifyContent: 'flex-start'
+  },
+  closeMenuButton: {
+    color: baseColors.tertiary[50],
+    position: 'absolute' as const,
+    top: '20px',
+    right: '20px'
   },
   srOnly: {
     position: 'absolute' as const,
