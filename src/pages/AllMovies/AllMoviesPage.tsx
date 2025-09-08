@@ -3,6 +3,7 @@ import { MovieList } from '../../components/MovieList/MovieList';
 import { GET_MOVIES_BY_TITLE } from '../../api/queries';
 import { BodySection } from '../../components/BodySection';
 import { PageHeading } from '../../components/PageHeading';
+import { ScrollToTop } from '../../components/ScrollToTop';
 import { useLazyQuery } from '@apollo/client';
 
 type Movie = {
@@ -115,6 +116,7 @@ export const AllMoviesPage: React.FC = () => {
         isLoadingMore={isLoadingMore}
         hasMore={hasMore}
       />
+      <ScrollToTop />
     </BodySection>
   );
 };
