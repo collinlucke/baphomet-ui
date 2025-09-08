@@ -1,10 +1,10 @@
 import { useEffect, useState, useRef } from 'react';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client/react';
 import { BodySection } from '../../components/BodySection';
 import { PageHeading } from '../../components/PageHeading';
 import { Leaderboard } from '../../components/Leaderboard/Leaderboard';
 import { GET_USER_LEADERBOARD } from '../../api/queries';
-import type { User } from '../../types/CustomTypes.types.ts';
+import type { User, LeaderboardType } from '../../types/CustomTypes.types.ts';
 
 export const LeaderboardPage = () => {
   const [leaderboard, setLeaderboard] = useState<User[]>([]);
@@ -15,10 +15,13 @@ export const LeaderboardPage = () => {
 
   console.log('LeaderboardPage mounted');
 
-  const [fetchLeaderboard] = useLazyQuery(GET_USER_LEADERBOARD, {
-    variables: { cursor },
-    onCompleted: data => {
-      const { users, newCursor, endOfResults } = data.leaderboard;
+  const [fetchLeaderboard, { data, error }] =
+    useLazyQuery(GET_USER_LEADERBOARD);
+
+  useEffect(() => {
+    if (data) {
+      const leaderboardData = data as LeaderboardType;
+      const { users, newCursor, endOfResults } = leaderboardData.leaderboard;
 
       if (isNewSearchRef.current) {
         setLeaderboard(users || []);
@@ -35,22 +38,26 @@ export const LeaderboardPage = () => {
       setCursor(newCursor || '');
       setHasMore(!endOfResults);
       setIsLoadingMore(false);
-    },
-    onError: err => {
-      console.error('Error fetching leaderboard:', err);
+    }
+  }, [data]);
+
+  // Handle errors
+  useEffect(() => {
+    if (error) {
+      console.error('Error fetching leaderboard:', error);
       setIsLoadingMore(false);
     }
-  });
+  }, [error]);
 
   const fetchMoreUsers = async () => {
     if (isLoadingMore || !hasMore) return;
     setIsLoadingMore(true);
-    fetchLeaderboard();
+    fetchLeaderboard({ variables: { cursor } });
   };
 
   useEffect(() => {
-    fetchLeaderboard();
-  }, []);
+    fetchLeaderboard({ variables: { cursor: '' } });
+  }, [fetchLeaderboard]);
 
   return (
     <BodySection>

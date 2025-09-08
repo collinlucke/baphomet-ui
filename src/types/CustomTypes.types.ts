@@ -1,12 +1,15 @@
-import { ServerError, ServerParseError } from '@apollo/client';
-import { ApolloError } from '@apollo/client/errors';
+import {
+  ServerError,
+  ServerParseError,
+  CombinedGraphQLErrors
+} from '@apollo/client/errors';
 import { GraphQLFormattedError, GraphQLErrorExtensions } from 'graphql';
 
 export type CustomNetworkErrorTypes =
   | ServerError
   | (ServerParseError & { statusCode?: number });
 
-export type CustomApolloErrorTypes = ApolloError & {
+export type CustomApolloErrorTypes = CombinedGraphQLErrors & {
   networkError?: CustomNetworkErrorTypes;
   status?: string | number;
   statusCode?: number;
@@ -50,4 +53,12 @@ export type User = {
   joinDate: string;
   role: string;
   emailVerified: boolean;
+};
+
+export type LeaderboardType = {
+  leaderboard: {
+    users: User[];
+    newCursor: string;
+    endOfResults: boolean;
+  };
 };

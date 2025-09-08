@@ -4,7 +4,7 @@ import { GET_MOVIES_BY_TITLE } from '../../api/queries';
 import { BodySection } from '../../components/BodySection';
 import { PageHeading } from '../../components/PageHeading';
 import { ScrollToTop } from '../../components/ScrollToTop';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client/react';
 
 type Movie = {
   id: string;
@@ -20,6 +20,13 @@ type Movie = {
   tmdbId: string;
 };
 
+type MovieResults = {
+  searchResults: Movie[];
+  newCursor: string;
+  endOfResults: boolean;
+  newTotalMovieCount: number;
+};
+
 export const AllMoviesPage: React.FC = () => {
   const [allMovies, setAllMovies] = useState<Movie[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -31,8 +38,12 @@ export const AllMoviesPage: React.FC = () => {
 
   console.log('AllMoviesPage mounted');
 
-  const [fetchMovies] = useLazyQuery(GET_MOVIES_BY_TITLE, {
-    onCompleted: data => {
+  const [fetchMovies, { data, error }] = useLazyQuery<{
+    movieResults: MovieResults;
+  }>(GET_MOVIES_BY_TITLE);
+
+  useEffect(() => {
+    if (data) {
       const { searchResults, newCursor, endOfResults, newTotalMovieCount } =
         data.movieResults;
 
@@ -55,13 +66,12 @@ export const AllMoviesPage: React.FC = () => {
       setCursor(newCursor || '');
       setHasMore(!endOfResults);
       setIsLoadingMore(false);
-    },
-    onError: err => {
-      console.error('Error fetching movies:', err);
-      setIsLoadingMore(false);
+    }
+    if (error) {
+      console.error('Error fetching movies:', error);
       setIsLoadingMore(false);
     }
-  });
+  }, [data]);
 
   const fetchMoreMovies = async () => {
     if (isLoadingMore || !hasMore) return;
