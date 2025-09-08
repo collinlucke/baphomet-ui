@@ -7,6 +7,7 @@ import { CSSObject } from '@emotion/react';
 import { isMobileAndLandscapeVar } from '../reactiveVars';
 import { useReactiveVar } from '@apollo/client';
 import { resizeTmdbImage } from '../utils/resizeTmdbImage.ts';
+import party from 'party-js';
 
 type MovieCardProps = {
   isVoting?: boolean;
@@ -54,6 +55,29 @@ export const MovieCard: React.FC<MovieCardProps> = ({
     onKeyDown?.(event);
   };
 
+  const onClickHandler = (event: React.MouseEvent<HTMLDivElement>) => {
+    console.log(event);
+    if (!isVoting) {
+      handleVote(movie.id);
+
+      const tempElement = document.createElement('div');
+      tempElement.style.position = 'fixed';
+      tempElement.style.left = `${event.clientX}px`;
+      tempElement.style.top = `${event.clientY}px`;
+      tempElement.style.pointerEvents = 'none';
+      document.body.appendChild(tempElement);
+
+      party.sparkles(tempElement, {
+        count: party.variation.range(20, 40),
+        size: party.variation.range(0.5, 1.5)
+      });
+
+      setTimeout(() => {
+        document.body.removeChild(tempElement);
+      }, 100);
+    }
+  };
+
   const generateAriaLabel = (): string => {
     if (ariaLabel) return ariaLabel;
 
@@ -84,7 +108,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
           ),
           isVoting && baphStyles.movieCardDisabled
         ]}
-        onClick={() => !isVoting && handleVote(movie.id)}
+        onClick={onClickHandler}
         onKeyDown={handleKeyDown}
         onFocus={onFocus}
         onBlur={onBlur}

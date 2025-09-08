@@ -208,10 +208,10 @@ export const ArenaPage: React.FC = () => {
 const baphStyles: { [key: string]: CSSObject } = {
   container: {
     display: 'flex',
-    alignItems: 'start',
+    alignItems: 'center',
     gap: '2rem',
     minHeight: '80vh',
-    justifyContent: 'center'
+    flexDirection: 'column'
   },
   loadingContainer: {
     display: 'flex',
