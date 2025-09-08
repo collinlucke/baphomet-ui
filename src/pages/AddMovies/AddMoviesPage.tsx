@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useMutation, useLazyQuery } from '@apollo/client';
+import { useState, useEffect } from 'react';
+import { useMutation, useLazyQuery } from '@apollo/client/react';
 import { getMovieByTMDBId, getMoviesByTitle } from '../../api/tmdbApi';
 import {
   Button,
@@ -50,6 +50,23 @@ type TMDBSearchResponse = {
   total_results: number;
 };
 
+interface AddMovieData {
+  addMovie: {
+    success: boolean;
+    message: string;
+  };
+}
+
+interface CheckMovieData {
+  movieResults: {
+    searchResults: Array<{
+      id: string;
+      title: string;
+      tmdbId: string;
+    }>;
+  };
+}
+
 export const AddMoviesPage: React.FC = () => {
   const [tmdbId, setTmdbId] = useState<string>('');
   const [titleSearch, setTitleSearch] = useState<string>('');
@@ -79,20 +96,30 @@ export const AddMoviesPage: React.FC = () => {
     totalComparisons: 0
   };
 
-  const [addMovieMutation, { loading: isLoading }] = useMutation(ADD_MOVIE, {
-    onCompleted: () => {
+  const [
+    addMovieMutation,
+    { loading: isLoading, data: addMovieData, error: addMovieError }
+  ] = useMutation<AddMovieData>(ADD_MOVIE);
+
+  const [checkMovieByTmdbId, { data: checkMovieData, error: checkMovieError }] =
+    useLazyQuery<CheckMovieData>(CHECK_MOVIE_BY_TMDB_ID);
+
+  useEffect(() => {
+    if (addMovieData?.addMovie) {
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 3000);
-    },
-    onError: error => {
-      console.error('Error adding movie:', error);
     }
-  });
+  }, [addMovieData]);
 
-  const [checkMovieByTmdbId] = useLazyQuery(CHECK_MOVIE_BY_TMDB_ID, {
-    onCompleted: data => {
-      console.log(data);
-      const { searchResults } = data?.movieResults || {};
+  useEffect(() => {
+    if (addMovieError) {
+      console.error('Error adding movie:', addMovieError);
+    }
+  }, [addMovieError]);
+
+  useEffect(() => {
+    if (checkMovieData) {
+      const { searchResults } = checkMovieData?.movieResults || {};
 
       if (searchResults && searchResults.length > 0) {
         setDuplicateError(
@@ -108,12 +135,15 @@ export const AddMoviesPage: React.FC = () => {
           }
         });
       }
-    },
-    onError: error => {
-      console.error("Checking for duplicates didn't work.", error);
+    }
+  }, [checkMovieData, newMovie, additionalData, addMovieMutation]);
+
+  useEffect(() => {
+    if (checkMovieError) {
+      console.error("Checking for duplicates didn't work.", checkMovieError);
       setDuplicateError('Failed to check for duplicates. Please try again.');
     }
-  });
+  }, [checkMovieError]);
 
   const handleFetch = async (tmdbId?: string) => {
     const idToFetch = tmdbId || newMovie.tmdbId;

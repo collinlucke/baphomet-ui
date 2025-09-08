@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useMutation } from '@apollo/client';
+import React, { useState, useEffect } from 'react';
+import { useMutation } from '@apollo/client/react';
 import { InputField, Button } from '@collinlucke/phantomartist';
 import { CSSObject } from '@emotion/react';
 import { SIGNUP } from '../api/mutations';
@@ -7,6 +7,23 @@ import { SignupFormData, SignupFormProps } from '../types/auth.types';
 import { isAuthenticatedVar } from '../reactiveVars';
 import { ModalContent } from './ModalContent';
 import { emailValidation } from '../utils/validation';
+import type { ApolloMutationError } from '../types/CustomTypes.types';
+
+type SignupMutationData = {
+  signup: {
+    token: string;
+    user: {
+      id: string;
+      username: string;
+      email: string;
+      displayName?: string;
+      totalVotes: number;
+      joinDate: string;
+      role: string;
+      emailVerified: boolean;
+    };
+  };
+};
 
 export const SignupForm: React.FC<SignupFormProps> = ({
   onSuccess,
@@ -23,30 +40,46 @@ export const SignupForm: React.FC<SignupFormProps> = ({
   const [errors, setErrors] = useState<Partial<SignupFormData>>({});
   const [generalError, setGeneralError] = useState<string>('');
 
-  const [signupMutation, { loading: isLoading }] = useMutation(SIGNUP, {
-    onCompleted: data => {
+  const [signupMutation, { loading: isLoading, data, error }] =
+    useMutation(SIGNUP);
+
+  // Handle successful signup
+  useEffect(() => {
+    if (data) {
+      const typedData = data as SignupMutationData;
       setGeneralError('');
       setErrors({});
 
-      localStorage.setItem('baphomet-token', data.signup.token);
-      localStorage.setItem('baphomet-user', JSON.stringify(data.signup.user));
+      localStorage.setItem('baphomet-token', typedData.signup.token);
+      localStorage.setItem(
+        'baphomet-user',
+        JSON.stringify(typedData.signup.user)
+      );
 
       isAuthenticatedVar(true);
 
       if (onSuccess) {
-        onSuccess(data.signup);
+        onSuccess(typedData.signup);
       }
-    },
-    onError: error => {
+    }
+  }, [data, onSuccess]);
+
+  // Handle signup errors
+  useEffect(() => {
+    if (error) {
+      const apolloError = error as ApolloMutationError;
       let errorMessage = 'An error occurred during signup';
 
-      if (error.networkError) {
+      if (apolloError.networkError) {
         errorMessage =
           'Unable to connect to server. Please check your connection and try again.';
-      } else if (error.graphQLErrors && error.graphQLErrors.length > 0) {
-        errorMessage = error.graphQLErrors[0].message;
-      } else if (error.message) {
-        errorMessage = error.message;
+      } else if (
+        apolloError.graphQLErrors &&
+        apolloError.graphQLErrors.length > 0
+      ) {
+        errorMessage = apolloError.graphQLErrors[0].message;
+      } else if (apolloError.message) {
+        errorMessage = apolloError.message;
       }
 
       if (errorMessage.toLowerCase().includes('username')) {
@@ -63,7 +96,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
         onError(errorMessage);
       }
     }
-  });
+  }, [error, onError]);
 
   const validateForm = (): boolean => {
     const newErrors: Partial<SignupFormData> = {};
@@ -71,7 +104,6 @@ export const SignupForm: React.FC<SignupFormProps> = ({
       email: formData.email.trim(),
       isRequired: true
     });
-    console.log('Email validation message:', emailErrorMessage);
 
     if (emailErrorMessage) {
       newErrors.email = emailErrorMessage;

@@ -21,12 +21,19 @@ import {
   isLandscapeVar,
   isMobileAndLandscapeVar
 } from './reactiveVars';
-import { useReactiveVar, useLazyQuery, useQuery } from '@apollo/client';
+import { useReactiveVar, useLazyQuery, useQuery } from '@apollo/client/react';
 import { CSSObject } from '@emotion/react';
 import { CHECK_AUTH, GET_RANDOM_BACKDROP_IMAGE } from './api/queries';
 import { SignupForm } from './components/SignupForm';
 import { LoginForm } from './components/LoginForm';
 import { FeedbackForm } from './components/FeedbackForm';
+import type { AuthData } from './types/CustomTypes.types';
+
+type BackdropData = {
+  getRandomBackdropImage: {
+    backdropUrl: string;
+  };
+};
 
 export const App = () => {
   const showHeading = useReactiveVar(showHeadingVar);
@@ -37,19 +44,29 @@ export const App = () => {
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [backdrop, setBackdrop] = useState<string>('');
 
-  useQuery(GET_RANDOM_BACKDROP_IMAGE, {
-    onCompleted: data => {
-      const { backdropUrl } = data.getRandomBackdropImage;
+  const { data: backdropData, error: backdropError } = useQuery(
+    GET_RANDOM_BACKDROP_IMAGE
+  );
+
+  // Handle backdrop data
+  useEffect(() => {
+    if (backdropData) {
+      const typedData = backdropData as BackdropData;
+      const { backdropUrl } = typedData.getRandomBackdropImage;
       if (backdropUrl) {
         setBackdrop(backdropUrl);
       } else {
         console.warn('No backdrop image found');
       }
-    },
-    onError: error => {
-      console.error('Error fetching random backdrop image:', error);
     }
-  });
+  }, [backdropData]);
+
+  // Handle backdrop error
+  useEffect(() => {
+    if (backdropError) {
+      console.error('Error fetching random backdrop image:', backdropError);
+    }
+  }, [backdropError]);
   const updateDeviceState = () => {
     const isMobile =
       window.innerWidth <= 768 || navigator.userAgent.includes('Mobile');
@@ -78,22 +95,31 @@ export const App = () => {
     };
   }, []);
 
-  const [checkAuth] = useLazyQuery(CHECK_AUTH, {
-    onCompleted: data => {
-      if (data.checkAuth.isValid) {
+  const [checkAuth, { data: authData, error: authError }] =
+    useLazyQuery(CHECK_AUTH);
+
+  // Handle auth data
+  useEffect(() => {
+    if (authData) {
+      const typedAuthData = authData as AuthData;
+      if (typedAuthData.checkAuth.isValid) {
         isAuthenticatedVar(true);
       } else {
         localStorage.removeItem('baphomet-token');
         localStorage.removeItem('baphomet-user');
         isAuthenticatedVar(false);
       }
-    },
-    onError: () => {
+    }
+  }, [authData]);
+
+  // Handle auth error
+  useEffect(() => {
+    if (authError) {
       localStorage.removeItem('baphomet-token');
       localStorage.removeItem('baphomet-user');
       isAuthenticatedVar(false);
     }
-  });
+  }, [authError]);
 
   useEffect(() => {
     const token = localStorage.getItem('baphomet-token');

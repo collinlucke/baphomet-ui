@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { SignupForm } from '../SignupForm';
 import { SIGNUP } from '../../api/mutations';
 
@@ -104,7 +104,7 @@ describe('SignupForm - Realistic Tests', () => {
       ];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <SignupForm onSuccess={mockOnSuccess} />
         </MockedProvider>
       );
@@ -171,7 +171,7 @@ describe('SignupForm - Realistic Tests', () => {
       ];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <SignupForm onError={mockOnError} />
         </MockedProvider>
       );
@@ -224,7 +224,7 @@ describe('SignupForm - Realistic Tests', () => {
       ];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <SignupForm onError={mockOnError} />
         </MockedProvider>
       );
@@ -294,7 +294,7 @@ describe('SignupForm - Realistic Tests', () => {
       ];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <SignupForm />
         </MockedProvider>
       );

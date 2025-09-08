@@ -1,11 +1,28 @@
-import React, { useState } from 'react';
-import { useMutation } from '@apollo/client';
+import React, { useState, useEffect } from 'react';
+import { useMutation } from '@apollo/client/react';
 import { InputField, Button } from '@collinlucke/phantomartist';
 import { CSSObject } from '@emotion/react';
 import { LOGIN } from '../api/mutations';
 import { LoginFormData, LoginFormProps } from '../types/auth.types';
 import { isAuthenticatedVar } from '../reactiveVars';
 import { ModalContent } from './ModalContent';
+import type { ApolloMutationError } from '../types/CustomTypes.types';
+
+type LoginMutationData = {
+  login: {
+    token: string;
+    user: {
+      id: string;
+      username: string;
+      email: string;
+      displayName?: string;
+      totalVotes: number;
+      joinDate: string;
+      role: string;
+      emailVerified: boolean;
+    };
+  };
+};
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
   const [formData, setFormData] = useState<LoginFormData>({
@@ -16,31 +33,44 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
   const [errors, setErrors] = useState<Partial<LoginFormData>>({});
   const [generalError, setGeneralError] = useState<string>('');
 
-  const [loginMutation, { loading: isLoading }] = useMutation(LOGIN, {
-    onCompleted: data => {
+  const [loginMutation, { loading: isLoading, data, error }] =
+    useMutation(LOGIN);
+
+  useEffect(() => {
+    if (data) {
+      const typedData = data as LoginMutationData;
       setGeneralError('');
       setErrors({});
 
-      localStorage.setItem('baphomet-token', data.login.token);
-      localStorage.setItem('baphomet-user', JSON.stringify(data.login.user));
+      localStorage.setItem('baphomet-token', typedData.login.token);
+      localStorage.setItem(
+        'baphomet-user',
+        JSON.stringify(typedData.login.user)
+      );
       isAuthenticatedVar(true);
 
       if (onSuccess) {
-        onSuccess(data.login);
+        onSuccess(typedData.login);
       }
-    },
-    onError: error => {
+    }
+  }, [data, onSuccess]);
+
+  useEffect(() => {
+    if (error) {
+      const apolloError = error as ApolloMutationError;
       let errorMessage = 'An error occurred during login';
 
-      if (error.networkError) {
+      if (apolloError.networkError) {
         errorMessage =
           'Unable to connect to server. Please check your connection and try again.';
-      } else if (error.graphQLErrors && error.graphQLErrors.length > 0) {
-        errorMessage = error.graphQLErrors[0].message;
-      } else if (error.message) {
-        errorMessage = error.message;
+      } else if (
+        apolloError.graphQLErrors &&
+        apolloError.graphQLErrors.length > 0
+      ) {
+        errorMessage = apolloError.graphQLErrors[0].message;
+      } else if (apolloError.message) {
+        errorMessage = apolloError.message;
       }
-      console.log(error);
 
       if (errorMessage.toLowerCase().includes('password')) {
         setErrors(prev => ({ ...prev, password: errorMessage }));
@@ -59,7 +89,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
         onError(errorMessage);
       }
     }
-  });
+  }, [error, onError]);
 
   const validateForm = (): boolean => {
     const newErrors: Partial<LoginFormData> = {};

@@ -5,7 +5,7 @@ import {
 } from '@collinlucke/phantomartist';
 import { CSSObject } from '@emotion/react';
 import { isMobileAndLandscapeVar } from '../reactiveVars';
-import { useReactiveVar } from '@apollo/client';
+import { useReactiveVar } from '@apollo/client/react';
 import { resizeTmdbImage } from '../utils/resizeTmdbImage.ts';
 import party from 'party-js';
 
@@ -56,7 +56,6 @@ export const MovieCard: React.FC<MovieCardProps> = ({
   };
 
   const onClickHandler = (event: React.MouseEvent<HTMLDivElement>) => {
-    console.log(event);
     if (!isVoting) {
       handleVote(movie.id);
 

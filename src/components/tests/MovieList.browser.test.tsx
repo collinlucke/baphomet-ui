@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import { expect, describe, it, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { MovieList } from '../MovieList/MovieList';
 import { setupIntersectionObserverMock } from '../__mocks__/browserMocks';
 import { mockMovies, mockMovieDetailsQuery } from '../__mocks__/testData';
@@ -11,9 +11,7 @@ setupIntersectionObserverMock();
 
 const renderWithApollo = (ui: React.ReactElement) => {
   return render(
-    <MockedProvider mocks={[mockMovieDetailsQuery]} addTypename={false}>
-      {ui}
-    </MockedProvider>
+    <MockedProvider mocks={[mockMovieDetailsQuery]}>{ui}</MockedProvider>
   );
 };
 

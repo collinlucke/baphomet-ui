@@ -36,8 +36,6 @@ export const AllMoviesPage: React.FC = () => {
   const [totalMovieCount, setTotalMovieCount] = useState(0);
   const isNewSearchRef = useRef(true);
 
-  console.log('AllMoviesPage mounted');
-
   const [fetchMovies, { data, error }] = useLazyQuery<{
     movieResults: MovieResults;
   }>(GET_MOVIES_BY_TITLE);

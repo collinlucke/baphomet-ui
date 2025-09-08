@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import { expect, describe, it, beforeEach, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { createPhantomArtistMock } from '../__mocks__/phantomArtistMocks.tsx';
 import { createMovieListItemMock } from '../__mocks__/movieListItemMock';
 import { MovieList } from '../MovieList/MovieList';
@@ -33,7 +33,7 @@ describe('MovieList Component - Unit Tests', () => {
   describe('Component Logic & Props', () => {
     it('renders movie list when movies are provided', () => {
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]} addTypename={false}>
+        <MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} />
         </MockedProvider>
       );
@@ -46,7 +46,7 @@ describe('MovieList Component - Unit Tests', () => {
 
     it('displays total movie count in search component', () => {
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]} addTypename={false}>
+        <MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} totalMovieCount="5" />
         </MockedProvider>
       );
@@ -56,7 +56,7 @@ describe('MovieList Component - Unit Tests', () => {
 
     it('handles empty and null movie arrays', () => {
       const { rerender } = render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]} addTypename={false}>
+        <MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} movies={[]} />
         </MockedProvider>
       );
@@ -70,7 +70,7 @@ describe('MovieList Component - Unit Tests', () => {
       expect(noResultsLine2).toBeInTheDocument();
 
       rerender(
-        <MockedProvider mocks={[mockMovieDetailsQuery]} addTypename={false}>
+        <MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} movies={null} />
         </MockedProvider>
       );
@@ -83,7 +83,7 @@ describe('MovieList Component - Unit Tests', () => {
   describe('Loading States', () => {
     it('shows loading indicator when isLoadingMore is true', () => {
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]} addTypename={false}>
+        <MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} isLoadingMore={true} />
         </MockedProvider>
       );
@@ -93,7 +93,7 @@ describe('MovieList Component - Unit Tests', () => {
 
     it('shows end of results message when hasMore is false', () => {
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]} addTypename={false}>
+        <MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} hasMore={false} />
         </MockedProvider>
       );
@@ -105,7 +105,7 @@ describe('MovieList Component - Unit Tests', () => {
 
     it('does not show end message when movies array is empty', () => {
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]} addTypename={false}>
+        <MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} movies={[]} hasMore={false} />
         </MockedProvider>
       );
@@ -122,7 +122,7 @@ describe('MovieList Component - Unit Tests', () => {
       const mockSetSearchTerm = vi.fn();
 
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]} addTypename={false}>
+        <MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} setSearchTerm={mockSetSearchTerm} />
         </MockedProvider>
       );
@@ -135,7 +135,7 @@ describe('MovieList Component - Unit Tests', () => {
 
     it('displays current search term', () => {
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]} addTypename={false}>
+        <MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} searchTerm="matrix" />
         </MockedProvider>
       );
@@ -149,7 +149,7 @@ describe('MovieList Component - Unit Tests', () => {
       const user = userEvent.setup();
 
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]} addTypename={false}>
+        <MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} />
         </MockedProvider>
       );
@@ -164,7 +164,7 @@ describe('MovieList Component - Unit Tests', () => {
 
     it('renders modal component', () => {
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]} addTypename={false}>
+        <MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} />
         </MockedProvider>
       );
@@ -176,7 +176,7 @@ describe('MovieList Component - Unit Tests', () => {
   describe('Scroll Functionality', () => {
     it('renders sentinel element for infinite scroll', () => {
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]} addTypename={false}>
+        <MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} />
         </MockedProvider>
       );
@@ -190,7 +190,7 @@ describe('MovieList Component - Unit Tests', () => {
   describe('Accessibility', () => {
     it('has proper ARIA attributes', () => {
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]} addTypename={false}>
+        <MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} />
         </MockedProvider>
       );
@@ -204,7 +204,7 @@ describe('MovieList Component - Unit Tests', () => {
 
     it('renders movie items with proper structure', () => {
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]} addTypename={false}>
+        <MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} />
         </MockedProvider>
       );
@@ -231,7 +231,7 @@ describe('MovieList Component - Unit Tests', () => {
       };
 
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]} addTypename={false}>
+        <MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...minimalProps} />
         </MockedProvider>
       );
@@ -249,7 +249,7 @@ describe('MovieList Component - Unit Tests', () => {
       };
 
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]} addTypename={false}>
+        <MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...propsWithUndefinedCallbacks} />
         </MockedProvider>
       );
@@ -265,7 +265,7 @@ describe('MovieList Component - Unit Tests', () => {
       };
 
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]} addTypename={false}>
+        <MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} className={customClassName} />
         </MockedProvider>
       );
@@ -279,7 +279,7 @@ describe('MovieList Component - Unit Tests', () => {
       const mocks = [mockMovieDetailsQuery];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <MovieList {...defaultProps} />
         </MockedProvider>
       );
@@ -290,7 +290,7 @@ describe('MovieList Component - Unit Tests', () => {
   describe('Snapshot Tests', () => {
     it('should match snapshot with default props', () => {
       const { container } = render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <MovieList {...defaultProps} />
         </MockedProvider>
       );
@@ -300,7 +300,7 @@ describe('MovieList Component - Unit Tests', () => {
 
     it('should match snapshot with empty movies list', () => {
       const { container } = render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <MovieList {...defaultProps} movies={[]} />
         </MockedProvider>
       );
@@ -310,7 +310,7 @@ describe('MovieList Component - Unit Tests', () => {
 
     it('should match snapshot with loading state', () => {
       const { container } = render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <MovieList
             {...defaultProps}
             movies={[]}
@@ -326,7 +326,7 @@ describe('MovieList Component - Unit Tests', () => {
 
   it('should match snapshot with loading state', () => {
     const { container } = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <MovieList
           {...defaultProps}
           movies={[]}
@@ -341,7 +341,7 @@ describe('MovieList Component - Unit Tests', () => {
 
   it('should match snapshot with search functionality', () => {
     const { container } = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <MovieList
           {...defaultProps}
           onSearch={vi.fn()}

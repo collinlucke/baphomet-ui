@@ -3,7 +3,7 @@ import { useNavigate, useRouteError } from 'react-router-dom';
 import { ButtonGroup, Modal, Button } from '@collinlucke/phantomartist';
 import { CustomErrorTypes } from '../types/CustomTypes.types';
 import { errorVar } from '../reactiveVars';
-import { useReactiveVar } from '@apollo/client';
+import { useReactiveVar } from '@apollo/client/react';
 
 type ErrorBoundaryTypes = {
   id?: string;
@@ -65,7 +65,7 @@ export const ErrorBoundary: React.FC<ErrorBoundaryTypes> = ({ children }) => {
       // dataTestId={`error-modal-${errorContent.status}`}
     >
       {children ? (
-        children
+        <>{children as ReactNode}</>
       ) : (
         <>
           <div>

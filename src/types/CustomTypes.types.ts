@@ -35,6 +35,16 @@ export type CustomErrorTypes = Error & {
   stack?: string;
 };
 
+export type ApolloMutationError = {
+  networkError?: {
+    message: string;
+  };
+  graphQLErrors?: Array<{
+    message: string;
+  }>;
+  message: string;
+};
+
 export type GetMoviesByTitleQueryVarsObject = {
   variables: {
     limit: number;
@@ -60,5 +70,11 @@ export type LeaderboardType = {
     users: User[];
     newCursor: string;
     endOfResults: boolean;
+  };
+};
+
+export type AuthData = {
+  checkAuth: {
+    isValid: boolean;
   };
 };

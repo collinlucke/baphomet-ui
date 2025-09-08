@@ -13,8 +13,6 @@ export const LeaderboardPage = () => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const isNewSearchRef = useRef(true);
 
-  console.log('LeaderboardPage mounted');
-
   const [fetchLeaderboard, { data, error }] =
     useLazyQuery(GET_USER_LEADERBOARD);
 

@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import { expect, describe, it, beforeEach, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { GraphQLError } from 'graphql';
 import { LoginForm } from '../LoginForm';
 import { LOGIN } from '../../api/mutations';

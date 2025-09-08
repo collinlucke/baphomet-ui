@@ -3,7 +3,7 @@ import { expect, describe, it, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { Heading } from '../Heading';
 import { isAuthenticatedVar } from '../../reactiveVars';
 import { mockLocalStorage } from '../__mocks__/mockLocalStorage';

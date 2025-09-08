@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { mockLocalStorage } from '../__mocks__/mockLocalStorage';
 import { Heading } from '../Heading';
 import { BrowserRouter } from 'react-router-dom';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { isAuthenticatedVar } from '../../reactiveVars';
 
 beforeEach(() => {

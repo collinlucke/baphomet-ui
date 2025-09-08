@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { Button, InputField } from '@collinlucke/phantomartist';
 import { CSSObject } from '@emotion/react';
 import { ModalContent } from './ModalContent';
 import { SUBMIT_FEEDBACK } from '../api/mutations';
 import { emailValidation } from '../utils/validation';
+import type { ApolloMutationError } from '../types/CustomTypes.types';
 
 type FeedbackFormProps = {
   onSuccess: () => void;
@@ -35,17 +36,23 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
     }
   }, []);
 
-  const [submitFeedback] = useMutation(SUBMIT_FEEDBACK, {
-    onCompleted: () => {
+  const [submitFeedback, { data, error }] = useMutation(SUBMIT_FEEDBACK);
+
+  useEffect(() => {
+    if (data) {
       setIsSubmitting(false);
       onSuccess();
-    },
-    onError: error => {
+    }
+  }, [data, onSuccess]);
+
+  useEffect(() => {
+    if (error) {
+      const apolloError = error as ApolloMutationError;
       setIsSubmitting(false);
       setGeneralError('Failed to send feedback. Please try again.');
-      console.error('Feedback submission error:', error);
+      console.error('Feedback submission error:', apolloError);
     }
-  });
+  }, [error]);
 
   const sanitizeInput = (input: string): string => {
     return input

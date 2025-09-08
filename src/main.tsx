@@ -4,10 +4,12 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import {
   ApolloClient,
   InMemoryCache,
-  ApolloProvider,
-  createHttpLink
-} from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
+  HttpLink,
+  ApolloLink
+} from '@apollo/client/core';
+import { ApolloProvider } from '@apollo/client/react';
+import { ThemeProvider } from '@emotion/react';
+import { baseTheme } from '@collinlucke/phantomartist';
 import routes from './routes';
 import { logEnvironmentInfo } from './utils/environment';
 import 'dotenv';
@@ -31,30 +33,35 @@ const getBackendUrl = () => {
 };
 
 const router = createBrowserRouter(routes);
-const httpLink = createHttpLink({
+
+const httpLink = new HttpLink({
   uri: getBackendUrl()
 });
 
-const authLink = setContext((_, { headers }) => {
+const authLink = new ApolloLink((operation, forward) => {
   const token = localStorage.getItem('baphomet-token');
-  return {
+
+  operation.setContext({
     headers: {
-      ...headers,
       authorization: token ? `Bearer ${token}` : '',
       'x-apollo-operation-name': 'GraphQLOperation'
     }
-  };
+  });
+
+  return forward(operation);
 });
 
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: ApolloLink.from([authLink, httpLink]),
   cache: new InMemoryCache()
 });
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ApolloProvider client={client}>
-      <RouterProvider router={router} />
-    </ApolloProvider>
+    <ThemeProvider theme={baseTheme}>
+      <ApolloProvider client={client}>
+        <RouterProvider router={router} />
+      </ApolloProvider>
+    </ThemeProvider>
   </React.StrictMode>
 );

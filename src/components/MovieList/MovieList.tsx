@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client/react';
 import {
   List,
   Search,
@@ -25,6 +25,10 @@ type Movie = {
   backdropUrl?: string;
   tmdbId: string;
 };
+
+interface MovieDetailsData {
+  movieDetails: Movie | null;
+}
 
 type MovieData = {
   movies: Movie[] | null;
@@ -59,15 +63,15 @@ export const MovieList: React.FC<MovieData> = ({
     onSearch?.(searchTerm);
   };
 
-  const [fetchMovieDetails] = useLazyQuery(GET_MOVIE_BY_TMDB_ID, {
-    onCompleted: data => {
-      const movieDetails = data.movieDetails;
-      if (movieDetails) {
-        console.log('Movie details fetched:', movieDetails);
-        // TODO - Open movie details modal
-      }
+  const [fetchMovieDetails, { data: movieDetailsData }] =
+    useLazyQuery<MovieDetailsData>(GET_MOVIE_BY_TMDB_ID);
+
+  useEffect(() => {
+    if (movieDetailsData?.movieDetails) {
+      console.log('Movie details fetched:', movieDetailsData.movieDetails);
+      // TODO - Open movie details modal
     }
-  });
+  }, [movieDetailsData]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

@@ -10,8 +10,22 @@ import {
   isAuthenticatedVar,
   showUnauthorizedModalVar
 } from '../reactiveVars';
-import { useQuery, useReactiveVar } from '@apollo/client';
+import { useQuery, useReactiveVar } from '@apollo/client/react';
 import { CHECK_AUTH } from '../api/queries';
+import type { AuthData } from '../types/CustomTypes.types';
+
+type ApolloErrorExtended = {
+  networkError?: CustomNetworkErrorTypes;
+  cause?: CustomErrorTypes;
+  protocolErrors?: Array<{
+    message: string;
+    extensions?: unknown;
+  }>;
+  clientErrors?: unknown[];
+  graphQLErrors?: unknown[];
+  message: string;
+  name: string;
+};
 
 type ProtectedRouteTypes = {
   element: ComponentType<Record<string, unknown>>;
@@ -26,43 +40,49 @@ export const ProtectedRoute: React.FC<ProtectedRouteTypes> = ({
   const baphToken = localStorage.getItem('baphomet-token') || null;
   const [authCheckCompleted, setAuthCheckCompleted] = useState(false);
 
-  useQuery(CHECK_AUTH, {
+  const { data, error: queryError } = useQuery(CHECK_AUTH, {
     variables: {
       token: baphToken
     },
-    skip: !baphToken,
-    onCompleted: data => {
+    skip: !baphToken
+  });
+
+  // Handle auth data
+  useEffect(() => {
+    if (data) {
+      const typedData = data as AuthData;
       setAuthCheckCompleted(true);
-      if (data.checkAuth.isValid) {
+      if (typedData.checkAuth.isValid) {
         isAuthenticatedVar(true);
       } else {
         isAuthenticatedVar(false);
-
         showUnauthorizedModalVar(true);
       }
-    },
-    onError: error => {
+    }
+  }, [data]);
+
+  // Handle auth error
+  useEffect(() => {
+    if (queryError) {
       setAuthCheckCompleted(true);
+      const apolloError = queryError as ApolloErrorExtended;
+
       const titledError: CustomErrorTypes = {
-        ...error,
+        name: apolloError.name || 'ApolloError',
+        message: apolloError.message || 'Authentication check failed',
         title: 'checkAuth',
-        networkError: error.networkError as CustomNetworkErrorTypes | undefined,
-        cause: error.cause as CustomErrorTypes,
-        protocolErrors:
-          error.protocolErrors?.map(err => ({
-            message: err.message,
-            extensions: err.extensions ? [err.extensions] : undefined
-          })) || [],
-        clientErrors: error.clientErrors || [],
-        graphQLErrors: error.graphQLErrors || []
+        networkError: apolloError.networkError,
+        cause: apolloError.cause,
+        protocolErrors: [],
+        clientErrors: [],
+        graphQLErrors: []
       };
       errorVar(titledError);
 
       isAuthenticatedVar(false);
-
       showUnauthorizedModalVar(true);
     }
-  });
+  }, [queryError]);
 
   useEffect(() => {
     if (!baphToken) {

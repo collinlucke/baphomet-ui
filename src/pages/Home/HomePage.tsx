@@ -4,10 +4,28 @@ import { BodySection } from '../../components/BodySection';
 import { Button } from '@collinlucke/phantomartist';
 import { MovieList } from '../../components/MovieList/MovieList';
 import { GET_MOVIES_BY_TITLE } from '../../api/queries';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { showFeedbackModalVar } from '../../reactiveVars';
+
+interface MovieResultsData {
+  movieResults: {
+    searchResults: Array<{
+      id: string;
+      title: string;
+      releaseDate?: string;
+      rated?: string;
+      posterUrl?: string;
+      winningPercentage: number;
+      overview?: string;
+      genres?: string[];
+      revenue?: number;
+      backdropUrl?: string;
+      tmdbId: string;
+    }>;
+  };
+}
 export const HomePage: React.FC = () => {
-  const { data } = useQuery(GET_MOVIES_BY_TITLE, {
+  const { data } = useQuery<MovieResultsData>(GET_MOVIES_BY_TITLE, {
     variables: {
       title: '',
       limit: 27,
@@ -61,7 +79,7 @@ export const HomePage: React.FC = () => {
           <h3>Current Movie Standings...</h3>
           <br />
           <MovieList
-            movies={data?.movieResults?.searchResults}
+            movies={data?.movieResults?.searchResults || null}
             showSearch={false}
             className={{
               movieListWrapper: baphStyles.movieListWrapper,

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
+import { useState, useEffect } from 'react';
+import { useQuery, useMutation } from '@apollo/client/react';
 import { GET_RANDOM_MATCHUP } from '../../api/queries';
 import { SUBMIT_VOTE } from '../../api/mutations';
 import { BodySection } from '../../components/BodySection';
@@ -31,6 +31,17 @@ type Matchup = {
   comparisonId: string;
 };
 
+interface MatchupData {
+  getRandomMovieMatchup: Matchup;
+}
+
+interface SubmitVoteData {
+  submitVote: {
+    success: boolean;
+    message: string;
+  };
+}
+
 export const ArenaPage: React.FC = () => {
   const [isVoting, setIsVoting] = useState(false);
   const [voteResult, setVoteResult] = useState<{
@@ -38,30 +49,39 @@ export const ArenaPage: React.FC = () => {
     message: string;
   } | null>(null);
 
-  const { data, loading, error, refetch } = useQuery(GET_RANDOM_MATCHUP, {
-    errorPolicy: 'all'
-  });
+  const { data, loading, error, refetch } = useQuery<MatchupData>(
+    GET_RANDOM_MATCHUP,
+    {
+      errorPolicy: 'all'
+    }
+  );
 
-  const [submitVote] = useMutation(SUBMIT_VOTE, {
-    onCompleted: data => {
+  const [submitVote, { data: voteData, error: voteError }] =
+    useMutation<SubmitVoteData>(SUBMIT_VOTE);
+
+  useEffect(() => {
+    if (voteData?.submitVote) {
       setIsVoting(false);
       setVoteResult({
-        success: data.submitVote.success,
-        message: data.submitVote.message
+        success: voteData.submitVote.success,
+        message: voteData.submitVote.message
       });
 
       setVoteResult(null);
       refetch();
-    },
-    onError: error => {
+    }
+  }, [voteData, refetch]);
+
+  useEffect(() => {
+    if (voteError) {
       setIsVoting(false);
       setVoteResult({
         success: false,
-        message: error.message
+        message: voteError.message
       });
       setTimeout(() => setVoteResult(null), 3000);
     }
-  });
+  }, [voteError]);
 
   const handleVote = async (winnerId: string) => {
     if (!data?.getRandomMovieMatchup || isVoting) return;
@@ -103,7 +123,6 @@ export const ArenaPage: React.FC = () => {
   };
 
   if (loading) {
-    console.log('Loading matchup...');
     return (
       <ArenaContainer>
         <div css={baphStyles.loadingContainer}>
