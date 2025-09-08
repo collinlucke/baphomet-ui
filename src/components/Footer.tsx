@@ -65,7 +65,6 @@ export const Footer: React.FC = () => {
 
 const baphStyles: { [key: string]: CSSObject } = {
   footer: {
-    // backgroundColor: baseColors.secondary[800],
     display: 'flex',
     flexDirection: 'column' as const,
     justifyContent: 'space-between',

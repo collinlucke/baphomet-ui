@@ -554,12 +554,15 @@ const baphStyles: { [key: string]: CSSObject } = {
     justifyContent: 'flex-end'
   },
   mobileMenu: {
-    backgroundColor: '#0B1828',
+    backgroundColor: baseColors.primary[500],
     width: '280px',
     height: '100%',
     padding: '20px',
     boxShadow: '-2px 0 8px rgba(0, 0, 0, 0.3)',
-    overflowY: 'auto' as const
+    overflowY: 'auto' as const,
+    display: 'flex',
+    flexDirection: 'column' as const,
+    justifyContent: 'space-between'
   },
   mobileNav: {
     display: 'flex',
