@@ -6,7 +6,7 @@ import { MockedProvider } from '@apollo/client/testing/react';
 import { GraphQLError } from 'graphql';
 import { LoginForm } from '../LoginForm';
 import { LOGIN } from '../../api/mutations';
-import { mockLocalStorage } from '../__mocks__/mockLocalStorage';
+import { mockLocalStorage } from './__mocks__/mockLocalStorage';
 
 beforeEach(() => {
   mockLocalStorage();

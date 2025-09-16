@@ -177,7 +177,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
             autoComplete="email"
             ariaDescribedBy={errors.email ? 'email-error' : 'email-help'}
             ariaInvalid={!!errors.email}
-            data-testid="login-email-input"
+            testId="login-email-input"
           />
           <div id="email-help" css={baphStyles.srOnly}>
             Enter the email address associated with your account
@@ -198,7 +198,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
               errors.password ? 'password-error' : 'password-help'
             }
             ariaInvalid={!!errors.password}
-            data-testid="login-password-input"
+            testId="login-password-input"
           />
           <div id="password-help" css={baphStyles.srOnly}>
             Enter your account password
@@ -214,7 +214,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
             ariaLabel={
               isLoading ? 'Signing in, please wait' : 'Sign in to your account'
             }
-            data-testid="login-submit-button"
+            testId="login-submit-button"
           >
             {isLoading ? 'Signing In...' : 'Sign In'}
           </Button>

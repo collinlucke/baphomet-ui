@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { MockedProvider } from '@apollo/client/testing/react';
 import { Heading } from '../Heading';
 import { isAuthenticatedVar } from '../../reactiveVars';
-import { mockLocalStorage } from '../__mocks__/mockLocalStorage';
+import { mockLocalStorage } from './__mocks__/mockLocalStorage';
 
 beforeEach(() => {
   mockLocalStorage();
@@ -17,7 +17,7 @@ const renderHeading = () => {
   return render(
     <MockedProvider mocks={[]}>
       <BrowserRouter>
-        <Heading setShowLoginModal={() => {}} setShowSignupModal={() => {}} />
+        <Heading />
       </BrowserRouter>
     </MockedProvider>
   );
@@ -179,10 +179,7 @@ describe('Logout Functionality', () => {
       rerender(
         <MockedProvider mocks={[]}>
           <BrowserRouter>
-            <Heading
-              setShowLoginModal={() => {}}
-              setShowSignupModal={() => {}}
-            />
+            <Heading />
           </BrowserRouter>
         </MockedProvider>
       );

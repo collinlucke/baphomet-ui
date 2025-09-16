@@ -1,30 +1,41 @@
 import '@testing-library/jest-dom';
-import { expect, describe, it, beforeEach, vi } from 'vitest';
+import { expect, describe, it, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { mockLocalStorage } from '../__mocks__/mockLocalStorage';
+import { mockLocalStorage } from './__mocks__/mockLocalStorage';
 import { Heading } from '../Heading';
 import { BrowserRouter } from 'react-router-dom';
 import { MockedProvider } from '@apollo/client/testing/react';
-import { isAuthenticatedVar } from '../../reactiveVars';
+import { ThemeProvider } from '@emotion/react';
+import { baseTheme } from '@collinlucke/phantomartist';
+import {
+  isAuthenticatedVar,
+  showSignUpModalVar,
+  showLoginModalVar
+} from '../../reactiveVars';
 
 beforeEach(() => {
   mockLocalStorage();
   isAuthenticatedVar(false);
+  showSignUpModalVar(false);
+  showLoginModalVar(false);
 });
+
+const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <ThemeProvider theme={baseTheme}>
+    <MockedProvider mocks={[]}>
+      <BrowserRouter>{children}</BrowserRouter>
+    </MockedProvider>
+  </ThemeProvider>
+);
 
 describe('Heading', () => {
   describe('Basic rendering', () => {
     it('renders the logo/home link correctly', async () => {
       render(
-        <MockedProvider mocks={[]}>
-          <BrowserRouter>
-            <Heading
-              setShowLoginModal={() => {}}
-              setShowSignupModal={() => {}}
-            />
-          </BrowserRouter>
-        </MockedProvider>
+        <TestWrapper>
+          <Heading />
+        </TestWrapper>
       );
 
       expect(await screen.findByTestId('home-link')).toBeVisible();
@@ -33,18 +44,13 @@ describe('Heading', () => {
 
     it('renders navigation buttons', async () => {
       render(
-        <MockedProvider mocks={[]}>
-          <BrowserRouter>
-            <Heading
-              setShowLoginModal={() => {}}
-              setShowSignupModal={() => {}}
-            />
-          </BrowserRouter>
-        </MockedProvider>
+        <TestWrapper>
+          <Heading />
+        </TestWrapper>
       );
 
       expect(screen.getByText('Arena')).toBeVisible();
-      expect(screen.getByText('Leader Boards')).toBeVisible();
+      expect(screen.getByText('Leaderboard')).toBeVisible();
       expect(screen.getByText('All Movies')).toBeVisible();
     });
   });
@@ -56,14 +62,9 @@ describe('Heading', () => {
 
     it('shows Sign Up and Log in buttons', async () => {
       render(
-        <MockedProvider mocks={[]}>
-          <BrowserRouter>
-            <Heading
-              setShowLoginModal={() => {}}
-              setShowSignupModal={() => {}}
-            />
-          </BrowserRouter>
-        </MockedProvider>
+        <TestWrapper>
+          <Heading />
+        </TestWrapper>
       );
 
       expect(screen.getByTestId('signup-button')).toBeVisible();
@@ -72,14 +73,9 @@ describe('Heading', () => {
 
     it('does NOT show Add new movie button', async () => {
       render(
-        <MockedProvider mocks={[]}>
-          <BrowserRouter>
-            <Heading
-              setShowLoginModal={() => {}}
-              setShowSignupModal={() => {}}
-            />
-          </BrowserRouter>
-        </MockedProvider>
+        <TestWrapper>
+          <Heading />
+        </TestWrapper>
       );
 
       expect(screen.queryByTestId('add-new-movie-button')).toBeNull();
@@ -87,64 +83,56 @@ describe('Heading', () => {
 
     it('opens signup modal when Sign Up button is clicked', async () => {
       const user = userEvent.setup();
-      const mockSetShowSignupModal = vi.fn();
-      const mockSetShowLoginModal = vi.fn();
 
       render(
-        <MockedProvider mocks={[]}>
-          <BrowserRouter>
-            <Heading
-              setShowLoginModal={mockSetShowLoginModal}
-              setShowSignupModal={mockSetShowSignupModal}
-            />
-          </BrowserRouter>
-        </MockedProvider>
+        <TestWrapper>
+          <Heading />
+        </TestWrapper>
       );
 
       await user.click(screen.getByTestId('signup-button'));
 
-      expect(mockSetShowSignupModal).toHaveBeenCalledWith(true);
-      expect(mockSetShowLoginModal).not.toHaveBeenCalled();
+      expect(showSignUpModalVar()).toBe(true);
     });
 
     it('opens login modal when Log in button is clicked', async () => {
       const user = userEvent.setup();
-      const mockSetShowSignupModal = vi.fn();
-      const mockSetShowLoginModal = vi.fn();
 
       render(
-        <MockedProvider mocks={[]}>
-          <BrowserRouter>
-            <Heading
-              setShowLoginModal={mockSetShowLoginModal}
-              setShowSignupModal={mockSetShowSignupModal}
-            />
-          </BrowserRouter>
-        </MockedProvider>
+        <TestWrapper>
+          <Heading />
+        </TestWrapper>
       );
 
       await user.click(screen.getByTestId('login-button'));
 
-      expect(mockSetShowLoginModal).toHaveBeenCalledWith(true);
-      expect(mockSetShowSignupModal).not.toHaveBeenCalled();
+      expect(showLoginModalVar()).toBe(true);
     });
   });
 
   describe('When user IS authenticated', () => {
     beforeEach(() => {
+      const mockUser = {
+        id: '1',
+        username: 'testuser',
+        email: 'test@example.com',
+        role: 'admin',
+        displayName: 'Test User',
+        totalVotes: 0,
+        joinDate: '2023-01-01',
+        emailVerified: true
+      };
+
+      localStorage.setItem('baphomet-user', JSON.stringify(mockUser));
+      localStorage.setItem('baphomet-token', 'mock-token');
       isAuthenticatedVar(true);
     });
 
     it('shows Add new movie button', async () => {
       render(
-        <MockedProvider mocks={[]}>
-          <BrowserRouter>
-            <Heading
-              setShowLoginModal={() => {}}
-              setShowSignupModal={() => {}}
-            />
-          </BrowserRouter>
-        </MockedProvider>
+        <TestWrapper>
+          <Heading />
+        </TestWrapper>
       );
 
       expect(await screen.findByTestId('add-new-movie-button')).toBeVisible();
@@ -152,14 +140,9 @@ describe('Heading', () => {
 
     it('shows Log out button', async () => {
       render(
-        <MockedProvider mocks={[]}>
-          <BrowserRouter>
-            <Heading
-              setShowLoginModal={() => {}}
-              setShowSignupModal={() => {}}
-            />
-          </BrowserRouter>
-        </MockedProvider>
+        <TestWrapper>
+          <Heading />
+        </TestWrapper>
       );
 
       expect(screen.getByTestId('logout-button')).toBeVisible();
@@ -167,14 +150,9 @@ describe('Heading', () => {
 
     it('does NOT show Sign Up and Log in buttons', async () => {
       render(
-        <MockedProvider mocks={[]}>
-          <BrowserRouter>
-            <Heading
-              setShowLoginModal={() => {}}
-              setShowSignupModal={() => {}}
-            />
-          </BrowserRouter>
-        </MockedProvider>
+        <TestWrapper>
+          <Heading />
+        </TestWrapper>
       );
 
       expect(screen.queryByTestId('signup-button')).toBeNull();
@@ -185,14 +163,9 @@ describe('Heading', () => {
       const user = userEvent.setup();
 
       render(
-        <MockedProvider mocks={[]}>
-          <BrowserRouter>
-            <Heading
-              setShowLoginModal={() => {}}
-              setShowSignupModal={() => {}}
-            />
-          </BrowserRouter>
-        </MockedProvider>
+        <TestWrapper>
+          <Heading />
+        </TestWrapper>
       );
 
       await user.click(screen.getByText('Log out'));
@@ -209,31 +182,23 @@ describe('Heading', () => {
       isAuthenticatedVar(false);
 
       const { container } = render(
-        <MockedProvider mocks={[]}>
-          <BrowserRouter>
-            <Heading
-              setShowLoginModal={() => {}}
-              setShowSignupModal={() => {}}
-            />
-          </BrowserRouter>
-        </MockedProvider>
+        <TestWrapper>
+          <Heading />
+        </TestWrapper>
       );
 
       expect(container).toMatchSnapshot('heading-not-authenticated');
     });
 
     it('matches snapshot when authenticated', async () => {
-      isAuthenticatedVar(true);
+      beforeEach(() => {
+        isAuthenticatedVar(true);
+      });
 
       const { container } = render(
-        <MockedProvider mocks={[]}>
-          <BrowserRouter>
-            <Heading
-              setShowLoginModal={() => {}}
-              setShowSignupModal={() => {}}
-            />
-          </BrowserRouter>
-        </MockedProvider>
+        <TestWrapper>
+          <Heading />
+        </TestWrapper>
       );
 
       expect(container).toMatchSnapshot('heading-authenticated');

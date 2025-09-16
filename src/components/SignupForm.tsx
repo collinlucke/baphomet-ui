@@ -175,6 +175,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
     <ModalContent
       title="Create Your Account"
       subtitle="Join the movie ranking community!"
+      testId="signup-modal"
     >
       <form
         css={baphStyles.form}

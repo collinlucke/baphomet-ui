@@ -3,102 +3,121 @@
 exports[`Heading > Snapshots > matches snapshot when authenticated > heading-authenticated 1`] = `
 <div>
   <header
-    class="pa-header css-14s00ml"
+    aria-label="Site header"
+    class="pa-header css-c9rb8t"
+    role="banner"
   >
     <div
-      class="css-5yuwd8"
+      class="css-1j19tx6"
     >
       <a
         aria-label="Baphomet - Go to homepage"
-        class="css-o2l70y"
+        class="css-9u4epn"
+        data-discover="true"
         data-testid="home-link"
         href="/"
       >
         <h1
-          class="css-vvwwy8"
+          class="css-yeu9cf"
         >
           Baphomet
         </h1>
         <img
           alt="Baphomet logo"
           aria-hidden="true"
-          class="css-1u7uypu"
+          class="css-jo2gi6"
           role="presentation"
           src="/baphy-favicon.png"
         />
       </a>
-      <div
-        class="css-3sy7va"
+      <nav
+        aria-label="Main navigation"
+        class="css-bfomv6"
       >
-        <nav
-          aria-label="Main navigation"
-          class="css-2w0nze"
-          role="navigation"
+        <div
+          class="pa-button-group horizontal medium css-1a9vhha"
+          role="group"
         >
-          <div
-            aria-label="Navigation buttons"
-            class="pa-button-group horizontal medium css-g48o9w"
-            role="group"
+          <a
+            data-discover="true"
+            href="/arena"
           >
             <button
               aria-label="Go to Arena page"
-              class="pa-button ghostOnDark small css-1f5ziua"
+              class="pa-button ghostOnDark small css-wad0dn"
             >
               Arena
             </button>
+          </a>
+          <a
+            data-discover="true"
+            href="/leaderboard"
+          >
             <button
-              aria-label="Go to Leader Boards page"
-              class="pa-button ghostOnDark small css-1f5ziua"
-              disabled=""
+              aria-label="Go to Leaderboard page"
+              class="pa-button ghostOnDark small css-wad0dn"
             >
-              Leader Boards
+              Leaderboard
             </button>
+          </a>
+          <a
+            data-discover="true"
+            href="/all-movies"
+          >
             <button
               aria-label="Go to All Movies page"
-              class="pa-button ghostOnDark small css-1f5ziua"
+              class="pa-button ghostOnDark small css-wad0dn"
             >
               All Movies
             </button>
-          </div>
-        </nav>
-        <div
-          aria-label="User actions"
-          class="pa-button-group horizontal medium css-g48o9w"
-          role="group"
-        >
-          <button
-            aria-label="Add new movie"
-            class="pa-button secondary small css-twe5xh"
-            data-testid="add-new-movie-button"
+          </a>
+          <a
+            data-discover="true"
+            href="/faq"
           >
-            <svg
-              class=""
-              color="currentColor"
-              fill="none"
-              height="17"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="3px"
-              viewBox="0 0 24 24"
-              width="17"
-              xmlns="http://www.w3.org/2000/svg"
+            <button
+              aria-label="Go to FAQ page"
+              class="pa-button ghostOnDark small css-wad0dn"
             >
-              <path
-                d="M12 4V20M20 12H4"
-                stroke="currentColor"
-              />
-            </svg>
-            Add new movie
-          </button>
-          <button
-            aria-label="Sign out of your account"
-            class="pa-button primary small css-1il6nhi"
-            data-testid="logout-button"
+              FAQ
+            </button>
+          </a>
+          <div
+            aria-label="User actions"
+            class="pa-button-group horizontal medium css-hegljl"
+            role="group"
           >
-            Log out
-          </button>
+            <button
+              aria-describedby="signup-help"
+              aria-label="Open sign up form"
+              class="pa-button secondary small css-x6551n"
+              data-testid="signup-button"
+            >
+              Sign Up
+            </button>
+            <button
+              aria-describedby="login-help"
+              aria-label="Open log in form"
+              class="pa-button primary small css-18sumex"
+              data-testid="login-button"
+            >
+              Log in
+            </button>
+            <span
+              class="css-1tm92sh"
+              id="signup-help"
+            >
+              Create a new account to add and rate movies
+            </span>
+            <span
+              class="css-1tm92sh"
+              id="login-help"
+            >
+              Sign in to your existing account
+            </span>
+          </div>
         </div>
-      </div>
+      </nav>
     </div>
   </header>
 </div>
@@ -107,99 +126,121 @@ exports[`Heading > Snapshots > matches snapshot when authenticated > heading-aut
 exports[`Heading > Snapshots > matches snapshot when not authenticated > heading-not-authenticated 1`] = `
 <div>
   <header
-    class="pa-header css-14s00ml"
+    aria-label="Site header"
+    class="pa-header css-c9rb8t"
+    role="banner"
   >
     <div
-      class="css-5yuwd8"
+      class="css-1j19tx6"
     >
       <a
         aria-label="Baphomet - Go to homepage"
-        class="css-o2l70y"
+        class="css-9u4epn"
+        data-discover="true"
         data-testid="home-link"
         href="/"
       >
         <h1
-          class="css-vvwwy8"
+          class="css-yeu9cf"
         >
           Baphomet
         </h1>
         <img
           alt="Baphomet logo"
           aria-hidden="true"
-          class="css-1u7uypu"
+          class="css-jo2gi6"
           role="presentation"
           src="/baphy-favicon.png"
         />
       </a>
-      <div
-        class="css-3sy7va"
+      <nav
+        aria-label="Main navigation"
+        class="css-bfomv6"
       >
-        <nav
-          aria-label="Main navigation"
-          class="css-2w0nze"
-          role="navigation"
+        <div
+          class="pa-button-group horizontal medium css-1a9vhha"
+          role="group"
         >
-          <div
-            aria-label="Navigation buttons"
-            class="pa-button-group horizontal medium css-g48o9w"
-            role="group"
+          <a
+            data-discover="true"
+            href="/arena"
           >
             <button
               aria-label="Go to Arena page"
-              class="pa-button ghostOnDark small css-1f5ziua"
+              class="pa-button ghostOnDark small css-wad0dn"
             >
               Arena
             </button>
+          </a>
+          <a
+            data-discover="true"
+            href="/leaderboard"
+          >
             <button
-              aria-label="Go to Leader Boards page"
-              class="pa-button ghostOnDark small css-1f5ziua"
-              disabled=""
+              aria-label="Go to Leaderboard page"
+              class="pa-button ghostOnDark small css-wad0dn"
             >
-              Leader Boards
+              Leaderboard
             </button>
+          </a>
+          <a
+            data-discover="true"
+            href="/all-movies"
+          >
             <button
               aria-label="Go to All Movies page"
-              class="pa-button ghostOnDark small css-1f5ziua"
+              class="pa-button ghostOnDark small css-wad0dn"
             >
               All Movies
             </button>
+          </a>
+          <a
+            data-discover="true"
+            href="/faq"
+          >
+            <button
+              aria-label="Go to FAQ page"
+              class="pa-button ghostOnDark small css-wad0dn"
+            >
+              FAQ
+            </button>
+          </a>
+          <div
+            aria-label="User actions"
+            class="pa-button-group horizontal medium css-hegljl"
+            role="group"
+          >
+            <button
+              aria-describedby="signup-help"
+              aria-label="Open sign up form"
+              class="pa-button secondary small css-x6551n"
+              data-testid="signup-button"
+            >
+              Sign Up
+            </button>
+            <button
+              aria-describedby="login-help"
+              aria-label="Open log in form"
+              class="pa-button primary small css-18sumex"
+              data-testid="login-button"
+            >
+              Log in
+            </button>
+            <span
+              class="css-1tm92sh"
+              id="signup-help"
+            >
+              Create a new account to add and rate movies
+            </span>
+            <span
+              class="css-1tm92sh"
+              id="login-help"
+            >
+              Sign in to your existing account
+            </span>
           </div>
-        </nav>
-        <div
-          aria-label="Authentication options"
-          class="pa-button-group horizontal medium css-g48o9w"
-          role="group"
-        >
-          <button
-            aria-describedby="signup-help"
-            aria-label="Open sign up form"
-            class="pa-button secondary small css-twe5xh"
-            data-testid="signup-button"
-          >
-            Sign Up
-          </button>
-          <button
-            aria-describedby="login-help"
-            aria-label="Open log in form"
-            class="pa-button primary small css-1il6nhi"
-            data-testid="login-button"
-          >
-            Log in
-          </button>
         </div>
-        <span
-          class="css-1tm92sh"
-          id="signup-help"
-        >
-          Create a new account to add and rate movies
-        </span>
-        <span
-          class="css-1tm92sh"
-          id="login-help"
-        >
-          Sign in to your existing account
-        </span>
-      </div>
+      </nav>
     </div>
   </header>
 </div>

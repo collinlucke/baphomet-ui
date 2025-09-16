@@ -4,8 +4,8 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing/react';
 import { MovieList } from '../MovieList/MovieList';
-import { setupIntersectionObserverMock } from '../__mocks__/browserMocks';
-import { mockMovies, mockMovieDetailsQuery } from '../__mocks__/testData';
+import { setupIntersectionObserverMock } from './__mocks__/browserMocks';
+import { mockMovies, mockMovieDetailsQuery } from './__mocks__/testData';
 
 setupIntersectionObserverMock();
 

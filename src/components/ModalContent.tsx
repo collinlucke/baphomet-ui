@@ -4,17 +4,20 @@ type ModalContentProps = {
   title: string;
   subtitle?: string;
   children: React.ReactNode;
+  testId?: string;
 };
 
 export const ModalContent: React.FC<ModalContentProps> = ({
   children,
   title,
-  subtitle
+  subtitle,
+  testId
 }) => {
   return (
     <div
       css={baphStyles.modalContent}
       role="dialog"
+      data-testid={testId}
       aria-label={`${title} Modal Content`}
     >
       <div css={baphStyles.header}>

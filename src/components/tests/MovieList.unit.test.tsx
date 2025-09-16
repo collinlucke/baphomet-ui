@@ -3,11 +3,11 @@ import { expect, describe, it, beforeEach, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing/react';
-import { createPhantomArtistMock } from '../__mocks__/phantomArtistMocks.tsx';
-import { createMovieListItemMock } from '../__mocks__/movieListItemMock';
+import { createPhantomArtistMock } from './__mocks__/phantomArtistMocks.tsx';
+import { createMovieListItemMock } from './__mocks__/movieListItemMock.tsx';
 import { MovieList } from '../MovieList/MovieList';
-import { setupIntersectionObserverMock } from '../__mocks__/browserMocks';
-import { mockMovies, mockMovieDetailsQuery } from '../__mocks__/testData';
+import { setupIntersectionObserverMock } from './__mocks__/browserMocks.ts';
+import { mockMovies, mockMovieDetailsQuery } from './__mocks__/testData.ts';
 
 createPhantomArtistMock();
 createMovieListItemMock();
