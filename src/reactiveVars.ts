@@ -21,3 +21,7 @@ export const isMobileVar = makeVar(false);
 export const isLandscapeVar = makeVar(false);
 export const isMobileAndLandscapeVar = makeVar(false);
 export const showMovieDetailsVar = makeVar(false);
+export const logOutVar = makeVar<(() => void) | null>(null);
+export const showSlideOutMenuVar = makeVar(false);
+export const showSignUpModalVar = makeVar(false);
+export const showLoginModalVar = makeVar(false);

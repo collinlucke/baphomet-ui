@@ -3,12 +3,13 @@ import './styling/index.css';
 import { Outlet } from 'react-router-dom';
 import { Heading } from './components/Heading';
 import { Footer } from './components/Footer';
+import { MainNav } from './components/Navs/MainNav';
 import {
   Main,
   Globals,
   Modal,
-  Button,
-  mediaQueries
+  mediaQueries,
+  SlideOutMenu
 } from '@collinlucke/phantomartist';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import {
@@ -19,7 +20,9 @@ import {
   showFeedbackModalVar,
   isMobileVar,
   isLandscapeVar,
-  isMobileAndLandscapeVar
+  isMobileAndLandscapeVar,
+  showSignUpModalVar,
+  showLoginModalVar
 } from './reactiveVars';
 import { useReactiveVar, useLazyQuery, useQuery } from '@apollo/client/react';
 import { CSSObject } from '@emotion/react';
@@ -27,6 +30,7 @@ import { CHECK_AUTH, GET_RANDOM_BACKDROP_IMAGE } from './api/queries';
 import { SignupForm } from './components/SignupForm';
 import { LoginForm } from './components/LoginForm';
 import { FeedbackForm } from './components/FeedbackForm';
+import { UnauthorizedModalContent } from './components/UnauthorizedModalContent';
 import type { AuthData } from './types/CustomTypes.types';
 
 type BackdropData = {
@@ -38,17 +42,61 @@ type BackdropData = {
 export const App = () => {
   const showHeading = useReactiveVar(showHeadingVar);
   const error = useReactiveVar(errorVar);
+  const isMobile = useReactiveVar(isMobileVar);
   const showUnauthorizedModal = useReactiveVar(showUnauthorizedModalVar);
   const showFeedbackModal = useReactiveVar(showFeedbackModalVar);
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showSignupModal, setShowSignupModal] = useState(false);
+  const showLoginModal = useReactiveVar(showLoginModalVar);
+  const showSignupModal = useReactiveVar(showSignUpModalVar);
   const [backdrop, setBackdrop] = useState<string>('');
 
   const { data: backdropData, error: backdropError } = useQuery(
     GET_RANDOM_BACKDROP_IMAGE
   );
 
-  // Handle backdrop data
+  const [checkAuth, { data: authData, error: authError }] =
+    useLazyQuery(CHECK_AUTH);
+
+  const updateDeviceState = () => {
+    console.log(navigator.userAgent);
+    const isMobile = navigator.userAgent.includes('Mobile');
+    const isLandscape = window.innerHeight < window.innerWidth;
+    const isMobileAndLandscape = isMobile && isLandscape;
+
+    isMobileVar(isMobile);
+    isLandscapeVar(isLandscape);
+    isMobileAndLandscapeVar(isMobileAndLandscape);
+    showHeadingVar(!isMobile);
+  };
+
+  // In case anyone asks, I like to use handlers as much a possible
+  const closeLoginModalHandler = () => {
+    showLoginModalVar(false);
+  };
+
+  const closeSignupModalHandler = () => {
+    showSignUpModalVar(false);
+  };
+
+  const closeUnauthorizedModalHandler = () => {
+    showUnauthorizedModalVar(false);
+  };
+
+  const loginSuccessHandler = () => {
+    showLoginModalVar(false);
+  };
+
+  const signupSuccessHandler = () => {
+    showSignUpModalVar(false);
+  };
+
+  const closeFeedbackModalHandler = () => {
+    showFeedbackModalVar(false);
+  };
+
+  const feedbackSuccessHandler = () => {
+    showFeedbackModalVar(false);
+  };
+
   useEffect(() => {
     if (backdropData) {
       const typedData = backdropData as BackdropData;
@@ -61,22 +109,11 @@ export const App = () => {
     }
   }, [backdropData]);
 
-  // Handle backdrop error
   useEffect(() => {
     if (backdropError) {
       console.error('Error fetching random backdrop image:', backdropError);
     }
   }, [backdropError]);
-  const updateDeviceState = () => {
-    const isMobile =
-      window.innerWidth <= 768 || navigator.userAgent.includes('Mobile');
-    const isLandscape = window.innerHeight < window.innerWidth;
-    const isMobileAndLandscape = isMobile && isLandscape;
-
-    isMobileVar(isMobile);
-    isLandscapeVar(isLandscape);
-    isMobileAndLandscapeVar(isMobileAndLandscape);
-  };
 
   useEffect(() => {
     updateDeviceState();
@@ -95,10 +132,16 @@ export const App = () => {
     };
   }, []);
 
-  const [checkAuth, { data: authData, error: authError }] =
-    useLazyQuery(CHECK_AUTH);
+  useEffect(() => {
+    const token = localStorage.getItem('baphomet-token');
+    if (token) {
+      checkAuth({ variables: { token } });
+    } else {
+      localStorage.removeItem('baphomet-user');
+      isAuthenticatedVar(false);
+    }
+  }, [checkAuth]);
 
-  // Handle auth data
   useEffect(() => {
     if (authData) {
       const typedAuthData = authData as AuthData;
@@ -110,68 +153,17 @@ export const App = () => {
         isAuthenticatedVar(false);
       }
     }
-  }, [authData]);
-
-  // Handle auth error
-  useEffect(() => {
-    if (authError) {
-      localStorage.removeItem('baphomet-token');
-      localStorage.removeItem('baphomet-user');
-      isAuthenticatedVar(false);
-    }
-  }, [authError]);
-
-  useEffect(() => {
-    const token = localStorage.getItem('baphomet-token');
-    if (token) {
-      checkAuth({ variables: { token } });
-    } else {
-      isAuthenticatedVar(false);
-    }
-  }, [checkAuth]);
-
-  const handleLoginModalClose = () => {
-    setShowLoginModal(false);
-  };
-
-  const handleSignupModalClose = () => {
-    setShowSignupModal(false);
-  };
-
-  const handleUnauthorizedModalClose = () => {
-    showUnauthorizedModalVar(false);
-  };
-
-  const handleUnauthorizedModalLogin = () => {
-    showUnauthorizedModalVar(false);
-    setShowLoginModal(true);
-  };
-
-  const handleLoginSuccess = () => {
-    setShowLoginModal(false);
-  };
-
-  const handleSignupSuccess = () => {
-    setShowSignupModal(false);
-  };
-
-  const handleFeedbackModalClose = () => {
-    showFeedbackModalVar(false);
-  };
-
-  const handleFeedbackSuccess = () => {
-    showFeedbackModalVar(false);
-  };
+  }, [authData, authError]);
 
   return (
     <>
       <Globals />
 
-      {showHeading && (
-        <Heading
-          setShowLoginModal={setShowLoginModal}
-          setShowSignupModal={setShowSignupModal}
-        />
+      {showHeading && <Heading />}
+      {isMobile && (
+        <SlideOutMenu isMobile={isMobile}>
+          <MainNav />
+        </SlideOutMenu>
       )}
       <Main isDark={true} className={{ main: getMainStyles(backdrop) }}>
         <Outlet />
@@ -181,36 +173,23 @@ export const App = () => {
       </div>
       {error && <ErrorBoundary />}
 
-      <Modal isOpen={showLoginModal} onClose={handleLoginModalClose}>
-        <LoginForm onSuccess={handleLoginSuccess} />
+      <Modal isOpen={showLoginModal} onClose={closeLoginModalHandler}>
+        <LoginForm onSuccess={loginSuccessHandler} />
       </Modal>
 
-      <Modal isOpen={showSignupModal} onClose={handleSignupModalClose}>
-        <SignupForm onSuccess={handleSignupSuccess} />
+      <Modal isOpen={showSignupModal} onClose={closeSignupModalHandler}>
+        <SignupForm onSuccess={signupSuccessHandler} />
       </Modal>
 
-      <Modal isOpen={showFeedbackModal} onClose={handleFeedbackModalClose}>
-        <FeedbackForm onSuccess={handleFeedbackSuccess} />
+      <Modal isOpen={showFeedbackModal} onClose={closeFeedbackModalHandler}>
+        <FeedbackForm onSuccess={feedbackSuccessHandler} />
       </Modal>
 
       <Modal
         isOpen={showUnauthorizedModal}
-        onClose={handleUnauthorizedModalClose}
+        onClose={closeUnauthorizedModalHandler}
       >
-        <div css={baphStyles.unauthorizedModalContent}>
-          <h3 css={baphStyles.actionRequiredHeading}>Action Required</h3>
-          <p css={baphStyles.unauthorizedMessage}>
-            Could not complete your action because you are not logged in.
-          </p>
-          <div css={baphStyles.unauthorizedModalActions}>
-            <Button onClick={handleUnauthorizedModalLogin} kind="primary">
-              Log In
-            </Button>
-            <Button onClick={handleUnauthorizedModalClose} kind="secondary">
-              Cancel
-            </Button>
-          </div>
-        </div>
+        <UnauthorizedModalContent />
       </Modal>
     </>
   );
@@ -247,25 +226,7 @@ const baphStyles: { [key: string]: CSSObject } = {
       zIndex: -1
     }
   },
-  unauthorizedModalContent: {
-    textAlign: 'center',
-    padding: '20px'
-  },
-  actionRequiredHeading: {
-    color: '#f39c12',
-    marginBottom: '16px',
-    fontSize: '1.2rem'
-  },
-  unauthorizedMessage: {
-    color: '#e74c3c',
-    marginBottom: '24px',
-    fontSize: '1rem'
-  },
-  unauthorizedModalActions: {
-    display: 'flex',
-    gap: '12px',
-    justifyContent: 'center'
-  },
+
   footerWrapper: {
     display: 'none',
     [mediaQueries.minWidth.lg]: {
