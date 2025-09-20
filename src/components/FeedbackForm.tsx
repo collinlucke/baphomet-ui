@@ -182,7 +182,7 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
         <div css={baphStyles.submitContainer}>
           <Button
             type="submit"
-            kind="primary"
+            variant="primary"
             disabled={isSubmitting || !formData.comments.trim()}
             ariaLabel={
               isSubmitting

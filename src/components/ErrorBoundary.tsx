@@ -79,7 +79,7 @@ export const ErrorBoundary: React.FC<ErrorBoundaryTypes> = ({ children }) => {
           </div>
 
           <ButtonGroup>
-            <Button onClick={goHomeHandler} kind="ghost">
+            <Button onClick={goHomeHandler} variant="ghost">
               Go home
             </Button>
             <Button onClick={goToLoginHandler}>Log in</Button>

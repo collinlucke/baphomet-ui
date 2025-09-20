@@ -4,7 +4,7 @@ import {
   mediaQueries
 } from '@collinlucke/phantomartist';
 import { CSSObject } from '@emotion/react';
-import { isMobileAndLandscapeVar } from '../reactiveVars';
+import { isMobileVar } from '../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
 import { resizeTmdbImage } from '../utils/resizeTmdbImage.ts';
 import party from 'party-js';
@@ -43,7 +43,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
   onFocus,
   onBlur
 }) => {
-  const isMobileAndLandscape = useReactiveVar(isMobileAndLandscapeVar);
+  const isMobile = useReactiveVar(isMobileVar);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -100,11 +100,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
     >
       <div
         css={[
-          getMovieCardStyles(
-            movie.backdropUrl ?? '',
-            posterImageUrl,
-            isMobileAndLandscape
-          ),
+          getMovieCardStyles(movie.backdropUrl ?? '', posterImageUrl, isMobile),
           isVoting && baphStyles.movieCardDisabled
         ]}
         onClick={onClickHandler}
@@ -135,14 +131,14 @@ export const MovieCard: React.FC<MovieCardProps> = ({
 const getMovieCardStyles = (
   backdropUrl: string,
   posterUrl: string,
-  isMobileAndLandscape: boolean
+  isMobile: boolean
 ) => {
   return {
     ...baphStyles.movieCard,
     backgroundImage: `url(${backdropUrl})`,
     [mediaQueries.minWidth.lg]: {
       backgroundImage: `url(${posterUrl})`,
-      aspectRatio: isMobileAndLandscape ? '1.25/1' : '2/3',
+      aspectRatio: isMobile ? '1.25/1' : '2/3',
       height: 'unset'
     }
   };

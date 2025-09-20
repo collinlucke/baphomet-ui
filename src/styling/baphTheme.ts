@@ -251,10 +251,10 @@ export const baphTheme = {
   variations: baphColorVariations,
   semantic: baphSemanticColors,
   typography: baphTypography,
-  button: ({ kind }: { kind?: string }) => {
+  button: ({ variant }: { variant?: string }) => {
     const btn = baphSemanticColors.button;
     // Only return color-related styles, let baseTheme handle the rest
-    return kind
+    return variant
       ? {
           primary: {
             backgroundColor: btn.primary.background,
@@ -292,7 +292,7 @@ export const baphTheme = {
             border: `1px solid white`
             // border: `1px solid ${btn.secondary.text}`
           }
-        }[kind]
+        }[variant]
       : {};
   }
 };

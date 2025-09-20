@@ -11,7 +11,7 @@ export const ScrollToTop = () => {
     <div css={baphStyles.scrollToTop}>
       <Button
         className={{ button: baphStyles.button }}
-        kind="secondary"
+        variant="secondary"
         onClick={handleScroll}
       >
         <ArrowUp01Icon />

@@ -8,10 +8,10 @@ export const UnauthorizedModalContent: React.FC = () => {
       subtitle="Please log in to access this page."
     >
       <div css={baphStyles.unauthorizedModalActions}>
-        <Button onClick={() => {}} kind="primary">
+        <Button onClick={() => {}} variant="primary">
           Log In
         </Button>
-        <Button onClick={() => {}} kind="secondary">
+        <Button onClick={() => {}} variant="secondary">
           Cancel
         </Button>
       </div>

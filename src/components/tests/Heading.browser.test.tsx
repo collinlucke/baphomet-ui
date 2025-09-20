@@ -4,8 +4,9 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { mockLocalStorage } from './__mocks__/mockLocalStorage';
 import { Heading } from '../Heading';
-import { BrowserRouter } from 'react-router-dom';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { ApolloProvider } from '@apollo/client/react';
+import { InMemoryCache, ApolloClient, ApolloLink } from '@apollo/client';
 import { ThemeProvider } from '@emotion/react';
 import { baseTheme } from '@collinlucke/phantomartist';
 import {
@@ -21,24 +22,42 @@ beforeEach(() => {
   showLoginModalVar(false);
 });
 
-const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <ThemeProvider theme={baseTheme}>
-    <MockedProvider mocks={[]}>
-      <BrowserRouter>{children}</BrowserRouter>
-    </MockedProvider>
-  </ThemeProvider>
-);
+const mockClient = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: ApolloLink.empty()
+});
+
+const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <>{children}</>,
+      errorElement: <div>Error</div>
+    }
+  ]);
+
+  return (
+    <ThemeProvider theme={baseTheme}>
+      <ApolloProvider client={mockClient}>
+        <RouterProvider router={router} />
+      </ApolloProvider>
+    </ThemeProvider>
+  );
+};
 
 describe('Heading', () => {
   describe('Basic rendering', () => {
-    it('renders the logo/home link correctly', async () => {
+    it.only('renders the logo/home link correctly', async () => {
       render(
         <TestWrapper>
           <Heading />
         </TestWrapper>
       );
 
-      expect(await screen.findByTestId('home-link')).toBeVisible();
+      const homeLink = await screen.getByTestId('home-link');
+      console.log(homeLink);
+
+      expect(homeLink).toBeVisible();
       expect(screen.getByText('Baphomet')).toBeVisible();
     });
 

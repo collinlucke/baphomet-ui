@@ -1,49 +1,79 @@
-import { useEffect } from 'react';
 import {
   Header,
   mediaQueries,
   SlideOutMenu,
-  screenSizes
+  Button
 } from '@collinlucke/phantomartist';
+import { Menu01Icon } from 'hugeicons-react';
 import { LogoLink } from './LogoLink';
-import { showSlideOutMenuVar } from '../reactiveVars';
+import {
+  showSlideOutMenuVar,
+  isLargeScreenVar,
+  isMobileVar
+} from '../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
 import { CSSObject } from '@emotion/react';
 import { MainNav } from './Navs/MainNav';
 
 export const Heading: React.FC = () => {
   const showSlideOutMenu = useReactiveVar(showSlideOutMenuVar);
+  const isLargeScreen = useReactiveVar(isLargeScreenVar);
+  const isMobile = useReactiveVar(isMobileVar);
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth > screenSizes.lg) {
-        showSlideOutMenuVar(false);
-      } else {
-        showSlideOutMenuVar(true);
-      }
-    };
-    handleResize();
+  const MenuIconButton = () => (
+    <Button
+      variant="ghostOnDark"
+      size="small"
+      iconOnly
+      icon={<Menu01Icon size={24} />}
+      onClick={() => showSlideOutMenuVar(true)}
+      ariaLabel={showSlideOutMenu ? 'Close menu' : 'Open menu'}
+      className={{ button: getOpenButtonStyles(isMobile) }}
+    />
+  );
 
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+  const MainNavSlideOut = () => (
+    <SlideOutMenu
+      showSlideOut={showSlideOutMenu}
+      setShowSlideOut={showSlideOutMenuVar}
+    >
+      <MainNav />
+    </SlideOutMenu>
+  );
 
   return (
-    <Header>
-      <div key="header-content" css={baphStyles.headerContent}>
-        <LogoLink />
-        {showSlideOutMenu ? (
-          <SlideOutMenu>
-            <MainNav />
-          </SlideOutMenu>
-        ) : (
-          <MainNav />
-        )}
-      </div>
-    </Header>
+    <>
+      {isMobile ? (
+        <header>
+          {MenuIconButton()}
+          {MainNavSlideOut()}
+        </header>
+      ) : (
+        <Header>
+          <div key="header-content" css={baphStyles.headerContent}>
+            <LogoLink />
+            {!isLargeScreen ? (
+              <div>
+                {MenuIconButton()}
+                {MainNavSlideOut()}
+              </div>
+            ) : (
+              <>
+                <MainNav />
+              </>
+            )}
+          </div>
+        </Header>
+      )}
+    </>
   );
+};
+
+const getOpenButtonStyles = (isMobile: boolean): CSSObject => {
+  return {
+    ...baphStyles.openButton,
+    ...(isMobile ? { position: 'absolute', top: '16px', right: '16px' } : {})
+  };
 };
 
 const baphStyles: { [key: string]: CSSObject } = {
@@ -56,5 +86,10 @@ const baphStyles: { [key: string]: CSSObject } = {
     [mediaQueries.minWidth.sm]: {
       padding: '0 20px'
     }
+  },
+  openButton: {
+    padding: '16px',
+    zIndex: 10,
+    '&:hover': { boxShadow: 'none' }
   }
 };

@@ -3,26 +3,26 @@ import './styling/index.css';
 import { Outlet } from 'react-router-dom';
 import { Heading } from './components/Heading';
 import { Footer } from './components/Footer';
-import { MainNav } from './components/Navs/MainNav';
 import {
   Main,
   Globals,
   Modal,
   mediaQueries,
-  SlideOutMenu
+  screenSizes
 } from '@collinlucke/phantomartist';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import {
   errorVar,
-  showHeadingVar,
   isAuthenticatedVar,
   showUnauthorizedModalVar,
   showFeedbackModalVar,
   isMobileVar,
   isLandscapeVar,
-  isMobileAndLandscapeVar,
   showSignUpModalVar,
-  showLoginModalVar
+  showLoginModalVar,
+  isLargeScreenVar,
+  isMobileAndLandscapeVar,
+  showSlideOutMenuVar
 } from './reactiveVars';
 import { useReactiveVar, useLazyQuery, useQuery } from '@apollo/client/react';
 import { CSSObject } from '@emotion/react';
@@ -40,13 +40,12 @@ type BackdropData = {
 };
 
 export const App = () => {
-  const showHeading = useReactiveVar(showHeadingVar);
   const error = useReactiveVar(errorVar);
-  const isMobile = useReactiveVar(isMobileVar);
   const showUnauthorizedModal = useReactiveVar(showUnauthorizedModalVar);
   const showFeedbackModal = useReactiveVar(showFeedbackModalVar);
   const showLoginModal = useReactiveVar(showLoginModalVar);
   const showSignupModal = useReactiveVar(showSignUpModalVar);
+  const showSlideOutMenu = useReactiveVar(showSlideOutMenuVar);
   const [backdrop, setBackdrop] = useState<string>('');
 
   const { data: backdropData, error: backdropError } = useQuery(
@@ -57,15 +56,11 @@ export const App = () => {
     useLazyQuery(CHECK_AUTH);
 
   const updateDeviceState = () => {
-    console.log(navigator.userAgent);
-    const isMobile = navigator.userAgent.includes('Mobile');
-    const isLandscape = window.innerHeight < window.innerWidth;
-    const isMobileAndLandscape = isMobile && isLandscape;
-
-    isMobileVar(isMobile);
-    isLandscapeVar(isLandscape);
-    isMobileAndLandscapeVar(isMobileAndLandscape);
-    showHeadingVar(!isMobile);
+    isMobileVar(navigator.userAgent.includes('Mobile'));
+    isLandscapeVar(window.innerHeight < window.innerWidth);
+    isLargeScreenVar(window.innerWidth >= screenSizes.lg);
+    isMobileAndLandscapeVar(isMobileVar() && isLandscapeVar());
+    showSlideOutMenuVar(isMobileVar() && showSlideOutMenu);
   };
 
   // In case anyone asks, I like to use handlers as much a possible
@@ -159,12 +154,8 @@ export const App = () => {
     <>
       <Globals />
 
-      {showHeading && <Heading />}
-      {isMobile && (
-        <SlideOutMenu isMobile={isMobile}>
-          <MainNav />
-        </SlideOutMenu>
-      )}
+      <Heading />
+
       <Main isDark={true} className={{ main: getMainStyles(backdrop) }}>
         <Outlet />
       </Main>

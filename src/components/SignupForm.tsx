@@ -293,7 +293,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
         <div css={baphStyles.submitContainer}>
           <Button
             type="submit"
-            kind="primary"
+            variant="primary"
             disabled={
               isLoading ||
               !formData.username.trim() ||

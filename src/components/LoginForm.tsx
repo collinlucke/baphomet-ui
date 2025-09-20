@@ -208,7 +208,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
         <div css={baphStyles.submitContainer}>
           <Button
             type="submit"
-            kind="primary"
+            variant="primary"
             size="large"
             disabled={isLoading || !formData.email.trim() || !formData.password}
             ariaLabel={

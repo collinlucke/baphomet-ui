@@ -283,7 +283,7 @@ export const AddMoviesPage: React.FC = () => {
           onSearch={handleTitleSearch}
           inputSize="medium"
           buttonSize="medium"
-          buttonKind="secondary"
+          buttonVariant="secondary"
           showResultsCount={false}
           label="Movie Title"
           buttonText={isSearching ? 'Searching...' : 'Search by Title'}
@@ -299,7 +299,7 @@ export const AddMoviesPage: React.FC = () => {
           onSearch={handleSearch}
           inputSize="medium"
           buttonSize="medium"
-          buttonKind="secondary"
+          buttonVariant="secondary"
           showResultsCount={false}
           label="TMDB ID"
           buttonText={`Fetch By TMDB ID`}
@@ -399,13 +399,13 @@ export const AddMoviesPage: React.FC = () => {
       <div css={baphStyles.saveButtonGroup}>
         <Button
           size="small"
-          kind="secondary"
+          variant="secondary"
           onClick={handleAddMovie}
           disabled={isLoading || !newMovie.title}
         >
           {isLoading ? 'Adding...' : 'Add Movie'}
         </Button>
-        <Button size="medium" kind="outline" onClick={handleClear}>
+        <Button size="medium" variant="outline" onClick={handleClear}>
           Clear
         </Button>
       </div>
@@ -463,7 +463,7 @@ export const AddMoviesPage: React.FC = () => {
                   </p>
 
                   <Button
-                    kind="primary"
+                    variant="primary"
                     size="small"
                     onClick={() => handleSelectMovie(movie)}
                     className={{ button: baphStyles.selectButton }}

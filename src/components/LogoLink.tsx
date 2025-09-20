@@ -1,13 +1,20 @@
 import { mediaQueries } from '@collinlucke/phantomartist';
 import { Link } from 'react-router-dom';
+import { showSlideOutMenuVar, isMobileVar } from '../reactiveVars';
+import { useReactiveVar } from '@apollo/client/react';
 
 export const LogoLink = () => {
+  const isMobile = useReactiveVar(isMobileVar);
+  const closeSlideOutMenu = () => {
+    showSlideOutMenuVar(false);
+  };
   return (
     <Link
       to={'/'}
       data-testid="home-link"
       css={baphStyles.logoLink}
       aria-label="Baphomet - Go to homepage"
+      onClick={isMobile ? closeSlideOutMenu : undefined}
     >
       <h1 css={baphStyles.title}>Baphomet</h1>
       <img

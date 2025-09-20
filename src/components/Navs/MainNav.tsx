@@ -1,38 +1,35 @@
+import { useState, useRef } from 'react';
 import {
   Button,
   ButtonGroup,
   mediaQueries,
-  screenSizes
+  Dropdown,
+  Avatar
 } from '@collinlucke/phantomartist';
 import { LogoLink } from '../LogoLink';
+import { UserMenu } from '../UserMenu';
 import { useReactiveVar } from '@apollo/client/react';
 import {
   isMobileVar,
   isAuthenticatedVar,
   showSlideOutMenuVar,
   showSignUpModalVar,
-  showLoginModalVar
+  showLoginModalVar,
+  isLargeScreenVar
 } from '../../reactiveVars';
 import { Link } from 'react-router-dom';
 
 // TODO: This could use some clean up/refactoring/optimization
 export const MainNav: React.FC = () => {
+  const dropdownRef = useRef<HTMLDivElement>(
+    null
+  ) as React.RefObject<HTMLDivElement>;
   const isMobile = useReactiveVar(isMobileVar);
   const isAuthenticated = useReactiveVar(isAuthenticatedVar);
   const showSlideOutMenu = useReactiveVar(showSlideOutMenuVar);
-  const isLarge = window.innerWidth >= screenSizes.lg;
-  const buttonSize = !showSlideOutMenu ? 'small' : 'medium';
-  const user = localStorage.getItem('baphomet-user')
-    ? JSON.parse(localStorage.getItem('baphomet-user') || '{}')
-    : null;
-
-  const logOutHandler = () => {
-    localStorage.removeItem('baphomet-token');
-    localStorage.removeItem('baphomet-user');
-    isAuthenticatedVar(false);
-    showSlideOutMenuVar(false);
-  };
-
+  const isLargeScreen = useReactiveVar(isLargeScreenVar);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const buttonSize = isLargeScreen && !isMobile ? 'small' : 'medium';
   const showLoginModalHandler = () => {
     showLoginModalVar(true);
     showSlideOutMenuVar(false);
@@ -43,19 +40,37 @@ export const MainNav: React.FC = () => {
     showSlideOutMenuVar(false);
   };
 
+  const toggleDropdownHandler = () => {
+    setShowUserDropdown(!showUserDropdown);
+  };
+
+  const closeDropdownHandler = () => {
+    setShowUserDropdown(false);
+  };
+
+  const closeSlideOutMenu = () => {
+    showSlideOutMenuVar(false);
+  };
+
   return (
     <nav css={baphStyles.nav} aria-label="Main navigation">
       <ButtonGroup
-        className={{ buttonGroup: getNavButtonGroupStyles(isMobile, isLarge) }}
+        className={{
+          buttonGroup: getNavButtonGroupStyles(isLargeScreen, isMobile)
+        }}
+        direction={isLargeScreen && !isMobile ? 'horizontal' : 'vertical'}
       >
         <>
           {isMobile && <LogoLink />}
           <Link to="/arena">
             <Button
               size={buttonSize}
-              kind="ghostOnDark"
+              variant="ghostOnDark"
               ariaLabel="Go to Arena page"
               className={{ button: baphStyles.button }}
+              onClick={
+                !isLargeScreen || isMobile ? closeSlideOutMenu : undefined
+              }
             >
               Arena
             </Button>
@@ -63,9 +78,12 @@ export const MainNav: React.FC = () => {
           <Link to="/leaderboard">
             <Button
               size={buttonSize}
-              kind="ghostOnDark"
+              variant="ghostOnDark"
               ariaLabel="Go to Leaderboard page"
               className={{ button: baphStyles.button }}
+              onClick={
+                !isLargeScreen || isMobile ? closeSlideOutMenu : undefined
+              }
             >
               Leaderboard
             </Button>
@@ -73,9 +91,12 @@ export const MainNav: React.FC = () => {
           <Link to="/all-movies">
             <Button
               size={buttonSize}
-              kind="ghostOnDark"
+              variant="ghostOnDark"
               ariaLabel="Go to All Movies page"
               className={{ button: baphStyles.button }}
+              onClick={
+                !isLargeScreen || isMobile ? closeSlideOutMenu : undefined
+              }
             >
               All Movies
             </Button>
@@ -83,14 +104,17 @@ export const MainNav: React.FC = () => {
           <Link to="/faq">
             <Button
               size={buttonSize}
-              kind="ghostOnDark"
+              variant="ghostOnDark"
               ariaLabel="Go to FAQ page"
               className={{ button: baphStyles.button }}
+              onClick={
+                !isLargeScreen || isMobile ? closeSlideOutMenu : undefined
+              }
             >
               FAQ
             </Button>
           </Link>
-          {isMobile && <hr css={baphStyles.divider} />}
+          {!isLargeScreen && <hr css={baphStyles.divider} />}
         </>
         <ButtonGroup
           className={{ buttonGroup: baphStyles.authButtonGroup }}
@@ -98,36 +122,33 @@ export const MainNav: React.FC = () => {
         >
           {isAuthenticated ? (
             <>
-              {user.role === 'admin' && (
-                <Link to="/add-movies">
-                  <Button
-                    testId="add-new-movie-button"
-                    size={buttonSize}
-                    kind="secondary"
-                    ariaLabel="Add new movie"
-                    className={{ button: baphStyles.noWrapButton }}
+              <div css={baphStyles.userMenu} ref={dropdownRef}>
+                <Button
+                  onClick={toggleDropdownHandler}
+                  variant="ghost"
+                  className={{ button: getAvatarButtonStyles(isLargeScreen) }}
+                >
+                  <Avatar displayName="User Name Placeholder" />
+                </Button>
+                {!showSlideOutMenu ? (
+                  <Dropdown
+                    showDropdown={showUserDropdown}
+                    className={{ dropdownWrapper: baphStyles.dropdown }}
+                    closeDropdown={closeDropdownHandler}
+                    dropdownRef={dropdownRef}
                   >
-                    Add new movie
-                  </Button>
-                </Link>
-              )}
-
-              <Button
-                kind="primary"
-                onClick={logOutHandler}
-                size={buttonSize}
-                ariaLabel="Sign out of your account"
-                testId="logout-button"
-                className={{ button: baphStyles.noWrapButton }}
-              >
-                Log out
-              </Button>
+                    <UserMenu setShowUserDropdown={setShowUserDropdown} />
+                  </Dropdown>
+                ) : (
+                  <UserMenu />
+                )}
+              </div>
             </>
           ) : (
             <>
               <Button
                 onClick={showSignUpModalHandler}
-                kind="secondary"
+                variant="secondary"
                 size={buttonSize}
                 ariaLabel="Open sign up form"
                 ariaDescribedBy="signup-help"
@@ -138,7 +159,7 @@ export const MainNav: React.FC = () => {
               </Button>
               <Button
                 onClick={showLoginModalHandler}
-                kind="primary"
+                variant="primary"
                 size={buttonSize}
                 ariaLabel="Open log in form"
                 ariaDescribedBy="login-help"
@@ -161,15 +182,24 @@ export const MainNav: React.FC = () => {
   );
 };
 
-const getNavButtonGroupStyles = (isMobile: boolean, isLarge: boolean) => ({
+const getNavButtonGroupStyles = (
+  isLargeScreen: boolean,
+  isMobile: boolean
+) => ({
   ...baphStyles.navButtonGroup,
-  ...(isMobile || !isLarge
+  ...(!isLargeScreen || isMobile
     ? {
-        flexDirection: 'column' as const,
         alignItems: 'flex-start' as const
       }
-    : { flexDirection: 'row' as const, alignItems: 'center' as const })
+    : { alignItems: 'center' as const })
 });
+
+const getAvatarButtonStyles = (isLargeScreen: boolean) => {
+  return {
+    ...baphStyles.avatarButton,
+    ...(isLargeScreen ? {} : { cursor: 'default' })
+  };
+};
 
 const baphStyles = {
   nav: {
@@ -204,5 +234,16 @@ const baphStyles = {
   },
   divider: {
     width: '100%'
+  },
+  userMenu: {
+    position: 'relative' as const
+  },
+  avatarButton: {
+    padding: 0,
+    borderRadius: '50%'
+  },
+  dropdown: {
+    top: 'calc(100% + 8px)',
+    right: 0
   }
 };

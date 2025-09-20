@@ -62,7 +62,7 @@ export const HomePage: React.FC = () => {
           </p>
 
           <Link to="/faq" css={baphStyles.faqLink}>
-            <Button kind="secondary">
+            <Button variant="secondary">
               Interested in knowing more? Go FAQ yourself!
             </Button>
           </Link>

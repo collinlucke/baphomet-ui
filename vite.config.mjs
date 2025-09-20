@@ -1,5 +1,10 @@
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export default defineConfig(({ mode }) => {
   // Load env file based on `mode` in the current working directory.
@@ -8,19 +13,22 @@ export default defineConfig(({ mode }) => {
   // Determine if we're using local PhantomArtist
   const useLocalPhantomArtist = env.VITE_USE_LOCAL_PHANTOMARTIST === 'true';
 
-  return {
+  const config = {
     plugins: [
       react({
         jsxImportSource: '@emotion/react',
         babel: {
           plugins: ['@emotion/babel-plugin']
-        }
+        },
+        // Enable fast refresh for better HMR
+        fastRefresh: true
       })
     ],
     optimizeDeps: {
       // Exclude linked packages from optimization to ensure real-time updates
       exclude: ['@collinlucke/phantomartist'],
-      force: true // Force re-optimization
+      // Don't force re-optimization as it can cause full page reloads
+      force: false
     },
     define: {
       // Make environment variables available in the app
@@ -37,7 +45,11 @@ export default defineConfig(({ mode }) => {
         allow: ['..']
       },
       host: '0.0.0.0',
-      port: 5173 // Default Vite port
+      port: 5173, // Default Vite port
+      hmr: {
+        // Enable HMR overlay for better debugging
+        overlay: true
+      }
     },
     test: {
       globals: true,
@@ -57,4 +69,21 @@ export default defineConfig(({ mode }) => {
       environment: 'jsdom'
     }
   };
+
+  // If using local PhantomArtist, add alias to source files for better HMR
+  if (useLocalPhantomArtist) {
+    config.resolve = {
+      alias: {
+        '@collinlucke/phantomartist': path.resolve(
+          __dirname,
+          '../phantomartist/lib'
+        )
+      }
+    };
+
+    // Watch PhantomArtist source files directly
+    config.server.watch.ignored = ['!../phantomartist/lib/**'];
+  }
+
+  return config;
 });

@@ -12,6 +12,11 @@ import {
   mediaQueries
 } from '@collinlucke/phantomartist';
 import { CSSObject } from '@emotion/react';
+import {
+  isLargeScreenVar,
+  isMobileAndLandscapeVar
+} from '../../reactiveVars.ts';
+import { useReactiveVar } from '@apollo/client/react';
 
 type Movie = {
   id: string;
@@ -43,6 +48,8 @@ interface SubmitVoteData {
 }
 
 export const ArenaPage: React.FC = () => {
+  const isLargeScreen = useReactiveVar(isLargeScreenVar);
+  const isMobileAndLandscape = useReactiveVar(isMobileAndLandscapeVar);
   const [isVoting, setIsVoting] = useState(false);
   const [voteResult, setVoteResult] = useState<{
     success: boolean;
@@ -103,7 +110,6 @@ export const ArenaPage: React.FC = () => {
   };
 
   const handleSkip = () => {
-    console.log(loading ? 'Skipping matchup...' : 'Refetching matchup...');
     refetch();
   };
 
@@ -141,7 +147,7 @@ export const ArenaPage: React.FC = () => {
               ? 'Not enough movies available for matchups. Add more movies to get started!'
               : 'Failed to load matchup. Please try again.'}
           </p>
-          <Button kind="primary" size="medium" onClick={() => refetch()}>
+          <Button variant="primary" size="medium" onClick={() => refetch()}>
             Try Again
           </Button>
         </div>
@@ -154,13 +160,26 @@ export const ArenaPage: React.FC = () => {
       <ArenaContainer>
         <div css={baphStyles.errorContainer}>
           <p css={baphStyles.errorText}>No matchup available</p>
-          <Button kind="primary" size="medium" onClick={() => refetch()}>
+          <Button variant="primary" size="medium" onClick={() => refetch()}>
             Get Matchup
           </Button>
         </div>
       </ArenaContainer>
     );
   }
+
+  const SkipButton = () => (
+    <div css={baphStyles.skipButtonWrapper}>
+      <Button
+        variant="outline"
+        size="medium"
+        onClick={handleSkip}
+        disabled={isVoting}
+      >
+        Skip this matchup
+      </Button>
+    </div>
+  );
 
   const matchup: Matchup = data.getRandomMovieMatchup;
 
@@ -178,7 +197,7 @@ export const ArenaPage: React.FC = () => {
       )}
 
       <div
-        css={baphStyles.matchupContainer}
+        css={getMatchupContainerStyles({ isMobileAndLandscape, isLargeScreen })}
         className="arena-matchup-container"
       >
         <MovieCard
@@ -191,16 +210,7 @@ export const ArenaPage: React.FC = () => {
           <div css={baphStyles.vsContainer}>
             <div css={baphStyles.vsText}>VS</div>
           </div>
-          <div css={baphStyles.actionButtons} className="skip-middle">
-            <Button
-              kind="outline"
-              size="medium"
-              onClick={handleSkip}
-              disabled={isVoting}
-            >
-              Skip This Matchup
-            </Button>
-          </div>
+          {isMobileAndLandscape || isLargeScreen ? SkipButton() : null}
         </div>
 
         <MovieCard
@@ -209,19 +219,26 @@ export const ArenaPage: React.FC = () => {
           handleVote={handleVote}
         />
 
-        <div css={baphStyles.actionButtons} className="skip-bottom">
-          <Button
-            kind="outline"
-            size="medium"
-            onClick={handleSkip}
-            disabled={isVoting}
-          >
-            Skip This Matchup
-          </Button>
-        </div>
+        {!(isMobileAndLandscape || isLargeScreen) ? SkipButton() : null}
       </div>
     </ArenaContainer>
   );
+};
+
+const getMatchupContainerStyles = ({
+  isMobileAndLandscape,
+  isLargeScreen
+}: {
+  isMobileAndLandscape: boolean;
+  isLargeScreen: boolean;
+}) => {
+  return {
+    ...baphStyles.matchupContainer,
+    flexDirection:
+      isMobileAndLandscape || isLargeScreen
+        ? ('row' as const)
+        : ('column' as const)
+  };
 };
 
 const baphStyles: { [key: string]: CSSObject } = {
@@ -283,18 +300,13 @@ const baphStyles: { [key: string]: CSSObject } = {
     justifyContent: 'center',
     maxWidth: '1200px',
     width: '100%',
-    flexDirection: 'column',
-    [mediaQueries.minWidth.lg]: {
-      flexDirection: 'row',
-      gap: '2rem'
-    }
+    flexDirection: 'column'
   },
   vsAndSkipContainer: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     gap: '3rem'
-    // marginTop: '1rem'
   },
   vsContainer: {
     display: 'flex',
@@ -321,21 +333,10 @@ const baphStyles: { [key: string]: CSSObject } = {
       height: '80px'
     }
   },
-  actionButtons: {
+  skipButtonWrapper: {
     display: 'flex',
     gap: '1rem',
     marginTop: '1rem',
-    zIndex: 10,
-    '&.skip-bottom': {
-      [mediaQueries.minWidth.lg]: {
-        display: 'none'
-      }
-    },
-    '&.skip-middle': {
-      display: 'none',
-      [mediaQueries.minWidth.lg]: {
-        display: 'flex'
-      }
-    }
+    zIndex: 10
   }
 };
