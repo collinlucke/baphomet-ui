@@ -1,24 +1,34 @@
-import {
-  Header,
-  mediaQueries,
-  SlideOutMenu,
-  Button
-} from '@collinlucke/phantomartist';
+import { Header, mediaQueries, Button } from '@collinlucke/phantomartist';
 import { Menu01Icon } from 'hugeicons-react';
 import { LogoLink } from './LogoLink';
 import {
   showSlideOutMenuVar,
   isLargeScreenVar,
-  isMobileVar
+  isMobileVar,
+  isSmallOrMobileVar,
+  isAuthenticatedVar
 } from '../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
 import { CSSObject } from '@emotion/react';
-import { MainNav } from './Navs/MainNav';
+import { MainNavLinks } from './Navs/MainNavLinks';
+import { SlideOutNav } from './Navs/SlideOutNav';
+import { AuthUserAvatarButton } from './Navs/AuthUserAvatarButton';
+import { UnauthorizedButtons } from './Navs/UnauthorizedButtons';
 
 export const Heading: React.FC = () => {
-  const showSlideOutMenu = useReactiveVar(showSlideOutMenuVar);
   const isLargeScreen = useReactiveVar(isLargeScreenVar);
   const isMobile = useReactiveVar(isMobileVar);
+  const isSmallOrMobile = useReactiveVar(isSmallOrMobileVar);
+  const isAuthenticated = useReactiveVar(isAuthenticatedVar);
+  const user = localStorage.getItem('baphomet-user')
+    ? JSON.parse(localStorage.getItem('baphomet-user') || '{}')
+    : null;
+
+  const openSlideOutMenuHandler = () => {
+    if (isSmallOrMobile) {
+      showSlideOutMenuVar(true);
+    }
+  };
 
   const MenuIconButton = () => (
     <Button
@@ -26,46 +36,49 @@ export const Heading: React.FC = () => {
       size="small"
       iconOnly
       icon={<Menu01Icon size={24} />}
-      onClick={() => showSlideOutMenuVar(true)}
-      ariaLabel={showSlideOutMenu ? 'Close menu' : 'Open menu'}
+      onClick={openSlideOutMenuHandler}
+      ariaLabel={'Open menu'}
       className={{ button: getOpenButtonStyles(isMobile) }}
     />
   );
 
-  const MainNavSlideOut = () => (
-    <SlideOutMenu
-      showSlideOut={showSlideOutMenu}
-      setShowSlideOut={showSlideOutMenuVar}
-    >
-      <MainNav />
-    </SlideOutMenu>
-  );
-
   return (
-    <>
+    <nav>
       {isMobile ? (
         <header>
-          {MenuIconButton()}
-          {MainNavSlideOut()}
+          <nav>
+            <MenuIconButton />
+            <SlideOutNav displayName={user?.displayName} />
+          </nav>
         </header>
       ) : (
         <Header>
           <div key="header-content" css={baphStyles.headerContent}>
-            <LogoLink />
             {!isLargeScreen ? (
-              <div>
-                {MenuIconButton()}
-                {MainNavSlideOut()}
-              </div>
+              <nav css={baphStyles.nav}>
+                <LogoLink />
+                <div>
+                  <MenuIconButton />
+                  <SlideOutNav displayName={user?.displayName} />
+                </div>
+              </nav>
             ) : (
-              <>
-                <MainNav />
-              </>
+              <nav css={baphStyles.nav}>
+                <LogoLink />
+                <div css={baphStyles.rightContent}>
+                  <MainNavLinks />
+                  {isAuthenticated ? (
+                    <AuthUserAvatarButton displayName={user?.displayName} />
+                  ) : (
+                    <UnauthorizedButtons />
+                  )}
+                </div>
+              </nav>
             )}
           </div>
         </Header>
       )}
-    </>
+    </nav>
   );
 };
 
@@ -87,9 +100,21 @@ const baphStyles: { [key: string]: CSSObject } = {
       padding: '0 20px'
     }
   },
+  nav: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    gap: '20px',
+    width: '100%'
+  },
   openButton: {
     padding: '16px',
     zIndex: 10,
     '&:hover': { boxShadow: 'none' }
+  },
+  rightContent: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    gap: '20px',
+    alignItems: 'center'
   }
 };

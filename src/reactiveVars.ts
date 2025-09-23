@@ -20,3 +20,4 @@ export const showSlideOutMenuVar = makeVar(false);
 export const showSignUpModalVar = makeVar(false);
 export const showLoginModalVar = makeVar(false);
 export const isLargeScreenVar = makeVar(false);
+export const isSmallOrMobileVar = makeVar(true);

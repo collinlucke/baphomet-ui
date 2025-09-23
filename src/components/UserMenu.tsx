@@ -1,9 +1,9 @@
 import { CSSObject } from '@emotion/react';
-import { Button, ButtonGroup } from '@collinlucke/phantomartist';
-import { Link } from 'react-router-dom';
+import { ButtonGroup } from '@collinlucke/phantomartist';
+import { isAuthenticatedVar, isSmallOrMobileVar } from '../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
 import { logout } from '../utils/logout';
-import { isAuthenticatedVar, isLargeScreenVar } from '../reactiveVars';
+import { NavMenuButton } from './NavMenuButton';
 
 type UserMenuProps = {
   setShowUserDropdown?: (show: boolean) => void;
@@ -11,9 +11,7 @@ type UserMenuProps = {
 
 export const UserMenu: React.FC<UserMenuProps> = ({ setShowUserDropdown }) => {
   const isAuthenticated = useReactiveVar(isAuthenticatedVar);
-  const isLargeScreen = useReactiveVar(isLargeScreenVar);
-  const buttonSize = isLargeScreen ? 'small' : 'medium';
-  const buttonVariant = isLargeScreen ? 'ghost' : 'ghostOnDark';
+  const isSmallOrMobile = useReactiveVar(isSmallOrMobileVar);
 
   const user = localStorage.getItem('baphomet-user')
     ? JSON.parse(localStorage.getItem('baphomet-user') || '{}')
@@ -26,71 +24,28 @@ export const UserMenu: React.FC<UserMenuProps> = ({ setShowUserDropdown }) => {
 
   return (
     <ButtonGroup
-      className={{ buttonGroup: getUserMenuStyles(isLargeScreen) }}
+      className={{ buttonGroup: getUserMenuStyles(isSmallOrMobile) }}
       direction="vertical"
     >
-      <Button
-        variant={buttonVariant}
-        size={buttonSize}
-        className={{ button: getButtonStyles(isLargeScreen) }}
-      >
-        Profile
-      </Button>
+      <NavMenuButton>Profile</NavMenuButton>
+
       {isAuthenticated && user && user.role === 'admin' && (
-        <Link to="/add-movies">
-          <Button
-            variant={buttonVariant}
-            size={buttonSize}
-            className={{ button: getButtonStyles(isLargeScreen) }}
-          >
-            Add Movie
-          </Button>
-        </Link>
+        <NavMenuButton to="/add-movies">Add Movie</NavMenuButton>
       )}
-      <Button
-        variant={buttonVariant}
-        size={buttonSize}
-        className={{ button: getButtonStyles(isLargeScreen) }}
-        onClick={logOutHandler}
-      >
-        Logout
-      </Button>
+
+      <NavMenuButton onClick={logOutHandler}>Logout</NavMenuButton>
     </ButtonGroup>
   );
 };
 
-const getUserMenuStyles = (isLargeScreen: boolean) => {
+const getUserMenuStyles = (isSmallOrMobile: boolean): CSSObject => {
   return {
-    ...baphStyles.userMenu,
-    ...(!isLargeScreen
+    display: 'flex',
+    ...(isSmallOrMobile
       ? {
-          marginTop: '10px'
+          marginTop: '10px',
+          alignItems: 'flex-start' as const
         }
       : {})
   };
-};
-
-const getButtonStyles = (isLargeScreen: boolean): CSSObject => {
-  return {
-    ...baphStyles.button,
-    ...(!isLargeScreen
-      ? {
-          padding: '10px 0',
-          justifyContent: 'start' as const
-        }
-      : {})
-  };
-};
-
-const baphStyles: { [key: string]: CSSObject } = {
-  userMenu: {
-    display: 'flex'
-  },
-  button: {
-    width: '100%',
-    '&:hover': {
-      backgroundColor: 'none',
-      boxShadow: 'none'
-    }
-  }
 };

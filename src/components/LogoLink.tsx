@@ -16,7 +16,7 @@ export const LogoLink = () => {
       aria-label="Baphomet - Go to homepage"
       onClick={isMobile ? closeSlideOutMenu : undefined}
     >
-      <h1 css={baphStyles.title}>Baphomet</h1>
+      <h1 css={getTitleStyles(isMobile)}>Baphomet</h1>
       <img
         src="/baphy-favicon.png"
         alt="Baphomet logo"
@@ -27,6 +27,23 @@ export const LogoLink = () => {
     </Link>
   );
 };
+
+const getTitleStyles = (isMobile: boolean) => ({
+  margin: 0,
+  ...(isMobile
+    ? {
+        fontSize: '1.5rem'
+      }
+    : {
+        fontSize: '1.6rem',
+        [mediaQueries.minWidth.md]: {
+          fontSize: '1.6rem'
+        },
+        [mediaQueries.minWidth.lg]: {
+          fontSize: '2rem'
+        }
+      })
+});
 
 const baphStyles = {
   logoLink: {

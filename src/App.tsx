@@ -22,7 +22,8 @@ import {
   showLoginModalVar,
   isLargeScreenVar,
   isMobileAndLandscapeVar,
-  showSlideOutMenuVar
+  showSlideOutMenuVar,
+  isSmallOrMobileVar
 } from './reactiveVars';
 import { useReactiveVar, useLazyQuery, useQuery } from '@apollo/client/react';
 import { CSSObject } from '@emotion/react';
@@ -61,6 +62,7 @@ export const App = () => {
     isLargeScreenVar(window.innerWidth >= screenSizes.lg);
     isMobileAndLandscapeVar(isMobileVar() && isLandscapeVar());
     showSlideOutMenuVar(isMobileVar() && showSlideOutMenu);
+    isSmallOrMobileVar(!isLargeScreenVar() || isMobileVar());
   };
 
   // In case anyone asks, I like to use handlers as much a possible
