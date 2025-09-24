@@ -26,7 +26,7 @@ type LoginMutationData = {
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
   const [formData, setFormData] = useState<LoginFormData>({
-    email: '',
+    emailOrUsername: '',
     password: ''
   });
 
@@ -77,9 +77,10 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
         setGeneralError('');
       } else if (
         errorMessage.toLowerCase().includes('user does not exist') ||
-        errorMessage.toLowerCase().includes('email')
+        errorMessage.toLowerCase().includes('email') ||
+        errorMessage.toLowerCase().includes('username')
       ) {
-        setErrors(prev => ({ ...prev, email: errorMessage }));
+        setErrors(prev => ({ ...prev, emailOrUsername: errorMessage }));
         setGeneralError('');
       } else {
         setGeneralError(errorMessage);
@@ -94,10 +95,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
   const validateForm = (): boolean => {
     const newErrors: Partial<LoginFormData> = {};
 
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+    if (!formData.emailOrUsername.trim()) {
+      newErrors.emailOrUsername = 'Email or username is required';
     }
 
     if (!formData.password) {
@@ -118,7 +117,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
     try {
       await loginMutation({
         variables: {
-          email: formData.email,
+          emailOrUsername: formData.emailOrUsername,
           password: formData.password
         }
       });
@@ -165,22 +164,24 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
 
         <div css={baphStyles.fields}>
           <InputField
-            label="Email"
-            type="email"
-            name="email"
-            value={formData.email}
+            label="Email or Username"
+            type="text"
+            name="emailOrUsername"
+            value={formData.emailOrUsername}
             onChange={updateField}
-            placeholder="Enter your email address"
+            placeholder="Enter your email or username"
             required
-            error={errors.email}
+            error={errors.emailOrUsername}
             disabled={isLoading}
-            autoComplete="email"
-            ariaDescribedBy={errors.email ? 'email-error' : 'email-help'}
-            ariaInvalid={!!errors.email}
+            autoComplete="username email"
+            ariaDescribedBy={
+              errors.emailOrUsername ? 'email-error' : 'email-help'
+            }
+            ariaInvalid={!!errors.emailOrUsername}
             testId="login-email-input"
           />
           <div id="email-help" css={baphStyles.srOnly}>
-            Enter the email address associated with your account
+            Enter the email address or username associated with your account
           </div>
 
           <InputField
@@ -210,7 +211,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
             type="submit"
             variant="primary"
             size="large"
-            disabled={isLoading || !formData.email.trim() || !formData.password}
+            disabled={
+              isLoading ||
+              !formData.emailOrUsername.trim() ||
+              !formData.password
+            }
             ariaLabel={
               isLoading ? 'Signing in, please wait' : 'Sign in to your account'
             }

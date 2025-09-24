@@ -17,6 +17,9 @@ type SignupMutationData = {
       username: string;
       email: string;
       displayName?: string;
+      firstName?: string;
+      lastName?: string;
+      birthday?: string;
       totalVotes: number;
       joinDate: string;
       role: string;
@@ -34,7 +37,10 @@ export const SignupForm: React.FC<SignupFormProps> = ({
     email: '',
     password: '',
     confirmPassword: '',
-    displayName: ''
+    displayName: '',
+    firstName: '',
+    lastName: '',
+    birthday: ''
   });
 
   const [errors, setErrors] = useState<Partial<SignupFormData>>({});
@@ -148,7 +154,10 @@ export const SignupForm: React.FC<SignupFormProps> = ({
           username: formData.username,
           email: formData.email,
           password: formData.password,
-          displayName: formData.displayName || formData.username
+          displayName: formData.displayName || formData.username,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          birthday: formData.birthday
         }
       });
     } catch (error) {
@@ -219,8 +228,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             label="Display Name"
             value={formData.displayName}
             onChange={updateField}
-            placeholder="How should we display your name?"
-            required
+            placeholder="If not provided, username will be used"
             error={errors.displayName}
             disabled={isLoading}
             data-testid="signup-display-name-input"
@@ -230,6 +238,52 @@ export const SignupForm: React.FC<SignupFormProps> = ({
           />
           <div id="displayname-help" css={baphStyles.srOnly}>
             Enter the name that will be shown to other users
+          </div>
+
+          <InputField
+            label="First Name"
+            value={formData.firstName}
+            onChange={updateField}
+            error={errors.firstName}
+            disabled={isLoading}
+            data-testid="signup-first-name-input"
+            name="firstName"
+            ariaDescribedBy="firstname-help"
+            ariaInvalid={!!errors.firstName}
+          />
+          <div id="firstname-help" css={baphStyles.srOnly}>
+            Enter your first name
+          </div>
+
+          <InputField
+            label="Last Name"
+            value={formData.lastName}
+            onChange={updateField}
+            error={errors.lastName}
+            disabled={isLoading}
+            data-testid="signup-last-name-input"
+            name="lastName"
+            ariaDescribedBy="lastname-help"
+            ariaInvalid={!!errors.lastName}
+          />
+          <div id="lastname-help" css={baphStyles.srOnly}>
+            Enter your last name
+          </div>
+
+          <InputField
+            label="Birthday"
+            value={formData.birthday}
+            onChange={updateField}
+            type="date"
+            error={errors.birthday}
+            disabled={isLoading}
+            data-testid="signup-birthday-input"
+            name="birthday"
+            ariaDescribedBy="birthday-help"
+            ariaInvalid={!!errors.birthday}
+          />
+          <div id="birthday-help" css={baphStyles.srOnly}>
+            Enter your birthday in YYYY-MM-DD format
           </div>
 
           <InputField

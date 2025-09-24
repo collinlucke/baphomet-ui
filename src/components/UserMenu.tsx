@@ -12,6 +12,7 @@ type UserMenuProps = {
 export const UserMenu: React.FC<UserMenuProps> = ({ setShowUserDropdown }) => {
   const isAuthenticated = useReactiveVar(isAuthenticatedVar);
   const isSmallOrMobile = useReactiveVar(isSmallOrMobileVar);
+  const variant = !isSmallOrMobile ? 'ghost' : undefined;
 
   const user = localStorage.getItem('baphomet-user')
     ? JSON.parse(localStorage.getItem('baphomet-user') || '{}')
@@ -27,13 +28,19 @@ export const UserMenu: React.FC<UserMenuProps> = ({ setShowUserDropdown }) => {
       className={{ buttonGroup: getUserMenuStyles(isSmallOrMobile) }}
       direction="vertical"
     >
-      <NavMenuButton>Profile</NavMenuButton>
+      <NavMenuButton to="/profile" variant={variant}>
+        Profile
+      </NavMenuButton>
 
       {isAuthenticated && user && user.role === 'admin' && (
-        <NavMenuButton to="/add-movies">Add Movie</NavMenuButton>
+        <NavMenuButton to="/add-movies" variant={variant}>
+          Add Movie
+        </NavMenuButton>
       )}
 
-      <NavMenuButton onClick={logOutHandler}>Logout</NavMenuButton>
+      <NavMenuButton onClick={logOutHandler} variant={variant}>
+        Logout
+      </NavMenuButton>
     </ButtonGroup>
   );
 };
@@ -46,6 +53,6 @@ const getUserMenuStyles = (isSmallOrMobile: boolean): CSSObject => {
           marginTop: '10px',
           alignItems: 'flex-start' as const
         }
-      : {})
+      : { gap: 0 })
   };
 };

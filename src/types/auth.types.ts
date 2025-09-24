@@ -15,7 +15,7 @@ export type AuthResponse = {
 };
 
 export type LoginFormData = {
-  email: string;
+  emailOrUsername: string; // Changed from 'email' to be more explicit
   password: string;
 };
 
@@ -25,6 +25,9 @@ export type SignupFormData = {
   password: string;
   confirmPassword: string;
   displayName: string;
+  firstName: string;
+  lastName: string;
+  birthday: string;
 };
 
 export type LoginFormProps = {

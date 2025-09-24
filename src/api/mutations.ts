@@ -85,8 +85,8 @@ export const UPDATE_MOVIE = gql`
 `;
 
 export const LOGIN = gql`
-  mutation login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
+  mutation login($emailOrUsername: String!, $password: String!) {
+    login(emailOrUsername: $emailOrUsername, password: $password) {
       token
       user {
         id
@@ -97,6 +97,10 @@ export const LOGIN = gql`
         joinDate
         role
         emailVerified
+        firstName
+        lastName
+        birthday
+        avatarUrl
       }
     }
   }
@@ -108,12 +112,18 @@ export const SIGNUP = gql`
     $email: String!
     $password: String!
     $displayName: String
+    $firstName: String
+    $lastName: String
+    $birthday: String
   ) {
     signup(
       username: $username
       email: $email
       password: $password
       displayName: $displayName
+      firstName: $firstName
+      lastName: $lastName
+      birthday: $birthday
     ) {
       token
       user {
@@ -121,6 +131,9 @@ export const SIGNUP = gql`
         username
         email
         displayName
+        firstName
+        lastName
+        birthday
         totalVotes
         joinDate
         role
@@ -169,6 +182,59 @@ export const SUBMIT_FEEDBACK = gql`
         comments
         timestamp
       }
+    }
+  }
+`;
+
+export const UPDATE_PROFILE = gql`
+  mutation updateProfile(
+    $id: ID!
+    $firstName: String
+    $lastName: String
+    $username: String
+    $email: String
+    $displayName: String
+    $birthday: String
+    $avatarUrl: String
+  ) {
+    updateProfile(
+      id: $id
+      firstName: $firstName
+      lastName: $lastName
+      username: $username
+      email: $email
+      displayName: $displayName
+      birthday: $birthday
+      avatarUrl: $avatarUrl
+    ) {
+      id
+      firstName
+      lastName
+      username
+      email
+      displayName
+      birthday
+      avatarUrl
+    }
+  }
+`;
+
+export const CHANGE_PASSWORD = gql`
+  mutation changePassword(
+    $id: ID!
+    $currentPassword: String!
+    $newPassword: String!
+  ) {
+    changePassword(
+      id: $id
+      currentPassword: $currentPassword
+      newPassword: $newPassword
+    ) {
+      id
+      email
+      displayName
+      birthday
+      avatarUrl
     }
   }
 `;

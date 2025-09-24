@@ -7,6 +7,7 @@ import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 import { AddMoviesPage } from './pages/AddMovies/AddMoviesPage.tsx';
 import { LeaderboardPage } from './pages/Leaderboard/LeaderboardPage.tsx';
 import { FAQPage } from './pages/FAQ/FAQPage.tsx';
+import { ProfilePage } from './pages/Profile/ProfilePage.tsx';
 
 const routes = [
   {
@@ -34,6 +35,10 @@ const routes = [
       {
         path: 'faq',
         element: <FAQPage />
+      },
+      {
+        path: 'profile',
+        element: <ProtectedRoute element={ProfilePage} />
       }
     ]
   }

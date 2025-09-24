@@ -9,7 +9,8 @@ type ButtonVariant =
   | 'tertiary'
   | 'ghost'
   | 'ghostOnDark'
-  | 'outline';
+  | 'outline'
+  | undefined;
 
 type NavMenuButtonProps = {
   children: React.ReactElement | string;
@@ -38,9 +39,7 @@ export const NavMenuButton = ({
 
   if (variant) {
     buttonVariant = variant;
-  } else if (isSmallOrMobile) {
-    buttonVariant = 'ghostOnDark';
-  } else if (onDark) {
+  } else if (isSmallOrMobile || onDark) {
     buttonVariant = 'ghostOnDark';
   } else {
     buttonVariant = 'ghost';

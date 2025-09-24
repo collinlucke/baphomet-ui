@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { CSSObject } from '@emotion/react';
 import {
   baseColors,
@@ -23,7 +22,6 @@ export const MovieListItem: React.FC<MovieListItemProps> = ({
 }) => {
   const winningPercentage = movie.winningPercentage?.toFixed(2) || '0.00';
   const [major, minor] = winningPercentage.split('.');
-  const [showTooltip, setShowTooltip] = useState(false);
 
   const openMovieDetailsHandler = (
     e: React.MouseEvent | React.KeyboardEvent
@@ -46,16 +44,7 @@ export const MovieListItem: React.FC<MovieListItemProps> = ({
       aria-label={`Open details for ${movie.title}`}
       data-testid={`movie-item-${movie.tmdbId}`}
     >
-      {showTooltip && movie.title && (
-        <div css={baphStyles.tooltip}>
-          <span>{movie.title}</span>
-        </div>
-      )}
-      <div
-        css={baphStyles.posterWrapper}
-        onMouseEnter={() => setShowTooltip(true)}
-        onMouseLeave={() => setShowTooltip(false)}
-      >
+      <div css={baphStyles.posterWrapper} title={movie.title}>
         <img src={movie.posterUrl} alt={movie.title} css={baphStyles.poster} />
         <div css={baphStyles.scoreWrapper}>
           <span css={baphStyles.major}>{major}.</span>
@@ -130,30 +119,6 @@ const baphStyles = {
     },
     [mediaQueries.minWidth.xl]: {
       fontSize: '2.25rem'
-    }
-  },
-  tooltip: {
-    width: 'max-content',
-    textAlign: 'center' as const,
-    fontSize: '.75rem',
-    backgroundColor: baseColors.tertiary[50],
-    color: baseColors.primary[500],
-    padding: '2px 12px',
-    borderRadius: '2px',
-    boxShadow: `0 2px 8px ${baseColors.primary[500]}`,
-    whiteSpace: 'nowrap',
-    position: 'absolute' as const,
-    left: '100%',
-    zIndex: 10,
-    '&:after': {
-      content: '""',
-      position: 'absolute' as const,
-      right: '100%',
-      top: '25%',
-      rotate: '90deg',
-      borderWidth: '6px',
-      borderStyle: 'solid',
-      borderColor: `${baseColors.tertiary[50]} transparent transparent transparent`
     }
   }
 };
