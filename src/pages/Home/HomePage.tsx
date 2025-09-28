@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { BodySection } from '../../components/BodySection';
 import { Button } from '@collinlucke/phantomartist';
 import { MovieList } from '../../components/MovieList/MovieList';
-import { GET_MOVIES_BY_TITLE } from '../../api/queries';
+import { GET_ALL_MOVIES } from '../../api/queries';
 import { useQuery } from '@apollo/client/react';
 import { showFeedbackModalVar } from '../../reactiveVars';
 
@@ -14,25 +14,25 @@ interface MovieResultsData {
       title: string;
       releaseDate?: string;
       rated?: string;
-      posterUrl?: string;
+      posterPath?: string;
       winningPercentage: number;
       overview?: string;
       genres?: string[];
       revenue?: number;
-      backdropUrl?: string;
+      backdropPath?: string;
       tmdbId: string;
     }>;
   };
 }
 export const HomePage: React.FC = () => {
-  const { data } = useQuery<MovieResultsData>(GET_MOVIES_BY_TITLE, {
+  const { data } = useQuery<MovieResultsData>(GET_ALL_MOVIES, {
     variables: {
       title: '',
       limit: 27,
       sortBy: 'winningPercentage',
       sortOrder: 'desc'
     },
-    fetchPolicy: 'cache-and-network' // Use cache first, then network
+    fetchPolicy: 'cache-and-network'
   });
 
   const showFeedbackHandler = () => {

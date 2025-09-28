@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { MovieList } from '../../components/MovieList/MovieList';
-import { GET_MOVIES_BY_TITLE } from '../../api/queries';
+import { GET_MOVIE_LIST_ITEMS } from '../../api/queries';
 import { BodySection } from '../../components/BodySection';
 import { PageHeading } from '../../components/PageHeading';
 import { ScrollToTop } from '../../components/ScrollToTop';
@@ -11,12 +11,12 @@ type Movie = {
   title: string;
   releaseDate?: string;
   rated?: string;
-  posterUrl?: string;
+  posterPath?: string;
   winningPercentage: number;
   overview?: string;
   genres?: string[];
   revenue?: number;
-  backdropUrl?: string;
+  backdropPath?: string;
   tmdbId: string;
 };
 
@@ -36,9 +36,9 @@ export const AllMoviesPage: React.FC = () => {
   const [totalMovieCount, setTotalMovieCount] = useState(0);
   const isNewSearchRef = useRef(true);
 
-  const [fetchMovies, { data, error }] = useLazyQuery<{
+  const [getMovieListItems, { data, error }] = useLazyQuery<{
     movieResults: MovieResults;
-  }>(GET_MOVIES_BY_TITLE);
+  }>(GET_MOVIE_LIST_ITEMS);
 
   useEffect(() => {
     if (data) {
@@ -74,7 +74,7 @@ export const AllMoviesPage: React.FC = () => {
   const fetchMoreMovies = async () => {
     if (isLoadingMore || !hasMore) return;
     setIsLoadingMore(true);
-    fetchMovies({
+    getMovieListItems({
       variables: {
         title: searchTerm,
         limit: 28,
@@ -85,7 +85,7 @@ export const AllMoviesPage: React.FC = () => {
 
   // Set it off
   useEffect(() => {
-    fetchMovies({
+    getMovieListItems({
       variables: {
         title: '',
         limit: 28,
@@ -100,7 +100,7 @@ export const AllMoviesPage: React.FC = () => {
     setCursor('');
     setHasMore(true);
     isNewSearchRef.current = true;
-    fetchMovies({
+    getMovieListItems({
       variables: {
         title: term,
         limit: 28,

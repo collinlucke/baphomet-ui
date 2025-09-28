@@ -1,29 +1,35 @@
 import { gql } from '@apollo/client';
 
 export const GET_ALL_MOVIES = gql`
-  query getAllMovies(
-    $limit: Int
-    $searchTerm: String
-    $tmdbId: String
-    $cursor: String
-  ) {
-    movieResults: getAllMovies(
+  query getAllMovies($limit: Int, $searchTerm: String, $cursor: String) {
+    movieResults: getMovies(
       limit: $limit
       searchTerm: $searchTerm
-      tmdbId: $tmdbId
       cursor: $cursor
     ) {
       searchResults {
         id
         title
-        rated
         releaseDate
         overview
         genres
         revenue
-        posterUrl
-        backdropUrl
+        posterPath
+        backdropPath
         tmdbId
+        tagline
+        topBilledCast {
+          id
+          name
+          role
+          profilePath
+        }
+        directors {
+          id
+          name
+          profilePath
+          role
+        }
         addedBy
         lastUpdated
         createdAt
@@ -35,6 +41,62 @@ export const GET_ALL_MOVIES = gql`
       newTotalMovieCount
       newCursor
       endOfResults
+    }
+  }
+`;
+
+export const GET_MOVIE_LIST_ITEMS = gql`
+  query getMovieListItems($limit: Int, $searchTerm: String, $cursor: String) {
+    movieResults: getMovies(
+      limit: $limit
+      searchTerm: $searchTerm
+      cursor: $cursor
+    ) {
+      searchResults {
+        id
+        title
+        posterPath
+        winningPercentage
+      }
+      newTotalMovieCount
+      newCursor
+      endOfResults
+    }
+  }
+`;
+
+export const GET_MOVIE_DETAILS = gql`
+  query getMovieDetails($id: Int!) {
+    movieResults: getMovieDetails(id: $id) {
+      id
+      title
+      releaseDate
+      overview
+      genres
+      revenue
+      posterPath
+      backdropPath
+      tmdbId
+      tagline
+      topBilledCast {
+        id
+        name
+        role
+        profilePath
+      }
+      directors {
+        id
+        name
+        profilePath
+        role
+      }
+      addedBy
+      lastUpdated
+      createdAt
+      totalWins
+      totalLosses
+      winningPercentage
+      totalComparisons
     }
   }
 `;
@@ -57,14 +119,26 @@ export const GET_MOVIES_BY_TITLE = gql`
       searchResults {
         id
         title
-        rated
         releaseDate
         overview
         genres
         revenue
-        posterUrl
-        backdropUrl
+        posterPath
+        backdropPath
         tmdbId
+        tagline
+        topBilledCast {
+          id
+          name
+          role
+          profilePath
+        }
+        directors {
+          id
+          name
+          role
+          profilePath
+        }
         addedBy
         lastUpdated
         createdAt
@@ -82,24 +156,80 @@ export const GET_MOVIES_BY_TITLE = gql`
 
 export const GET_MOVIE_BY_TMDB_ID = gql`
   query getMovieByTmdbId($tmdbId: String!) {
-    movieResults: getMovieByTmdbId(tmdbId: $tmdbId) {
-      id
+    movieResult: getMovieByTmdbId(tmdbId: $tmdbId) {
+      found
+      errorMessage
+      movie {
+        id
+        title
+        releaseDate
+        overview
+        genres
+        revenue
+        posterPath
+        backdropPath
+        tmdbId
+        tagline
+        topBilledCast {
+          id
+          name
+          role
+          profilePath
+        }
+        directors {
+          id
+          name
+          profilePath
+          role
+        }
+      }
+    }
+  }
+`;
+
+export const FETCH_MOVIE_FROM_TMDB = gql`
+  query fetchMovieFromTmdb($tmdbId: String!) {
+    fetchedMovie: fetchMovieFromTmdb(tmdbId: $tmdbId) {
       title
-      rated
       releaseDate
       overview
       genres
       revenue
-      posterUrl
-      backdropUrl
+      posterPath
+      backdropPath
       tmdbId
-      addedBy
-      lastUpdated
-      createdAt
-      totalWins
-      totalLosses
-      winningPercentage
-      totalComparisons
+      tagline
+      topBilledCast {
+        id
+        name
+        role
+        profilePath
+      }
+      directors {
+        id
+        name
+        profilePath
+        role
+      }
+    }
+  }
+`;
+
+export const FETCH_POSSIBLE_MOVIE_MATCHES = gql`
+  query fetchPossibleMovieMatches($title: String!) {
+    possibleMovieMatches: fetchPossibleMovieMatches(title: $title) {
+      page
+      results {
+        id
+        title
+        releaseDate
+        overview
+        genreIds
+        posterPath
+        backdropPath
+      }
+      totalResults
+      totalPages
     }
   }
 `;
@@ -114,7 +244,7 @@ export const CHECK_AUTH = gql`
 
 export const CHECK_MOVIE_BY_TMDB_ID = gql`
   query checkMovieByTmdbId($tmdbId: String!) {
-    movieResults: getAllMovies(tmdbId: $tmdbId) {
+    movieResults: findMovie(tmdbId: $tmdbId) {
       searchResults {
         id
         title
@@ -130,8 +260,8 @@ export const GET_RANDOM_MATCHUP = gql`
       movie1 {
         id
         title
-        posterUrl
-        backdropUrl
+        posterPath
+        backdropPath
         releaseDate
         genres
         winningPercentage
@@ -142,8 +272,8 @@ export const GET_RANDOM_MATCHUP = gql`
       movie2 {
         id
         title
-        posterUrl
-        backdropUrl
+        posterPath
+        backdropPath
         releaseDate
         genres
         winningPercentage
@@ -159,7 +289,7 @@ export const GET_RANDOM_MATCHUP = gql`
 export const GET_RANDOM_BACKDROP_IMAGE = gql`
   query getRandomBackdropImage {
     getRandomBackdropImage {
-      backdropUrl
+      backdropPath
     }
   }
 `;

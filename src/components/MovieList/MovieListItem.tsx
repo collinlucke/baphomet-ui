@@ -1,4 +1,5 @@
 import { CSSObject } from '@emotion/react';
+import { Link } from 'react-router-dom';
 import {
   baseColors,
   baseVibrantColors,
@@ -9,55 +10,48 @@ export type MovieListItemProps = {
   movie: {
     id: string;
     title: string;
-    posterUrl?: string;
+    posterPath?: string;
     winningPercentage: number;
     tmdbId: string;
   };
   openMovieDetails: (tmdbId: string) => void;
 };
 
-export const MovieListItem: React.FC<MovieListItemProps> = ({
-  movie,
-  openMovieDetails
-}) => {
+export const MovieListItem: React.FC<MovieListItemProps> = ({ movie }) => {
   const winningPercentage = movie.winningPercentage?.toFixed(2) || '0.00';
   const [major, minor] = winningPercentage.split('.');
 
-  const openMovieDetailsHandler = (
-    e: React.MouseEvent | React.KeyboardEvent
-  ) => {
-    if (
-      (e.type === 'keydown' && (e as React.KeyboardEvent).key === 'Enter') ||
-      e.type === 'click'
-    ) {
-      openMovieDetails(movie.tmdbId || '');
-    }
-  };
-
   return (
     <li
-      css={getContainerStyles(movie.posterUrl || '')}
+      css={getContainerStyles(movie.posterPath || '')}
       role="button"
       tabIndex={0}
-      onClick={openMovieDetailsHandler}
-      onKeyDown={openMovieDetailsHandler}
       aria-label={`Open details for ${movie.title}`}
       data-testid={`movie-item-${movie.tmdbId}`}
     >
-      <div css={baphStyles.posterWrapper} title={movie.title}>
-        <img src={movie.posterUrl} alt={movie.title} css={baphStyles.poster} />
-        <div css={baphStyles.scoreWrapper}>
-          <span css={baphStyles.major}>{major}.</span>
-          <span css={baphStyles.minor}>{minor}</span>
+      <Link
+        to={`/movie/${movie.id}`}
+        aria-label={`Open details for ${movie.title}`}
+      >
+        <div css={baphStyles.posterWrapper} title={movie.title}>
+          <img
+            src={`https://image.tmdb.org/t/p/w154${movie.posterPath}`}
+            alt={movie.title}
+            css={baphStyles.poster}
+          />
+          <div css={baphStyles.scoreWrapper}>
+            <span css={baphStyles.major}>{major}.</span>
+            <span css={baphStyles.minor}>{minor}</span>
+          </div>
         </div>
-      </div>
+      </Link>
     </li>
   );
 };
 
-const getContainerStyles = (posterUrl: string): CSSObject => ({
+const getContainerStyles = (posterPath: string): CSSObject => ({
   ...baphStyles.container,
-  backgroundImage: posterUrl ? `url(${posterUrl})` : 'none'
+  backgroundImage: posterPath ? `url(${posterPath})` : 'none'
 });
 
 const baphStyles = {

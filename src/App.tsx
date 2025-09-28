@@ -33,10 +33,11 @@ import { LoginForm } from './components/LoginForm';
 import { FeedbackForm } from './components/FeedbackForm';
 import { UnauthorizedModalContent } from './components/UnauthorizedModalContent';
 import type { AuthData } from './types/CustomTypes.types';
+import { AppGlobals } from './styling/Globals';
 
 type BackdropData = {
   getRandomBackdropImage: {
-    backdropUrl: string;
+    backdropPath: string;
   };
 };
 
@@ -97,9 +98,9 @@ export const App = () => {
   useEffect(() => {
     if (backdropData) {
       const typedData = backdropData as BackdropData;
-      const { backdropUrl } = typedData.getRandomBackdropImage;
-      if (backdropUrl) {
-        setBackdrop(backdropUrl);
+      const { backdropPath } = typedData.getRandomBackdropImage;
+      if (backdropPath) {
+        setBackdrop(backdropPath);
       } else {
         console.warn('No backdrop image found');
       }
@@ -155,6 +156,7 @@ export const App = () => {
   return (
     <>
       <Globals />
+      <AppGlobals />
 
       <Heading />
 

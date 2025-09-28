@@ -1,9 +1,9 @@
 import { CSSObject } from '@emotion/react';
 import { ButtonGroup } from '@collinlucke/phantomartist';
-import { isAuthenticatedVar, isSmallOrMobileVar } from '../reactiveVars';
+import { isAuthenticatedVar, isSmallOrMobileVar } from '../../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
-import { logout } from '../utils/logout';
-import { NavMenuButton } from './NavMenuButton';
+import { logout } from '../../utils/logout';
+import { NavMenuButton } from '../NavMenuButton';
 
 type UserMenuProps = {
   setShowUserDropdown?: (show: boolean) => void;

@@ -14,9 +14,9 @@ type MovieCardProps = {
   movie: {
     id: string;
     title: string;
-    posterUrl?: string;
+    posterPath?: string;
     releaseDate?: string;
-    backdropUrl?: string;
+    backdropPath?: string;
   };
   handleVote: (movieId: string) => void;
 
@@ -91,7 +91,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
     return `${movie.title}${yearText}${voteText}`;
   };
 
-  const posterImageUrl = resizeTmdbImage(movie.posterUrl ?? '', 'w500');
+  const posterImageUrl = resizeTmdbImage(movie.posterPath ?? '', 'w500');
 
   return (
     <div
@@ -100,7 +100,11 @@ export const MovieCard: React.FC<MovieCardProps> = ({
     >
       <div
         css={[
-          getMovieCardStyles(movie.backdropUrl ?? '', posterImageUrl, isMobile),
+          getMovieCardStyles(
+            movie.backdropPath ?? '',
+            posterImageUrl,
+            isMobile
+          ),
           isVoting && baphStyles.movieCardDisabled
         ]}
         onClick={onClickHandler}
@@ -129,15 +133,15 @@ export const MovieCard: React.FC<MovieCardProps> = ({
 };
 
 const getMovieCardStyles = (
-  backdropUrl: string,
-  posterUrl: string,
+  backdropPath: string,
+  posterPath: string,
   isMobile: boolean
 ) => {
   return {
     ...baphStyles.movieCard,
-    backgroundImage: `url(${backdropUrl})`,
+    backgroundImage: `url(${backdropPath})`,
     [mediaQueries.minWidth.lg]: {
-      backgroundImage: `url(${posterUrl})`,
+      backgroundImage: `url(${posterPath})`,
       aspectRatio: isMobile ? '1.25/1' : '2/3',
       height: 'unset'
     }

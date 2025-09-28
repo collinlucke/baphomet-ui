@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@apollo/client": "^4.0.4",
-    "@collinlucke/phantomartist": "1.3.9",
+    "@collinlucke/phantomartist": "1.4.0",
     "@emotion/babel-plugin": "^11.13.5",
     "@emotion/styled": "^11.14.1",
     "@floating-ui/react": "^0.27.16",

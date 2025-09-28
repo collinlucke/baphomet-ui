@@ -2,19 +2,21 @@ import { mediaQueries } from '@collinlucke/phantomartist';
 import { CSSObject } from '@emotion/react';
 
 export const PageHeading: React.FC<{
-  title: string;
-  subtitle?: string;
+  title: string | React.ReactNode;
+  subtitle?: string | React.ReactNode;
   className?: CSSObject;
   slug?: string;
   ariaLabelledBy?: string;
   ariaDescribedBy?: string;
+  rightContent?: React.ReactNode;
 }> = ({
   title,
   subtitle,
   className,
   slug,
   ariaLabelledBy,
-  ariaDescribedBy
+  ariaDescribedBy,
+  rightContent
 }) => {
   const headingId = `heading-${slug || 'page'}`;
 
@@ -25,9 +27,12 @@ export const PageHeading: React.FC<{
       aria-labelledby={ariaLabelledBy || headingId}
       aria-describedby={subtitle ? `${headingId}-subtitle` : ariaDescribedBy}
     >
-      <h1 css={[baphStyles.heading, className?.heading]} id={headingId}>
-        {title}
-      </h1>
+      <div css={baphStyles.headingContainer}>
+        <h1 css={[baphStyles.heading, className?.heading]} id={headingId}>
+          <span>{title}</span>
+        </h1>
+        {rightContent}
+      </div>
       {subtitle && (
         <h4
           css={[baphStyles.subtitle, className?.subtitle]}
@@ -42,12 +47,21 @@ export const PageHeading: React.FC<{
 
 const baphStyles = {
   heading: {
+    display: 'flex',
+    alignItems: 'baseline',
+    justifyContent: 'space-between',
     margin: 0,
     lineHeight: '1.2',
     fontSize: '1.75rem',
     [mediaQueries.minWidth.md]: {
       fontSize: '2rem'
     }
+  },
+  headingContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    position: 'relative' as const
   },
   subtitle: {
     margin: '0.5rem 0 0 0',

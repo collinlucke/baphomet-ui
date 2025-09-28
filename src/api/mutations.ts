@@ -1,7 +1,5 @@
 import { gql } from '@apollo/client';
 
-// TODO: Update to handle uploading movie posters
-
 export const ADD_MOVIE = gql`
   mutation addMovie(
     $title: String!
@@ -9,9 +7,12 @@ export const ADD_MOVIE = gql`
     $overview: String
     $genres: [String]
     $revenue: String
-    $posterUrl: String
-    $backdropUrl: String
+    $posterPath: String
+    $backdropPath: String
     $tmdbId: String
+    $tagline: String
+    $topBilledCast: [CastMemberInput]
+    $directors: [DirectorInput]
     $addedBy: ID
     $lastUpdated: DateTime
     $createdAt: DateTime
@@ -20,15 +21,18 @@ export const ADD_MOVIE = gql`
     $winningPercentage: Float
     $totalComparisons: Int
   ) {
-    newMovie: addMovie(
+    addMovie(
       title: $title
       releaseDate: $releaseDate
       overview: $overview
       genres: $genres
       revenue: $revenue
-      posterUrl: $posterUrl
-      backdropUrl: $backdropUrl
+      posterPath: $posterPath
+      backdropPath: $backdropPath
       tmdbId: $tmdbId
+      tagline: $tagline
+      topBilledCast: $topBilledCast
+      directors: $directors
       addedBy: $addedBy
       lastUpdated: $lastUpdated
       createdAt: $createdAt
@@ -37,49 +41,94 @@ export const ADD_MOVIE = gql`
       winningPercentage: $winningPercentage
       totalComparisons: $totalComparisons
     ) {
-      id
-      title
-      releaseDate
-      overview
-      genres
-      revenue
-      posterUrl
-      backdropUrl
-      tmdbId
-      totalWins
-      totalLosses
-      winningPercentage
-      totalComparisons
-      addedBy
-      lastUpdated
-      createdAt
+      success
+      message
+      movie {
+        id
+        title
+        releaseDate
+        overview
+        genres
+        revenue
+        posterPath
+        backdropPath
+        tmdbId
+        tagline
+        topBilledCast {
+          id
+          name
+          character
+          profilePath
+        }
+        directors {
+          id
+          name
+          profilePath
+        }
+        totalWins
+        totalLosses
+        winningPercentage
+        totalComparisons
+      }
     }
   }
 `;
 
 export const UPDATE_MOVIE = gql`
   mutation updateMovie(
-    $id: ID!
-    $title: String!
-    $rated: String
+    $id: String!
+    $title: String
     $releaseDate: String
-    $posterUrl: String
+    $posterPath: String
+    $backdropPath: String
+    $tmdbId: String
     $overview: String
+    $genres: [String]
+    $revenue: String
+    $tagline: String
+    $topBilledCast: [CastMemberInput]
+    $directors: [DirectorInput]
   ) {
-    updatedMovie: updateMovie(
+    updateMovie(
       id: $id
       title: $title
-      rated: $rated
       releaseDate: $releaseDate
-      posterUrl: $posterUrl
+      posterPath: $posterPath
+      backdropPath: $backdropPath
+      tmdbId: $tmdbId
       overview: $overview
+      genres: $genres
+      revenue: $revenue
+      tagline: $tagline
+      topBilledCast: $topBilledCast
+      directors: $directors
     ) {
+      id
       title
       releaseDate
-      rated
-      id
-      posterUrl
       overview
+      genres
+      revenue
+      posterPath
+      backdropPath
+      tmdbId
+      tagline
+      topBilledCast {
+        id
+        name
+        profilePath
+        role
+      }
+      directors {
+        id
+        name
+        profilePath
+        role
+      }
+      totalWins
+      totalLosses
+      winningPercentage
+      totalComparisons
     }
   }
 `;
@@ -214,6 +263,10 @@ export const UPDATE_PROFILE = gql`
       email
       displayName
       birthday
+      totalVotes
+      joinDate
+      role
+      emailVerified
       avatarUrl
     }
   }

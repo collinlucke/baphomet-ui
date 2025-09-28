@@ -1,7 +1,7 @@
 import { Avatar, SlideOutMenu } from '@collinlucke/phantomartist';
 import { MainNavLinks } from './MainNavLinks';
 import { LogoLink } from '../LogoLink';
-import { UserMenu } from '../UserMenu';
+import { UserMenu } from './UserMenu';
 import { UnauthorizedButtons } from './UnauthorizedButtons';
 import {
   showSlideOutMenuVar,

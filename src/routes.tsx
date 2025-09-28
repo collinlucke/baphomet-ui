@@ -8,6 +8,7 @@ import { AddMoviesPage } from './pages/AddMovies/AddMoviesPage.tsx';
 import { LeaderboardPage } from './pages/Leaderboard/LeaderboardPage.tsx';
 import { FAQPage } from './pages/FAQ/FAQPage.tsx';
 import { ProfilePage } from './pages/Profile/ProfilePage.tsx';
+import { MovieDetailsPage } from './pages/MovieDetails/MovieDetailsPage.tsx';
 
 const routes = [
   {
@@ -39,6 +40,10 @@ const routes = [
       {
         path: 'profile',
         element: <ProtectedRoute element={ProfilePage} />
+      },
+      {
+        path: 'movie/:id',
+        element: <MovieDetailsPage />
       }
     ]
   }

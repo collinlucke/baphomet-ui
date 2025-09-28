@@ -30,13 +30,12 @@ export const ProfilePage = () => {
   const user = localStorage.getItem('baphomet-user')
     ? JSON.parse(localStorage.getItem('baphomet-user') || '{}')
     : null;
-  console.log(user);
+
   const [updateProfile] = useMutation(UPDATE_PROFILE);
   const [changePassword] = useMutation(CHANGE_PASSWORD);
 
   useEffect(() => {
     if (user) {
-      console.log('User found:', user);
       setFormData(prev => ({
         ...prev,
         id: user.id || '',
@@ -65,7 +64,6 @@ export const ProfilePage = () => {
 
   const handleProfileSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
     updateProfile({ variables: { ...formData } });
   };
 

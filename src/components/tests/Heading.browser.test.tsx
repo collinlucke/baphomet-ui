@@ -55,7 +55,6 @@ describe('Heading', () => {
       );
 
       const homeLink = await screen.getByTestId('home-link');
-      console.log(homeLink);
 
       expect(homeLink).toBeVisible();
       expect(screen.getByText('Baphomet')).toBeVisible();

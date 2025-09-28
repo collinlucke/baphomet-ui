@@ -1,3 +1,5 @@
+import { baseColors } from '@collinlucke/phantomartist';
+
 export const baphColors = {
   primary: '#0B1828',
   secondary: '#146B68',
@@ -182,6 +184,12 @@ export const baphTypography = {
       textTransform: 'uppercase' as const
     }
   }
+};
+
+export const baphScrollbarStyles = {
+  sbTrackColor: baseColors.secondary[400],
+  sbThumbColor: baseColors.secondary[700],
+  sbSize: '5px'
 };
 
 // Semantic color mappings

@@ -21,7 +21,7 @@ import { useReactiveVar } from '@apollo/client/react';
 type Movie = {
   id: string;
   title: string;
-  posterUrl?: string;
+  posterPath?: string;
   releaseDate?: string;
   genres?: string[];
   winningPercentage?: number;

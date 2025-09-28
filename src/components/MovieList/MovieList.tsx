@@ -17,12 +17,12 @@ type Movie = {
   title: string;
   releaseDate?: string;
   rated?: string;
-  posterUrl?: string;
+  posterPath?: string;
   winningPercentage: number;
   overview?: string;
   genres?: string[];
   revenue?: number;
-  backdropUrl?: string;
+  backdropPath?: string;
   tmdbId: string;
 };
 
