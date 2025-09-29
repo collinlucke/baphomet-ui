@@ -9,6 +9,7 @@ export default [
       'dist/**/*',
       'build/**/*',
       'node_modules/**/*',
+      'phantomartist/**/*',
       '*.config.js',
       '*.config.mjs',
       'dev-phantomartist.js',
