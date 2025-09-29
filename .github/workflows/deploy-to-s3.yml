@@ -23,17 +23,36 @@ jobs:
           node-version: '18'
           cache: 'pnpm'
 
+      - name: Checkout PhantomArtist
+        uses: actions/checkout@v3
+        with:
+          repository: collinlucke/phantomartist
+          path: phantomartist
+
+      - name: Install and Build PhantomArtist
+        run: |
+          cd phantomartist
+          pnpm install
+          pnpm build
+          cd ..
+
+      - name: Setup Node.js with GitHub Packages
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@collinlucke'
+
       - name: Setup production environment
         run: |
           echo "shamefully-hoist=true" > .npmrc
           echo "strict-peer-dependencies=false" >> .npmrc
-          rm -f pnpm-workspace.yaml
+          echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
 
       - name: Install dependencies
         run: pnpm install
-
-      - name: Setup PhantomArtist for production
-        run: node setup-phantomartist.js --prod
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Vite app
         run: pnpm build
