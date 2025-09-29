@@ -17,11 +17,20 @@ jobs:
         with:
           version: 8
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
       - name: Install dependencies
-        run: pnpm install
+        run: |
+          cd ../..  # Navigate to root workspace directory
+          pnpm install
+          cd baphomet-ui
 
       - name: Build Vite app
         run: pnpm build
+        working-directory: ./baphomet-ui
 
       - name: Sync to S3
         uses: jakejarvis/s3-sync-action@master
