@@ -23,14 +23,17 @@ jobs:
           node-version: '18'
           cache: 'pnpm'
 
-      - name: Initial dependencies install
+      - name: Setup production environment
+        run: |
+          echo "shamefully-hoist=true" > .npmrc
+          echo "strict-peer-dependencies=false" >> .npmrc
+          rm -f pnpm-workspace.yaml
+
+      - name: Install dependencies
         run: pnpm install
 
       - name: Setup PhantomArtist for production
         run: node setup-phantomartist.js --prod
-
-      - name: Install updated dependencies
-        run: pnpm install
 
       - name: Build Vite app
         run: pnpm build
