@@ -23,10 +23,13 @@ jobs:
           node-version: '18'
           cache: 'pnpm'
 
+      - name: Initial dependencies install
+        run: pnpm install
+
       - name: Setup PhantomArtist for production
         run: node setup-phantomartist.js --prod
 
-      - name: Install dependencies
+      - name: Install updated dependencies
         run: pnpm install
 
       - name: Build Vite app
