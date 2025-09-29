@@ -23,14 +23,12 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: |
-          cd ../..  # Navigate to root workspace directory
-          pnpm install
-          cd baphomet-ui
+        run: pnpm install --no-frozen-lockfile
+        working-directory: ./
 
       - name: Build Vite app
         run: pnpm build
-        working-directory: ./baphomet-ui
+        working-directory: ./
 
       - name: Sync to S3
         uses: jakejarvis/s3-sync-action@master
