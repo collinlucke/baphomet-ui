@@ -21,14 +21,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
-        working-directory: ./
+        run: pnpm install
 
       - name: Build Vite app
         run: pnpm build
-        working-directory: ./
 
       - name: Sync to S3
         uses: jakejarvis/s3-sync-action@master
