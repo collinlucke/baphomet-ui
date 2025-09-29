@@ -23,6 +23,9 @@ jobs:
           node-version: '18'
           cache: 'pnpm'
 
+      - name: Setup PhantomArtist for production
+        run: node setup-phantomartist.js --prod
+
       - name: Install dependencies
         run: pnpm install
 
