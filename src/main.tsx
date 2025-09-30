@@ -27,8 +27,8 @@ const getBackendUrl = () => {
     return `http://${window.location.hostname}:5050/graphql`;
   }
   return (
-    import.meta.env.GRAPHQL_BAPHOMET_SERVER_RENDER_URL ||
-    'https://baphomet-server.onrender.com/graphql'
+    import.meta.env.VITE_AWS_BAPHOMET_SERVER_URL ||
+    'https://api.baphomet.collinlucke.com/graphql'
   );
 };
 
