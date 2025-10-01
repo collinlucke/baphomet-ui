@@ -1,7 +1,46 @@
+# services:
+#   - type: web
+#     name: baphomet-ui
+#     env: static
+#     buildCommand: |
+#       echo "Installing pnpm..."
+#       npm install -g pnpm@8
+
+#       echo "Setting up .npmrc..."
+#       echo "shamefully-hoist=true" > .npmrc
+#       echo "strict-peer-dependencies=false" >> .npmrc
+#       echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
+#       echo "//npm.pkg.github.com/:_authToken=${GIT_REGISTRY_TOKEN}" >> .npmrc
+
+#       echo "Installing dependencies..."
+#       pnpm install --frozen-lockfile --verbose
+
+#       echo "Running TypeScript compilation..."
+#       pnpm exec tsc --diagnostics
+
+#       echo "Starting Vite build..."
+#       pnpm exec vite build --debug --logLevel info
+
+#       rm -f .npmrc
+#     staticPublishPath: ./dist
+#     buildFilter:
+#       paths:
+#         - src/**
+#         - public/**
+#         - package.json
+#         - pnpm-lock.yaml
+#         - tsconfig.json
+#         - vite.config.mjs
+#     envVars:
+#       - key: GRAPHQL_BAPHOMET_SERVER_RENDER_URL
+#         value: https://baphomet-server.onrender.com/graphql
+#       - key: GIT_REGISTRY_TOKEN
+#         sync: false # This makes it a secret environment variable
+
 services:
-  - type: web
-    name: baphomet-ui
-    env: static
+  - type: worker
+    name: baphomet-ui-debug
+    env: node
     buildCommand: |
       echo "Installing pnpm..."
       npm install -g pnpm@8
@@ -22,17 +61,11 @@ services:
       pnpm exec vite build --debug --logLevel info
 
       rm -f .npmrc
-    staticPublishPath: ./dist
-    buildFilter:
-      paths:
-        - src/**
-        - public/**
-        - package.json
-        - pnpm-lock.yaml
-        - tsconfig.json
-        - vite.config.mjs
+    startCommand: |
+      echo "Build complete. Sleeping to keep logs alive..."
+      sleep 3600
     envVars:
       - key: GRAPHQL_BAPHOMET_SERVER_RENDER_URL
         value: https://baphomet-server.onrender.com/graphql
       - key: GIT_REGISTRY_TOKEN
-        sync: false # This makes it a secret environment variable
+        sync: false
