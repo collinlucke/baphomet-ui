@@ -35,13 +35,22 @@ jobs:
         run: |
           echo "Checking .npmrc content (auth token hidden):"
           cat .npmrc | sed 's/authToken=.*/authToken=[hidden]/'
-          echo "Auth token present: ${{ secrets.GIT_REGISTRY_TOKEN}}"
+          if [ -z "${{ secrets.GIT_REGISTRY_TOKEN }}" ]; then
+            echo "ERROR: GIT_REGISTRY_TOKEN is empty!"
+            exit 1
+          fi
+          echo "Auth token length: ${#GIT_REGISTRY_TOKEN}"
+        env:
+          GIT_REGISTRY_TOKEN: ${{ secrets.GIT_REGISTRY_TOKEN }}
 
       - name: Install dependencies
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GIT_REGISTRY_TOKEN }}
           GIT_REGISTRY_TOKEN: ${{ secrets.GIT_REGISTRY_TOKEN }}
-        run: pnpm install
+        run: |
+          echo "Testing package access..."
+          pnpm view @collinlucke/phantomartist@1.4.0 || exit 1
+          echo "Package is accessible, proceeding with install..."
+          pnpm install
 
       - name: Build
         run: pnpm build
