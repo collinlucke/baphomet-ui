@@ -1,65 +1,20 @@
 services:
   - type: static
     name: baphomet-ui
-    buildCommand: |
-      echo "Setting up Node environment..."
-      export NODE_VERSION=18
-      export NODE_ENV=production
-      export PATH="/opt/render/project/node/bin:$PATH"
-
-      echo "Installing pnpm..."
-      npm install -g pnpm@8
-
-      # Setup .npmrc
-      echo "Setting up .npmrc..."
-      cp .npmrc.render .npmrc
-
-      # Debug
-      echo "Node version: $(node --version)"
-      echo "PNPM version: $(pnpm --version)"
-
-      # Clear and reinstall
-      echo "Installing dependencies..."
-      rm -f pnpm-lock.yaml
-      
-      # Explicitly install phantomartist from NPM
-      echo "Installing phantomartist from NPM..."
-      pnpm install @collinlucke/phantomartist@1.4.1 --registry https://registry.npmjs.org/
-      
-      # Install rest of dependencies
-      pnpm install --no-frozen-lockfile
-
-      # Build
-      echo "Starting build process..."
-      set -e
-      pnpm build
-
-      # Cleanup
-      rm -f .npmrc
-
-      # Verify build output
-      echo "Verifying build output..."
-      if [ ! -d "dist" ]; then
-        echo "Error: dist directory not found!"
-        exit 1
-      fi
-      echo "Build output:"
-      ls -la dist/
-
-      rm -f .npmrc
+    buildCommand: cp .npmrc.render .npmrc && pnpm build
     staticPublishPath: dist
     routes:
       - type: rewrite
         source: /*
         destination: /index.html
-      paths:
-        - src/**
-        - public/**
-        - package.json
-        - pnpm-lock.yaml
-        - tsconfig.json
-        - vite.config.mjs
-        - .npmrc.render
+      - paths:
+          - src/**
+          - public/**
+          - package.json
+          - pnpm-lock.yaml
+          - tsconfig.json
+          - vite.config.mjs
+          - .npmrc.render
     envVars:
       - key: GRAPHQL_BAPHOMET_SERVER_RENDER_URL
         value: https://baphomet-server.onrender.com/graphql
