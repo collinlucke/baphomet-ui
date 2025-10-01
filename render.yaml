@@ -1,20 +1,18 @@
 services:
   - type: static
     name: baphomet-ui
-    buildCommand: cp .npmrc.render .npmrc && pnpm build
+    buildCommand: |
+      echo "Setting up .npmrc..."
+      cp .npmrc.render .npmrc
+      echo "Installing dependencies..."
+      pnpm install --no-frozen-lockfile
+      echo "Building project..."
+      pnpm build
     staticPublishPath: dist
     routes:
       - type: rewrite
         source: /*
         destination: /index.html
-      - paths:
-          - src/**
-          - public/**
-          - package.json
-          - pnpm-lock.yaml
-          - tsconfig.json
-          - vite.config.mjs
-          - .npmrc.render
     envVars:
       - key: GRAPHQL_BAPHOMET_SERVER_RENDER_URL
         value: https://baphomet-server.onrender.com/graphql
