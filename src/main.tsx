@@ -28,7 +28,7 @@ const getBackendUrl = () => {
   }
   return (
     import.meta.env.VITE_BAPHOMET_SERVER_URL ||
-    'https://baphomet-server.onrender.com'
+    'https://baphomet-server.onrender.com/graphql'
   );
 };
 
