@@ -2,22 +2,43 @@ services:
   - type: web
     name: baphomet-ui
     env: node
+    runtime: node
+    nodeVersion: 22
     buildCommand: |
+      # Install pnpm
       echo "Installing pnpm..."
       npm install -g pnpm@8
 
+      # Setup Node environment
+      echo "Setting up Node environment..."
+      export NODE_VERSION=22
+      export NODE_ENV=production
+
+      # Setup .npmrc
       echo "Setting up .npmrc..."
       echo "shamefully-hoist=true" > .npmrc
       echo "strict-peer-dependencies=false" >> .npmrc
       echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
       echo "//npm.pkg.github.com/:_authToken=${GIT_REGISTRY_TOKEN}" >> .npmrc
 
-      echo "Installing dependencies..."
-      PNPM_HOME="/pnpm" PATH="$PNPM_HOME:$PATH" pnpm install --frozen-lockfile
+      # Debug
+      echo "Node version: $(node --version)"
+      echo "PNPM version: $(pnpm --version)"
+      echo "Checking .npmrc content (auth token hidden):"
+      cat .npmrc | sed 's/authToken=.*/authToken=[hidden]/'
 
+      # Clear and reinstall
+      echo "Installing dependencies..."
+      rm -f pnpm-lock.yaml
+      pnpm install --no-frozen-lockfile
+
+      # Build
       echo "Starting build process..."
-      set -e  # Make script exit on any error
-      PNPM_HOME="/pnpm" PATH="$PNPM_HOME:$PATH" pnpm build
+      set -e
+      pnpm build
+
+      # Cleanup
+      rm -f .npmrc
 
       # Verify build output
       echo "Verifying build output..."
