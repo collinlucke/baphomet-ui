@@ -1,4 +1,4 @@
-import { Avatar, SlideOutMenu } from '@collinlucke/phantomartist';
+import { Avatar, SlideOutMenu } from 'phantomartist';
 import { MainNavLinks } from './MainNavLinks';
 import { LogoLink } from '../LogoLink';
 import { UserMenu } from './UserMenu';

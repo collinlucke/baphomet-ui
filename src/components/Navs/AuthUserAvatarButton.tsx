@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Avatar, Button, Dropdown } from '@collinlucke/phantomartist';
+import { Avatar, Button, Dropdown } from 'phantomartist';
 import { UserMenu } from './UserMenu';
 
 type AuthUserAvatarProps = {

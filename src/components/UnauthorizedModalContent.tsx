@@ -1,5 +1,5 @@
 import { ModalContent } from './ModalContent';
-import { Button } from '@collinlucke/phantomartist';
+import { Button } from 'phantomartist';
 
 export const UnauthorizedModalContent: React.FC = () => {
   return (

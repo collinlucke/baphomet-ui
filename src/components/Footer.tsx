@@ -1,6 +1,6 @@
 import { CSSObject } from '@emotion/react';
 import { showFeedbackModalVar } from '../reactiveVars';
-import { baseColors, mediaQueries } from '@collinlucke/phantomartist';
+import { baseColors, mediaQueries } from 'phantomartist';
 import { Link } from 'react-router-dom';
 import { Github01Icon } from 'hugeicons-react';
 

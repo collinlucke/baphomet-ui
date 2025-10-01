@@ -8,7 +8,7 @@ import {
   baseColors,
   baseVibrantColors,
   mediaQueries
-} from '@collinlucke/phantomartist';
+} from 'phantomartist';
 import { Camera02Icon } from 'hugeicons-react';
 import { CSSObject } from '@emotion/react';
 import { CHANGE_PASSWORD, UPDATE_PROFILE } from '../../api/mutations';

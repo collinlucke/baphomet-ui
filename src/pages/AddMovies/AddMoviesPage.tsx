@@ -8,7 +8,7 @@ import {
   baseVibrantColors,
   mediaQueries,
   Label
-} from '@collinlucke/phantomartist';
+} from 'phantomartist';
 import { BodySection } from '../../components/BodySection';
 import { CSSObject } from '@emotion/react';
 import { ADD_MOVIE, UPDATE_MOVIE } from '../../api/mutations';

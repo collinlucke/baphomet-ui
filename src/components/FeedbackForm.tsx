@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client/react';
-import { Button, InputField } from '@collinlucke/phantomartist';
+import { Button, InputField } from 'phantomartist';
 import { CSSObject } from '@emotion/react';
 import { ModalContent } from './ModalContent';
 import { SUBMIT_FEEDBACK } from '../api/mutations';

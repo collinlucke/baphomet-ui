@@ -1,4 +1,4 @@
-import { Block, InnerWidth, mediaQueries } from '@collinlucke/phantomartist';
+import { Block, InnerWidth, mediaQueries } from 'phantomartist';
 import { CSSObject } from '@emotion/react';
 
 type BodySectionProps = {

@@ -9,7 +9,7 @@ import {
 } from '@apollo/client/core';
 import { ApolloProvider } from '@apollo/client/react';
 import { ThemeProvider } from '@emotion/react';
-import { baseTheme } from '@collinlucke/phantomartist';
+import { baseTheme } from 'phantomartist';
 import routes from './routes';
 import { logEnvironmentInfo } from './utils/environment';
 import 'dotenv';

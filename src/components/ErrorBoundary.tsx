@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { useNavigate, useRouteError } from 'react-router-dom';
-import { ButtonGroup, Modal, Button } from '@collinlucke/phantomartist';
+import { ButtonGroup, Modal, Button } from 'phantomartist';
 import { CustomErrorTypes } from '../types/CustomTypes.types';
 import { errorVar } from '../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';

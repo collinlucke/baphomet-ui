@@ -1,4 +1,4 @@
-import { mediaQueries } from '@collinlucke/phantomartist';
+import { mediaQueries } from 'phantomartist';
 import { CSSObject } from '@emotion/react';
 
 export const PageHeading: React.FC<{

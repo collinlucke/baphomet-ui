@@ -10,7 +10,7 @@ import {
   baseColors,
   baseVibrantColors,
   mediaQueries
-} from '@collinlucke/phantomartist';
+} from 'phantomartist';
 import { CSSObject } from '@emotion/react';
 import {
   isLargeScreenVar,

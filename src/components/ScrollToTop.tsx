@@ -1,5 +1,5 @@
 import { CSSObject } from '@emotion/react';
-import { Button } from '@collinlucke/phantomartist';
+import { Button } from 'phantomartist';
 import { ArrowUp01Icon } from 'hugeicons-react';
 
 export const ScrollToTop = () => {

@@ -1,4 +1,4 @@
-import { List, AccordionListItem } from '@collinlucke/phantomartist';
+import { List, AccordionListItem } from 'phantomartist';
 import { BodySection } from '../../components/BodySection';
 import { PageHeading } from '../../components/PageHeading';
 import { questions } from './faqs.tsx';

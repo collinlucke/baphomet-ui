@@ -1,4 +1,4 @@
-import { ButtonGroup } from '@collinlucke/phantomartist';
+import { ButtonGroup } from 'phantomartist';
 import { NavMenuButton } from '../NavMenuButton';
 import { showSlideOutMenuVar, isSmallOrMobileVar } from '../../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';

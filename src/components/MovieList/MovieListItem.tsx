@@ -4,7 +4,7 @@ import {
   baseColors,
   baseVibrantColors,
   mediaQueries
-} from '@collinlucke/phantomartist';
+} from 'phantomartist';
 
 export type MovieListItemProps = {
   movie: {

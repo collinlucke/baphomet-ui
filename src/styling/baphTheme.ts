@@ -1,4 +1,4 @@
-import { baseColors } from '@collinlucke/phantomartist';
+import { baseColors } from 'phantomartist';
 
 export const baphColors = {
   primary: '#0B1828',

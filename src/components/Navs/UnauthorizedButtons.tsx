@@ -1,4 +1,4 @@
-import { Button, ButtonGroup } from '@collinlucke/phantomartist';
+import { Button, ButtonGroup } from 'phantomartist';
 import {
   showLoginModalVar,
   showSignUpModalVar,

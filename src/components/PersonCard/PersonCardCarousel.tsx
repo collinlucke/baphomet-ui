@@ -1,7 +1,7 @@
 import { isMobileVar } from '../../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
 import { PersonCard } from './PersonCard';
-import { baseColors } from '@collinlucke/phantomartist';
+import { baseColors } from 'phantomartist';
 import type { PersonProps } from './PersonCard';
 
 type PersonCardCarouselProps = {

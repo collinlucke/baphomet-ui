@@ -4,7 +4,7 @@ import {
   baseVibrantColors,
   Button,
   Modal
-} from '@collinlucke/phantomartist';
+} from 'phantomartist';
 import type { PossibleMovieMatch } from './AddMoviesPage';
 
 type PossibleMovieMatchesProps = {

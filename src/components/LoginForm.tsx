@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client/react';
-import { InputField, Button } from '@collinlucke/phantomartist';
+import { InputField, Button } from 'phantomartist';
 import { CSSObject } from '@emotion/react';
 import { LOGIN } from '../api/mutations';
 import { LoginFormData, LoginFormProps } from '../types/auth.types';

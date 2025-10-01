@@ -1,7 +1,7 @@
 import { isAuthenticatedVar } from '../../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
 import React from 'react';
-import { Button, baseColors } from '@collinlucke/phantomartist';
+import { Button, baseColors } from 'phantomartist';
 import { Delete02Icon } from 'hugeicons-react';
 
 export type PersonProps = {

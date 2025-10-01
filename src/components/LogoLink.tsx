@@ -1,4 +1,4 @@
-import { mediaQueries } from '@collinlucke/phantomartist';
+import { mediaQueries } from 'phantomartist';
 import { Link } from 'react-router-dom';
 import { showSlideOutMenuVar, isMobileVar } from '../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';

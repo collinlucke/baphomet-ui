@@ -6,7 +6,7 @@ import {
   baseColors,
   mediaQueries,
   Modal
-} from '@collinlucke/phantomartist';
+} from 'phantomartist';
 import { GET_MOVIE_BY_TMDB_ID } from '../../api/queries';
 import { MovieListItem } from './MovieListItem';
 import { baphColorVariations } from '../../styling/baphTheme';

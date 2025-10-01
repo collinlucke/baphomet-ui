@@ -1,7 +1,7 @@
 import { CSSObject } from '@emotion/react';
 import { Link } from 'react-router-dom';
 import { BodySection } from '../../components/BodySection';
-import { Button } from '@collinlucke/phantomartist';
+import { Button } from 'phantomartist';
 import { MovieList } from '../../components/MovieList/MovieList';
 import { GET_ALL_MOVIES } from '../../api/queries';
 import { useQuery } from '@apollo/client/react';

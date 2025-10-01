@@ -19,7 +19,7 @@ import { useReactiveVar } from '@apollo/client/react';
 import { LOGIN, SIGNUP } from '../../api/mutations';
 import { mockLocalStorage } from './__mocks__/mockLocalStorage';
 import { ThemeProvider } from '@emotion/react';
-import { baseTheme } from '@collinlucke/phantomartist';
+import { baseTheme } from 'phantomartist';
 
 beforeEach(() => {
   mockLocalStorage();

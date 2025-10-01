@@ -3,7 +3,7 @@ import { PageHeading } from '../../components/PageHeading';
 import { GET_MOVIE_DETAILS } from '../../api/queries';
 import { useQuery } from '@apollo/client/react';
 import { useParams } from 'react-router-dom';
-import { baseColors } from '@collinlucke/phantomartist';
+import { baseColors } from 'phantomartist';
 
 type MovieDetailsResponse = {
   movieResults: {

@@ -1,4 +1,4 @@
-import { Header, mediaQueries, Button } from '@collinlucke/phantomartist';
+import { Header, mediaQueries, Button } from 'phantomartist';
 import { Menu01Icon } from 'hugeicons-react';
 import { LogoLink } from './LogoLink';
 import {

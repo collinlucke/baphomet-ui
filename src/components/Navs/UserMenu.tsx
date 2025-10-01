@@ -1,5 +1,5 @@
 import { CSSObject } from '@emotion/react';
-import { ButtonGroup } from '@collinlucke/phantomartist';
+import { ButtonGroup } from 'phantomartist';
 import { isAuthenticatedVar, isSmallOrMobileVar } from '../../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
 import { logout } from '../../utils/logout';

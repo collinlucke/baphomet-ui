@@ -1,4 +1,4 @@
-import { baseColors } from '@collinlucke/phantomartist';
+import { baseColors } from 'phantomartist';
 
 type ModalContentProps = {
   title: string;

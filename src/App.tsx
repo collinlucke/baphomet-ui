@@ -9,7 +9,7 @@ import {
   Modal,
   mediaQueries,
   screenSizes
-} from '@collinlucke/phantomartist';
+} from 'phantomartist';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import {
   errorVar,

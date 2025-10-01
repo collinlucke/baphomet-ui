@@ -11,7 +11,7 @@
 //   scanPageContrast
 //   getContrastRatio,
 //   checkWCAGCompliance
-// } from '@collinlucke/phantomartist';
+// } from 'phantomartist';
 // import { baphColors } from '../styling/baphTheme';
 
 // Define Baphomet-specific color combinations

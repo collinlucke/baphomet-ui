@@ -2,7 +2,7 @@ import {
   baseVibrantColors,
   baseColors,
   mediaQueries
-} from '@collinlucke/phantomartist';
+} from 'phantomartist';
 import { CSSObject } from '@emotion/react';
 import { isMobileVar } from '../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
