@@ -21,6 +21,12 @@ services:
       # Clear and reinstall
       echo "Installing dependencies..."
       rm -f pnpm-lock.yaml
+      
+      # Explicitly install phantomartist from NPM
+      echo "Installing phantomartist from NPM..."
+      pnpm install @collinlucke/phantomartist@1.4.1 --registry https://registry.npmjs.org/
+      
+      # Install rest of dependencies
       pnpm install --no-frozen-lockfile
 
       # Build
