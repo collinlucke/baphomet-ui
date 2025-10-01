@@ -18,14 +18,10 @@ services:
       echo "Setting up .npmrc..."
       echo "shamefully-hoist=true" > .npmrc
       echo "strict-peer-dependencies=false" >> .npmrc
-      echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
-      echo "//npm.pkg.github.com/:_authToken=${GIT_REGISTRY_TOKEN}" >> .npmrc
 
       # Debug
       echo "Node version: $(node --version)"
       echo "PNPM version: $(pnpm --version)"
-      echo "Checking .npmrc content (auth token hidden):"
-      cat .npmrc | sed 's/authToken=.*/authToken=[hidden]/'
 
       # Clear and reinstall
       echo "Installing dependencies..."
