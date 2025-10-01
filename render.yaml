@@ -12,23 +12,12 @@ services:
       echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
       echo "//npm.pkg.github.com/:_authToken=${GIT_REGISTRY_TOKEN}" >> .npmrc
 
-      # Build phantomartist locally
-      echo "Cloning and building phantomartist..."
-      git clone https://github.com/collinlucke/phantomartist.git
-      cd phantomartist
-      pnpm install
-      pnpm build
-      cd ..
+      echo "Installing dependencies..."
+      PNPM_HOME="/pnpm" PATH="$PNPM_HOME:$PATH" pnpm install --frozen-lockfile
 
-      # Link phantomartist locally
-      echo "Installing and linking dependencies..."
-      pnpm install --frozen-lockfile --verbose
-      pnpm link ./phantomartist
-
-      # Build the application
       echo "Starting build process..."
       set -e  # Make script exit on any error
-      pnpm build
+      PNPM_HOME="/pnpm" PATH="$PNPM_HOME:$PATH" pnpm build
 
       # Verify build output
       echo "Verifying build output..."

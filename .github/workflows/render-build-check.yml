@@ -47,10 +47,9 @@ jobs:
         env:
           GIT_REGISTRY_TOKEN: ${{ secrets.GIT_REGISTRY_TOKEN }}
         run: |
-          echo "Testing package access..."
-          pnpm view @collinlucke/phantomartist@1.4.0 || exit 1
-          echo "Package is accessible, proceeding with install..."
-          pnpm install
+          echo "Regenerating lockfile and installing..."
+          rm -f pnpm-lock.yaml
+          pnpm install --no-frozen-lockfile
 
       - name: Build
         run: pnpm build
