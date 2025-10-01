@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: baphomet-ui
+    env: static
+    buildCommand: pnpm build
+    staticPublishPath: ./dist
+    envVars:
+      - key: GRAPHQL_BAPHOMET_SERVER_RENDER_URL
+        value: https://baphomet-server.onrender.com/graphql

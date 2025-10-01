@@ -1,0 +1,41 @@
+name: Render Build Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Setup environment
+        run: |
+          echo "shamefully-hoist=true" > .npmrc
+          echo "strict-peer-dependencies=false" >> .npmrc
+          echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
+
+      - name: Install dependencies
+        run: pnpm install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build
+        run: pnpm build
+        env:
+          GRAPHQL_BAPHOMET_SERVER_RENDER_URL: ${{ secrets.GRAPHQL_BAPHOMET_SERVER_RENDER_URL }}
