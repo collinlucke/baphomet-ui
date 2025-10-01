@@ -3,6 +3,10 @@ services:
     name: baphomet-ui
     env: static
     buildCommand: |
+      # Install pnpm
+      echo "Installing pnpm..."
+      npm install -g pnpm@8
+
       # Set up GitHub Packages authentication
       echo "shamefully-hoist=true" > .npmrc
       echo "strict-peer-dependencies=false" >> .npmrc
@@ -19,7 +23,8 @@ services:
 
       # Install dependencies
       echo "Installing dependencies..."
-      pnpm install --frozen-lockfile --verbose
+      echo "Node auth token present: ${NODE_AUTH_TOKEN:+yes}"
+      NODE_AUTH_TOKEN="${GIT_REGISTRY_TOKEN}" pnpm install --frozen-lockfile --verbose
 
       # Build the application
       echo "Building application..."
