@@ -18,7 +18,7 @@
   "dependencies": {
     "express": "^4.18.2",
     "@apollo/client": "^4.0.4",
-    "@collinlucke/phantomartist": "1.4.0",
+    "@collinlucke/phantomartist": "file:./phantomartist",
     "@emotion/babel-plugin": "^11.13.5",
     "@emotion/styled": "^11.14.1",
     "@floating-ui/react": "^0.27.16",
