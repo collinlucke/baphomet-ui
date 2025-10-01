@@ -23,8 +23,7 @@ services:
 
       # Install dependencies
       echo "Installing dependencies..."
-      echo "Node auth token present: ${NODE_AUTH_TOKEN:+yes}"
-      NODE_AUTH_TOKEN="${GIT_REGISTRY_TOKEN}" pnpm install --frozen-lockfile --verbose
+      pnpm install --frozen-lockfile --verbose
 
       # Build the application
       echo "Building application..."
@@ -46,5 +45,3 @@ services:
         value: https://baphomet-server.onrender.com/graphql
       - key: GIT_REGISTRY_TOKEN
         sync: false # This makes it a secret environment variable
-      - key: NODE_AUTH_TOKEN
-        fromVariable: GIT_REGISTRY_TOKEN # This will use the same token value

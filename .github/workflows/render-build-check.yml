@@ -35,7 +35,7 @@ jobs:
         run: |
           echo "Checking .npmrc content (auth token hidden):"
           cat .npmrc | sed 's/authToken=.*/authToken=[hidden]/'
-          echo "Auth token present: ${{ secrets.GIT_REGISTRY_TOKEN != '' }}"
+          echo "Auth token present: ${{ secrets.GIT_REGISTRY_TOKEN}}"
 
       - name: Install dependencies
         env:
