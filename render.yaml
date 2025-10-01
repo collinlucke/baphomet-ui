@@ -16,5 +16,3 @@ services:
     envVars:
       - key: GRAPHQL_BAPHOMET_SERVER_RENDER_URL
         value: https://baphomet-server.onrender.com/graphql
-      - key: GIT_REGISTRY_TOKEN
-        sync: false
