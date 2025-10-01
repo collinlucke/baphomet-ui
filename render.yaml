@@ -3,33 +3,24 @@ services:
     name: baphomet-ui
     env: static
     buildCommand: |
-      # Install pnpm
       echo "Installing pnpm..."
       npm install -g pnpm@8
 
-      # Set up GitHub Packages authentication
+      echo "Setting up .npmrc..."
       echo "shamefully-hoist=true" > .npmrc
       echo "strict-peer-dependencies=false" >> .npmrc
       echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
       echo "//npm.pkg.github.com/:_authToken=${GIT_REGISTRY_TOKEN}" >> .npmrc
 
-      # Debug environment
-      echo "Checking environment..."
-      echo "Node version: $(node --version)"
-      echo "NPM version: $(npm --version)"
-      echo "PNPM version: $(pnpm --version)"
-      echo "Checking .npmrc content:"
-      cat .npmrc | sed 's/:.*/: [hidden]/'
-
-      # Install dependencies
       echo "Installing dependencies..."
       pnpm install --frozen-lockfile --verbose
 
-      # Build the application
-      echo "Building application..."
-      pnpm build
+      echo "Running TypeScript compilation..."
+      pnpm exec tsc --diagnostics
 
-      # Cleanup sensitive data
+      echo "Starting Vite build..."
+      pnpm exec vite build --debug --logLevel info
+
       rm -f .npmrc
     staticPublishPath: ./dist
     buildFilter:
