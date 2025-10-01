@@ -57,6 +57,8 @@ jobs:
 
       - name: Build Vite app
         run: pnpm build
+        env:
+          VITE_AWS_BAPHOMET_SERVER_URL: 'https://api.baphomet.collinlucke.com/graphql'
 
       - name: Sync to S3
         uses: jakejarvis/s3-sync-action@master
