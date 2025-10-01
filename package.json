@@ -12,11 +12,9 @@
     "lint:fix": "eslint . --report-unused-disable-directives --max-warnings 50 --fix",
     "preview": "vite preview",
     "install:dev": "pnpm install && pnpm link ../phantomartist",
-    "install:prod": "pnpm install",
-    "serve": "node serve.js"
+    "install:prod": "pnpm install"
   },
   "dependencies": {
-    "express": "^4.18.2",
     "@apollo/client": "^4.0.4",
     "@collinlucke/phantomartist": "1.4.0",
     "@emotion/babel-plugin": "^11.13.5",
