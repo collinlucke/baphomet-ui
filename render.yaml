@@ -2,17 +2,13 @@ services:
   - type: static
     name: baphomet-ui
     buildCommand: |
-      # Install Node.js
+      echo "Setting up Node environment..."
       export NODE_VERSION=18
+      export NODE_ENV=production
       export PATH="/opt/render/project/node/bin:$PATH"
-      # Install pnpm
+
       echo "Installing pnpm..."
       npm install -g pnpm@8
-
-      # Setup Node environment
-      echo "Setting up Node environment..."
-      export NODE_VERSION=22
-      export NODE_ENV=production
 
       # Setup .npmrc
       echo "Setting up .npmrc..."
