@@ -12,8 +12,7 @@ services:
 
       # Setup .npmrc
       echo "Setting up .npmrc..."
-      echo "shamefully-hoist=true" > .npmrc
-      echo "strict-peer-dependencies=false" >> .npmrc
+      cp .npmrc.render .npmrc
 
       # Debug
       echo "Node version: $(node --version)"
@@ -54,8 +53,9 @@ services:
         - pnpm-lock.yaml
         - tsconfig.json
         - vite.config.mjs
+        - .npmrc.render
     envVars:
       - key: GRAPHQL_BAPHOMET_SERVER_RENDER_URL
         value: https://baphomet-server.onrender.com/graphql
       - key: GIT_REGISTRY_TOKEN
-        sync: false # This makes it a secret environment variable
+        sync: false
