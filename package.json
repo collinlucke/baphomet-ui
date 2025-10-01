@@ -7,14 +7,16 @@
     "dev:windows": "powershell -ExecutionPolicy Bypass -File scripts/dev-with-cleanup.ps1",
     "dev:simple": "vite",
     "test": "vitest",
-    "build": "echo 'Starting build...' && tsc --diagnostics || echo 'TypeScript failed' && vite build --debug --logLevel info || echo 'Vite build failed'",
+    "build": "echo 'Starting build...' && tsc --diagnostics && echo 'TypeScript complete' && vite build --debug --logLevel info",
     "lint": "eslint src/ --report-unused-disable-directives --max-warnings 50",
     "lint:fix": "eslint . --report-unused-disable-directives --max-warnings 50 --fix",
     "preview": "vite preview",
     "install:dev": "pnpm install && pnpm link ../phantomartist",
-    "install:prod": "pnpm install"
+    "install:prod": "pnpm install",
+    "serve": "node serve.js"
   },
   "dependencies": {
+    "express": "^4.18.2",
     "@apollo/client": "^4.0.4",
     "@collinlucke/phantomartist": "1.4.0",
     "@emotion/babel-plugin": "^11.13.5",

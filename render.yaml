@@ -1,7 +1,7 @@
 services:
   - type: web
+    name: baphomet-ui
     env: node
-    startCommand: "echo 'Build complete. Sleeping...' && sleep 3600"
     buildCommand: |
       echo "Installing pnpm..."
       npm install -g pnpm@8
@@ -15,14 +15,22 @@ services:
       echo "Installing dependencies..."
       pnpm install --frozen-lockfile --verbose
 
-      echo "Running TypeScript compilation..."
-      pnpm exec tsc --diagnostics
+      # Build the application
+      echo "Starting build process..."
+      set -e  # Make script exit on any error
+      pnpm build
 
-      echo "Starting Vite build..."
-      pnpm exec vite build --debug --logLevel info
+      # Verify build output
+      echo "Verifying build output..."
+      if [ ! -d "dist" ]; then
+        echo "Error: dist directory not found!"
+        exit 1
+      fi
+      echo "Build output:"
+      ls -la dist/
 
       rm -f .npmrc
-    staticPublishPath: ./dist
+    startCommand: pnpm serve
     buildFilter:
       paths:
         - src/**
