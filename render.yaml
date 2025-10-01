@@ -3,12 +3,20 @@ services:
     name: baphomet-ui
     env: static
     buildCommand: |
+      # Set up GitHub Packages authentication
+      echo "//npm.pkg.github.com/:_authToken=${GIT_REGISTRY_TOKEN}" > .npmrc
+      echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
+
+      # Install dependencies
       echo "Installing dependencies..."
       pnpm install --frozen-lockfile --verbose
+
+      # Build the application
       echo "Building application..."
       pnpm build
-      echo "Build complete. Checking dist directory..."
-      ls -la dist/
+
+      # Cleanup sensitive data
+      rm -f .npmrc
     staticPublishPath: ./dist
     buildFilter:
       paths:
@@ -21,3 +29,5 @@ services:
     envVars:
       - key: GRAPHQL_BAPHOMET_SERVER_RENDER_URL
         value: https://baphomet-server.onrender.com/graphql
+      - key: GIT_REGISTRY_TOKEN
+        sync: false # This makes it a secret environment variable
