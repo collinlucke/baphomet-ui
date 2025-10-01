@@ -7,7 +7,7 @@
     "dev:windows": "powershell -ExecutionPolicy Bypass -File scripts/dev-with-cleanup.ps1",
     "dev:simple": "vite",
     "test": "vitest",
-    "build": "echo 'Setting up dependencies...' && cp .npmrc.render .npmrc && pnpm install @collinlucke/phantomartist@1.4.1 --registry https://registry.npmjs.org/ && echo 'Starting build...' && tsc --diagnostics && echo 'TypeScript complete' && vite build --debug --logLevel info",
+    "build": "echo 'Setting up dependencies...' && cp .npmrc.render .npmrc && pnpm install @collinlucke/phantomartist@1.4.1 --registry https://registry.npmjs.org/ -w && echo 'Starting build...' && tsc --diagnostics && echo 'TypeScript complete' && vite build --debug --logLevel info",
     "lint": "eslint src/ --report-unused-disable-directives --max-warnings 50",
     "lint:fix": "eslint . --report-unused-disable-directives --max-warnings 50 --fix",
     "preview": "vite preview",
