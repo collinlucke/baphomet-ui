@@ -1,10 +1,10 @@
 services:
-  - type: web
+  - type: static
     name: baphomet-ui
-    env: node
-    runtime: node
-    nodeVersion: 22
     buildCommand: |
+      # Install Node.js
+      export NODE_VERSION=18
+      export PATH="/opt/render/project/node/bin:$PATH"
       # Install pnpm
       echo "Installing pnpm..."
       npm install -g pnpm@8
@@ -46,8 +46,11 @@ services:
       ls -la dist/
 
       rm -f .npmrc
-    startCommand: pnpm serve
-    buildFilter:
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
       paths:
         - src/**
         - public/**
