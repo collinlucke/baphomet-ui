@@ -4,8 +4,18 @@ services:
     env: static
     buildCommand: |
       # Set up GitHub Packages authentication
-      echo "//npm.pkg.github.com/:_authToken=${GIT_REGISTRY_TOKEN}" > .npmrc
+      echo "shamefully-hoist=true" > .npmrc
+      echo "strict-peer-dependencies=false" >> .npmrc
       echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
+      echo "//npm.pkg.github.com/:_authToken=${GIT_REGISTRY_TOKEN}" >> .npmrc
+
+      # Debug environment
+      echo "Checking environment..."
+      echo "Node version: $(node --version)"
+      echo "NPM version: $(npm --version)"
+      echo "PNPM version: $(pnpm --version)"
+      echo "Checking .npmrc content:"
+      cat .npmrc | sed 's/:.*/: [hidden]/'
 
       # Install dependencies
       echo "Installing dependencies..."
@@ -31,3 +41,5 @@ services:
         value: https://baphomet-server.onrender.com/graphql
       - key: GIT_REGISTRY_TOKEN
         sync: false # This makes it a secret environment variable
+      - key: NODE_AUTH_TOKEN
+        fromVariable: GIT_REGISTRY_TOKEN # This will use the same token value
