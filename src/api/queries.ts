@@ -1,11 +1,19 @@
 import { gql } from '@apollo/client';
 
 export const GET_ALL_MOVIES = gql`
-  query getAllMovies($limit: Int, $searchTerm: String, $cursor: String) {
+  query getAllMovies(
+    $title: String
+    $sortBy: String
+    $sortOrder: String
+    $limit: Int
+    $cursor: String
+  ) {
     movieResults: getMovies(
+      title: $title
       limit: $limit
-      searchTerm: $searchTerm
       cursor: $cursor
+      sortBy: $sortBy
+      sortOrder: $sortOrder
     ) {
       searchResults {
         id

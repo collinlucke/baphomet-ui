@@ -3,13 +3,7 @@ import './styling/index.css';
 import { Outlet } from 'react-router-dom';
 import { Heading } from './components/Heading';
 import { Footer } from './components/Footer';
-import {
-  Main,
-  Globals,
-  Modal,
-  mediaQueries,
-  screenSizes
-} from 'phantomartist';
+import { Main, Globals, Modal, mediaQueries, screenSizes } from 'phantomartist';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import {
   errorVar,
@@ -196,7 +190,7 @@ const getMainStyles = (backdrop?: string) => ({
     ...(typeof baphStyles.main['&::before'] === 'object'
       ? baphStyles.main['&::before']
       : {}),
-    backgroundImage: `url(${backdrop})`
+    backgroundImage: `url(https://image.tmdb.org/t/p/original${backdrop})`
   }
 });
 

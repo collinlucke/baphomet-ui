@@ -11,12 +11,11 @@
     "lint": "eslint src/ --report-unused-disable-directives --max-warnings 50",
     "lint:fix": "eslint . --report-unused-disable-directives --max-warnings 50 --fix",
     "preview": "vite preview",
-    "install:dev": "pnpm install && pnpm link ../phantomartist",
-    "install:prod": "pnpm install"
+    "install:dev": "bash scripts/use-local-phantomartist.sh",
+    "install:prod": "bash scripts/use-npm-phantomartist.sh"
   },
   "dependencies": {
     "@apollo/client": "^4.0.4",
-    "phantomartist": "1.4.1",
     "@emotion/babel-plugin": "^11.13.5",
     "@emotion/styled": "^11.14.1",
     "@floating-ui/react": "^0.27.16",
@@ -32,6 +31,7 @@
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
     "party-js": "^2.2.0",
+    "phantomartist": "latest",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "rollup-plugin-delete": "^3.0.1",

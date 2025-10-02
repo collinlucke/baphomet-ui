@@ -14,6 +14,9 @@ importers:
       '@apollo/client':
         specifier: ^4.0.4
         version: 4.0.7(graphql@16.11.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(rxjs@7.8.2)
+      '@collinlucke/phantomartist':
+        specifier: link:..\phantomartist
+        version: link:../phantomartist
       '@emotion/babel-plugin':
         specifier: ^11.13.5
         version: 11.13.5
@@ -60,8 +63,8 @@ importers:
         specifier: ^2.2.0
         version: 2.2.0
       phantomartist:
-        specifier: 1.4.1
-        version: 1.4.1(@emotion/react@11.14.0(@types/react@19.1.17)(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react-router-dom@7.9.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)
+        specifier: file:../phantomartist
+        version: file:../phantomartist(@emotion/react@11.14.0(@types/react@19.1.17)(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react-router-dom@7.9.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)
       react:
         specifier: ^19.1.1
         version: 19.1.1
@@ -2038,8 +2041,8 @@ packages:
     resolution: {integrity: sha512-//nshmD55c46FuFw26xV/xFAaB5HF9Xdap7HJBBnrKdAd6/GxDBaNA1870O79+9ueg61cZLSVc+OaFlfmObYVQ==}
     engines: {node: '>= 14.16'}
 
-  phantomartist@1.4.1:
-    resolution: {integrity: sha512-Uawb85eVHDv18m8yNx+F4lpv0xfraMWkjJs9k1mE9sS60J3zFc+J8yn37sTg8oAAO5CXNoHgZ/v/awio1rzcQQ==}
+  phantomartist@file:../phantomartist:
+    resolution: {directory: ../phantomartist, type: directory}
     peerDependencies:
       '@emotion/react': ^11.14.0
       react: ^19.1.1
@@ -4725,7 +4728,7 @@ snapshots:
 
   pathval@2.0.1: {}
 
-  phantomartist@1.4.1(@emotion/react@11.14.0(@types/react@19.1.17)(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react-router-dom@7.9.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1):
+  phantomartist@file:../phantomartist(@emotion/react@11.14.0(@types/react@19.1.17)(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react-router-dom@7.9.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1):
     dependencies:
       '@emotion/react': 11.14.0(@types/react@19.1.17)(react@19.1.1)
       hugeicons-react: 0.3.0(react@19.1.1)

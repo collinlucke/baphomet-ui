@@ -1,12 +1,7 @@
-import {
-  baseVibrantColors,
-  baseColors,
-  mediaQueries
-} from 'phantomartist';
+import { baseVibrantColors, baseColors, mediaQueries } from 'phantomartist';
 import { CSSObject } from '@emotion/react';
 import { isMobileVar } from '../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
-import { resizeTmdbImage } from '../utils/resizeTmdbImage.ts';
 import party from 'party-js';
 
 type MovieCardProps = {
@@ -91,7 +86,9 @@ export const MovieCard: React.FC<MovieCardProps> = ({
     return `${movie.title}${yearText}${voteText}`;
   };
 
-  const posterImageUrl = resizeTmdbImage(movie.posterPath ?? '', 'w500');
+  const posterImageUrl = 'https://image.tmdb.org/t/p/w500' + movie.posterPath;
+  const backdropImageUrl =
+    'https://image.tmdb.org/t/p/w780' + movie.backdropPath;
 
   return (
     <div
@@ -100,11 +97,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
     >
       <div
         css={[
-          getMovieCardStyles(
-            movie.backdropPath ?? '',
-            posterImageUrl,
-            isMobile
-          ),
+          getMovieCardStyles(backdropImageUrl, posterImageUrl, isMobile),
           isVoting && baphStyles.movieCardDisabled
         ]}
         onClick={onClickHandler}
@@ -134,14 +127,14 @@ export const MovieCard: React.FC<MovieCardProps> = ({
 
 const getMovieCardStyles = (
   backdropPath: string,
-  posterPath: string,
+  posterImageUrl: string,
   isMobile: boolean
 ) => {
   return {
     ...baphStyles.movieCard,
     backgroundImage: `url(${backdropPath})`,
     [mediaQueries.minWidth.lg]: {
-      backgroundImage: `url(${posterPath})`,
+      backgroundImage: `url(${posterImageUrl})`,
       aspectRatio: isMobile ? '1.25/1' : '2/3',
       height: 'unset'
     }
