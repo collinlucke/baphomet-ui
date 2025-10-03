@@ -4,7 +4,7 @@
 echo "Switching to production phantomartist..."
 
 # Update package.json to use NPM version
-sed -i 's/"phantomartist": "file:..\/phantomartist"/"phantomartist": "1.4.1"/' package.json
+sed -i 's/"phantomartist": "file:..\/phantomartist"/"phantomartist": "latest"/' package.json
 
 # Reinstall dependencies  
 pnpm install

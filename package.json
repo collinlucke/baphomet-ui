@@ -7,7 +7,7 @@
     "dev:windows": "powershell -ExecutionPolicy Bypass -File scripts/dev-with-cleanup.ps1",
     "dev:simple": "vite",
     "test": "vitest",
-    "build": "echo 'Starting build...' && tsc --diagnostics && echo 'TypeScript complete' && vite build --debug --logLevel info",
+    "build": "tsc && vite build",
     "lint": "eslint src/ --report-unused-disable-directives --max-warnings 50",
     "lint:fix": "eslint . --report-unused-disable-directives --max-warnings 50 --fix",
     "preview": "vite preview",

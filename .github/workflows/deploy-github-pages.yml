@@ -1,19 +1,15 @@
-name: Build and Deploy to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
-  packages: read
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: 'pages'
   cancel-in-progress: false
@@ -33,42 +29,22 @@ jobs:
         with:
           node-version: 22
 
-      - name: Setup .npmrc for GitHub packages
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "registry=https://registry.npmjs.org/" > .npmrc
-          echo "@collinlucke:registry=https://npm.pkg.github.com" >> .npmrc
-          echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
-          echo "Created .npmrc file:"
-          cat .npmrc
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
 
       - name: Install dependencies
-        run: |
-          npm install -g pnpm
-          # Clear cache to ensure latest packages are fetched
-          pnpm store prune
-          echo "Installing dependencies..."
-          # Remove files that force local linking instead of registry resolution
-          rm -f pnpm-lock.yaml
-          rm -f pnpm-workspace.yaml
-          pnpm install --verbose
-          echo "Checking if PhantomArtist was installed:"
-          ls -la node_modules/@collinlucke/ || echo "PhantomArtist not found in node_modules"
+        run: pnpm install --frozen-lockfile
 
-      - name: Build for production
+      - name: Build
         env:
           VITE_TMDB_API_KEY: ${{ secrets.VITE_TMDB_API_KEY }}
-          GRAPHQL_BAPHOMET_SERVER_RENDER_URL: https://baphomet-server.onrender.com/graphql
-          GIT_REGISTRY_TOKEN: ${{ secrets.GIT_REGISTRY_TOKEN }}
-          GITHUB_ACTIONS: true
-          GITHUB_PAGES_CUSTOM_DOMAIN: true
+          VITE_BACKEND_BASE_URL: https://baphomet-server.onrender.com
         run: pnpm build
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
-        with:
-          enablement: true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
