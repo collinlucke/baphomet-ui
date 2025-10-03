@@ -76,7 +76,7 @@ export const ADD_MOVIE = gql`
 
 export const UPDATE_MOVIE = gql`
   mutation updateMovie(
-    $id: String!
+    $id: ID!
     $title: String
     $releaseDate: String
     $posterPath: String

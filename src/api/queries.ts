@@ -54,12 +54,8 @@ export const GET_ALL_MOVIES = gql`
 `;
 
 export const GET_MOVIE_LIST_ITEMS = gql`
-  query getMovieListItems($limit: Int, $searchTerm: String, $cursor: String) {
-    movieResults: getMovies(
-      limit: $limit
-      searchTerm: $searchTerm
-      cursor: $cursor
-    ) {
+  query getMovieListItems($limit: Int, $title: String, $cursor: String) {
+    movieResults: getMovies(limit: $limit, title: $title, cursor: $cursor) {
       searchResults {
         id
         title
@@ -74,7 +70,7 @@ export const GET_MOVIE_LIST_ITEMS = gql`
 `;
 
 export const GET_MOVIE_DETAILS = gql`
-  query getMovieDetails($id: Int!) {
+  query getMovieDetails($id: ID!) {
     movieResults: getMovieDetails(id: $id) {
       id
       title
@@ -105,6 +101,24 @@ export const GET_MOVIE_DETAILS = gql`
       totalLosses
       winningPercentage
       totalComparisons
+      posterImages {
+        w92
+        w154
+        w185
+        w342
+        w500
+        w780
+        original
+      }
+      backdropImages {
+        w92
+        w154
+        w185
+        w342
+        w500
+        w780
+        original
+      }
     }
   }
 `;
@@ -276,6 +290,24 @@ export const GET_RANDOM_MATCHUP = gql`
         totalWins
         totalLosses
         totalComparisons
+        posterImages {
+          w92
+          w154
+          w185
+          w342
+          w500
+          w780
+          original
+        }
+        backdropImages {
+          w92
+          w154
+          w185
+          w342
+          w500
+          w780
+          original
+        }
       }
       movie2 {
         id
@@ -288,6 +320,24 @@ export const GET_RANDOM_MATCHUP = gql`
         totalWins
         totalLosses
         totalComparisons
+        posterImages {
+          w92
+          w154
+          w185
+          w342
+          w500
+          w780
+          original
+        }
+        backdropImages {
+          w92
+          w154
+          w185
+          w342
+          w500
+          w780
+          original
+        }
       }
       comparisonId
     }

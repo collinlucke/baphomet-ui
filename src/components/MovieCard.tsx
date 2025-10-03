@@ -12,14 +12,32 @@ type MovieCardProps = {
     posterPath?: string;
     releaseDate?: string;
     backdropPath?: string;
+    posterImages?: {
+      w92?: string;
+      w154?: string;
+      w185?: string;
+      w342?: string;
+      w500?: string;
+      w780?: string;
+      original?: string;
+    };
+    backdropImages?: {
+      w92?: string;
+      w154?: string;
+      w185?: string;
+      w342?: string;
+      w500?: string;
+      w780?: string;
+      original?: string;
+    };
   };
-  handleVote: (movieId: string) => void;
-
   ariaLabel?: string;
   ariaDescribedBy?: string;
   tabIndex?: number;
   dataTestId?: string;
   autoFocus?: boolean;
+
+  handleVote: (movieId: string) => void;
   onKeyDown?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
   onFocus?: (event: React.FocusEvent<HTMLDivElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
@@ -28,12 +46,12 @@ type MovieCardProps = {
 export const MovieCard: React.FC<MovieCardProps> = ({
   isVoting,
   movie,
-  handleVote,
   ariaLabel,
   ariaDescribedBy,
   tabIndex = 0,
   dataTestId,
   autoFocus = false,
+  handleVote,
   onKeyDown,
   onFocus,
   onBlur
@@ -86,9 +104,9 @@ export const MovieCard: React.FC<MovieCardProps> = ({
     return `${movie.title}${yearText}${voteText}`;
   };
 
-  const posterImageUrl = 'https://image.tmdb.org/t/p/w500' + movie.posterPath;
-  const backdropImageUrl =
-    'https://image.tmdb.org/t/p/w780' + movie.backdropPath;
+  const posterImageUrl = movie?.posterImages?.w342 || '';
+
+  const backdropImageUrl = movie?.backdropImages?.w780 || '';
 
   return (
     <div
@@ -126,13 +144,13 @@ export const MovieCard: React.FC<MovieCardProps> = ({
 };
 
 const getMovieCardStyles = (
-  backdropPath: string,
+  backdropImageUrl: string,
   posterImageUrl: string,
   isMobile: boolean
 ) => {
   return {
     ...baphStyles.movieCard,
-    backgroundImage: `url(${backdropPath})`,
+    backgroundImage: `url(${backdropImageUrl})`,
     [mediaQueries.minWidth.lg]: {
       backgroundImage: `url(${posterImageUrl})`,
       aspectRatio: isMobile ? '1.25/1' : '2/3',

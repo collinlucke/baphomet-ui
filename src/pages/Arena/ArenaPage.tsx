@@ -144,7 +144,7 @@ export const ArenaPage: React.FC = () => {
         <div css={baphStyles.errorContainer}>
           <p css={baphStyles.errorText}>
             {error.message.includes('Not enough movies')
-              ? 'Not enough movies available for matchups. Add more movies to get started!'
+              ? 'Not enough movies available for matchups. But how?'
               : 'Failed to load matchup. Please try again.'}
           </p>
           <Button variant="primary" size="medium" onClick={() => refetch()}>
@@ -247,7 +247,8 @@ const baphStyles: { [key: string]: CSSObject } = {
     alignItems: 'center',
     gap: '2rem',
     minHeight: '80vh',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    position: 'relative'
   },
   loadingContainer: {
     display: 'flex',
@@ -281,7 +282,10 @@ const baphStyles: { [key: string]: CSSObject } = {
     textAlign: 'center',
     fontSize: '1.1rem',
     fontWeight: 'bold',
-    transition: 'all 0.3s ease'
+    transition: 'all 0.3s ease',
+    position: 'absolute',
+    zIndex: 10,
+    top: '20%'
   },
   voteSuccess: {
     backgroundColor: baseVibrantColors.secondary[700],

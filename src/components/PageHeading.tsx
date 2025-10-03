@@ -1,7 +1,7 @@
 import { mediaQueries } from 'phantomartist';
 import { CSSObject } from '@emotion/react';
 
-export const PageHeading: React.FC<{
+type PageHeadingProps = {
   title: string | React.ReactNode;
   subtitle?: string | React.ReactNode;
   className?: CSSObject;
@@ -9,7 +9,9 @@ export const PageHeading: React.FC<{
   ariaLabelledBy?: string;
   ariaDescribedBy?: string;
   rightContent?: React.ReactNode;
-}> = ({
+};
+
+export const PageHeading: React.FC<PageHeadingProps> = ({
   title,
   subtitle,
   className,

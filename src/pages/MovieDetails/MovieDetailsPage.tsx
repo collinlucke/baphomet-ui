@@ -14,6 +14,24 @@ type MovieDetailsResponse = {
     genres: string[];
     posterPath: string;
     backdropPath: string;
+    posterImages?: {
+      w92?: string;
+      w154?: string;
+      w185?: string;
+      w342?: string;
+      w500?: string;
+      w780?: string;
+      original?: string;
+    };
+    backdropImages?: {
+      w92?: string;
+      w154?: string;
+      w185?: string;
+      w342?: string;
+      w500?: string;
+      w780?: string;
+      original?: string;
+    };
     rated?: string;
     revenue?: number;
     tmdbId: string;
@@ -34,9 +52,10 @@ export const MovieDetailsPage = () => {
   const { id } = useParams();
 
   const { data } = useQuery<MovieDetailsResponse>(GET_MOVIE_DETAILS, {
-    variables: { id: parseInt(id || '') }
+    variables: { id }
   });
   const movie = data?.movieResults;
+  console.log(movie);
   const releaseYear = movie?.releaseDate
     ? new Date(movie.releaseDate).getFullYear()
     : null;
@@ -88,7 +107,7 @@ export const MovieDetailsPage = () => {
       <div css={baphStyles.detailsContainer}>
         <div css={baphStyles.posterContainer}>
           <img
-            src={`https://image.tmdb.org/t/p/w342${movie?.posterPath}`}
+            src={movie?.posterImages?.w500}
             alt={movie?.title}
             css={baphStyles.poster}
           />
