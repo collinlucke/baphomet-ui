@@ -17,7 +17,8 @@ import {
   isLargeScreenVar,
   isMobileAndLandscapeVar,
   showSlideOutMenuVar,
-  isSmallOrMobileVar
+  isSmallOrMobileVar,
+  headerHeightVar
 } from './reactiveVars';
 import { useReactiveVar, useLazyQuery, useQuery } from '@apollo/client/react';
 import { CSSObject } from '@emotion/react';
@@ -52,12 +53,15 @@ export const App = () => {
     useLazyQuery(CHECK_AUTH);
 
   const updateDeviceState = () => {
+    const headerHeight = document.querySelector('header')?.clientHeight;
+
     isMobileVar(navigator.userAgent.includes('Mobile'));
     isLandscapeVar(window.innerHeight < window.innerWidth);
     isLargeScreenVar(window.innerWidth >= screenSizes.lg);
     isMobileAndLandscapeVar(isMobileVar() && isLandscapeVar());
     showSlideOutMenuVar(isMobileVar() && showSlideOutMenu);
     isSmallOrMobileVar(!isLargeScreenVar() || isMobileVar());
+    headerHeightVar(headerHeight);
   };
 
   // In case anyone asks, I like to use handlers as much a possible
@@ -198,7 +202,6 @@ const baphStyles: { [key: string]: CSSObject } = {
   main: {
     position: 'relative',
     zIndex: 0,
-    minHeight: '100vh',
     '&::before': {
       content: '""',
       position: 'absolute',
@@ -207,7 +210,6 @@ const baphStyles: { [key: string]: CSSObject } = {
       right: 0,
       bottom: 0,
       backgroundSize: 'cover',
-      backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
       backgroundAttachment: 'fixed',
       filter: 'grayscale(100%)',

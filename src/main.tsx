@@ -11,7 +11,7 @@ import { ApolloProvider } from '@apollo/client/react';
 import { ThemeProvider } from '@emotion/react';
 import { baseTheme } from 'phantomartist';
 import routes from './routes';
-import { logEnvironmentInfo } from './utils/environment';
+import { logEnvironmentInfo, getGraphQLEndpoint } from './utils/environment';
 import 'dotenv';
 
 logEnvironmentInfo();
@@ -22,20 +22,10 @@ if (redirectPath && redirectPath !== '/') {
   window.history.replaceState(null, '', redirectPath);
 }
 
-const getBackendUrl = () => {
-  if (import.meta.env.MODE === 'development') {
-    return `http://${window.location.hostname}:5050/graphql`;
-  }
-  return (
-    import.meta.env.VITE_BAPHOMET_SERVER_URL ||
-    'https://baphomet-server.onrender.com/graphql'
-  );
-};
-
 const router = createBrowserRouter(routes);
 
 const httpLink = new HttpLink({
-  uri: getBackendUrl()
+  uri: getGraphQLEndpoint()
 });
 
 const authLink = new ApolloLink((operation, forward) => {

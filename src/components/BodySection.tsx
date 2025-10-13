@@ -1,5 +1,6 @@
-import { Block, InnerWidth, mediaQueries } from 'phantomartist';
 import { CSSObject } from '@emotion/react';
+import { Block, InnerWidth, mediaQueries } from 'phantomartist';
+import { headerHeightVar } from '../reactiveVars';
 
 type BodySectionProps = {
   children: React.ReactNode;
@@ -62,13 +63,13 @@ export const BodySection: React.FC<BodySectionProps> = ({
 
 const baphStyles: { [key: string]: CSSObject } = {
   sectionBlock: {
-    marginBottom: '60px',
-    justifyContent: 'start'
+    justifyContent: 'start',
+    minHeight: `calc(100dvh - ${headerHeightVar()}px)`
   },
   section: {
     display: 'flex',
     flexDirection: 'column' as const,
-    padding: '1rem 2rem',
+    padding: '1.35rem 2rem',
     [mediaQueries.minWidth.xl]: {
       padding: '2rem'
     }
@@ -79,7 +80,6 @@ const baphStyles: { [key: string]: CSSObject } = {
     display: 'flex',
     flexDirection: 'column' as const,
     gap: '35px',
-    margin: '10px auto',
     [mediaQueries.minWidth.xl]: {
       margin: '1.5rem auto'
     }
@@ -87,6 +87,6 @@ const baphStyles: { [key: string]: CSSObject } = {
   sectionContent: {
     display: 'flex',
     flexDirection: 'column' as const,
-    gap: '2rem'
+    gap: '1.35rem'
   }
 };

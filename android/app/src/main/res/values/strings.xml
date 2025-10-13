@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Baphomet</string>
+    <string name="title_activity_main">Baphomet</string>
+    <string name="package_name">com.baphomet.collinlucke.com</string>
+    <string name="custom_url_scheme">com.baphomet.collinlucke.com</string>
+</resources>

@@ -1,10 +1,6 @@
 import { CSSObject } from '@emotion/react';
 import { Link } from 'react-router-dom';
-import {
-  baseColors,
-  baseVibrantColors,
-  mediaQueries
-} from 'phantomartist';
+import { baseColors, baseVibrantColors, mediaQueries } from 'phantomartist';
 
 export type MovieListItemProps = {
   movie: {
@@ -14,7 +10,6 @@ export type MovieListItemProps = {
     winningPercentage: number;
     tmdbId: string;
   };
-  openMovieDetails: (tmdbId: string) => void;
 };
 
 export const MovieListItem: React.FC<MovieListItemProps> = ({ movie }) => {

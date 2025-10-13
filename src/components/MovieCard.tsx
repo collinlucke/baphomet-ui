@@ -152,7 +152,9 @@ const getMovieCardStyles = (
     ...baphStyles.movieCard,
     backgroundImage: `url(${backdropImageUrl})`,
     [mediaQueries.minWidth.lg]: {
-      backgroundImage: `url(${posterImageUrl})`,
+      backgroundImage: isMobile
+        ? `url(${backdropImageUrl})`
+        : `url(${posterImageUrl})`,
       aspectRatio: isMobile ? '1.25/1' : '2/3',
       height: 'unset'
     }

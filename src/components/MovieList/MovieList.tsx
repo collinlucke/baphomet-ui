@@ -1,13 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { useLazyQuery } from '@apollo/client/react';
-import {
-  List,
-  Search,
-  baseColors,
-  mediaQueries,
-  Modal
-} from 'phantomartist';
-import { GET_MOVIE_BY_TMDB_ID } from '../../api/queries';
+import { List, Search, baseColors, mediaQueries, Modal } from 'phantomartist';
 import { MovieListItem } from './MovieListItem';
 import { baphColorVariations } from '../../styling/baphTheme';
 import { CSSObject } from '@emotion/react';
@@ -25,10 +17,6 @@ type Movie = {
   backdropPath?: string;
   tmdbId: string;
 };
-
-interface MovieDetailsData {
-  movieDetails: Movie | null;
-}
 
 type MovieData = {
   movies: Movie[] | null;
@@ -63,16 +51,6 @@ export const MovieList: React.FC<MovieData> = ({
     onSearch?.(searchTerm);
   };
 
-  const [fetchMovieDetails, { data: movieDetailsData }] =
-    useLazyQuery<MovieDetailsData>(GET_MOVIE_BY_TMDB_ID);
-
-  useEffect(() => {
-    if (movieDetailsData?.movieDetails) {
-      console.log('Movie details fetched:', movieDetailsData.movieDetails);
-      // TODO - Open movie details modal
-    }
-  }, [movieDetailsData]);
-
   useEffect(() => {
     const observer = new IntersectionObserver(
       entries => {
@@ -98,12 +76,6 @@ export const MovieList: React.FC<MovieData> = ({
 
   const setSearchTermHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm?.(e);
-  };
-
-  const openMovieDetailsHandler = (tmdbId: string) => {
-    fetchMovieDetails({
-      variables: { tmdbId }
-    });
   };
 
   return (
@@ -133,13 +105,7 @@ export const MovieList: React.FC<MovieData> = ({
           <>
             <List className={baphStyles.list} data-testid="movie-list">
               {movies &&
-                movies.map(mov => (
-                  <MovieListItem
-                    movie={mov}
-                    key={mov.id}
-                    openMovieDetails={openMovieDetailsHandler}
-                  />
-                ))}
+                movies.map(mov => <MovieListItem movie={mov} key={mov.id} />)}
               {isLoadingMore && (
                 <div css={baphStyles.loadingContainer}>
                   <div css={baphStyles.loadingText}>Loading more movies...</div>

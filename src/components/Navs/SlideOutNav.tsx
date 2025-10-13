@@ -1,13 +1,8 @@
 import { Avatar, SlideOutMenu } from 'phantomartist';
 import { MainNavLinks } from './MainNavLinks';
-import { LogoLink } from '../LogoLink';
 import { UserMenu } from './UserMenu';
 import { UnauthorizedButtons } from './UnauthorizedButtons';
-import {
-  showSlideOutMenuVar,
-  isAuthenticatedVar,
-  isMobileVar
-} from '../../reactiveVars';
+import { showSlideOutMenuVar, isAuthenticatedVar } from '../../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
 
 type SlideOutNavProps = {
@@ -17,14 +12,12 @@ type SlideOutNavProps = {
 export const SlideOutNav = ({ displayName }: SlideOutNavProps) => {
   const showSlideOutMenu = useReactiveVar(showSlideOutMenuVar);
   const isAuthenticated = useReactiveVar(isAuthenticatedVar);
-  const isMobile = useReactiveVar(isMobileVar);
 
   return (
     <SlideOutMenu
       showSlideOut={showSlideOutMenu}
       setShowSlideOut={showSlideOutMenuVar}
     >
-      {isMobile && <LogoLink />}
       <MainNavLinks />
       <hr css={baphStyles.divider} />
       {isAuthenticated && (

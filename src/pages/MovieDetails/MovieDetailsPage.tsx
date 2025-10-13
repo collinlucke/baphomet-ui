@@ -55,7 +55,6 @@ export const MovieDetailsPage = () => {
     variables: { id }
   });
   const movie = data?.movieResults;
-  console.log(movie);
   const releaseYear = movie?.releaseDate
     ? new Date(movie.releaseDate).getFullYear()
     : null;

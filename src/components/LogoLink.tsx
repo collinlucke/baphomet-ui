@@ -80,8 +80,8 @@ const baphStyles = {
       height: '48px'
     },
     [mediaQueries.minWidth.lg]: {
-      width: '64px',
-      height: '64px'
+      width: isMobileVar() ? '52px' : '64px',
+      height: isMobileVar() ? '52px' : '64px'
     }
   }
 };

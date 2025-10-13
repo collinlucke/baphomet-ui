@@ -14,7 +14,9 @@ import {
 import { CSSObject } from '@emotion/react';
 import {
   isLargeScreenVar,
-  isMobileAndLandscapeVar
+  isMobileAndLandscapeVar,
+  headerHeightVar,
+  isMobileVar
 } from '../../reactiveVars.ts';
 import { useReactiveVar } from '@apollo/client/react';
 
@@ -50,6 +52,8 @@ interface SubmitVoteData {
 export const ArenaPage: React.FC = () => {
   const isLargeScreen = useReactiveVar(isLargeScreenVar);
   const isMobileAndLandscape = useReactiveVar(isMobileAndLandscapeVar);
+  const headerHeight = useReactiveVar(headerHeightVar);
+  const isMobile = useReactiveVar(isMobileVar);
   const [isVoting, setIsVoting] = useState(false);
   const [voteResult, setVoteResult] = useState<{
     success: boolean;
@@ -89,6 +93,12 @@ export const ArenaPage: React.FC = () => {
       setTimeout(() => setVoteResult(null), 3000);
     }
   }, [voteError]);
+
+  useEffect(() => {
+    if (isLargeScreen && isMobile) {
+      window.scrollTo({ top: headerHeight, behavior: 'smooth' });
+    }
+  }, [isLargeScreen, isMobile]);
 
   const handleVote = async (winnerId: string) => {
     if (!data?.getRandomMovieMatchup || isVoting) return;
@@ -210,7 +220,7 @@ export const ArenaPage: React.FC = () => {
           <div css={baphStyles.vsContainer}>
             <div css={baphStyles.vsText}>VS</div>
           </div>
-          {isMobileAndLandscape || isLargeScreen ? SkipButton() : null}
+          {isMobileAndLandscape || isLargeScreen ? <SkipButton /> : null}
         </div>
 
         <MovieCard
@@ -219,7 +229,7 @@ export const ArenaPage: React.FC = () => {
           handleVote={handleVote}
         />
 
-        {!(isMobileAndLandscape || isLargeScreen) ? SkipButton() : null}
+        {!(isMobileAndLandscape || isLargeScreen) ? <SkipButton /> : null}
       </div>
     </ArenaContainer>
   );
@@ -246,7 +256,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     display: 'flex',
     alignItems: 'center',
     gap: '2rem',
-    minHeight: '80vh',
+    // minHeight: '80vh',
     flexDirection: 'column',
     position: 'relative'
   },
@@ -340,7 +350,7 @@ const baphStyles: { [key: string]: CSSObject } = {
   skipButtonWrapper: {
     display: 'flex',
     gap: '1rem',
-    marginTop: '1rem',
+    // marginTop: '1rem',
     zIndex: 10
   }
 };

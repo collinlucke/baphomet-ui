@@ -293,8 +293,6 @@ export const AddMoviesPage: React.FC = () => {
       });
     }
 
-    console.log('Updating movie with data:', rest);
-
     const updateData = {
       ...rest,
       lastUpdated: new Date().toISOString()

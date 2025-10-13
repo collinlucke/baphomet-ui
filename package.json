@@ -1,6 +1,6 @@
 {
   "name": "baphomet-ui",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "type": "module",
   "scripts": {
     "dev": "bash scripts/dev-with-cleanup.sh",
@@ -16,6 +16,11 @@
   },
   "dependencies": {
     "@apollo/client": "^4.0.4",
+    "@capacitor/android": "^7.4.3",
+    "@capacitor/cli": "^7.4.3",
+    "@capacitor/core": "^7.4.3",
+    "@capacitor/ios": "^7.4.3",
+    "@collinlucke/phantomartist": "link:../phantomartist",
     "@emotion/babel-plugin": "^11.13.5",
     "@emotion/styled": "^11.14.1",
     "@floating-ui/react": "^0.27.16",

@@ -1,5 +1,7 @@
-import { mediaQueries } from 'phantomartist';
 import { CSSObject } from '@emotion/react';
+import { mediaQueries } from 'phantomartist';
+import { isMobileVar } from '../reactiveVars';
+import { useReactiveVar } from '@apollo/client/react';
 
 type PageHeadingProps = {
   title: string | React.ReactNode;
@@ -21,7 +23,7 @@ export const PageHeading: React.FC<PageHeadingProps> = ({
   rightContent
 }) => {
   const headingId = `heading-${slug || 'page'}`;
-
+  const isMobile = useReactiveVar(isMobileVar);
   return (
     <div
       data-testid={`page-heading-${slug}`}
@@ -30,7 +32,10 @@ export const PageHeading: React.FC<PageHeadingProps> = ({
       aria-describedby={subtitle ? `${headingId}-subtitle` : ariaDescribedBy}
     >
       <div css={baphStyles.headingContainer}>
-        <h1 css={[baphStyles.heading, className?.heading]} id={headingId}>
+        <h1
+          css={[getHeadingStyes(isMobile), className?.heading]}
+          id={headingId}
+        >
           <span>{title}</span>
         </h1>
         {rightContent}
@@ -47,17 +52,21 @@ export const PageHeading: React.FC<PageHeadingProps> = ({
   );
 };
 
+const getHeadingStyes = (isMobile: boolean) => ({
+  ...baphStyles.heading,
+  fontSize: '1.75rem',
+  [mediaQueries.minWidth.md]: {
+    fontSize: isMobile ? '1.65rem' : '2rem'
+  }
+});
+
 const baphStyles = {
   heading: {
     display: 'flex',
     alignItems: 'baseline',
     justifyContent: 'space-between',
     margin: 0,
-    lineHeight: '1.2',
-    fontSize: '1.75rem',
-    [mediaQueries.minWidth.md]: {
-      fontSize: '2rem'
-    }
+    lineHeight: '1.2'
   },
   headingContainer: {
     display: 'flex',
@@ -69,6 +78,7 @@ const baphStyles = {
     margin: '0.5rem 0 0 0',
     lineHeight: '1.3',
     color: '#6b7280',
-    fontWeight: 'normal'
+    fontWeight: 'normal',
+    fontSize: 'large'
   }
 };

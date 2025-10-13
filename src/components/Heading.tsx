@@ -38,58 +38,46 @@ export const Heading: React.FC = () => {
       icon={<Menu01Icon size={24} />}
       onClick={openSlideOutMenuHandler}
       ariaLabel={'Open menu'}
-      className={{ button: getOpenButtonStyles(isMobile) }}
+      className={{ button: baphStyles.openButton }}
     />
   );
 
   return (
-    <nav>
-      {isMobile ? (
-        <header>
-          <nav>
-            <MenuIconButton />
-            <SlideOutNav displayName={user?.displayName} />
-          </nav>
-        </header>
-      ) : (
-        <Header>
-          <div key="header-content" css={baphStyles.headerContent}>
-            {!isLargeScreen ? (
-              <nav css={baphStyles.nav}>
-                <LogoLink />
-                <div>
-                  <MenuIconButton />
-                  <SlideOutNav displayName={user?.displayName} />
-                </div>
-              </nav>
+    <Header className={{ header: getHeaderStyes(isSmallOrMobile) }}>
+      <div key="header-content" css={baphStyles.headerContent}>
+        <nav css={baphStyles.nav}>
+          <LogoLink />
+
+          <div css={baphStyles.rightContent}>
+            {isMobile || !isLargeScreen ? (
+              <div css={baphStyles.rightContent}>
+                <MenuIconButton />
+                <SlideOutNav displayName={user?.displayName} />
+              </div>
             ) : (
-              <nav css={baphStyles.nav}>
-                <LogoLink />
-                <div css={baphStyles.rightContent}>
-                  <MainNavLinks />
-                  {isAuthenticated ? (
-                    <AuthUserAvatarButton displayName={user?.displayName} />
-                  ) : (
-                    <UnauthorizedButtons />
-                  )}
-                </div>
-              </nav>
+              <>
+                <MainNavLinks />
+                {isAuthenticated ? (
+                  <AuthUserAvatarButton displayName={user?.displayName} />
+                ) : (
+                  <UnauthorizedButtons />
+                )}
+              </>
             )}
           </div>
-        </Header>
-      )}
-    </nav>
+        </nav>
+      </div>
+    </Header>
   );
 };
 
-const getOpenButtonStyles = (isMobile: boolean): CSSObject => {
-  return {
-    ...baphStyles.openButton,
-    ...(isMobile ? { position: 'absolute', top: '16px', right: '16px' } : {})
-  };
-};
-
+const getHeaderStyes = (isSmallOrMobile: boolean) => ({
+  height: isSmallOrMobile ? '65px' : '75px'
+});
 const baphStyles: { [key: string]: CSSObject } = {
+  header: {
+    maxHeight: '55px'
+  },
   headerContent: {
     display: 'flex',
     justifyContent: 'space-between',

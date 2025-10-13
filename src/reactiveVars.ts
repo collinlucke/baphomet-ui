@@ -22,3 +22,4 @@ export const showLoginModalVar = makeVar(false);
 export const isLargeScreenVar = makeVar(false);
 export const isSmallOrMobileVar = makeVar(true);
 export const currentMovieDetailsVar = makeVar(null);
+export const headerHeightVar = makeVar(0);
