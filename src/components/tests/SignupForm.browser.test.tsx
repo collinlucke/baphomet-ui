@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing/react';
-import { SignupForm } from '../SignupForm';
+import { SignupForm } from '../ModalContents/SignupForm';
 import { SIGNUP } from '../../api/mutations';
 
 const user = userEvent.setup();

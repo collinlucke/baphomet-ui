@@ -4,7 +4,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing/react';
 import { GraphQLError } from 'graphql';
-import { LoginForm } from '../LoginForm';
+import { LoginForm } from '../ModalContents/LoginForm';
 import { LOGIN } from '../../api/mutations';
 import { mockLocalStorage } from './__mocks__/mockLocalStorage';
 

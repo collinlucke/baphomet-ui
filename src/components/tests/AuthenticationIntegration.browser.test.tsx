@@ -7,9 +7,9 @@ import { MockedProvider } from '@apollo/client/testing/react';
 import type { MockedResponse } from '@apollo/client/testing';
 import { GraphQLError } from 'graphql';
 import { Heading } from '../Layouts/Heading';
-import { LoginForm } from '../LoginForm';
-import { SignupForm } from '../SignupForm';
-import { ModalContent } from '../ModalContent';
+import { LoginForm } from '../ModalContents/LoginForm';
+import { SignupForm } from '../ModalContents/SignupForm';
+import { ModalContent } from '../ModalContents/ModalContent';
 import {
   isAuthenticatedVar,
   showSignUpModalVar,
