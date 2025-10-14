@@ -3,7 +3,7 @@ import { expect, describe, it, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { mockLocalStorage } from './__mocks__/mockLocalStorage';
-import { Heading } from '../Heading';
+import { Heading } from '../Layouts/Heading';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client/react';
 import { InMemoryCache, ApolloClient, ApolloLink } from '@apollo/client';

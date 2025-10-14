@@ -1,9 +1,9 @@
 import { List, AccordionListItem } from 'phantomartist';
-import { BodySection } from '../../components/BodySection';
-import { PageHeading } from '../../components/PageHeading';
+import { BodySection } from '../../components/Layouts/BodySection';
+import { PageHeading } from '../../components/Layouts/PageHeading.tsx';
 import { questions } from './faqs.tsx';
 
-export const FAQPage = () => {
+const FAQPage = () => {
   return (
     <BodySection>
       <PageHeading
@@ -20,3 +20,4 @@ export const FAQPage = () => {
     </BodySection>
   );
 };
+export default FAQPage;

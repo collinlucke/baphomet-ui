@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { MovieList } from '../../components/MovieList/MovieList';
 import { GET_MOVIE_LIST_ITEMS } from '../../api/queries';
-import { BodySection } from '../../components/BodySection';
-import { PageHeading } from '../../components/PageHeading';
-import { ScrollToTop } from '../../components/ScrollToTop';
+import { BodySection } from '../../components/Layouts/BodySection';
+import { PageHeading } from '../../components/Layouts/PageHeading';
+import { ScrollToTopButton } from '../../components/Buttons/ScrollToTopButton';
 import { useLazyQuery } from '@apollo/client/react';
 
 type Movie = {
@@ -27,7 +27,7 @@ type MovieResults = {
   newTotalMovieCount: number;
 };
 
-export const AllMoviesPage: React.FC = () => {
+const AllMoviesPage: React.FC = () => {
   const [allMovies, setAllMovies] = useState<Movie[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [cursor, setCursor] = useState('');
@@ -124,7 +124,9 @@ export const AllMoviesPage: React.FC = () => {
         isLoadingMore={isLoadingMore}
         hasMore={hasMore}
       />
-      <ScrollToTop />
+      <ScrollToTopButton />
     </BodySection>
   );
 };
+
+export default AllMoviesPage;

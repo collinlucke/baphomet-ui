@@ -7,13 +7,13 @@ import {
   isMobileVar,
   isSmallOrMobileVar,
   isAuthenticatedVar
-} from '../reactiveVars';
+} from '../../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
 import { CSSObject } from '@emotion/react';
-import { MainNavLinks } from './Navs/MainNavLinks';
-import { SlideOutNav } from './Navs/SlideOutNav';
-import { AuthUserAvatarButton } from './Navs/AuthUserAvatarButton';
-import { UnauthorizedButtons } from './Navs/UnauthorizedButtons';
+import { MainNavLinks } from '../Navs/MainNavLinks';
+import { SlideOutNav } from '../Navs/SlideOutNav';
+import { AuthUserAvatarButton } from '../Navs/AuthUserAvatarButton';
+import { UnauthorizedButtons } from '../Navs/UnauthorizedButtons';
 
 export const Heading: React.FC = () => {
   const isLargeScreen = useReactiveVar(isLargeScreenVar);

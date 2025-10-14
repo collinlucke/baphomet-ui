@@ -3,7 +3,7 @@ import { ButtonGroup } from 'phantomartist';
 import { isAuthenticatedVar, isSmallOrMobileVar } from '../../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
 import { logout } from '../../utils/logout';
-import { NavMenuButton } from '../NavMenuButton';
+import { NavMenuButton } from '../Buttons/NavMenuButton';
 
 type UserMenuProps = {
   setShowUserDropdown?: (show: boolean) => void;

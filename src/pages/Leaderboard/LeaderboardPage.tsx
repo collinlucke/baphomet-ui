@@ -1,12 +1,12 @@
 import { useEffect, useState, useRef } from 'react';
 import { useLazyQuery } from '@apollo/client/react';
-import { BodySection } from '../../components/BodySection';
-import { PageHeading } from '../../components/PageHeading';
+import { BodySection } from '../../components/Layouts/BodySection';
+import { PageHeading } from '../../components/Layouts/PageHeading.tsx';
 import { Leaderboard } from '../../components/Leaderboard/Leaderboard';
 import { GET_USER_LEADERBOARD } from '../../api/queries';
 import type { User, LeaderboardType } from '../../types/CustomTypes.types.ts';
 
-export const LeaderboardPage = () => {
+const LeaderboardPage = () => {
   const [leaderboard, setLeaderboard] = useState<User[]>([]);
   const [cursor, setCursor] = useState('');
   const [hasMore, setHasMore] = useState(true);
@@ -72,3 +72,5 @@ export const LeaderboardPage = () => {
     </BodySection>
   );
 };
+
+export default LeaderboardPage;

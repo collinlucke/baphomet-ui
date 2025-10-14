@@ -1,13 +1,13 @@
 import { CSSObject } from '@emotion/react';
 import { Link } from 'react-router-dom';
-import { BodySection } from '../../components/BodySection';
+import { BodySection } from '../../components/Layouts/BodySection';
 import { Button } from 'phantomartist';
 import { MovieList } from '../../components/MovieList/MovieList';
 import { GET_ALL_MOVIES } from '../../api/queries';
 import { useQuery } from '@apollo/client/react';
 import { showFeedbackModalVar } from '../../reactiveVars';
 
-interface MovieResultsData {
+type MovieResultsData = {
   movieResults: {
     searchResults: Array<{
       id: string;
@@ -23,8 +23,9 @@ interface MovieResultsData {
       tmdbId: string;
     }>;
   };
-}
-export const HomePage: React.FC = () => {
+};
+
+const HomePage: React.FC = () => {
   const { data } = useQuery<MovieResultsData>(GET_ALL_MOVIES, {
     variables: {
       title: '',
@@ -91,6 +92,8 @@ export const HomePage: React.FC = () => {
     </>
   );
 };
+
+export default HomePage;
 
 const baphStyles: { [key: string]: CSSObject } = {
   welcomeSection: {

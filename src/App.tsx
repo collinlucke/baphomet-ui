@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
 import './styling/index.css';
 import { Outlet } from 'react-router-dom';
-import { Heading } from './components/Heading';
-import { Footer } from './components/Footer';
+import { Heading } from './components/Layouts/Heading';
+import { Footer } from './components/Layouts/Footer';
 import { Main, Globals, Modal, mediaQueries, screenSizes } from 'phantomartist';
-import { ErrorBoundary } from './components/ErrorBoundary';
 import {
-  errorVar,
   isAuthenticatedVar,
   showUnauthorizedModalVar,
   showFeedbackModalVar,
@@ -23,10 +21,10 @@ import {
 import { useReactiveVar, useLazyQuery, useQuery } from '@apollo/client/react';
 import { CSSObject } from '@emotion/react';
 import { CHECK_AUTH, GET_RANDOM_BACKDROP_IMAGE } from './api/queries';
-import { SignupForm } from './components/SignupForm';
-import { LoginForm } from './components/LoginForm';
-import { FeedbackForm } from './components/FeedbackForm';
-import { UnauthorizedModalContent } from './components/UnauthorizedModalContent';
+import { SignupForm } from './components/ModalContents/SignupForm';
+import { LoginForm } from './components/ModalContents/LoginForm';
+import { FeedbackForm } from './components/ModalContents/FeedbackForm';
+import { UnauthorizedModalContent } from './components/ModalContents/UnauthorizedModalContent';
 import type { AuthData } from './types/CustomTypes.types';
 import { AppGlobals } from './styling/Globals';
 
@@ -37,7 +35,6 @@ type BackdropData = {
 };
 
 export const App = () => {
-  const error = useReactiveVar(errorVar);
   const showUnauthorizedModal = useReactiveVar(showUnauthorizedModalVar);
   const showFeedbackModal = useReactiveVar(showFeedbackModalVar);
   const showLoginModal = useReactiveVar(showLoginModalVar);
@@ -164,7 +161,6 @@ export const App = () => {
       <div css={baphStyles.footerWrapper}>
         <Footer />
       </div>
-      {error && <ErrorBoundary />}
 
       <Modal isOpen={showLoginModal} onClose={closeLoginModalHandler}>
         <LoginForm onSuccess={loginSuccessHandler} />

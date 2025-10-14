@@ -1,6 +1,6 @@
 import { CSSObject } from '@emotion/react';
 import { mediaQueries } from 'phantomartist';
-import { isMobileVar } from '../reactiveVars';
+import { isMobileVar } from '../../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
 
 type PageHeadingProps = {

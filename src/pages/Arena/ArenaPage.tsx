@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client/react';
 import { GET_RANDOM_MATCHUP } from '../../api/queries';
 import { SUBMIT_VOTE } from '../../api/mutations';
-import { BodySection } from '../../components/BodySection';
-import { PageHeading } from '../../components/PageHeading';
-import { MovieCard } from '../../components/MovieCard';
+import { BodySection } from '../../components/Layouts/BodySection';
+import { PageHeading } from '../../components/Layouts/PageHeading.tsx';
+import { MovieCard } from './MovieCard.tsx';
 import {
   Button,
   baseColors,
@@ -49,7 +49,7 @@ interface SubmitVoteData {
   };
 }
 
-export const ArenaPage: React.FC = () => {
+const ArenaPage: React.FC = () => {
   const isLargeScreen = useReactiveVar(isLargeScreenVar);
   const isMobileAndLandscape = useReactiveVar(isMobileAndLandscapeVar);
   const headerHeight = useReactiveVar(headerHeightVar);
@@ -234,6 +234,8 @@ export const ArenaPage: React.FC = () => {
     </ArenaContainer>
   );
 };
+
+export default ArenaPage;
 
 const getMatchupContainerStyles = ({
   isMobileAndLandscape,

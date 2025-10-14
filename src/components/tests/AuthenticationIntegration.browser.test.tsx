@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { MockedProvider } from '@apollo/client/testing/react';
 import type { MockedResponse } from '@apollo/client/testing';
 import { GraphQLError } from 'graphql';
-import { Heading } from '../Heading';
+import { Heading } from '../Layouts/Heading';
 import { LoginForm } from '../LoginForm';
 import { SignupForm } from '../SignupForm';
 import { ModalContent } from '../ModalContent';

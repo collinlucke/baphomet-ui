@@ -1,30 +1,58 @@
+import { lazy, Suspense } from 'react';
 import App from './App.tsx';
-import { HomePage } from './pages/Home/HomePage.tsx';
-import { AllMoviesPage } from './pages/AllMovies/AllMoviesPage.tsx';
-import { ArenaPage } from './pages/Arena/ArenaPage.tsx';
 import { ProtectedRoute } from './components/ProtectedRoute.tsx';
-import { ErrorBoundary } from './components/ErrorBoundary.tsx';
-import { AddMoviesPage } from './pages/AddMovies/AddMoviesPage.tsx';
-import { LeaderboardPage } from './pages/Leaderboard/LeaderboardPage.tsx';
-import { FAQPage } from './pages/FAQ/FAQPage.tsx';
-import { ProfilePage } from './pages/Profile/ProfilePage.tsx';
-import { MovieDetailsPage } from './pages/MovieDetails/MovieDetailsPage.tsx';
+import { ReactErrorBoundary } from './components/ReactErrorBoundary.tsx';
+import NotFoundPage from './pages/NotFound/NotFoundPage.tsx';
+const HomePage = lazy(() => import('./pages/Home/HomePage.tsx'));
+const AllMoviesPage = lazy(() => import('./pages/AllMovies/AllMoviesPage.tsx'));
+const ArenaPage = lazy(() => import('./pages/Arena/ArenaPage.tsx'));
+const AddMoviesPage = lazy(() => import('./pages/AddMovies/AddMoviesPage.tsx'));
+const LeaderboardPage = lazy(
+  () => import('./pages/Leaderboard/LeaderboardPage.tsx')
+);
+const FAQPage = lazy(() => import('./pages/FAQ/FAQPage.tsx'));
+const ProfilePage = lazy(() => import('./pages/Profile/ProfilePage.tsx'));
+const MovieDetailsPage = lazy(
+  () => import('./pages/MovieDetails/MovieDetailsPage.tsx')
+);
+
+const withErrorBoundary = (
+  Component: React.LazyExoticComponent<React.ComponentType<object>>
+) => {
+  return (
+    <ReactErrorBoundary>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Component />
+      </Suspense>
+    </ReactErrorBoundary>
+  );
+};
+
+const AddMoviesRoute = lazy(() =>
+  Promise.resolve({
+    default: () => <ProtectedRoute element={AddMoviesPage} />
+  })
+);
+const ProfileRoute = lazy(() =>
+  Promise.resolve({
+    default: () => <ProtectedRoute element={ProfilePage} />
+  })
+);
 
 const routes = [
   {
     path: '/',
     element: <App />,
-    errorElement: <ErrorBoundary />,
     children: [
-      { path: '/', element: <HomePage /> },
-      { path: 'all-movies', element: <AllMoviesPage /> },
+      { path: '/', element: withErrorBoundary(HomePage) },
+      { path: 'all-movies', element: withErrorBoundary(AllMoviesPage) },
       {
         path: 'add-movies',
-        element: <ProtectedRoute element={AddMoviesPage} />
+        element: withErrorBoundary(AddMoviesRoute)
       },
       {
         path: 'leaderboard',
-        element: <LeaderboardPage />
+        element: withErrorBoundary(LeaderboardPage)
       },
       {
         path: 'view/:id'
@@ -32,19 +60,20 @@ const routes = [
       {
         path: 'edit/:id'
       },
-      { path: 'arena', element: <ArenaPage /> },
+      { path: 'arena', element: withErrorBoundary(ArenaPage) },
       {
         path: 'faq',
-        element: <FAQPage />
+        element: withErrorBoundary(FAQPage)
       },
       {
         path: 'profile',
-        element: <ProtectedRoute element={ProfilePage} />
+        element: withErrorBoundary(ProfileRoute)
       },
       {
         path: 'movie/:id',
-        element: <MovieDetailsPage />
-      }
+        element: withErrorBoundary(MovieDetailsPage)
+      },
+      { path: '*', element: <NotFoundPage /> }
     ]
   }
 ];

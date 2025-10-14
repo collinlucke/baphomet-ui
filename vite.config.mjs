@@ -19,10 +19,16 @@ export default defineConfig({
     }
   ],
   resolve: {
-    alias: process.env.NODE_ENV === 'development' ? {
-      'phantomartist': path.resolve(__dirname, '../phantomartist/lib'),
-      '@collinlucke/phantomartist': path.resolve(__dirname, '../phantomartist/lib')
-    } : {}
+    alias:
+      process.env.NODE_ENV === 'development'
+        ? {
+            phantomartist: path.resolve(__dirname, '../phantomartist/lib'),
+            '@collinlucke/phantomartist': path.resolve(
+              __dirname,
+              '../phantomartist/lib'
+            )
+          }
+        : {}
   },
   server: {
     port: 5173,
@@ -53,7 +59,12 @@ export default defineConfig({
   },
   optimizeDeps: {
     exclude: ['@collinlucke/phantomartist'],
-    include: ['react', 'react-dom', '@emotion/react/jsx-dev-runtime', '@emotion/react/jsx-runtime']
+    include: [
+      'react',
+      'react-dom',
+      '@emotion/react/jsx-dev-runtime',
+      '@emotion/react/jsx-runtime'
+    ]
   },
   build: {
     modulePreload: {

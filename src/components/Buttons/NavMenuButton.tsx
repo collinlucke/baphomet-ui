@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Button } from 'phantomartist';
 import { useReactiveVar } from '@apollo/client/react';
-import { isSmallOrMobileVar } from '../reactiveVars';
+import { isSmallOrMobileVar } from '../../reactiveVars';
 
 type ButtonVariant =
   | 'primary'

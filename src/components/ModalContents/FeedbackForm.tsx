@@ -3,9 +3,9 @@ import { useMutation } from '@apollo/client/react';
 import { Button, InputField } from 'phantomartist';
 import { CSSObject } from '@emotion/react';
 import { ModalContent } from './ModalContent';
-import { SUBMIT_FEEDBACK } from '../api/mutations';
-import { emailValidation } from '../utils/validation';
-import type { ApolloMutationError } from '../types/CustomTypes.types';
+import { SUBMIT_FEEDBACK } from '../../api/mutations';
+import { emailValidation } from '../../utils/validation';
+import type { ApolloMutationError } from '../../types/CustomTypes.types';
 
 type FeedbackFormProps = {
   onSuccess: () => void;

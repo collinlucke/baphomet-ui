@@ -1,6 +1,6 @@
 import { baseVibrantColors, baseColors, mediaQueries } from 'phantomartist';
 import { CSSObject } from '@emotion/react';
-import { isMobileVar } from '../reactiveVars';
+import { isMobileVar } from '../../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
 import party from 'party-js';
 
@@ -198,23 +198,6 @@ const baphStyles: { [key: string]: CSSObject } = {
       boxShadow: 'none'
     }
   },
-  movieImage: {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-    position: 'absolute'
-  },
-  noPosterPlaceholder: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: baseColors.secondary[600],
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: baseColors.tertiary[400],
-    fontSize: '1.2rem',
-    textAlign: 'center'
-  },
   movieOverlay: {
     position: 'absolute',
     bottom: 0,
@@ -242,11 +225,5 @@ const baphStyles: { [key: string]: CSSObject } = {
     fontSize: '0.75rem',
     color: baseColors.tertiary[300],
     textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)'
-  },
-  actionButtonContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: '1rem',
-    zIndex: 10
   }
 };

@@ -1,6 +1,6 @@
 import { CSSObject } from '@emotion/react';
 import { Block, InnerWidth, mediaQueries } from 'phantomartist';
-import { headerHeightVar } from '../reactiveVars';
+import { headerHeightVar } from '../../reactiveVars';
 
 type BodySectionProps = {
   children: React.ReactNode;

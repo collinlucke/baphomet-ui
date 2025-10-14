@@ -1,6 +1,9 @@
 import { ModalContent } from './ModalContent';
 import { Button } from 'phantomartist';
-import { showLoginModalVar, showUnauthorizedModalVar } from '../reactiveVars';
+import {
+  showLoginModalVar,
+  showUnauthorizedModalVar
+} from '../../reactiveVars';
 
 export const UnauthorizedModalContent = () => {
   const onLoginClickHandler = () => {

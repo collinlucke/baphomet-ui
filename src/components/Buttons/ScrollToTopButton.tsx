@@ -2,7 +2,7 @@ import { CSSObject } from '@emotion/react';
 import { Button } from 'phantomartist';
 import { ArrowUp01Icon } from 'hugeicons-react';
 
-export const ScrollToTop = () => {
+export const ScrollToTopButton = () => {
   const handleScroll = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };

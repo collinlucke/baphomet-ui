@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client/react';
 import { InputField, Button } from 'phantomartist';
 import { CSSObject } from '@emotion/react';
-import { SIGNUP } from '../api/mutations';
-import { SignupFormData, SignupFormProps } from '../types/auth.types';
-import { isAuthenticatedVar } from '../reactiveVars';
+import { SIGNUP } from '../../api/mutations';
+import { SignupFormData, SignupFormProps } from '../../types/auth.types';
+import { isAuthenticatedVar } from '../../reactiveVars';
 import { ModalContent } from './ModalContent';
-import { emailValidation } from '../utils/validation';
-import type { ApolloMutationError } from '../types/CustomTypes.types';
+import { emailValidation } from '../../utils/validation';
+import type { ApolloMutationError } from '../../types/CustomTypes.types';
 
 type SignupMutationData = {
   signup: {

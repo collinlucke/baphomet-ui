@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client/react';
-import { BodySection } from '../../components/BodySection';
+import { BodySection } from '../../components/Layouts/BodySection';
 import {
   InputField,
   Button,
@@ -13,7 +13,7 @@ import { Camera02Icon } from 'hugeicons-react';
 import { CSSObject } from '@emotion/react';
 import { CHANGE_PASSWORD, UPDATE_PROFILE } from '../../api/mutations';
 
-export const ProfilePage = () => {
+const ProfilePage = () => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [formData, setFormData] = useState({
     firstName: '',
@@ -370,3 +370,5 @@ const baphStyles: { [key: string]: CSSObject } = {
     }
   }
 };
+
+export default ProfilePage;

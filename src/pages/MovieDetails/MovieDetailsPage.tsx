@@ -1,5 +1,5 @@
-import { BodySection } from '../../components/BodySection';
-import { PageHeading } from '../../components/PageHeading';
+import { BodySection } from '../../components/Layouts/BodySection';
+import { PageHeading } from '../../components/Layouts/PageHeading';
 import { GET_MOVIE_DETAILS } from '../../api/queries';
 import { useQuery } from '@apollo/client/react';
 import { useParams } from 'react-router-dom';
@@ -48,7 +48,7 @@ type MovieDetailsResponse = {
   };
 };
 
-export const MovieDetailsPage = () => {
+const MovieDetailsPage = () => {
   const { id } = useParams();
 
   const { data } = useQuery<MovieDetailsResponse>(GET_MOVIE_DETAILS, {
@@ -126,6 +126,8 @@ export const MovieDetailsPage = () => {
     </BodySection>
   );
 };
+
+export default MovieDetailsPage;
 
 const baphStyles = {
   title: {

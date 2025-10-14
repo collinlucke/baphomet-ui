@@ -7,7 +7,9 @@ import {
 export const isAuthenticatedVar = makeVar(false);
 export const showUnauthorizedModalVar = makeVar(false);
 export const showFeedbackModalVar = makeVar(false);
-export const errorVar = makeVar<CustomErrorTypes | undefined>(undefined);
+export const errorVar = makeVar<CustomErrorTypes | Error | undefined>(
+  undefined
+);
 export const showHeadingVar = makeVar(true);
 export const getMoviesByTitleQueryVar = makeVar<
   ((variables: GetMoviesByTitleQueryVarsObject) => void) | null

@@ -9,7 +9,7 @@ import {
   mediaQueries,
   Label
 } from 'phantomartist';
-import { BodySection } from '../../components/BodySection';
+import { BodySection } from '../../components/Layouts/BodySection';
 import { CSSObject } from '@emotion/react';
 import { ADD_MOVIE, UPDATE_MOVIE } from '../../api/mutations';
 import {
@@ -102,7 +102,7 @@ export type PossibleMovieMatch = {
   genreIds: number[];
 };
 
-export const AddMoviesPage: React.FC = () => {
+const AddMoviesPage: React.FC = () => {
   const [tmdbId, setTmdbId] = useState<string>('');
   const [searchByTitle, setSearchByTitle] = useState<string>('');
   const [showMovieModal, setShowMovieModal] = useState<boolean>(false);
@@ -561,6 +561,8 @@ export const AddMoviesPage: React.FC = () => {
     </>
   );
 };
+
+export default AddMoviesPage;
 
 const baphStyles: { [key: string]: CSSObject } = {
   successMessage: {
