@@ -1,0 +1,16 @@
+name: Deploy UI to Render Production
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm install
+      - run: npm run build
+      - name: Trigger Render Production Deploy
+        run: curl -X POST "$RENDER_PROD_DEPLOY_HOOK"
