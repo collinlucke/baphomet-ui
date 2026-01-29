@@ -1,13 +1,14 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { InMemoryCache, ApolloClient } from '@apollo/client';
+import { InMemoryCache, ApolloClient, ApolloLink } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client/react';
 import { NavMenuButton } from '../old-NavMenuButton';
 import { isSmallOrMobileVar } from '../../../reactiveVars';
 
 // Create a test Apollo client
 const testClient = new ApolloClient({
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
+  link: new ApolloLink()
 });
 
 // Mock the phantomartist Button component

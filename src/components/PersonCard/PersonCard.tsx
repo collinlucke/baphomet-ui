@@ -2,7 +2,8 @@ import React from 'react';
 import { isAuthenticatedVar } from '../../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
 import { Button, baseColors } from 'phantomartist';
-import { Delete02Icon } from 'hugeicons-react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Delete02Icon } from '@hugeicons/core-free-icons';
 
 export type PersonProps = {
   id: number;
@@ -45,7 +46,7 @@ export const PersonCard: React.FC<{
               variant="ghost"
               size="small"
               onClick={removePersonHandler}
-              icon={<Delete02Icon size={16} />}
+              icon={<HugeiconsIcon icon={Delete02Icon} size={16} />}
               ariaLabel={`Remove ${person.name}`}
               className={{ button: baphStyles.button }}
             />

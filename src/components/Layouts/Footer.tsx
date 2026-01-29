@@ -2,7 +2,8 @@ import { CSSObject } from '@emotion/react';
 import { showFeedbackModalVar } from '../../reactiveVars';
 import { baseColors, mediaQueries } from 'phantomartist';
 import { Link } from 'react-router-dom';
-import { Github01Icon } from 'hugeicons-react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Github01Icon } from '@hugeicons/core-free-icons';
 
 export const Footer: React.FC = () => {
   const handleFeedbackClick = (e: React.KeyboardEvent | React.MouseEvent) => {
@@ -26,7 +27,7 @@ export const Footer: React.FC = () => {
             rel="noopener noreferrer"
             aria-label="Visit Collin Lucke's GitHub profile"
           >
-            <Github01Icon />
+            <HugeiconsIcon icon={Github01Icon} size={20} />
           </Link>
         </div>
       </div>

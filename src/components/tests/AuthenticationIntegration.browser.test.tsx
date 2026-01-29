@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { MockedProvider } from '@apollo/client/testing/react';
 import type { MockedResponse } from '@apollo/client/testing';
 import { GraphQLError } from 'graphql';
-import { Heading } from '../Layouts/Header';
+import { Header } from '../Layouts/Header';
 import { LoginForm } from '../ModalContents/LoginForm';
 import { SignupForm } from '../ModalContents/SignupForm';
 import { ModalContent } from '../ModalContents/ModalContent';
@@ -18,7 +18,7 @@ import {
 import { useReactiveVar } from '@apollo/client/react';
 import { LOGIN, SIGNUP } from '../../api/mutations';
 import { mockLocalStorage } from './__mocks__/mockLocalStorage';
-import { ThemeProvider } from '@emotion/react';
+// import { ThemeProvider } from '@emotion/react';
 // import { baseTheme } from 'phantomartist';
 
 beforeEach(() => {
@@ -94,7 +94,7 @@ const TestAuthComponent: React.FC<{ mocks: MockedResponse[] }> = ({
     // <ThemeProvider theme={baseTheme}>
     <MockedProvider mocks={mocks}>
       <BrowserRouter>
-        <Heading />
+        <Header />
         {showLoginModal && (
           <ModalContent title="Login">
             <LoginForm
@@ -125,7 +125,7 @@ const TestAuthComponent: React.FC<{ mocks: MockedResponse[] }> = ({
     // </ThemeProvider>
   );
 };
-const renderHeading = (mocks: MockedResponse[] = []) => {
+const renderHeader = (mocks: MockedResponse[] = []) => {
   return render(<TestAuthComponent mocks={mocks} />);
 };
 
@@ -133,7 +133,7 @@ describe('Authentication Integration Tests', () => {
   describe('Login Flow', () => {
     it.only('completes full login flow successfully', async () => {
       const user = userEvent.setup();
-      renderHeading([mockSuccessfulLogin]);
+      renderHeader([mockSuccessfulLogin]);
 
       expect(screen.getByTestId('signup-button')).toBeVisible();
       expect(screen.getByTestId('login-button')).toBeVisible();
@@ -189,7 +189,7 @@ describe('Authentication Integration Tests', () => {
       };
 
       const user = userEvent.setup();
-      renderHeading([mockLoginError]);
+      renderHeader([mockLoginError]);
 
       await user.click(screen.getByTestId('login-button'));
       await waitFor(() => {
@@ -223,7 +223,7 @@ describe('Authentication Integration Tests', () => {
   describe('Signup Flow', () => {
     it('completes full signup flow successfully', async () => {
       const user = userEvent.setup();
-      renderHeading([mockSuccessfulSignup]);
+      renderHeader([mockSuccessfulSignup]);
 
       await user.click(screen.getByTestId('signup-button'));
 
@@ -282,7 +282,7 @@ describe('Authentication Integration Tests', () => {
       };
 
       const user = userEvent.setup();
-      renderHeading([mockSignupError]);
+      renderHeader([mockSignupError]);
 
       await user.click(screen.getByTestId('signup-button'));
       await waitFor(() => {
@@ -329,7 +329,7 @@ describe('Authentication Integration Tests', () => {
       isAuthenticatedVar(true);
       localStorage.setItem('baphomet-token', 'existing-token');
 
-      renderHeading();
+      renderHeader();
 
       expect(screen.getByTestId('logout-button')).toBeVisible();
       expect(screen.getByTestId('add-new-movie-button')).toBeVisible();
@@ -352,7 +352,7 @@ describe('Authentication Integration Tests', () => {
 
     it('logout button has proper accessibility attributes', async () => {
       isAuthenticatedVar(true);
-      renderHeading();
+      renderHeader();
 
       const logoutButton = screen.getByTestId('logout-button');
       expect(logoutButton).toHaveAttribute(
@@ -366,7 +366,7 @@ describe('Authentication Integration Tests', () => {
   describe('Modal Interactions', () => {
     it('can close login modal without submitting', async () => {
       const user = userEvent.setup();
-      renderHeading();
+      renderHeader();
 
       await user.click(screen.getByTestId('login-button'));
       await waitFor(() => {
@@ -386,7 +386,7 @@ describe('Authentication Integration Tests', () => {
 
     it('can close signup modal without submitting', async () => {
       const user = userEvent.setup();
-      renderHeading();
+      renderHeader();
 
       await user.click(screen.getByTestId('signup-button'));
       await waitFor(() => {
@@ -406,7 +406,7 @@ describe('Authentication Integration Tests', () => {
 
     it('can switch between login and signup modals', async () => {
       const user = userEvent.setup();
-      renderHeading([mockSuccessfulLogin, mockSuccessfulSignup]);
+      renderHeader([mockSuccessfulLogin, mockSuccessfulSignup]);
 
       await user.click(screen.getByTestId('login-button'));
       await waitFor(() => {
@@ -433,7 +433,7 @@ describe('Authentication Integration Tests', () => {
       isAuthenticatedVar(true);
       localStorage.setItem('baphomet-token', 'persisted-token');
 
-      const { rerender } = renderHeading();
+      const { rerender } = renderHeader();
 
       expect(screen.getByTestId('logout-button')).toBeVisible();
       expect(screen.getByTestId('add-new-movie-button')).toBeVisible();
@@ -441,7 +441,7 @@ describe('Authentication Integration Tests', () => {
       rerender(
         <MockedProvider mocks={[]}>
           <BrowserRouter>
-            <Heading />
+            <Header />
           </BrowserRouter>
         </MockedProvider>
       );
@@ -451,7 +451,7 @@ describe('Authentication Integration Tests', () => {
     });
 
     it('reflects changes in authentication state via reactive var', async () => {
-      renderHeading();
+      renderHeader();
 
       expect(screen.getByTestId('signup-button')).toBeVisible();
       expect(screen.getByTestId('login-button')).toBeVisible();

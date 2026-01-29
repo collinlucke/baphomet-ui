@@ -150,15 +150,16 @@ export const App = () => {
   }, [authData, authError]);
 
   return (
-    <div css={baphStyles.appWrapper}>
+    <div>
       <Globals />
 
       <Header />
 
-      <Outlet />
-      <div css={baphStyles.footerWrapper}>
-        <Footer />
+      <div css={getMainStyles(backdrop)}>
+        <Outlet />
       </div>
+
+      <Footer />
 
       <Modal isOpen={showLoginModal} onClose={closeLoginModalHandler}>
         <LoginForm onSuccess={loginSuccessHandler} />
@@ -182,51 +183,24 @@ export const App = () => {
   );
 };
 
-const getMainStyles = (backdrop?: string) => ({
-  ...baphStyles.main,
+export default App;
+
+const getMainStyles = (backdrop?: string): CSSObject => ({
+  position: 'relative' as const,
+  zIndex: 0,
   '&::before': {
-    ...(typeof baphStyles.main['&::before'] === 'object'
-      ? baphStyles.main['&::before']
-      : {}),
+    content: '""',
+    position: 'absolute' as const,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundAttachment: 'fixed' as const,
+    filter: 'grayscale(100%)',
+    opacity: 0.05,
+    zIndex: -1,
     backgroundImage: `url(https://image.tmdb.org/t/p/original${backdrop})`
   }
 });
-
-const baphStyles: { [key: string]: CSSObject } = {
-  // appWrapper: {
-  //   display: 'flex',
-  //   flexDirection: 'column',
-  //   minHeight: '100vh',
-  //   width: '100%',
-  //   overflowX: 'hidden',
-  //   backgroundColor: 'var(--color-background-primary)',
-  //   color: 'var(--color-text-primary)'
-  // },
-  main: {
-    position: 'relative',
-    zIndex: 0,
-    '&::before': {
-      content: '""',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundSize: 'cover',
-      backgroundRepeat: 'no-repeat',
-      backgroundAttachment: 'fixed',
-      filter: 'grayscale(100%)',
-      opacity: 0.05,
-      zIndex: -1
-    }
-  },
-
-  footerWrapper: {
-    display: 'none'
-    // [mediaQueries.minWidth.lg]: {
-    //   display: 'block'
-    // }
-  }
-};
-
-export default App;

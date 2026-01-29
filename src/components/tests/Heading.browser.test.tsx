@@ -3,12 +3,12 @@ import { expect, describe, it, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { mockLocalStorage } from './__mocks__/mockLocalStorage';
-import { Heading } from '../Layouts/Header';
+import { Header } from '../Layouts/Header';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client/react';
 import { InMemoryCache, ApolloClient, ApolloLink } from '@apollo/client';
-import { ThemeProvider } from '@emotion/react';
-import { baseTheme } from 'phantomartist';
+// import { ThemeProvider } from '@emotion/react';
+// import { baseTheme } from 'phantomartist';
 import {
   isAuthenticatedVar,
   showSignUpModalVar,
@@ -45,12 +45,12 @@ const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   );
 };
 
-describe('Heading', () => {
+describe('Header', () => {
   describe('Basic rendering', () => {
     it.only('renders the logo/home link correctly', async () => {
       render(
         <TestWrapper>
-          <Heading />
+          <Header />
         </TestWrapper>
       );
 
@@ -63,7 +63,7 @@ describe('Heading', () => {
     it('renders navigation buttons', async () => {
       render(
         <TestWrapper>
-          <Heading />
+          <Header />
         </TestWrapper>
       );
 
@@ -81,7 +81,7 @@ describe('Heading', () => {
     it('shows Sign Up and Log in buttons', async () => {
       render(
         <TestWrapper>
-          <Heading />
+          <Header />
         </TestWrapper>
       );
 
@@ -92,7 +92,7 @@ describe('Heading', () => {
     it('does NOT show Add new movie button', async () => {
       render(
         <TestWrapper>
-          <Heading />
+          <Header />
         </TestWrapper>
       );
 
@@ -104,7 +104,7 @@ describe('Heading', () => {
 
       render(
         <TestWrapper>
-          <Heading />
+          <Header />
         </TestWrapper>
       );
 
@@ -118,7 +118,7 @@ describe('Heading', () => {
 
       render(
         <TestWrapper>
-          <Heading />
+          <Header />
         </TestWrapper>
       );
 
@@ -149,7 +149,7 @@ describe('Heading', () => {
     it('shows Add new movie button', async () => {
       render(
         <TestWrapper>
-          <Heading />
+          <Header />
         </TestWrapper>
       );
 
@@ -159,7 +159,7 @@ describe('Heading', () => {
     it('shows Log out button', async () => {
       render(
         <TestWrapper>
-          <Heading />
+          <Header />
         </TestWrapper>
       );
 
@@ -169,7 +169,7 @@ describe('Heading', () => {
     it('does NOT show Sign Up and Log in buttons', async () => {
       render(
         <TestWrapper>
-          <Heading />
+          <Header />
         </TestWrapper>
       );
 
@@ -182,7 +182,7 @@ describe('Heading', () => {
 
       render(
         <TestWrapper>
-          <Heading />
+          <Header />
         </TestWrapper>
       );
 
@@ -201,7 +201,7 @@ describe('Heading', () => {
 
       const { container } = render(
         <TestWrapper>
-          <Heading />
+          <Header />
         </TestWrapper>
       );
 
@@ -215,7 +215,7 @@ describe('Heading', () => {
 
       const { container } = render(
         <TestWrapper>
-          <Heading />
+          <Header />
         </TestWrapper>
       );
 

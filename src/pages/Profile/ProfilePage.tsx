@@ -9,7 +9,8 @@ import {
   baseVibrantColors,
   mediaQueries
 } from 'phantomartist';
-import { Camera02Icon } from 'hugeicons-react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Camera02Icon } from '@hugeicons/core-free-icons';
 import { CSSObject } from '@emotion/react';
 import { CHANGE_PASSWORD, UPDATE_PROFILE } from '../../api/mutations';
 
@@ -105,7 +106,7 @@ const ProfilePage = () => {
               size={120}
             />
             <label htmlFor="avatar-upload" css={baphStyles.cameraIconWrapper}>
-              <Camera02Icon size={24} />
+              <HugeiconsIcon icon={Camera02Icon} size={24} />
               <input
                 id="avatar-upload"
                 type="file"

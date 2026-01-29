@@ -27,7 +27,7 @@ export const UnauthorizedButtons = () => {
         size="small"
         aria-label="Open sign up form"
         aria-describedby="signup-help"
-        testId="signup-button"
+        data-testid="signup-button"
         dark={showSlideOutMenu}
       >
         Sign Up
@@ -38,7 +38,7 @@ export const UnauthorizedButtons = () => {
         size="small"
         aria-label="Open log in form"
         aria-describedby="login-help"
-        testId="login-button"
+        data-testid="login-button"
         dark
       >
         Log in

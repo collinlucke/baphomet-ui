@@ -1,24 +1,24 @@
 import { Button, ButtonGroup } from 'athameui';
-import { NavMenuButton } from '../Buttons/old-NavMenuButton';
+// import { NavMenuButton } from '../Buttons/old-NavMenuButton';
 import { Link } from 'react-router-dom';
-import { showSlideOutMenuVar, isSmallOrMobileVar } from '../../reactiveVars';
-import { useReactiveVar } from '@apollo/client/react';
+// import { showSlideOutMenuVar, isSmallOrMobileVar } from '../../reactiveVars';
+// import { useReactiveVar } from '@apollo/client/react';
 
-const mainNavPages = [
-  { label: 'Arena ', to: '/arena' },
-  { label: 'Leaderboard', to: '/leaderboard' },
-  { label: 'All Movies', to: '/all-movies' },
-  { label: 'FAQ', to: '/faq' }
-];
+// const mainNavPages = [
+//   { label: 'Arena ', to: '/arena' },
+//   { label: 'Leaderboard', to: '/leaderboard' },
+//   { label: 'All Movies', to: '/all-movies' },
+//   { label: 'FAQ', to: '/faq' }
+// ];
 
 export const MainNavLinks = () => {
-  const isSmallOrMobile = useReactiveVar(isSmallOrMobileVar);
+  // const isSmallOrMobile = useReactiveVar(isSmallOrMobileVar);
 
-  const closeSlideOutMenu = () => {
-    if (isSmallOrMobile) {
-      showSlideOutMenuVar(false);
-    }
-  };
+  // const closeSlideOutMenu = () => {
+  //   if (isSmallOrMobile) {
+  //     showSlideOutMenuVar(false);
+  //   }
+  // };
 
   return (
     <nav>
@@ -65,14 +65,14 @@ export const MainNavLinks = () => {
   );
 };
 
-const getNavButtonGroupStyles = (isSmallOrMobile: boolean) => ({
-  ...(isSmallOrMobile
-    ? {
-        flexDirection: 'column' as const,
-        alignItems: 'flex-start' as const
-      }
-    : {
-        flexDirection: 'row' as const,
-        alignItems: 'center' as const
-      })
-});
+// const getNavButtonGroupStyles = (isSmallOrMobile: boolean) => ({
+//   ...(isSmallOrMobile
+//     ? {
+//         flexDirection: 'column' as const,
+//         alignItems: 'flex-start' as const
+//       }
+//     : {
+//         flexDirection: 'row' as const,
+//         alignItems: 'center' as const
+//       })
+// });

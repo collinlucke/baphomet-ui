@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import { MockedProvider } from '@apollo/client/testing/react';
-import { Heading } from '../Layouts/Header';
+import { Header } from '../Layouts/Header';
 import { isAuthenticatedVar } from '../../reactiveVars';
 import { mockLocalStorage } from './__mocks__/mockLocalStorage';
 
@@ -13,11 +13,11 @@ beforeEach(() => {
   isAuthenticatedVar(false);
 });
 
-const renderHeading = () => {
+const renderHeader = () => {
   return render(
     <MockedProvider mocks={[]}>
       <BrowserRouter>
-        <Heading />
+        <Header />
       </BrowserRouter>
     </MockedProvider>
   );
@@ -27,7 +27,7 @@ describe('Logout Functionality', () => {
   describe('Logout Button Visibility', () => {
     it('shows logout button when user is authenticated', () => {
       isAuthenticatedVar(true);
-      renderHeading();
+      renderHeader();
 
       expect(screen.getByTestId('logout-button')).toBeVisible();
       expect(screen.getByText('Log out')).toBeInTheDocument();
@@ -35,7 +35,7 @@ describe('Logout Functionality', () => {
 
     it('does not show logout button when user is not authenticated', () => {
       isAuthenticatedVar(false);
-      renderHeading();
+      renderHeader();
 
       expect(screen.queryByTestId('logout-button')).not.toBeInTheDocument();
       expect(screen.queryByText('Log out')).not.toBeInTheDocument();
@@ -49,7 +49,7 @@ describe('Logout Functionality', () => {
       isAuthenticatedVar(true);
       localStorage.setItem('baphomet-token', 'existing-token');
 
-      renderHeading();
+      renderHeader();
 
       expect(screen.getByTestId('logout-button')).toBeVisible();
       expect(screen.getByTestId('add-new-movie-button')).toBeVisible();
@@ -75,7 +75,7 @@ describe('Logout Functionality', () => {
       isAuthenticatedVar(true);
       localStorage.removeItem('baphomet-token');
 
-      renderHeading();
+      renderHeader();
 
       await user.click(screen.getByTestId('logout-button'));
 
@@ -95,7 +95,7 @@ describe('Logout Functionality', () => {
       );
       localStorage.setItem('other-item', 'should-remain');
 
-      renderHeading();
+      renderHeader();
 
       await user.click(screen.getByTestId('logout-button'));
 
@@ -107,7 +107,7 @@ describe('Logout Functionality', () => {
   describe('Logout Button Accessibility', () => {
     it('has proper accessibility attributes', () => {
       isAuthenticatedVar(true);
-      renderHeading();
+      renderHeader();
 
       const logoutButton = screen.getByTestId('logout-button');
 
@@ -122,7 +122,7 @@ describe('Logout Functionality', () => {
     it('is keyboard accessible', async () => {
       const user = userEvent.setup();
       isAuthenticatedVar(true);
-      renderHeading();
+      renderHeader();
 
       const logoutButton = screen.getByTestId('logout-button');
 
@@ -140,7 +140,7 @@ describe('Logout Functionality', () => {
       isAuthenticatedVar(true);
       localStorage.setItem('baphomet-token', 'test-token');
 
-      renderHeading();
+      renderHeader();
 
       const logoutButton = screen.getByTestId('logout-button');
 
@@ -159,7 +159,7 @@ describe('Logout Functionality', () => {
       isAuthenticatedVar(true);
       expect(isAuthenticatedVar()).toBe(true);
 
-      renderHeading();
+      renderHeader();
 
       await user.click(screen.getByTestId('logout-button'));
 
@@ -172,14 +172,14 @@ describe('Logout Functionality', () => {
       isAuthenticatedVar(true);
       localStorage.setItem('baphomet-token', 'test-token');
 
-      const { rerender } = renderHeading();
+      const { rerender } = renderHeader();
 
       await user.click(screen.getByTestId('logout-button'));
 
       rerender(
         <MockedProvider mocks={[]}>
           <BrowserRouter>
-            <Heading />
+            <Header />
           </BrowserRouter>
         </MockedProvider>
       );
@@ -196,7 +196,7 @@ describe('Logout Functionality', () => {
       const user = userEvent.setup();
 
       isAuthenticatedVar(true);
-      renderHeading();
+      renderHeader();
 
       expect(screen.getByTestId('logout-button')).toBeVisible();
       expect(screen.getByTestId('add-new-movie-button')).toBeVisible();
@@ -217,7 +217,7 @@ describe('Logout Functionality', () => {
       const user = userEvent.setup();
 
       isAuthenticatedVar(true);
-      renderHeading();
+      renderHeader();
 
       expect(screen.getByTestId('add-new-movie-button')).toBeVisible();
 
@@ -232,7 +232,7 @@ describe('Logout Functionality', () => {
       const user = userEvent.setup();
 
       isAuthenticatedVar(true);
-      renderHeading();
+      renderHeader();
 
       expect(screen.getByText('Arena')).toBeVisible();
       expect(screen.getByText('Leader Boards')).toBeVisible();

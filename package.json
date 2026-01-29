@@ -29,7 +29,7 @@
     "@capacitor/cli": "^7.4.3",
     "@capacitor/core": "^7.4.3",
     "@capacitor/ios": "^7.4.3",
-    "@collinlucke/phantomartist": "^1.4.1",
+    "@collinlucke/phantomartist": "link:..\\phantomartist",
     "@emotion/babel-plugin": "^11.13.5",
     "@emotion/styled": "^11.14.1",
     "@floating-ui/react": "^0.27.16",

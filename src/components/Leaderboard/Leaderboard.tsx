@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { User } from '../../types/CustomTypes.types';
-import { CircleArrowUp02Icon } from 'hugeicons-react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { CircleArrowUp02Icon } from '@hugeicons/core-free-icons';
 import { LeaderboardItem } from './LeaderboardItem';
 
 type LeaderboardProps = {
@@ -56,7 +57,8 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
       )}
       {!hasMore && leaderboard.length > 0 && (
         <p>
-          This is the worst person ever! <CircleArrowUp02Icon size={20} />
+          This is the worst person ever!{' '}
+          <HugeiconsIcon icon={CircleArrowUp02Icon} size={20} />
         </p>
       )}
     </div>

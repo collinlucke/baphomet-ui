@@ -24,8 +24,8 @@ importers:
         specifier: ^7.4.3
         version: 7.4.5(@capacitor/core@7.4.5)
       '@collinlucke/phantomartist':
-        specifier: ^1.4.1
-        version: 1.4.1(@emotion/react@11.14.0(@types/react@19.2.10)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-router-dom@7.13.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
+        specifier: link:..\phantomartist
+        version: link:../phantomartist
       '@emotion/babel-plugin':
         specifier: ^11.13.5
         version: 11.13.5
@@ -306,14 +306,6 @@ packages:
     resolution: {integrity: sha512-i9cfo15Vn0GvFJ0Pm2zPhxQrK3NW5ISrf7bdzmKWUM5TUaCnWkCO4Zxsgjm8/VMXwt/gabA/di1O1c9pC3enCA==}
     peerDependencies:
       '@capacitor/core': ^7.4.0
-
-  '@collinlucke/phantomartist@1.4.1':
-    resolution: {integrity: sha512-3Xd4QlWTrFqL0ZKE/7rhPObUWhIOdlMhfSEAN9TYnujO3lVj1gD0eZZPx1ksyYtbXPYAWtYKzFf+BTaOA8FFsw==}
-    peerDependencies:
-      '@emotion/react': ^11.14.0
-      react: ^19.1.1
-      react-dom: ^19.1.1
-      react-router-dom: ^7.8.2
 
   '@csstools/color-helpers@5.1.0':
     resolution: {integrity: sha512-S11EXWJyy0Mz5SYvRmY8nJYTFFd1LCNV+7cXyAgQtOOuzb4EsgfqDufL+9esx72/eLhsRdGZwaldu/h+E4t4BA==}
@@ -3576,14 +3568,6 @@ snapshots:
   '@capacitor/ios@7.4.5(@capacitor/core@7.4.5)':
     dependencies:
       '@capacitor/core': 7.4.5
-
-  '@collinlucke/phantomartist@1.4.1(@emotion/react@11.14.0(@types/react@19.2.10)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-router-dom@7.13.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)':
-    dependencies:
-      '@emotion/react': 11.14.0(@types/react@19.2.10)(react@19.2.4)
-      hugeicons-react: 0.3.1(react@19.2.4)
-      react: 19.2.4
-      react-dom: 19.2.4(react@19.2.4)
-      react-router-dom: 7.13.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
 
   '@csstools/color-helpers@5.1.0': {}
 

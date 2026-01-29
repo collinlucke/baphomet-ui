@@ -1,4 +1,4 @@
-import { List, Main, Accordion } from 'athameui';
+import { Main, Accordion } from 'athameui';
 import { PageHeading } from '../../components/Layouts/PageHeading.tsx';
 import { faqs } from './faqs.tsx';
 
