@@ -8,10 +8,11 @@ const baphStyles: { [key: string]: CSSObject } = {
   }
 };
 
-export const questions = [
+export const faqs = [
   {
-    q: 'What is this thing?',
-    a: (
+    id: 1,
+    heading: 'What is this thing?',
+    content: (
       <div>
         Baphomet is thing that creates overall movie ratings (scores) based on
         user community input.
@@ -19,8 +20,9 @@ export const questions = [
     )
   },
   {
-    q: 'What is a Baphomet?',
-    a: (
+    id: 2,
+    heading: 'What is a Baphomet?',
+    content: (
       <div>
         Baphomet is a goat-headed, deity-ish thing often associated with occulty
         stuff. Usually representative of the duality of things like good and
@@ -29,8 +31,9 @@ export const questions = [
     )
   },
   {
-    q: "Isn't a Baphomet evil? Isn't Baphomet a satan?",
-    a: (
+    id: 3,
+    heading: "Isn't a Baphomet evil? Isn't Baphomet a satan?",
+    content: (
       <div>
         Without the history lesson, no. Also, how could you call this cute
         fuggin' thing evil!?
@@ -45,8 +48,9 @@ export const questions = [
     )
   },
   {
-    q: 'How the fuh does Baphomet work?',
-    a: (
+    id: 4,
+    heading: 'How the fuh does Baphomet work?',
+    content: (
       <>
         <div>
           Baphomet works by showing you two movies. You pick the one you like
@@ -66,8 +70,10 @@ export const questions = [
     )
   },
   {
-    q: "What's that blue number on each movie poster? It's kinda in the way.",
-    a: (
+    id: 5,
+    heading:
+      "What's that blue number on each movie poster? It's kinda in the way.",
+    content: (
       <div>
         That blue number is the Baphomet score, which represents the overall
         rating of the movie based on user votes. The higher the score, the more
@@ -77,8 +83,9 @@ export const questions = [
     )
   },
   {
-    q: 'Why should I use Baphomet?',
-    a: (
+    id: 6,
+    heading: 'Why should I use Baphomet?',
+    content: (
       <div>
         Cuz you like movies. Cuz you like being judgey. Cuz you like
         clicking/tapping on things. Cuz you love me. Cuz you need something to
@@ -88,8 +95,9 @@ export const questions = [
     )
   },
   {
-    q: "Why isn't this a mobile app?",
-    a: (
+    id: 7,
+    heading: "Why isn't this a mobile app?",
+    content: (
       <>
         <div>
           While making this app has been the culmination of years of thinkiness

@@ -9,7 +9,7 @@ import {
 } from '@apollo/client/core';
 import { ApolloProvider } from '@apollo/client/react';
 import { ThemeProvider } from '@emotion/react';
-import { baseTheme } from 'phantomartist';
+import { tokens } from 'athameui';
 import routes from './routes';
 import { logEnvironmentInfo, getGraphQLEndpoint } from './utils/environment';
 import 'dotenv';
@@ -48,7 +48,7 @@ const client = new ApolloClient({
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ThemeProvider theme={baseTheme}>
+    <ThemeProvider theme={tokens}>
       <ApolloProvider client={client}>
         <RouterProvider router={router} />
       </ApolloProvider>

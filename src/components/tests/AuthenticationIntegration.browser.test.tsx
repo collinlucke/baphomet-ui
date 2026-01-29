@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { MockedProvider } from '@apollo/client/testing/react';
 import type { MockedResponse } from '@apollo/client/testing';
 import { GraphQLError } from 'graphql';
-import { Heading } from '../Layouts/Heading';
+import { Heading } from '../Layouts/Header';
 import { LoginForm } from '../ModalContents/LoginForm';
 import { SignupForm } from '../ModalContents/SignupForm';
 import { ModalContent } from '../ModalContents/ModalContent';
@@ -19,7 +19,7 @@ import { useReactiveVar } from '@apollo/client/react';
 import { LOGIN, SIGNUP } from '../../api/mutations';
 import { mockLocalStorage } from './__mocks__/mockLocalStorage';
 import { ThemeProvider } from '@emotion/react';
-import { baseTheme } from 'phantomartist';
+// import { baseTheme } from 'phantomartist';
 
 beforeEach(() => {
   mockLocalStorage();
@@ -91,41 +91,38 @@ const TestAuthComponent: React.FC<{ mocks: MockedResponse[] }> = ({
   const showSignUpModal = useReactiveVar(showSignUpModalVar); // if needed
 
   return (
-    <ThemeProvider theme={baseTheme}>
-      <MockedProvider mocks={mocks}>
-        <BrowserRouter>
-          <Heading />
-          {showLoginModal && (
-            <ModalContent title="Login">
-              <LoginForm
-                onSuccess={() => showLoginModalVar(false)}
-                onError={() => {}}
-              />
-              <button
-                onClick={() => showLoginModalVar(false)}
-                aria-label="Close"
-              >
-                Close
-              </button>
-            </ModalContent>
-          )}
-          {showSignUpModal && (
-            <ModalContent title="Sign Up">
-              <SignupForm
-                onSuccess={() => showSignUpModalVar(false)}
-                onError={() => {}}
-              />
-              <button
-                onClick={() => showSignUpModalVar(false)}
-                aria-label="Close"
-              >
-                Close
-              </button>
-            </ModalContent>
-          )}
-        </BrowserRouter>
-      </MockedProvider>
-    </ThemeProvider>
+    // <ThemeProvider theme={baseTheme}>
+    <MockedProvider mocks={mocks}>
+      <BrowserRouter>
+        <Heading />
+        {showLoginModal && (
+          <ModalContent title="Login">
+            <LoginForm
+              onSuccess={() => showLoginModalVar(false)}
+              onError={() => {}}
+            />
+            <button onClick={() => showLoginModalVar(false)} aria-label="Close">
+              Close
+            </button>
+          </ModalContent>
+        )}
+        {showSignUpModal && (
+          <ModalContent title="Sign Up">
+            <SignupForm
+              onSuccess={() => showSignUpModalVar(false)}
+              onError={() => {}}
+            />
+            <button
+              onClick={() => showSignUpModalVar(false)}
+              aria-label="Close"
+            >
+              Close
+            </button>
+          </ModalContent>
+        )}
+      </BrowserRouter>
+    </MockedProvider>
+    // </ThemeProvider>
   );
 };
 const renderHeading = (mocks: MockedResponse[] = []) => {

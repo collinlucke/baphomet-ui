@@ -1,5 +1,5 @@
 import { Avatar, SlideOutMenu } from 'phantomartist';
-import { MainNavLinks } from './MainNavLinks';
+import { MainNavLinks } from '../MainNavLinks';
 import { UserMenu } from './UserMenu';
 import { UnauthorizedButtons } from './UnauthorizedButtons';
 import { showSlideOutMenuVar, isAuthenticatedVar } from '../../reactiveVars';

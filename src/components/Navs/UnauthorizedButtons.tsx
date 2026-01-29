@@ -1,14 +1,15 @@
-import { Button, ButtonGroup } from 'phantomartist';
+import { Button, ButtonGroup, tokens } from 'athameui';
 import {
   showLoginModalVar,
   showSignUpModalVar,
-  isSmallOrMobileVar
+  isSmallOrMobileVar,
+  showSlideOutMenuVar
 } from '../../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
 
 export const UnauthorizedButtons = () => {
   const isSmallOrMobile = useReactiveVar(isSmallOrMobileVar);
-  const buttonSize = isSmallOrMobile ? 'medium' : 'small';
+  const showSlideOutMenu = useReactiveVar(showSlideOutMenuVar);
 
   const showLoginModalHandler = () => {
     showLoginModalVar(true);
@@ -19,29 +20,26 @@ export const UnauthorizedButtons = () => {
   };
 
   return (
-    <ButtonGroup
-      direction={isSmallOrMobile ? 'vertical' : 'horizontal'}
-      className={{ buttonGroup: getButtonGroupStyles(isSmallOrMobile) }}
-    >
+    <ButtonGroup sx={{ buttonGroup: getButtonGroupStyles(isSmallOrMobile) }}>
       <Button
         onClick={showSignUpModalHandler}
-        variant="secondary"
-        size={buttonSize}
-        ariaLabel="Open sign up form"
-        ariaDescribedBy="signup-help"
+        variant="tertiary"
+        size="small"
+        aria-label="Open sign up form"
+        aria-describedby="signup-help"
         testId="signup-button"
-        className={{ button: baphStyles.noWrapButton }}
+        dark={showSlideOutMenu}
       >
         Sign Up
       </Button>
       <Button
         onClick={showLoginModalHandler}
         variant={isSmallOrMobile ? 'outline' : 'primary'}
-        size={buttonSize}
-        ariaLabel="Open log in form"
-        ariaDescribedBy="login-help"
+        size="small"
+        aria-label="Open log in form"
+        aria-describedby="login-help"
         testId="login-button"
-        className={{ button: baphStyles.noWrapButton }}
+        dark
       >
         Log in
       </Button>
@@ -57,13 +55,14 @@ export const UnauthorizedButtons = () => {
 
 const getButtonGroupStyles = (isSmallOrMobile: boolean) => ({
   alignItems: 'start' as const,
+  gap: '10px',
+  [tokens.media.min.lg]: {
+    gap: '15px'
+  },
   ...(isSmallOrMobile ? { marginTop: '20px' } : {})
 });
 
 const baphStyles = {
-  buttonGroup: {
-    alignItems: 'start' as const
-  },
   noWrapButton: {
     whiteSpace: 'nowrap' as const
   },

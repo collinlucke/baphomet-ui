@@ -186,8 +186,7 @@ const baphStyles: { [key: string]: CSSObject } = {
       gap: '25px'
     },
     [mediaQueries.minWidth.xl]: {
-      gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-      gap: '35px'
+      gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))'
     }
   },
   movieListWrapper: {

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import './styling/index.css';
 import { Outlet } from 'react-router-dom';
-import { Heading } from './components/Layouts/Heading';
+import { Header } from './components/Layouts/Header';
 import { Footer } from './components/Layouts/Footer';
-import { Main, Globals, Modal, mediaQueries, screenSizes } from 'phantomartist';
+// import { Main, Globals, Modal, mediaQueries, screenSizes } from 'phantomartist';
+import { Modal, screenSizes } from 'phantomartist';
+// import { Main } from './components/Layouts/Main';
 import {
   isAuthenticatedVar,
   showUnauthorizedModalVar,
@@ -26,7 +27,8 @@ import { LoginForm } from './components/ModalContents/LoginForm';
 import { FeedbackForm } from './components/ModalContents/FeedbackForm';
 import { UnauthorizedModalContent } from './components/ModalContents/UnauthorizedModalContent';
 import type { AuthData } from './types/CustomTypes.types';
-import { AppGlobals } from './styling/Globals';
+import { Globals } from './styling/Globals';
+import './styling/index.css';
 
 type BackdropData = {
   getRandomBackdropImage: {
@@ -61,7 +63,6 @@ export const App = () => {
     headerHeightVar(headerHeight);
   };
 
-  // In case anyone asks, I like to use handlers as much a possible
   const closeLoginModalHandler = () => {
     showLoginModalVar(false);
   };
@@ -149,15 +150,12 @@ export const App = () => {
   }, [authData, authError]);
 
   return (
-    <>
+    <div css={baphStyles.appWrapper}>
       <Globals />
-      <AppGlobals />
 
-      <Heading />
+      <Header />
 
-      <Main isDark={true} className={{ main: getMainStyles(backdrop) }}>
-        <Outlet />
-      </Main>
+      <Outlet />
       <div css={baphStyles.footerWrapper}>
         <Footer />
       </div>
@@ -180,7 +178,7 @@ export const App = () => {
       >
         <UnauthorizedModalContent />
       </Modal>
-    </>
+    </div>
   );
 };
 
@@ -195,6 +193,15 @@ const getMainStyles = (backdrop?: string) => ({
 });
 
 const baphStyles: { [key: string]: CSSObject } = {
+  // appWrapper: {
+  //   display: 'flex',
+  //   flexDirection: 'column',
+  //   minHeight: '100vh',
+  //   width: '100%',
+  //   overflowX: 'hidden',
+  //   backgroundColor: 'var(--color-background-primary)',
+  //   color: 'var(--color-text-primary)'
+  // },
   main: {
     position: 'relative',
     zIndex: 0,
@@ -215,10 +222,10 @@ const baphStyles: { [key: string]: CSSObject } = {
   },
 
   footerWrapper: {
-    display: 'none',
-    [mediaQueries.minWidth.lg]: {
-      display: 'block'
-    }
+    display: 'none'
+    // [mediaQueries.minWidth.lg]: {
+    //   display: 'block'
+    // }
   }
 };
 
