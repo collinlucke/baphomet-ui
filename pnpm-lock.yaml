@@ -23,9 +23,6 @@ importers:
       '@capacitor/ios':
         specifier: ^7.4.3
         version: 7.4.5(@capacitor/core@7.4.5)
-      '@collinlucke/phantomartist':
-        specifier: link:../phantomartist
-        version: link:../phantomartist
       '@emotion/babel-plugin':
         specifier: ^11.13.5
         version: 11.13.5
@@ -84,8 +81,8 @@ importers:
         specifier: ^2.2.0
         version: 2.2.0
       phantomartist:
-        specifier: file:../phantomartist
-        version: file:../phantomartist(@emotion/react@11.14.0(@types/react@19.2.10)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-router-dom@7.13.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
+        specifier: latest
+        version: 1.4.3(@emotion/react@11.14.0(@types/react@19.2.10)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-router-dom@7.13.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
       react:
         specifier: ^19.1.1
         version: 19.2.4
@@ -2396,8 +2393,8 @@ packages:
   pend@1.2.0:
     resolution: {integrity: sha512-F3asv42UuXchdzt+xXqfW1OGlVBe+mxa2mqI0pg5yAHZPvFmY3Y6drSf/GQ1A86WgWEN9Kzh/WrgKa6iGcHXLg==}
 
-  phantomartist@file:../phantomartist:
-    resolution: {directory: ../phantomartist, type: directory}
+  phantomartist@1.4.3:
+    resolution: {integrity: sha512-v+9F5k/Ky6xZasHhsa9lq5XBMN2dlVAT9T2PXaILtvVtobf0HNAgQiVxSkKwMt0nai3F/4k/BelFLcHItOLqzQ==}
     peerDependencies:
       '@emotion/react': ^11.14.0
       react: ^19.1.1
@@ -5542,7 +5539,7 @@ snapshots:
 
   pend@1.2.0: {}
 
-  phantomartist@file:../phantomartist(@emotion/react@11.14.0(@types/react@19.2.10)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-router-dom@7.13.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4):
+  phantomartist@1.4.3(@emotion/react@11.14.0(@types/react@19.2.10)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-router-dom@7.13.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4):
     dependencies:
       '@emotion/react': 11.14.0(@types/react@19.2.10)(react@19.2.4)
       hugeicons-react: 0.3.1(react@19.2.4)
