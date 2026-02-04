@@ -158,8 +158,6 @@ export const baphTypography = {
       letterSpacing: 'normal'
     },
 
-    // UI Elements - only custom styles not provided by phantomartist
-
     // Special styles
     hero: {
       fontFamily: '"Montserrat", sans-serif',

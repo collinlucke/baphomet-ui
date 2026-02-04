@@ -1,11 +1,11 @@
-import { BodySection } from '../../components/Layouts/BodySection';
+import { Main } from 'athameui';
 import { PageHeading } from '../../components/Layouts/PageHeading';
 import { GET_MOVIE_DETAILS } from '../../api/queries';
 import { useQuery } from '@apollo/client/react';
 import { useParams } from 'react-router-dom';
-import { baseColors } from 'phantomartist';
+import { tokens } from 'athameui';
 
-type MovieDetailsResponse = {
+export type MovieDetailsResponse = {
   movieResults: {
     id: number;
     title: string;
@@ -92,13 +92,13 @@ const MovieDetailsPage = () => {
   );
 
   return (
-    <BodySection>
+    <Main>
       <PageHeading
         title={title}
         subtitle={genres}
         rightContent={
           <div css={baphStyles.scoreWrapper}>
-            <span css={baphStyles.major}>{`${major}`}</span>.
+            <span css={baphStyles.major}>{`${major}`}.</span>
             <span css={baphStyles.minor}>{minor}</span>
           </div>
         }
@@ -123,7 +123,7 @@ const MovieDetailsPage = () => {
         </div>
         <div css={baphStyles.overview}>{movie?.overview}</div>
       </div>
-    </BodySection>
+    </Main>
   );
 };
 
@@ -141,7 +141,7 @@ const baphStyles = {
     fontWeight: 600 as const,
     position: 'absolute' as const,
     right: 0,
-    color: baseColors.accent[400]
+    color: tokens.color.error[400]
   },
   genres: {
     fontStyle: 'italic'
@@ -163,7 +163,7 @@ const baphStyles = {
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     overflow: 'hidden',
     borderRadius: '10px',
-    outline: `5px solid ${baseColors.secondary[800]}`,
+    outline: `5px solid ${tokens.color.secondary[800]}`,
     outlineOffset: '-5px'
   },
   poster: {
@@ -194,7 +194,7 @@ const baphStyles = {
   },
   overview: {
     flex: 3,
-    backgroundColor: baseColors.secondary[500],
+    backgroundColor: tokens.color.secondary[500],
     padding: '15px',
     borderRadius: '10px'
   }

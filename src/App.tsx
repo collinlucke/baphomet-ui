@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import './styling/index.css';
 import { Outlet } from 'react-router-dom';
-import { Heading } from './components/Layouts/Heading';
+import { Header } from './components/Layouts/Header';
 import { Footer } from './components/Layouts/Footer';
-import { Main, Globals, Modal, mediaQueries, screenSizes } from 'phantomartist';
+import { screenSizes } from 'phantomartist';
+import { Modal } from 'athameui';
 import {
   isAuthenticatedVar,
   showUnauthorizedModalVar,
@@ -26,7 +26,8 @@ import { LoginForm } from './components/ModalContents/LoginForm';
 import { FeedbackForm } from './components/ModalContents/FeedbackForm';
 import { UnauthorizedModalContent } from './components/ModalContents/UnauthorizedModalContent';
 import type { AuthData } from './types/CustomTypes.types';
-import { AppGlobals } from './styling/Globals';
+import { Globals } from './styling/Globals';
+import './styling/index.css';
 
 type BackdropData = {
   getRandomBackdropImage: {
@@ -61,7 +62,6 @@ export const App = () => {
     headerHeightVar(headerHeight);
   };
 
-  // In case anyone asks, I like to use handlers as much a possible
   const closeLoginModalHandler = () => {
     showLoginModalVar(false);
   };
@@ -149,18 +149,16 @@ export const App = () => {
   }, [authData, authError]);
 
   return (
-    <>
+    <div css={baphStyles.appWrapper}>
       <Globals />
-      <AppGlobals />
 
-      <Heading />
+      <Header />
 
-      <Main isDark={true} className={{ main: getMainStyles(backdrop) }}>
+      <div css={getMainStyles(backdrop)}>
         <Outlet />
-      </Main>
-      <div css={baphStyles.footerWrapper}>
-        <Footer />
       </div>
+
+      <Footer />
 
       <Modal isOpen={showLoginModal} onClose={closeLoginModalHandler}>
         <LoginForm onSuccess={loginSuccessHandler} />
@@ -180,46 +178,39 @@ export const App = () => {
       >
         <UnauthorizedModalContent />
       </Modal>
-    </>
+    </div>
   );
 };
 
-const getMainStyles = (backdrop?: string) => ({
-  ...baphStyles.main,
+export default App;
+
+const getMainStyles = (backdrop?: string): CSSObject => ({
+  position: 'relative' as const,
+  zIndex: 0,
+  flexGrow: 1,
   '&::before': {
-    ...(typeof baphStyles.main['&::before'] === 'object'
-      ? baphStyles.main['&::before']
-      : {}),
+    content: '""',
+    position: 'absolute' as const,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundAttachment: 'fixed' as const,
+    filter: 'grayscale(100%)',
+    opacity: 0.05,
+    zIndex: -1,
     backgroundImage: `url(https://image.tmdb.org/t/p/original${backdrop})`
   }
 });
 
 const baphStyles: { [key: string]: CSSObject } = {
-  main: {
-    position: 'relative',
-    zIndex: 0,
-    '&::before': {
-      content: '""',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundSize: 'cover',
-      backgroundRepeat: 'no-repeat',
-      backgroundAttachment: 'fixed',
-      filter: 'grayscale(100%)',
-      opacity: 0.05,
-      zIndex: -1
-    }
-  },
-
-  footerWrapper: {
-    display: 'none',
-    [mediaQueries.minWidth.lg]: {
-      display: 'block'
-    }
+  appWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '100vh',
+    justifyContent: 'space-between',
+    scrollbarGutter: 'stable'
   }
 };
-
-export default App;

@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useLazyQuery } from '@apollo/client/react';
-import { BodySection } from '../../components/Layouts/BodySection';
+import { Main } from 'athameui';
 import { PageHeading } from '../../components/Layouts/PageHeading.tsx';
 import { Leaderboard } from '../../components/Leaderboard/Leaderboard';
 import { GET_USER_LEADERBOARD } from '../../api/queries';
@@ -39,7 +39,6 @@ const LeaderboardPage = () => {
     }
   }, [data]);
 
-  // Handle errors
   useEffect(() => {
     if (error) {
       console.error('Error fetching leaderboard:', error);
@@ -58,7 +57,7 @@ const LeaderboardPage = () => {
   }, [fetchLeaderboard]);
 
   return (
-    <BodySection>
+    <Main>
       <PageHeading
         title="Leaderboard"
         subtitle="Basically, it's a quantifiable list of who's better than you."
@@ -69,7 +68,7 @@ const LeaderboardPage = () => {
         isLoadingMore={isLoadingMore}
         onScroll={fetchMoreUsers}
       />
-    </BodySection>
+    </Main>
   );
 };
 

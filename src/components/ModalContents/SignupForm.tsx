@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client/react';
-import { InputField, Button } from 'phantomartist';
+import { FormInput, Button } from 'athameui';
 import { CSSObject } from '@emotion/react';
 import { SIGNUP } from '../../api/mutations';
 import { SignupFormData, SignupFormProps } from '../../types/auth.types';
@@ -28,10 +28,7 @@ type SignupMutationData = {
   };
 };
 
-export const SignupForm: React.FC<SignupFormProps> = ({
-  onSuccess,
-  onError
-}) => {
+export const SignupForm = ({ onSuccess, onError }: SignupFormProps) => {
   const [formData, setFormData] = useState<SignupFormData>({
     username: '',
     email: '',
@@ -206,7 +203,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
         )}
 
         <div css={baphStyles.fields}>
-          <InputField
+          <FormInput
             label="Username"
             value={formData.username}
             onChange={updateField}
@@ -216,15 +213,15 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             disabled={isLoading}
             data-testid="signup-username-input"
             name="username"
-            autoComplete="username"
-            ariaDescribedBy="username-help"
-            ariaInvalid={!!errors.username}
+            auto-complete="username"
+            aria-describedby="username-help"
+            aria-invalid={!!errors.username}
           />
           <div id="username-help" css={baphStyles.srOnly}>
             Choose a unique username for your account, minimum 3 characters
           </div>
 
-          <InputField
+          <FormInput
             label="Display Name"
             value={formData.displayName}
             onChange={updateField}
@@ -233,14 +230,14 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             disabled={isLoading}
             data-testid="signup-display-name-input"
             name="displayName"
-            ariaDescribedBy="displayname-help"
-            ariaInvalid={!!errors.displayName}
+            aria-describedby="displayname-help"
+            aria-invalid={!!errors.displayName}
           />
           <div id="displayname-help" css={baphStyles.srOnly}>
             Enter the name that will be shown to other users
           </div>
 
-          <InputField
+          <FormInput
             label="First Name"
             value={formData.firstName}
             onChange={updateField}
@@ -248,14 +245,14 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             disabled={isLoading}
             data-testid="signup-first-name-input"
             name="firstName"
-            ariaDescribedBy="firstname-help"
-            ariaInvalid={!!errors.firstName}
+            aria-describedby="firstname-help"
+            aria-invalid={!!errors.firstName}
           />
           <div id="firstname-help" css={baphStyles.srOnly}>
             Enter your first name
           </div>
 
-          <InputField
+          <FormInput
             label="Last Name"
             value={formData.lastName}
             onChange={updateField}
@@ -263,14 +260,14 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             disabled={isLoading}
             data-testid="signup-last-name-input"
             name="lastName"
-            ariaDescribedBy="lastname-help"
-            ariaInvalid={!!errors.lastName}
+            aria-describedby="lastname-help"
+            aria-invalid={!!errors.lastName}
           />
           <div id="lastname-help" css={baphStyles.srOnly}>
             Enter your last name
           </div>
 
-          <InputField
+          <FormInput
             label="Birthday"
             value={formData.birthday}
             onChange={updateField}
@@ -279,14 +276,14 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             disabled={isLoading}
             data-testid="signup-birthday-input"
             name="birthday"
-            ariaDescribedBy="birthday-help"
-            ariaInvalid={!!errors.birthday}
+            aria-describedby="birthday-help"
+            aria-invalid={!!errors.birthday}
           />
           <div id="birthday-help" css={baphStyles.srOnly}>
             Enter your birthday in YYYY-MM-DD format
           </div>
 
-          <InputField
+          <FormInput
             label="Email"
             type="email"
             value={formData.email}
@@ -298,14 +295,14 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             data-testid="signup-email-input"
             name="email"
             autoComplete="email"
-            ariaDescribedBy="email-help"
-            ariaInvalid={!!errors.email}
+            aria-describedby="email-help"
+            aria-invalid={!!errors.email}
           />
           <div id="email-help" css={baphStyles.srOnly}>
             Enter a valid email address for account verification and updates
           </div>
 
-          <InputField
+          <FormInput
             label="Password"
             type="password"
             value={formData.password}
@@ -317,14 +314,14 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             data-testid="signup-password-input"
             name="password"
             autoComplete="new-password"
-            ariaDescribedBy="password-help"
-            ariaInvalid={!!errors.password}
+            aria-describedby="password-help"
+            aria-invalid={!!errors.password}
           />
           <div id="password-help" css={baphStyles.srOnly}>
             Create a secure password with at least 6 characters
           </div>
 
-          <InputField
+          <FormInput
             label="Confirm Password"
             type="password"
             value={formData.confirmPassword}
@@ -336,8 +333,8 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             data-testid="signup-confirm-password-input"
             name="confirmPassword"
             autoComplete="new-password"
-            ariaDescribedBy="confirm-password-help"
-            ariaInvalid={!!errors.confirmPassword}
+            aria-describedby="confirm-password-help"
+            aria-invalid={!!errors.confirmPassword}
           />
           <div id="confirm-password-help" css={baphStyles.srOnly}>
             Re-enter your password to confirm it matches
@@ -356,9 +353,9 @@ export const SignupForm: React.FC<SignupFormProps> = ({
               !formData.confirmPassword ||
               !formData.displayName.trim()
             }
-            testId="signup-submit-button"
-            className={{ button: baphStyles.signUpButton }}
-            ariaLabel={
+            data-testid="signup-submit-button"
+            sx={{ button: baphStyles.signUpButton }}
+            aria-label={
               isLoading
                 ? 'Creating account, please wait'
                 : 'Create your account'

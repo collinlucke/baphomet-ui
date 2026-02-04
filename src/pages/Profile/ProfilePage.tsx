@@ -1,15 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client/react';
-import { BodySection } from '../../components/Layouts/BodySection';
-import {
-  InputField,
-  Button,
-  Avatar,
-  baseColors,
-  baseVibrantColors,
-  mediaQueries
-} from 'phantomartist';
-import { Camera02Icon } from 'hugeicons-react';
+import { Avatar } from 'athameui';
+import { FormInput, Button, Main, tokens } from 'athameui';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Camera02Icon } from '@hugeicons/core-free-icons';
 import { CSSObject } from '@emotion/react';
 import { CHANGE_PASSWORD, UPDATE_PROFILE } from '../../api/mutations';
 
@@ -92,7 +86,7 @@ const ProfilePage = () => {
   };
 
   return (
-    <BodySection>
+    <Main>
       <h1>Profile Settings</h1>
 
       <div css={baphStyles.pageLayout}>
@@ -105,7 +99,7 @@ const ProfilePage = () => {
               size={120}
             />
             <label htmlFor="avatar-upload" css={baphStyles.cameraIconWrapper}>
-              <Camera02Icon size={24} />
+              <HugeiconsIcon icon={Camera02Icon} size={24} />
               <input
                 id="avatar-upload"
                 type="file"
@@ -124,7 +118,7 @@ const ProfilePage = () => {
             <div css={baphStyles.formFieldContainers}>
               <h3 css={baphStyles.sectionHeading}>Personal Information</h3>
 
-              <InputField
+              <FormInput
                 label="Username"
                 name="username"
                 value={formData.username}
@@ -132,19 +126,19 @@ const ProfilePage = () => {
                 error={errors.username}
                 required
                 size="medium"
-                onDark
+                dark
               />
 
-              <InputField
+              <FormInput
                 label="Display Name"
                 name="displayName"
                 value={formData.displayName}
                 onChange={handleFieldChange}
                 error={errors.displayName}
                 size="medium"
-                onDark
+                dark
               />
-              <InputField
+              <FormInput
                 label="Email"
                 name="email"
                 type="email"
@@ -153,27 +147,27 @@ const ProfilePage = () => {
                 error={errors.email}
                 required
                 size="medium"
-                onDark
+                dark
               />
-              <InputField
+              <FormInput
                 label="First Name"
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleFieldChange}
                 error={errors.firstName}
                 size="medium"
-                onDark
+                dark
               />
-              <InputField
+              <FormInput
                 label="Last Name"
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleFieldChange}
                 error={errors.lastName}
                 size="medium"
-                onDark
+                dark
               />
-              <InputField
+              <FormInput
                 label="Birthday"
                 name="birthday"
                 type="date"
@@ -181,7 +175,7 @@ const ProfilePage = () => {
                 onChange={handleFieldChange}
                 error={errors.birthday}
                 size="medium"
-                onDark
+                dark
               />
             </div>
 
@@ -213,7 +207,7 @@ const ProfilePage = () => {
               </p>
 
               <div css={baphStyles.passwordFields}>
-                <InputField
+                <FormInput
                   label="Current Password"
                   name="currentPassword"
                   type="password"
@@ -222,9 +216,9 @@ const ProfilePage = () => {
                   error={errors.currentPassword}
                   autoComplete="current-password"
                   size="medium"
-                  onDark
+                  dark
                 />
-                <InputField
+                <FormInput
                   label="New Password"
                   name="newPassword"
                   type="password"
@@ -233,9 +227,9 @@ const ProfilePage = () => {
                   error={errors.newPassword}
                   autoComplete="new-password"
                   size="medium"
-                  onDark
+                  dark
                 />
-                <InputField
+                <FormInput
                   label="Confirm New Password"
                   name="confirmNewPassword"
                   type="password"
@@ -244,7 +238,7 @@ const ProfilePage = () => {
                   error={errors.confirmNewPassword}
                   autoComplete="new-password"
                   size="medium"
-                  onDark
+                  dark
                 />
               </div>
 
@@ -267,7 +261,7 @@ const ProfilePage = () => {
           </form>
         </div>
       </div>
-    </BodySection>
+    </Main>
   );
 };
 
@@ -276,7 +270,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     display: 'flex',
     gap: '2rem',
     flexDirection: 'column',
-    [mediaQueries.minWidth.md]: {
+    [tokens.media.min.md]: {
       flexDirection: 'row'
     }
   },
@@ -284,7 +278,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     display: 'flex',
     alignItems: 'flex-start',
     justifyContent: 'center',
-    [mediaQueries.minWidth.md]: {
+    [tokens.media.min.md]: {
       flex: '0 0 200px'
     }
   },
@@ -320,18 +314,18 @@ const baphStyles: { [key: string]: CSSObject } = {
     justifyContent: 'flex-start'
   },
   divider: {
-    borderTop: `1px solid ${baseColors.tertiary[500]}`,
+    borderTop: `1px solid ${tokens.color.tertiary[500]}`,
     width: '100%',
     margin: '2rem 0'
   },
   sectionHeading: {
-    color: baseVibrantColors.primary[300],
+    color: tokens.color.primary.vibrant[300],
     fontSize: '1.25rem',
     fontWeight: 'bold',
     margin: '0 0 1rem 0'
   },
   sectionDescription: {
-    color: baseColors.tertiary[300],
+    color: tokens.color.tertiary.vibrant[300],
     fontSize: '0.875rem',
     margin: '0 0 1rem 0',
     fontStyle: 'italic'
@@ -347,7 +341,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     right: 0,
     padding: 8,
     cursor: 'pointer',
-    color: baseColors.primary[100],
+    color: tokens.color.primary[100],
     transition: 'all 0.2s ease',
     '&:hover': {
       transform: 'scale(1.1)'
@@ -365,7 +359,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     display: 'flex',
     gap: '1rem',
     flexDirection: 'column',
-    [mediaQueries.minWidth.md]: {
+    [tokens.media.min.md]: {
       flexDirection: 'column'
     }
   }

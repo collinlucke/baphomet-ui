@@ -1,18 +1,18 @@
 import { ReactNode } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
-import { Button } from 'phantomartist';
-import { BodySection } from './Layouts/BodySection';
+import { Button, Main } from 'athameui';
 import { useLocation, Link } from 'react-router-dom';
 
 type ErrorBoundaryProps = {
   children: ReactNode;
   fallback?: ReactNode;
+
   onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
 };
 
 const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
   return (
-    <BodySection>
+    <Main>
       <div
         style={{
           padding: '2rem',
@@ -40,21 +40,20 @@ const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
               marginTop: '0.5rem'
             }}
           >
-            {error.message}
-            {'\n'}
-            {error.stack}
+            {error instanceof Error ? error.message : String(error)}
+            {error instanceof Error ? error.stack : ''}
           </pre>
         </details>
         <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
           <Button onClick={resetErrorBoundary} variant="secondary">
             Try Again
           </Button>
-          <Button variant="ghostOnDark">
+          <Button variant="ghost" dark>
             <Link to="/">Go Home</Link>
           </Button>
         </div>
       </div>
-    </BodySection>
+    </Main>
   );
 };
 
@@ -64,10 +63,10 @@ export const ReactErrorBoundary = ({
 }: ErrorBoundaryProps) => {
   const location = useLocation();
 
-  const handleError = (error: Error, errorInfo: React.ErrorInfo) => {
+  const handleError = (error: unknown, errorInfo: React.ErrorInfo) => {
     console.log('Error boundary caught:', {
-      error: error.message,
-      stack: error.stack,
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
       componentStack: errorInfo.componentStack
     });
   };

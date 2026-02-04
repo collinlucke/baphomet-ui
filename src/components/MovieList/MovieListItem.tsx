@@ -1,6 +1,8 @@
+import { useEffect, useRef, useState } from 'react';
 import { CSSObject } from '@emotion/react';
+import { ContainerScalingText, tokens } from 'athameui';
 import { Link } from 'react-router-dom';
-import { baseColors, baseVibrantColors, mediaQueries } from 'phantomartist';
+import { motion } from 'motion/react';
 
 export type MovieListItemProps = {
   movie: {
@@ -12,49 +14,93 @@ export type MovieListItemProps = {
   };
 };
 
-export const MovieListItem: React.FC<MovieListItemProps> = ({ movie }) => {
+export const MovieListItem = ({ movie }: MovieListItemProps) => {
+  const liRef = useRef<HTMLLIElement>(null);
   const winningPercentage = movie.winningPercentage?.toFixed(2) || '0.00';
   const [major, minor] = winningPercentage.split('.');
+  const [majorSize, setMajorSize] = useState('');
+  const [minorSize, setMinorSize] = useState('');
+
+  useEffect(() => {
+    const updateFontSizes = () => {
+      const width = liRef.current?.offsetWidth;
+      setMajorSize(`${width! / 60}rem`);
+      setMinorSize(`${width! / 75}rem`);
+    };
+
+    updateFontSizes();
+    window.addEventListener('resize', updateFontSizes);
+    return () => window.removeEventListener('resize', updateFontSizes);
+  }, []);
 
   return (
     <li
+      ref={liRef}
       css={getContainerStyles(movie.posterPath || '')}
-      role="button"
       tabIndex={0}
       aria-label={`Open details for ${movie.title}`}
       data-testid={`movie-item-${movie.tmdbId}`}
+      key={movie.id}
     >
       <Link
         to={`/movie/${movie.id}`}
         aria-label={`Open details for ${movie.title}`}
+        className="block w-full"
       >
-        <div css={baphStyles.posterWrapper} title={movie.title}>
-          <img
-            src={`https://image.tmdb.org/t/p/w154${movie.posterPath}`}
-            alt={movie.title}
-            css={baphStyles.poster}
-          />
-          <div css={baphStyles.scoreWrapper}>
-            <span css={baphStyles.major}>{major}.</span>
-            <span css={baphStyles.minor}>{minor}</span>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.2 }}
+        >
+          <div
+            data-state="active"
+            title={`${movie.title} - ${winningPercentage}`}
+          >
+            {movie.posterPath ? (
+              <img
+                src={`https://image.tmdb.org/t/p/w500${movie.posterPath}`}
+                alt={movie.title}
+                css={baphStyles.poster}
+              />
+            ) : (
+              <ContainerScalingText
+                sx={{ container: baphStyles.posterWrapper }}
+                maxFontSize={20}
+                minFontSize={6}
+              >
+                Not found
+              </ContainerScalingText>
+            )}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              css={baphStyles.scoreWrapper}
+              data-testid="movie-winning-percentage"
+            >
+              <span css={baphStyles.major} style={{ fontSize: majorSize }}>
+                {major}.
+              </span>
+
+              <span css={baphStyles.minor} style={{ fontSize: minorSize }}>
+                {minor}
+              </span>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </Link>
     </li>
   );
 };
 
 const getContainerStyles = (posterPath: string): CSSObject => ({
-  ...baphStyles.container,
+  position: 'relative' as const,
+  display: 'flex',
+  cursor: 'pointer',
   backgroundImage: posterPath ? `url(${posterPath})` : 'none'
 });
 
 const baphStyles = {
-  container: {
-    position: 'relative' as const,
-    display: 'flex',
-    cursor: 'pointer'
-  },
   posterWrapper: {
     position: 'relative' as const,
     flex: '1',
@@ -65,49 +111,29 @@ const baphStyles = {
     height: '100%',
     backgroundColor: '#ccc',
     backgroundSize: 'cover',
-    border: `2px solid ${baseVibrantColors.primary[500]}`
+    border: `2px solid ${tokens.color.primary.vibrant[500]}`
   },
   scoreWrapper: {
     position: 'absolute' as const,
-    bottom: 0,
+    bottom: '5px',
     right: '10px',
     display: 'flex',
     alignItems: 'baseline',
     lineHeight: 'normal'
   },
   major: {
-    color: baseVibrantColors.primary[500],
-    fontSize: '1.85rem',
+    color: tokens.color.primary.vibrant[500],
     fontWeight: 'bold',
-    WebkitTextStroke: `1px ${baseColors.primary[700]}`,
+    WebkitTextStroke: `1px ${tokens.color.primary.vibrant[700]}`,
     paintOrder: 'stroke fill',
-    textShadow: '2px 2px 4px rgba(0, 0, 0, 1)',
-    [mediaQueries.minWidth.sm]: {
-      fontSize: '2rem'
-    },
-    [mediaQueries.minWidth.lg]: {
-      fontSize: '2.5rem'
-    },
-    [mediaQueries.minWidth.xl]: {
-      fontSize: '3rem'
-    }
+    textShadow: '2px 2px 4px rgba(0, 0, 0, 1)'
   },
   minor: {
-    color: baseVibrantColors.primary[500],
-    fontSize: '1.25rem',
+    color: tokens.color.primary.vibrant[500],
     fontWeight: 'bold',
-    WebkitTextStroke: `1px ${baseColors.primary[700]}`,
+    WebkitTextStroke: `1px ${tokens.color.primary.vibrant[700]}`,
     paintOrder: 'stroke fill',
     marginLeft: '2px',
-    textShadow: '2px 2px 4px rgba(0, 0, 0, 1)',
-    [mediaQueries.minWidth.sm]: {
-      fontSize: '1.5rem'
-    },
-    [mediaQueries.minWidth.lg]: {
-      fontSize: '1.85rem'
-    },
-    [mediaQueries.minWidth.xl]: {
-      fontSize: '2.25rem'
-    }
+    textShadow: '2px 2px 4px rgba(0, 0, 0, 1)'
   }
 };

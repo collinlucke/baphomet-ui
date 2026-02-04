@@ -1,4 +1,4 @@
-import { mediaQueries } from 'phantomartist';
+import { tokens } from 'athameui';
 import { Link } from 'react-router-dom';
 import { showSlideOutMenuVar, isMobileVar } from '../../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
@@ -11,7 +11,7 @@ export const LogoLink = () => {
   return (
     <Link
       to={'/'}
-      data-testid="home-link"
+      data-testid="logo-link"
       css={baphStyles.logoLink}
       aria-label="Baphomet - Go to homepage"
       onClick={isMobile ? closeSlideOutMenu : undefined}
@@ -20,7 +20,7 @@ export const LogoLink = () => {
       <img
         src="/baphy-favicon.png"
         alt="Baphomet logo"
-        css={baphStyles.favicon}
+        css={baphStyles.logo}
         role="presentation"
         aria-hidden="true"
       />
@@ -36,10 +36,7 @@ const getTitleStyles = (isMobile: boolean) => ({
       }
     : {
         fontSize: '1.6rem',
-        [mediaQueries.minWidth.md]: {
-          fontSize: '1.6rem'
-        },
-        [mediaQueries.minWidth.lg]: {
+        [tokens.media.min.lg]: {
           fontSize: '2rem'
         }
       })
@@ -50,38 +47,15 @@ const baphStyles = {
     display: 'flex',
     alignItems: 'center',
     gap: '6px',
-    textDecoration: 'none',
-    [mediaQueries.minWidth.sm]: {
-      gap: '8px'
-    },
-    [mediaQueries.minWidth.md]: {
-      gap: '10px'
-    },
-    [mediaQueries.minWidth.lg]: {
-      gap: '12px'
-    }
+    textDecoration: 'none'
   },
-  title: {
-    margin: 0,
-    fontSize: '1.5rem',
-    [mediaQueries.minWidth.md]: {
-      fontSize: '1.6rem'
-    },
-    [mediaQueries.minWidth.lg]: {
-      fontSize: '2rem'
-    }
-  },
-  favicon: {
+  logo: {
     width: '40px',
     height: '40px',
     objectFit: 'contain' as const,
-    [mediaQueries.minWidth.md]: {
+    [tokens.media.min.lg]: {
       width: '48px',
       height: '48px'
-    },
-    [mediaQueries.minWidth.lg]: {
-      width: isMobileVar() ? '52px' : '64px',
-      height: isMobileVar() ? '52px' : '64px'
     }
   }
 };

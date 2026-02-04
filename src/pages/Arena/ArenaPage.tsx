@@ -1,16 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client/react';
+import type { Movie } from '../../types/movies.types';
 import { GET_RANDOM_MATCHUP } from '../../api/queries';
 import { SUBMIT_VOTE } from '../../api/mutations';
-import { BodySection } from '../../components/Layouts/BodySection';
+import { Main } from 'athameui';
 import { PageHeading } from '../../components/Layouts/PageHeading.tsx';
 import { MovieCard } from './MovieCard.tsx';
-import {
-  Button,
-  baseColors,
-  baseVibrantColors,
-  mediaQueries
-} from 'phantomartist';
+import { Button, tokens } from 'athameui';
 import { CSSObject } from '@emotion/react';
 import {
   isLargeScreenVar,
@@ -19,18 +15,6 @@ import {
   isMobileVar
 } from '../../reactiveVars.ts';
 import { useReactiveVar } from '@apollo/client/react';
-
-type Movie = {
-  id: string;
-  title: string;
-  posterPath?: string;
-  releaseDate?: string;
-  genres?: string[];
-  winningPercentage?: number;
-  totalWins?: number;
-  totalLosses?: number;
-  totalComparisons?: number;
-};
 
 type Matchup = {
   movie1: Movie;
@@ -49,7 +33,7 @@ interface SubmitVoteData {
   };
 }
 
-const ArenaPage: React.FC = () => {
+const ArenaPage = () => {
   const isLargeScreen = useReactiveVar(isLargeScreenVar);
   const isMobileAndLandscape = useReactiveVar(isMobileAndLandscapeVar);
   const headerHeight = useReactiveVar(headerHeightVar);
@@ -125,16 +109,19 @@ const ArenaPage: React.FC = () => {
 
   const ArenaContainer = ({ children }: { children: React.ReactNode }) => {
     return (
-      <BodySection pageSlug="arena">
+      <Main>
         <PageHeading
           title="Movie Arena"
           slug="arena"
           className={baphStyles.pageHeading}
         />
-        <div css={baphStyles.container} className="arena-container">
+        <div
+          css={getContainerStyles({ isMobileAndLandscape })}
+          className="arena-container"
+        >
           {children}
         </div>
-      </BodySection>
+      </Main>
     );
   };
 
@@ -237,6 +224,18 @@ const ArenaPage: React.FC = () => {
 
 export default ArenaPage;
 
+const getContainerStyles = ({
+  isMobileAndLandscape
+}: {
+  isMobileAndLandscape: boolean;
+}) => {
+  return {
+    ...baphStyles.container,
+    marginTop: isMobileAndLandscape ? '1rem' : '3rem',
+    minHeight: `calc(100dvh - ${headerHeightVar()}px)`
+  };
+};
+
 const getMatchupContainerStyles = ({
   isMobileAndLandscape,
   isLargeScreen
@@ -258,7 +257,6 @@ const baphStyles: { [key: string]: CSSObject } = {
     display: 'flex',
     alignItems: 'center',
     gap: '2rem',
-    // minHeight: '80vh',
     flexDirection: 'column',
     position: 'relative'
   },
@@ -269,7 +267,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     minHeight: '300px'
   },
   loadingText: {
-    color: baseColors.tertiary[300],
+    color: tokens.color.tertiary[300],
     fontSize: '1.1rem'
   },
   errorContainer: {
@@ -278,12 +276,12 @@ const baphStyles: { [key: string]: CSSObject } = {
     alignItems: 'center',
     gap: '1rem',
     padding: '2rem',
-    backgroundColor: baseColors.secondary[700],
+    backgroundColor: tokens.color.secondary[700],
     borderRadius: '8px',
-    border: `1px solid ${baseVibrantColors.accent[500]}`
+    border: `1px solid ${tokens.color.error[500]}`
   },
   errorText: {
-    color: baseVibrantColors.accent[300],
+    color: tokens.color.error.vibrant[300],
     textAlign: 'center',
     margin: 0,
     fontSize: '1.1rem'
@@ -300,14 +298,14 @@ const baphStyles: { [key: string]: CSSObject } = {
     top: '20%'
   },
   voteSuccess: {
-    backgroundColor: baseVibrantColors.secondary[700],
-    color: baseVibrantColors.secondary[300],
-    border: `1px solid ${baseVibrantColors.secondary[500]}`
+    backgroundColor: tokens.color.secondary.vibrant[700],
+    color: tokens.color.secondary.vibrant[300],
+    border: `1px solid ${tokens.color.secondary.vibrant[500]}`
   },
   voteError: {
-    backgroundColor: baseVibrantColors.accent[700],
-    color: baseVibrantColors.accent[300],
-    border: `1px solid ${baseVibrantColors.accent[500]}`
+    backgroundColor: tokens.color.error.vibrant[700],
+    color: tokens.color.error.vibrant[300],
+    border: `1px solid ${tokens.color.error.vibrant[500]}`
   },
   matchupContainer: {
     display: 'flex',
@@ -332,18 +330,18 @@ const baphStyles: { [key: string]: CSSObject } = {
   vsText: {
     fontSize: '2rem',
     fontWeight: 'bold',
-    color: baseVibrantColors.primary[300],
+    color: tokens.color.primary.vibrant[300],
     textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
     padding: '1rem',
-    backgroundColor: baseColors.secondary[700],
+    backgroundColor: tokens.color.secondary[700],
     borderRadius: '50%',
     width: '50px',
     height: '50px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    border: `2px solid ${baseVibrantColors.primary[500]}`,
-    [mediaQueries.minWidth.lg]: {
+    border: `2px solid ${tokens.color.primary.vibrant[500]}`,
+    [tokens.media.min.lg]: {
       fontSize: '3rem',
       width: '80px',
       height: '80px'

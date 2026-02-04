@@ -1,24 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
-import { MovieList } from '../../components/MovieList/MovieList';
 import { GET_MOVIE_LIST_ITEMS } from '../../api/queries';
-import { BodySection } from '../../components/Layouts/BodySection';
-import { PageHeading } from '../../components/Layouts/PageHeading';
-import { ScrollToTopButton } from '../../components/Buttons/ScrollToTopButton';
 import { useLazyQuery } from '@apollo/client/react';
-
-type Movie = {
-  id: string;
-  title: string;
-  releaseDate?: string;
-  rated?: string;
-  posterPath?: string;
-  winningPercentage: number;
-  overview?: string;
-  genres?: string[];
-  revenue?: number;
-  backdropPath?: string;
-  tmdbId: string;
-};
+import type { Movie } from '../../types/movies.types';
+import { Main, ScrollToTopButton } from 'athameui';
+import { PageHeading } from '../../components/Layouts/PageHeading';
+import { MovieList } from '../../components/MovieList/MovieList';
 
 type MovieResults = {
   searchResults: Movie[];
@@ -27,7 +13,7 @@ type MovieResults = {
   newTotalMovieCount: number;
 };
 
-const AllMoviesPage: React.FC = () => {
+const AllMoviesPage = () => {
   const [allMovies, setAllMovies] = useState<Movie[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [cursor, setCursor] = useState('');
@@ -110,7 +96,7 @@ const AllMoviesPage: React.FC = () => {
   };
 
   return (
-    <BodySection pageSlug="all-movies">
+    <Main>
       <PageHeading
         title="All Movies"
         subtitle="Here's a big ol' list of movies."
@@ -123,10 +109,17 @@ const AllMoviesPage: React.FC = () => {
         onScroll={fetchMoreMovies}
         isLoadingMore={isLoadingMore}
         hasMore={hasMore}
+        sx={{ list: baphStyles.list }}
       />
       <ScrollToTopButton />
-    </BodySection>
+    </Main>
   );
 };
 
 export default AllMoviesPage;
+
+const baphStyles = {
+  list: {
+    marginTop: '2rem'
+  }
+};

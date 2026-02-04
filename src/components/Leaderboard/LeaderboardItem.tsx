@@ -45,10 +45,7 @@ const getRankDisplay = (rank: number): string => {
   return `#${rank}`;
 };
 
-export const LeaderboardItem: React.FC<LeaderboardItemProps> = ({
-  user,
-  rank
-}) => {
+export const LeaderboardItem = ({ user, rank }: LeaderboardItemProps) => {
   const rankStyles = getRankStyles(rank);
   const rankDisplay = getRankDisplay(rank);
 
