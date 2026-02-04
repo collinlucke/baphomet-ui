@@ -21,8 +21,7 @@
     "install:both:dev": "bash scripts/use-both-local.sh",
     "install:both:prod": "bash scripts/use-both-prod.sh",
     "install:dev": "bash scripts/use-local-phantomartist.sh",
-    "install:prod": "bash scripts/use-npm-phantomartist.sh",
-    "postinstall": "pnpm use:local"
+    "install:prod": "bash scripts/use-npm-phantomartist.sh"
   },
   "dependencies": {
     "@apollo/client": "^4.0.4",
