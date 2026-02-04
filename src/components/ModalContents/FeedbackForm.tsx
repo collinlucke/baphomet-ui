@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client/react';
-import { Button, InputField } from 'phantomartist';
+import { Button, FormInput } from 'athameui';
 import { CSSObject } from '@emotion/react';
 import { ModalContent } from './ModalContent';
 import { SUBMIT_FEEDBACK } from '../../api/mutations';
@@ -11,7 +11,7 @@ type FeedbackFormProps = {
   onSuccess: () => void;
 };
 
-export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
+export const FeedbackForm = ({ onSuccess }: FeedbackFormProps) => {
   const [formData, setFormData] = useState({
     email: '',
     comments: ''
@@ -141,7 +141,7 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
           </div>
         )}
 
-        <InputField
+        <FormInput
           label="Email Address (Optional)"
           type="email"
           name="email"
@@ -151,8 +151,8 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
           error={errors.email}
           helperText="Leave your email if you'd like us to follow up with you."
           autoComplete="email"
-          ariaDescribedBy="email-help"
-          ariaInvalid={!!errors.email}
+          aria-describedby="email-help"
+          aria-invalid={!!errors.email}
           data-testid="feedback-email-input"
         />
         <div id="email-help" css={baphStyles.srOnly}>
@@ -160,7 +160,7 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
           feedback
         </div>
 
-        <InputField
+        <FormInput
           label="Comments"
           type="textarea"
           name="comments"
@@ -170,8 +170,8 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
           disabled={isSubmitting}
           error={errors.comments}
           required
-          ariaDescribedBy="comments-help"
-          ariaInvalid={!!errors.comments}
+          aria-describedby="comments-help"
+          aria-invalid={!!errors.comments}
           data-testid="feedback-comments-input"
         />
         <div id="comments-help" css={baphStyles.srOnly}>
@@ -184,7 +184,7 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSuccess }) => {
             type="submit"
             variant="primary"
             disabled={isSubmitting || !formData.comments.trim()}
-            ariaLabel={
+            aria-label={
               isSubmitting
                 ? 'Sending feedback, please wait'
                 : 'Send your feedback'

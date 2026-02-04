@@ -41,35 +41,32 @@ export const ADD_MOVIE = gql`
       winningPercentage: $winningPercentage
       totalComparisons: $totalComparisons
     ) {
-      success
-      message
-      movie {
+      id
+      title
+      releaseDate
+      overview
+      genres
+      revenue
+      posterPath
+      backdropPath
+      tmdbId
+      tagline
+      topBilledCast {
         id
-        title
-        releaseDate
-        overview
-        genres
-        revenue
-        posterPath
-        backdropPath
-        tmdbId
-        tagline
-        topBilledCast {
-          id
-          name
-          character
-          profilePath
-        }
-        directors {
-          id
-          name
-          profilePath
-        }
-        totalWins
-        totalLosses
-        winningPercentage
-        totalComparisons
+        name
+        role
+        profilePath
       }
+      directors {
+        id
+        name
+        profilePath
+        role
+      }
+      totalWins
+      totalLosses
+      winningPercentage
+      totalComparisons
     }
   }
 `;

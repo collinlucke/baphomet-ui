@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client/react';
-import { InputField, Button } from 'phantomartist';
+import { FormInput, Button } from 'athameui';
 import { CSSObject } from '@emotion/react';
 import { LOGIN } from '../../api/mutations';
 import { LoginFormData, LoginFormProps } from '../../types/auth.types';
@@ -24,7 +24,7 @@ type LoginMutationData = {
   };
 };
 
-export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
+export const LoginForm = ({ onSuccess, onError }: LoginFormProps) => {
   const [formData, setFormData] = useState<LoginFormData>({
     emailOrUsername: '',
     password: ''
@@ -163,7 +163,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
         )}
 
         <div css={baphStyles.fields}>
-          <InputField
+          <FormInput
             label="Email or Username"
             type="text"
             name="emailOrUsername"
@@ -174,17 +174,17 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
             error={errors.emailOrUsername}
             disabled={isLoading}
             autoComplete="username email"
-            ariaDescribedBy={
+            aria-describedby={
               errors.emailOrUsername ? 'email-error' : 'email-help'
             }
-            ariaInvalid={!!errors.emailOrUsername}
-            testId="login-email-input"
+            aria-invalid={!!errors.emailOrUsername}
+            data-testid="login-email-input"
           />
           <div id="email-help" css={baphStyles.srOnly}>
             Enter the email address or username associated with your account
           </div>
 
-          <InputField
+          <FormInput
             label="Password"
             type="password"
             name="password"
@@ -195,11 +195,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
             error={errors.password}
             disabled={isLoading}
             autoComplete="current-password"
-            ariaDescribedBy={
+            aria-describedby={
               errors.password ? 'password-error' : 'password-help'
             }
-            ariaInvalid={!!errors.password}
-            testId="login-password-input"
+            aria-invalid={!!errors.password}
+            data-testid="login-password-input"
           />
           <div id="password-help" css={baphStyles.srOnly}>
             Enter your account password
@@ -216,10 +216,10 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
               !formData.emailOrUsername.trim() ||
               !formData.password
             }
-            ariaLabel={
+            aria-label={
               isLoading ? 'Signing in, please wait' : 'Sign in to your account'
             }
-            testId="login-submit-button"
+            data-testid="login-submit-button"
           >
             {isLoading ? 'Signing In...' : 'Sign In'}
           </Button>

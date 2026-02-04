@@ -1,5 +1,5 @@
 import { Header as AthameHeader, Button, tokens } from 'athameui';
-import {HugeiconsIcon} from '@hugeicons/react';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Menu01Icon } from '@hugeicons/core-free-icons';
 import { LogoLink } from './LogoLink';
 import {
@@ -16,7 +16,7 @@ import { SlideOutNav } from '../Navs/SlideOutNav';
 import { AuthUserAvatarButton } from '../Navs/AuthUserAvatarButton';
 import { UnauthorizedButtons } from '../Navs/UnauthorizedButtons';
 
-export const Header: React.FC = () => {
+export const Header = () => {
   const isLargeScreen = useReactiveVar(isLargeScreenVar);
   const isMobile = useReactiveVar(isMobileVar);
   const isSmallOrMobile = useReactiveVar(isSmallOrMobileVar);
@@ -45,7 +45,7 @@ export const Header: React.FC = () => {
                   data-testid="open-slide-out-menu-button"
                   variant="ghost"
                   size="small"
-                  icon={() => <HugeiconsIcon icon={Menu01Icon} size={24} />}
+                  icon={<HugeiconsIcon icon={Menu01Icon} size={24} />}
                   onClick={openSlideOutMenuHandler}
                   aria-label={'Open main menu flyout'}
                   dark

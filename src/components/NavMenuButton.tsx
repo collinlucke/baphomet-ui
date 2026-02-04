@@ -1,21 +1,20 @@
 import { Link } from 'react-router-dom';
-import { Button } from 'phantomartist';
+import { Button } from 'athameui';
 import { useReactiveVar } from '@apollo/client/react';
-import { isSmallOrMobileVar } from '../../reactiveVars';
+import { isSmallOrMobileVar } from '../reactiveVars';
 
 type ButtonVariant =
   | 'primary'
   | 'secondary'
   | 'tertiary'
   | 'ghost'
-  | 'ghostOnDark'
   | 'outline'
   | undefined;
 
 type NavMenuButtonProps = {
-  children: React.ReactElement | string;
+  children?: string | React.ReactNode;
   to?: string;
-  onDark?: boolean;
+  dark?: boolean;
   ariaLabel?: string;
   ariaDescribedBy?: string;
   variant?: ButtonVariant;
@@ -26,7 +25,7 @@ type NavMenuButtonProps = {
 export const NavMenuButton = ({
   children,
   to,
-  onDark = true,
+  dark = true,
   ariaLabel,
   ariaDescribedBy,
   variant,
@@ -35,25 +34,17 @@ export const NavMenuButton = ({
 }: NavMenuButtonProps) => {
   const isSmallOrMobile = useReactiveVar(isSmallOrMobileVar);
   const buttonSize = isSmallOrMobile ? 'medium' : 'small';
-  let buttonVariant: ButtonVariant;
-
-  if (variant) {
-    buttonVariant = variant;
-  } else if (isSmallOrMobile || onDark) {
-    buttonVariant = 'ghostOnDark';
-  } else {
-    buttonVariant = 'ghost';
-  }
 
   const ButtonElement = () => (
     <Button
       size={buttonSize}
-      variant={buttonVariant}
-      className={{ button: baphStyles.button }}
+      variant={variant}
+      sx={{ button: baphStyles.button }}
       onClick={onClick}
-      ariaLabel={ariaLabel}
-      ariaDescribedBy={ariaDescribedBy}
-      testId={testId}
+      aria-label={ariaLabel}
+      aria-describedby={ariaDescribedBy}
+      data-testid={testId}
+      dark={dark}
     >
       {children}
     </Button>

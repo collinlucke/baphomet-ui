@@ -1,5 +1,5 @@
 import { ModalContent } from './ModalContent';
-import { Button } from 'phantomartist';
+import { Button } from 'athameui';
 import {
   showLoginModalVar,
   showUnauthorizedModalVar

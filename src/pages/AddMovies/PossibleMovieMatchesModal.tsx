@@ -1,32 +1,29 @@
 import { CSSObject } from '@emotion/react';
-import {
-  baseColors,
-  baseVibrantColors,
-  Button,
-  Modal
-} from 'phantomartist';
+import { tokens, Button, Modal } from 'athameui';
 import type { PossibleMovieMatch } from './AddMoviesPage';
+
+const { color } = tokens;
 
 type PossibleMovieMatchesProps = {
   possibleMatches: PossibleMovieMatch[];
   showModal: boolean;
   handleCloseModal: () => void;
-  handleSelectMovie: (tmdbId: string) => void;
+  selectMovieHandler: (tmdbId: number) => void;
 };
 
-export const PossibleMovieMatchesModal: React.FC<PossibleMovieMatchesProps> = ({
+export const PossibleMovieMatchesModal = ({
   possibleMatches,
-  handleSelectMovie,
+  selectMovieHandler,
   showModal,
   handleCloseModal
-}) => {
+}: PossibleMovieMatchesProps) => {
   return (
     <Modal
       isOpen={showModal}
       onClose={handleCloseModal}
       title="Search Results"
-      maxWidth="800px"
       dataTestId="movie-search-modal"
+      sx={{ modal: baphStyles.modal }}
     >
       <div css={baphStyles.modalContent}>
         <p css={baphStyles.modalDescription}>
@@ -59,7 +56,7 @@ export const PossibleMovieMatchesModal: React.FC<PossibleMovieMatchesProps> = ({
                     {movie.releaseDate || 'Unknown'}
                   </div>
                   <div css={baphStyles.metaItem}>
-                    <strong>TMDB ID:</strong> {movie.id}
+                    <strong>TMDB ID:</strong> {movie.tmdbId}
                   </div>
                 </div>
 
@@ -71,8 +68,8 @@ export const PossibleMovieMatchesModal: React.FC<PossibleMovieMatchesProps> = ({
                   <Button
                     variant="primary"
                     size="small"
-                    onClick={() => handleSelectMovie(movie.id)}
-                    className={{ button: baphStyles.selectButton }}
+                    onClick={() => selectMovieHandler(movie.tmdbId)}
+                    sx={{ button: baphStyles.selectButton }}
                   >
                     Select Movie
                   </Button>
@@ -87,12 +84,15 @@ export const PossibleMovieMatchesModal: React.FC<PossibleMovieMatchesProps> = ({
 };
 
 const baphStyles: { [key: string]: CSSObject } = {
+  modal: {
+    maxWidth: '800px'
+  },
   modalContent: {
     maxHeight: '70vh',
     overflowY: 'auto' as const
   },
   modalDescription: {
-    color: baseColors.primary[500],
+    color: color.primary[500],
     marginBottom: '20px',
     fontSize: '16px',
     textAlign: 'center' as const
@@ -107,12 +107,12 @@ const baphStyles: { [key: string]: CSSObject } = {
     gap: '15px',
     padding: '15px',
     borderRadius: '8px',
-    backgroundColor: baseColors.secondary[700],
-    border: `1px solid ${baseColors.tertiary[600]}`,
+    backgroundColor: color.secondary[700],
+    border: `1px solid ${color.tertiary[600]}`,
     transition: 'all 0.2s ease',
     '&:hover': {
-      backgroundColor: baseColors.secondary[600],
-      borderColor: baseColors.tertiary[500],
+      backgroundColor: color.secondary[600],
+      borderColor: color.tertiary[500],
       transform: 'translateY(-2px)',
       boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
     }
@@ -132,14 +132,14 @@ const baphStyles: { [key: string]: CSSObject } = {
   noPosterPlaceholder: {
     width: '100%',
     height: '100%',
-    backgroundColor: baseColors.secondary[500],
+    backgroundColor: color.secondary[500],
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    color: baseColors.tertiary[400],
+    color: color.tertiary[400],
     fontSize: '12px',
     textAlign: 'center' as const,
-    border: `1px solid ${baseColors.tertiary[500]}`
+    border: `1px solid ${color.tertiary[500]}`
   },
   movieDetails: {
     flex: 1,
@@ -149,7 +149,7 @@ const baphStyles: { [key: string]: CSSObject } = {
   },
   movieTitle: {
     margin: 0,
-    color: baseVibrantColors.primary[300],
+    color: color.primary[300],
     fontSize: '18px',
     fontWeight: 'bold',
     lineHeight: '1.3'
@@ -161,14 +161,14 @@ const baphStyles: { [key: string]: CSSObject } = {
     fontSize: '14px'
   },
   metaItem: {
-    color: baseColors.tertiary[300],
+    color: color.tertiary[300],
     '& strong': {
-      color: baseColors.tertiary[100],
+      color: color.tertiary[100],
       marginRight: '5px'
     }
   },
   movieOverview: {
-    color: baseColors.tertiary[200],
+    color: color.tertiary[200],
     fontSize: '14px',
     lineHeight: '1.4',
     margin: 0,
@@ -191,7 +191,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     display: 'flex',
     gap: '10px',
     alignItems: 'center',
-    color: baseVibrantColors.accent[300]
+    color: color.error.vibrant[300]
   },
   updateButton: {
     marginLeft: '10px'

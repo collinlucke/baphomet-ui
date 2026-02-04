@@ -1,4 +1,4 @@
-import { baseVibrantColors, baseColors, mediaQueries } from 'phantomartist';
+import { tokens } from 'athameui';
 import { CSSObject } from '@emotion/react';
 import { isMobileVar } from '../../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
@@ -43,7 +43,7 @@ type MovieCardProps = {
   onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
 };
 
-export const MovieCard: React.FC<MovieCardProps> = ({
+export const MovieCard = ({
   isVoting,
   movie,
   ariaLabel,
@@ -55,7 +55,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
   onKeyDown,
   onFocus,
   onBlur
-}) => {
+}: MovieCardProps) => {
   const isMobile = useReactiveVar(isMobileVar);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -104,7 +104,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
     return `${movie.title}${yearText}${voteText}`;
   };
 
-  const posterImageUrl = movie?.posterImages?.w342 || '';
+  const posterImageUrl = movie?.posterImages?.w780 || '';
 
   const backdropImageUrl = movie?.backdropImages?.w780 || '';
 
@@ -151,7 +151,7 @@ const getMovieCardStyles = (
   return {
     ...baphStyles.movieCard,
     backgroundImage: `url(${backdropImageUrl})`,
-    [mediaQueries.minWidth.lg]: {
+    [tokens.media.min.lg]: {
       backgroundImage: isMobile
         ? `url(${backdropImageUrl})`
         : `url(${posterImageUrl})`,
@@ -178,15 +178,15 @@ const baphStyles: { [key: string]: CSSObject } = {
     overflow: 'hidden',
     cursor: 'pointer',
     transition: 'all 0.3s ease',
-    border: `2px solid ${baseColors.tertiary[600]}`,
+    border: `2px solid ${tokens.color.tertiary[600]}`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPositionY: '20%',
     backgroundPositionX: 'center',
     '&:hover': {
       transform: 'scale(1.05)',
-      border: `2px solid ${baseVibrantColors.primary[500]}`,
-      boxShadow: `0 8px 32px rgba(${baseVibrantColors.primary[500]}, 0.3)`
+      border: `2px solid ${tokens.color.primary[500]}`,
+      boxShadow: `0 8px 32px rgba(${tokens.color.primary[500]}, 0.3)`
     }
   },
   movieCardDisabled: {
@@ -194,7 +194,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     opacity: 0.7,
     '&:hover': {
       transform: 'none',
-      border: `2px solid ${baseColors.tertiary[600]}`,
+      border: `2px solid ${tokens.color.tertiary[600]}`,
       boxShadow: 'none'
     }
   },
@@ -223,7 +223,7 @@ const baphStyles: { [key: string]: CSSObject } = {
   movieYear: {
     margin: '0.25rem 0 0',
     fontSize: '0.75rem',
-    color: baseColors.tertiary[300],
+    color: tokens.color.tertiary[300],
     textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)'
   }
 };

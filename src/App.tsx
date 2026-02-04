@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Header } from './components/Layouts/Header';
 import { Footer } from './components/Layouts/Footer';
-// import { Main, Globals, Modal, mediaQueries, screenSizes } from 'phantomartist';
-import { Modal, screenSizes } from 'phantomartist';
-// import { Main } from './components/Layouts/Main';
+import { screenSizes } from 'phantomartist';
+import { Modal } from 'athameui';
 import {
   isAuthenticatedVar,
   showUnauthorizedModalVar,
@@ -150,7 +149,7 @@ export const App = () => {
   }, [authData, authError]);
 
   return (
-    <div>
+    <div css={baphStyles.appWrapper}>
       <Globals />
 
       <Header />
@@ -188,6 +187,7 @@ export default App;
 const getMainStyles = (backdrop?: string): CSSObject => ({
   position: 'relative' as const,
   zIndex: 0,
+  flexGrow: 1,
   '&::before': {
     content: '""',
     position: 'absolute' as const,
@@ -204,3 +204,13 @@ const getMainStyles = (backdrop?: string): CSSObject => ({
     backgroundImage: `url(https://image.tmdb.org/t/p/original${backdrop})`
   }
 });
+
+const baphStyles: { [key: string]: CSSObject } = {
+  appWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '100vh',
+    justifyContent: 'space-between',
+    scrollbarGutter: 'stable'
+  }
+};

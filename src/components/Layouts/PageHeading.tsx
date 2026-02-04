@@ -1,5 +1,5 @@
 import { CSSObject } from '@emotion/react';
-import { mediaQueries } from 'phantomartist';
+import { tokens } from 'athameui';
 import { isMobileVar } from '../../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
 
@@ -13,7 +13,7 @@ type PageHeadingProps = {
   rightContent?: React.ReactNode;
 };
 
-export const PageHeading: React.FC<PageHeadingProps> = ({
+export const PageHeading = ({
   title,
   subtitle,
   className,
@@ -21,7 +21,7 @@ export const PageHeading: React.FC<PageHeadingProps> = ({
   ariaLabelledBy,
   ariaDescribedBy,
   rightContent
-}) => {
+}: PageHeadingProps) => {
   const headingId = `heading-${slug || 'page'}`;
   const isMobile = useReactiveVar(isMobileVar);
   return (
@@ -55,7 +55,7 @@ export const PageHeading: React.FC<PageHeadingProps> = ({
 const getHeadingStyes = (isMobile: boolean) => ({
   ...baphStyles.heading,
   fontSize: '1.75rem',
-  [mediaQueries.minWidth.md]: {
+  [tokens.media.min.md]: {
     fontSize: isMobile ? '1.65rem' : '2rem'
   }
 });

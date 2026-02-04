@@ -1,5 +1,5 @@
 import { CSSObject } from '@emotion/react';
-import { Button } from 'phantomartist';
+import { Button } from 'athameui';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { ArrowUp01Icon } from '@hugeicons/core-free-icons';
 
@@ -11,7 +11,7 @@ export const ScrollToTopButton = () => {
   return (
     <div css={baphStyles.scrollToTop}>
       <Button
-        className={{ button: baphStyles.button }}
+        sx={{ button: baphStyles.button }}
         variant="secondary"
         onClick={handleScroll}
       >

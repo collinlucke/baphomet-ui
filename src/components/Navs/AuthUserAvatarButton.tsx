@@ -1,5 +1,7 @@
 import { useState, useRef } from 'react';
-import { Avatar, Button, Dropdown } from 'phantomartist';
+import { Button } from 'athameui';
+import { Dropdown } from 'phantomartist';
+import { Avatar } from 'athameui';
 import { UserMenu } from './UserMenu';
 
 type AuthUserAvatarProps = {
@@ -25,7 +27,7 @@ export const AuthUserAvatarButton = ({ displayName }: AuthUserAvatarProps) => {
       <Button
         onClick={toggleDropdownHandler}
         variant="ghost"
-        className={{ button: baphStyles.avatarButton }}
+        sx={{ button: baphStyles.avatarButton }}
       >
         <Avatar displayName={displayName || 'User'} />
       </Button>

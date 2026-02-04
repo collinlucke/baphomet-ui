@@ -11,12 +11,12 @@ type LeaderboardProps = {
   onScroll?: () => void;
 };
 
-export const Leaderboard: React.FC<LeaderboardProps> = ({
+export const Leaderboard = ({
   leaderboard,
   hasMore,
   isLoadingMore = false,
   onScroll
-}) => {
+}: LeaderboardProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
 

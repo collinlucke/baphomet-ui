@@ -1,15 +1,13 @@
 import { useState } from 'react';
 import { useMutation, useLazyQuery } from '@apollo/client/react';
+import { useReactiveVar } from '@apollo/client/react';
 import {
-  Button,
-  InputField,
-  Search,
-  baseColors,
-  baseVibrantColors,
-  mediaQueries,
-  Label
-} from 'phantomartist';
-import { BodySection } from '../../components/Layouts/BodySection';
+  isExistingMovieVar,
+  currentMovieVar
+} from './addMoviesPageReactiveVars';
+import { Button, Search, Main, tokens } from 'athameui';
+import { PageTitle } from '../../components/PageTitle';
+import { MovieDetailsForm } from './MovieDetailsForm';
 import { CSSObject } from '@emotion/react';
 import { ADD_MOVIE, UPDATE_MOVIE } from '../../api/mutations';
 import {
@@ -17,7 +15,6 @@ import {
   FETCH_MOVIE_FROM_TMDB,
   FETCH_POSSIBLE_MOVIE_MATCHES
 } from '../../api/queries';
-import { PersonCardCarousel } from '../../components/PersonCard/PersonCardCarousel';
 import { PossibleMovieMatchesModal } from './PossibleMovieMatchesModal';
 
 type PossibleMovieMatchResponse = {
@@ -27,18 +24,12 @@ type PossibleMovieMatchResponse = {
   totalResults: number;
 };
 
-type MovieResponse = {
-  success: boolean;
-  message: string;
-  movie: CurrentMovie;
-};
-
 type AddMovieData = {
-  addMovie: MovieResponse;
+  addMovie: CurrentMovie;
 };
 
 type UpdateMovieData = {
-  updateMovie: MovieResponse;
+  updateMovie: CurrentMovie;
 };
 
 type ExistingMovieData = {
@@ -56,28 +47,30 @@ type TopBilledCastMember = {
   profilePath: string;
 };
 
-type Directors = {
+type Director = {
   id: number;
   name: string;
   profilePath: string;
   role: string;
 };
 
-type NewMovie = {
-  title: string;
-  releaseDate?: string;
-  genres?: string[];
-  overview?: string;
-  posterPath?: string;
-  backdropPath?: string;
-  tmdbId?: string;
-  revenue?: string;
-  tagline?: string;
-  topBilledCast?: Array<TopBilledCastMember>;
-  directors?: Array<Directors>;
-};
+type SearchTermType = string | number | undefined;
 
-type CurrentMovie = {
+// type NewMovie = {
+//   title: string;
+//   releaseDate?: string;
+//   genres?: string[];
+//   overview?: string;
+//   posterPath?: string;
+//   backdropPath?: string;
+//   tmdbId?: string;
+//   revenue?: string;
+//   tagline?: string;
+//   topBilledCast?: Array<TopBilledCastMember>;
+//   directors?: Array<Directors>;
+// };
+
+export type CurrentMovie = {
   id?: string | undefined;
   title?: string | undefined;
   releaseDate?: string | undefined;
@@ -85,15 +78,16 @@ type CurrentMovie = {
   overview?: string | undefined;
   posterPath?: string | undefined;
   backdropPath?: string | undefined;
-  tmdbId?: string | undefined;
+  tmdbId?: number | undefined;
   revenue?: string | undefined;
   tagline?: string | undefined;
-  topBilledCast?: Array<TopBilledCastMember> | undefined;
-  directors?: Array<Directors> | undefined;
+  topBilledCast?: TopBilledCastMember[] | undefined;
+  directors?: Director[] | undefined;
 };
 
 export type PossibleMovieMatch = {
   id: string;
+  tmdbId: number;
   title: string;
   releaseDate: string;
   overview: string;
@@ -102,8 +96,8 @@ export type PossibleMovieMatch = {
   genreIds: number[];
 };
 
-const AddMoviesPage: React.FC = () => {
-  const [tmdbId, setTmdbId] = useState<string>('');
+const AddMoviesPage = () => {
+  const [tmdbId, setTmdbId] = useState<number | undefined>(undefined);
   const [searchByTitle, setSearchByTitle] = useState<string>('');
   const [showMovieModal, setShowMovieModal] = useState<boolean>(false);
   const [possibleMatches, setPossibleMatches] = useState<PossibleMovieMatch[]>(
@@ -112,11 +106,8 @@ const AddMoviesPage: React.FC = () => {
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showFoundInDbMessage, setShowFoundInDbMessage] = useState(false);
-  const [isExistingMovie, setIsExistingMovie] = useState<boolean>(false);
-
-  const [currentMovie, setCurrentMovie] = useState<CurrentMovie | undefined>(
-    undefined
-  );
+  const isExistingMovie = useReactiveVar(isExistingMovieVar);
+  const currentMovie = useReactiveVar(currentMovieVar);
   const additionalData = {
     addedBy: JSON.parse(localStorage.getItem('baphomet-user') || '{}').id,
     lastUpdated: new Date().toISOString(),
@@ -144,7 +135,7 @@ const AddMoviesPage: React.FC = () => {
   }>(FETCH_POSSIBLE_MOVIE_MATCHES);
 
   // ----- HANDLERS ----- //
-  const handleFetchByTmdbId = async (tmdbId?: string) => {
+  const fetchByTmdbIdHandler = async (tmdbId?: number | undefined) => {
     if (!tmdbId) return;
     setIsLoading(true);
     setShowFoundInDbMessage(false);
@@ -154,9 +145,7 @@ const AddMoviesPage: React.FC = () => {
         variables: { tmdbId: tmdbId }
       });
       if (data) {
-        setCurrentMovie(prev => {
-          return { ...prev, ...data.fetchedMovie };
-        });
+        currentMovieVar({ ...currentMovie, ...data.fetchedMovie });
       }
     } catch (err) {
       console.error('Error fetching movie data:', err);
@@ -165,7 +154,15 @@ const AddMoviesPage: React.FC = () => {
     }
   };
 
-  const handleSearchByTmdbId = async (tmdbId: string) => {
+  const onSubmit = () => {
+    if (isExistingMovie) {
+      handleUpdateMovie();
+    } else {
+      addMovieHandler();
+    }
+  };
+
+  const searchByTmdbIdHandler = async (tmdbId: number) => {
     if (!tmdbId) return;
 
     setIsLoading(true);
@@ -173,16 +170,20 @@ const AddMoviesPage: React.FC = () => {
       const movieByTmdbIdResponse = await getMovieByTmdbId({
         variables: { tmdbId }
       });
+
       const { found, movie } = movieByTmdbIdResponse.data?.movieResult || {};
-      if (found) {
-        setCurrentMovie(movie);
-        setIsExistingMovie(true);
+      console.log('Movie by TMDB ID response:', movieByTmdbIdResponse);
+      if (found && movie) {
+        currentMovieVar(movie);
+        isExistingMovieVar(true);
         setShowFoundInDbMessage(true);
       }
 
       if (!found) {
         try {
-          await handleFetchByTmdbId(tmdbId);
+          const data = await fetchMovieFromTmdb({ variables: { tmdbId } });
+          console.log('Fetched movie from TMDB:', data);
+          currentMovieVar(data.data?.fetchedMovie);
         } catch (error) {
           console.error('Error fetching movie from TMDB:', error);
         }
@@ -193,16 +194,18 @@ const AddMoviesPage: React.FC = () => {
     }
   };
   const handleSearchIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTmdbId(e.target.value);
+    setTmdbId(parseInt(e.target.value, 10));
   };
 
-  const handleTitleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const titleSearchTermHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchByTitle(e.target.value);
   };
 
-  const handleTitleSearch = async (title: string) => {
-    if (!title.trim()) return;
+  /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+  const searchByTitleHandler = async (title: SearchTermType) => {
+    if (!title?.toString().trim()) return;
     setIsSearching(true);
+
     try {
       const response = await fetchPossibleMovieMatches({
         variables: { title }
@@ -219,10 +222,30 @@ const AddMoviesPage: React.FC = () => {
       setIsSearching(false);
     }
   };
+  /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
-  const handleSelectMovie = async (tmdbId: string) => {
+  const selectMovieHandler = async (tmdbId: number) => {
     setShowMovieModal(false);
-    await handleSearchByTmdbId(tmdbId);
+    const movieByTmdbIdResponse = await getMovieByTmdbId({
+      variables: { tmdbId }
+    });
+    const { found, movie } = movieByTmdbIdResponse.data?.movieResult || {};
+
+    if (found && movie) {
+      currentMovieVar(movie);
+      isExistingMovieVar(true);
+      setShowFoundInDbMessage(true);
+      return;
+    }
+    if (!found) {
+      try {
+        const data = await fetchMovieFromTmdb({ variables: { tmdbId } });
+        currentMovieVar(data.data?.fetchedMovie);
+      } catch (error) {
+        console.error('Error fetching movie from TMDB:', error);
+      }
+      return;
+    }
   };
 
   const handleCloseModal = () => {
@@ -230,12 +253,12 @@ const AddMoviesPage: React.FC = () => {
     setPossibleMatches([]);
   };
 
-  const handleClear = () => {
-    setTmdbId('');
+  const clearFormHandler = () => {
+    setTmdbId(undefined);
     setSearchByTitle('');
     setPossibleMatches([]);
     setShowFoundInDbMessage(false);
-    setCurrentMovie({
+    currentMovieVar({
       id: '',
       title: '',
       releaseDate: '',
@@ -243,7 +266,7 @@ const AddMoviesPage: React.FC = () => {
       revenue: '',
       posterPath: '',
       backdropPath: '',
-      tmdbId: '',
+      tmdbId: undefined,
       overview: '',
       tagline: '',
       topBilledCast: [],
@@ -251,17 +274,17 @@ const AddMoviesPage: React.FC = () => {
     });
   };
 
-  const handleChange =
-    (field: keyof NewMovie) =>
+  const onFormFieldChange =
+    (field: string) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const value = e.target.value;
       if (field === 'genres') {
-        setCurrentMovie({
+        currentMovieVar({
           ...currentMovie,
           [field]: value.split(',').map(s => s.trim())
         });
       } else {
-        setCurrentMovie({ ...currentMovie, [field]: value });
+        currentMovieVar({ ...currentMovie, [field]: value });
       }
     };
 
@@ -286,7 +309,7 @@ const AddMoviesPage: React.FC = () => {
     if (rest?.directors) {
       rest.directors = rest.directors.map(director => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { __typename, ...directorRest } = director as Directors & {
+        const { __typename, ...directorRest } = director as Director & {
           __typename: string;
         };
         return directorRest;
@@ -301,7 +324,7 @@ const AddMoviesPage: React.FC = () => {
     updateMovie({ variables: updateData });
   };
 
-  const handleAddMovie = async () => {
+  const addMovieHandler = async () => {
     if (!currentMovie) return;
     await addMovie({
       variables: {
@@ -330,64 +353,40 @@ const AddMoviesPage: React.FC = () => {
       }
     });
   };
-
   const directorsLabel =
     currentMovie?.directors && currentMovie.directors.length === 1
       ? 'Director'
       : 'Directors';
 
-  const removePerson = (id: number, roleType?: string) => {
+  const removePerson = (id: number, roleType?: string | undefined): void => {
+    console.log('Removing person with ID:', id, 'from', roleType);
     if (roleType === 'topBilledCast') {
-      setCurrentMovie(prev => ({
-        ...prev,
+      const updatedMovie = {
+        ...currentMovie,
         topBilledCast:
-          prev?.topBilledCast &&
-          prev.topBilledCast.filter(member => member.id !== id)
-      }));
+          currentMovie?.topBilledCast &&
+          currentMovie.topBilledCast.filter(
+            (member: TopBilledCastMember): boolean => member.id !== id
+          )
+      };
+      currentMovieVar(updatedMovie);
     } else {
-      setCurrentMovie(prev => ({
-        ...prev,
+      const updatedMovie = {
+        ...currentMovie,
         directors:
-          prev?.directors &&
-          prev.directors.filter(director => director.id !== id)
-      }));
+          currentMovie?.directors &&
+          currentMovie.directors.filter(
+            (director: Director): boolean => director.id !== id
+          )
+      };
+      currentMovieVar(updatedMovie);
     }
   };
 
-  const SaveButtonGroup = () => (
-    <div css={baphStyles.saveButtonGroup}>
-      <Button
-        size="small"
-        variant="secondary"
-        onClick={isExistingMovie ? handleUpdateMovie : handleAddMovie}
-        disabled={isLoading || !currentMovie?.title}
-      >
-        {isLoading
-          ? 'Loading...'
-          : isExistingMovie
-          ? 'Update Movie'
-          : 'Add Movie'}
-      </Button>
-      {isExistingMovie && (
-        <Button
-          size="small"
-          variant="secondary"
-          onClick={() => handleFetchByTmdbId(currentMovie?.tmdbId)}
-          disabled={isLoading}
-        >
-          Refetch from TMDB
-        </Button>
-      )}
-      <Button size="medium" variant="outline" onClick={handleClear}>
-        Clear
-      </Button>
-    </div>
-  );
-
   return (
     <>
-      <BodySection>
-        <h1>Add Movies</h1>
+      <Main>
+        <PageTitle title="Add Movies" />
         <div
           css={baphStyles.formContainer}
           className="baph-add-movies-form-container"
@@ -395,29 +394,29 @@ const AddMoviesPage: React.FC = () => {
           <Search
             searchTerm={searchByTitle}
             searchLabel="Enter movie title"
-            setSearchTerm={handleTitleSearchChange}
-            onSearch={handleTitleSearch}
+            setSearchTerm={titleSearchTermHandler}
+            onSearch={searchByTitleHandler}
             inputSize="medium"
             buttonSize="medium"
-            buttonVariant="secondary"
+            buttonVariant="tertiary"
             showResultsCount={false}
             label="Movie Title"
             buttonText={isSearching ? 'Searching...' : 'Search by Title'}
-            onDark
+            dark
           />
 
           <Search
             searchTerm={tmdbId}
             searchLabel="Enter TMDB ID"
             setSearchTerm={handleSearchIdChange}
-            onSearch={handleSearchByTmdbId}
+            onSearch={searchByTitleHandler}
             inputSize="medium"
             buttonSize="medium"
-            buttonVariant="secondary"
+            buttonVariant="tertiary"
             showResultsCount={false}
             label="TMDB ID"
             buttonText={`Fetch By TMDB ID`}
-            onDark
+            dark
           />
           {showFoundInDbMessage && (
             <div css={baphStyles.messageContainer}>
@@ -426,7 +425,7 @@ const AddMoviesPage: React.FC = () => {
                 size="small"
                 variant="secondary"
                 onClick={() => {
-                  handleFetchByTmdbId(currentMovie?.tmdbId);
+                  fetchByTmdbIdHandler(currentMovie?.tmdbId);
                 }}
               >
                 Refetch from TMDB
@@ -434,127 +433,25 @@ const AddMoviesPage: React.FC = () => {
             </div>
           )}
 
-          <SaveButtonGroup />
           <hr css={baphStyles.divider} />
-
-          <div css={baphStyles.formFieldContainers}>
-            <InputField
-              label="Title"
-              type="text"
-              value={currentMovie?.title || ''}
-              onChange={handleChange('title')}
-              placeholder="Movie Title"
-              size="medium"
-              onDark
-            />
-            <InputField
-              size="medium"
-              label="Release Date"
-              type="text"
-              value={currentMovie?.releaseDate ?? ''}
-              onChange={handleChange('releaseDate')}
-              placeholder="Release Date"
-              onDark
-            />
-            <InputField
-              size="medium"
-              label="Genres"
-              type="text"
-              value={currentMovie?.genres?.join(', ') ?? ''}
-              onChange={handleChange('genres')}
-              placeholder="Genres, comma-separated"
-              onDark
-            />
-            <InputField
-              size="medium"
-              label="Overview"
-              type="text"
-              value={currentMovie?.overview ?? ''}
-              onChange={handleChange('overview')}
-              placeholder="Overview"
-              onDark
-            />
-            <InputField
-              size="medium"
-              label="Revenue"
-              type="text"
-              value={currentMovie?.revenue ?? ''}
-              onChange={handleChange('revenue')}
-              placeholder="Revenue"
-              onDark
-            />
-            <InputField
-              size="medium"
-              label="Poster Path"
-              type="text"
-              value={currentMovie?.posterPath ?? ''}
-              onChange={handleChange('posterPath')}
-              placeholder="Poster image path"
-              onDark
-            />
-            <InputField
-              size="medium"
-              label="Backdrop Path"
-              type="text"
-              value={currentMovie?.backdropPath ?? ''}
-              onChange={handleChange('backdropPath')}
-              placeholder="Backdrop image path"
-              onDark
-            />
-            <InputField
-              size="medium"
-              label="Tagline"
-              type="text"
-              value={currentMovie?.tagline ?? ''}
-              onChange={handleChange('tagline')}
-              placeholder="Tagline"
-              onDark
-            />
-            <div>
-              <Label label={directorsLabel} onDark />
-              <PersonCardCarousel
-                people={currentMovie?.directors || []}
-                removePerson={removePerson}
-                roleType="Director"
-              />
-            </div>
-            <div>
-              <Label label="Top Billed Cast" onDark />
-              <PersonCardCarousel
-                people={currentMovie?.topBilledCast || []}
-                removePerson={removePerson}
-                roleType="character"
-              />
-            </div>
-          </div>
-
-          <div css={baphStyles.previewContainer}>
-            {currentMovie?.posterPath ? (
-              <img
-                css={baphStyles.posterImg}
-                src={`https://image.tmdb.org/t/p/w300${currentMovie?.posterPath}`}
-                alt="Poster Preview"
-              />
-            ) : (
-              <div css={baphStyles.posterImg}>No Poster Available</div>
-            )}
-            {currentMovie?.backdropPath ? (
-              <img
-                css={baphStyles.backdropImg}
-                src={`https://image.tmdb.org/t/p/w1280${currentMovie?.backdropPath}`}
-                alt="Backdrop Preview"
-              />
-            ) : (
-              <div css={baphStyles.backdropImg}>No Backdrop Available</div>
-            )}
-          </div>
+          <MovieDetailsForm
+            onFormFieldChange={onFormFieldChange}
+            onSubmit={onSubmit}
+            currentMovie={currentMovie}
+            removePerson={removePerson}
+            directorsLabel={directorsLabel}
+            isExistingMovie={isExistingMovie}
+            updateMovie={handleUpdateMovie}
+            addMovie={addMovieHandler}
+            isLoading={isLoading}
+            clearFormHandler={clearFormHandler}
+            searchByTmdbIdHandler={searchByTmdbIdHandler}
+          />
         </div>
-
-        <SaveButtonGroup />
-      </BodySection>
+      </Main>
       <PossibleMovieMatchesModal
         possibleMatches={possibleMatches}
-        handleSelectMovie={handleSelectMovie}
+        selectMovieHandler={selectMovieHandler}
         showModal={showMovieModal}
         handleCloseModal={handleCloseModal}
       />
@@ -566,10 +463,10 @@ export default AddMoviesPage;
 
 const baphStyles: { [key: string]: CSSObject } = {
   successMessage: {
-    color: baseVibrantColors.secondary[700]
+    color: tokens.color.secondary.vibrant[700]
   },
   errorMessage: {
-    color: baseVibrantColors.accent[700]
+    color: tokens.color.error.vibrant[700]
   },
   formFieldContainers: {
     display: 'flex',
@@ -594,7 +491,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     maxWidth: '800px',
     flexDirection: 'column' as const,
     alignItems: 'center',
-    [mediaQueries.minWidth.md]: {
+    [tokens.media.min.md]: {
       flexDirection: 'row' as const,
       alignItems: 'flex-start'
     }
@@ -605,8 +502,8 @@ const baphStyles: { [key: string]: CSSObject } = {
     width: '200px',
     borderRadius: '4px',
     objectFit: 'cover' as const,
-    backgroundColor: baseColors.secondary[500],
-    border: `1px solid ${baseColors.tertiary[600]}`,
+    backgroundColor: tokens.color.secondary[500],
+    border: `1px solid ${tokens.color.tertiary[600]}`,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
@@ -618,17 +515,17 @@ const baphStyles: { [key: string]: CSSObject } = {
     minWidth: '0',
     borderRadius: '4px',
     objectFit: 'cover' as const,
-    backgroundColor: baseColors.secondary[500],
-    border: `1px solid ${baseColors.tertiary[600]}`,
+    backgroundColor: tokens.color.secondary[500],
+    border: `1px solid ${tokens.color.tertiary[600]}`,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    [mediaQueries.maxWidth.md]: {
+    [tokens.media.max.md]: {
       width: '100%'
     }
   },
   divider: {
-    borderTop: `1px solid ${baseColors.tertiary[500]}`,
+    borderTop: `1px solid ${tokens.color.tertiary[500]}`,
     width: '100%'
   }
 };

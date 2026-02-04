@@ -7,8 +7,6 @@ import { Header } from '../Layouts/Header';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client/react';
 import { InMemoryCache, ApolloClient, ApolloLink } from '@apollo/client';
-// import { ThemeProvider } from '@emotion/react';
-// import { baseTheme } from 'phantomartist';
 import {
   isAuthenticatedVar,
   showSignUpModalVar,

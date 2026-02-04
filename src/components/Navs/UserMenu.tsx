@@ -1,15 +1,15 @@
 import { CSSObject } from '@emotion/react';
-import { ButtonGroup } from 'phantomartist';
+import { ButtonGroup } from 'athameui';
 import { isAuthenticatedVar, isSmallOrMobileVar } from '../../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
 import { logout } from '../../utils/logout';
-import { NavMenuButton } from '../Buttons/old-NavMenuButton';
+import { NavMenuButton } from '../NavMenuButton';
 
 type UserMenuProps = {
   setShowUserDropdown?: (show: boolean) => void;
 };
 
-export const UserMenu: React.FC<UserMenuProps> = ({ setShowUserDropdown }) => {
+export const UserMenu = ({ setShowUserDropdown }: UserMenuProps) => {
   const isAuthenticated = useReactiveVar(isAuthenticatedVar);
   const isSmallOrMobile = useReactiveVar(isSmallOrMobileVar);
   const variant = !isSmallOrMobile ? 'ghost' : undefined;
@@ -25,8 +25,8 @@ export const UserMenu: React.FC<UserMenuProps> = ({ setShowUserDropdown }) => {
 
   return (
     <ButtonGroup
-      className={{ buttonGroup: getUserMenuStyles(isSmallOrMobile) }}
-      direction="vertical"
+      sx={{ buttonGroup: getUserMenuStyles(isSmallOrMobile) }}
+      direction="column"
     >
       <NavMenuButton to="/profile" variant={variant}>
         Profile

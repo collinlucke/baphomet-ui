@@ -1,7 +1,7 @@
 import { isMobileVar } from '../../reactiveVars';
+import { tokens } from 'athameui';
 import { useReactiveVar } from '@apollo/client/react';
 import { PersonCard } from './PersonCard';
-import { baseColors } from 'phantomartist';
 import type { PersonProps } from './PersonCard';
 
 type PersonCardCarouselProps = {
@@ -43,7 +43,7 @@ export const PersonCardCarousel = ({
 const baphStyles = {
   carousel: {
     display: 'flex',
-    border: `5px solid ${baseColors.secondary[800]}`,
+    border: `5px solid ${tokens.color.secondary[800]}`,
     borderRadius: '10px',
     padding: '10px',
     overflowX: 'auto' as const,

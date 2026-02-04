@@ -1,11 +1,14 @@
 import { CSSObject } from '@emotion/react';
+import { Footer as AthFooter } from 'athameui';
 import { showFeedbackModalVar } from '../../reactiveVars';
-import { baseColors, mediaQueries } from 'phantomartist';
+import { tokens } from 'athameui';
 import { Link } from 'react-router-dom';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Github01Icon } from '@hugeicons/core-free-icons';
 
-export const Footer: React.FC = () => {
+const { color, media } = tokens;
+
+export const Footer = () => {
   const handleFeedbackClick = (e: React.KeyboardEvent | React.MouseEvent) => {
     if (
       e.type === 'click' ||
@@ -17,12 +20,12 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer css={baphStyles.footer} role="contentinfo" aria-label="Site footer">
+    <AthFooter>
       <div css={baphStyles.footerSection}>
         <div>© {new Date().getFullYear()} Baphomet</div>
         <div>
           <Link
-            to="https://github.com/collinlucke"
+            to="https://github.com/collinlucke/baphomet-ui"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Visit Collin Lucke's GitHub profile"
@@ -60,48 +63,37 @@ export const Footer: React.FC = () => {
           Send Feedback
         </span>
       </div>
-    </footer>
+    </AthFooter>
   );
 };
 
 const baphStyles: { [key: string]: CSSObject } = {
-  footer: {
-    display: 'flex',
-    flexDirection: 'column' as const,
-    justifyContent: 'space-between',
-    gap: '10px',
-    [mediaQueries.minWidth.lg]: {
-      flexDirection: 'row' as const,
-      backgroundColor: baseColors.secondary[800],
-      padding: '15px'
-    }
-  },
   footerSection: {
     flex: 1,
-    color: baseColors.tertiary[100],
+    color: color.tertiary[100],
     lineHeight: '1.5',
     display: 'flex',
     alignItems: 'center',
     fontSize: '.75rem',
-    justifyContent: 'space-between',
-    [mediaQueries.minWidth.md]: {
+    gap: '1rem',
+    [media.min.md]: {
       fontSize: '0.875rem'
     }
   },
   feedbackLink: {
     width: '100%',
     textAlign: 'center' as const,
-    color: '#007bff',
+    color: color.primary[500],
     cursor: 'pointer',
     textDecoration: 'underline',
     outline: 'none',
     borderRadius: '2px',
     '&:hover, &:focus': {
-      color: '#0056b3',
+      color: color.primary[700],
       backgroundColor: 'rgba(0, 123, 255, 0.1)'
     },
     '&:focus': {
-      outline: '2px solid #007bff',
+      outline: `2px solid ${color.primary[500]}`,
       outlineOffset: '2px'
     }
   },

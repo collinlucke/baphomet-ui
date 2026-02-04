@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { InMemoryCache, ApolloClient, ApolloLink } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client/react';
-import { NavMenuButton } from '../old-NavMenuButton';
+import { NavMenuButton } from '../../NavMenuButton';
 import { isSmallOrMobileVar } from '../../../reactiveVars';
 
 // Create a test Apollo client
@@ -11,7 +11,6 @@ const testClient = new ApolloClient({
   link: new ApolloLink()
 });
 
-// Mock the phantomartist Button component
 jest.mock('phantomartist', () => ({
   Button: ({
     children,
@@ -118,28 +117,24 @@ describe('NavMenuButton', () => {
       expect(button).toHaveAttribute('data-variant', 'primary');
     });
 
-    it('uses ghostOnDark variant on small/mobile screens', () => {
+    it('uses ghost variant on small/mobile screens', () => {
       isSmallOrMobileVar(true);
 
       renderWithProviders(<NavMenuButton>Mobile Button</NavMenuButton>);
 
       const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('data-variant', 'ghostOnDark');
+      expect(button).toHaveAttribute('data-variant', 'ghost');
     });
 
-    it('uses ghostOnDark variant when onDark is true', () => {
-      renderWithProviders(
-        <NavMenuButton onDark={true}>Dark Button</NavMenuButton>
-      );
+    it('uses ghost variant when dark is true', () => {
+      renderWithProviders(<NavMenuButton dark>Dark Button</NavMenuButton>);
 
       const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('data-variant', 'ghostOnDark');
+      expect(button).toHaveAttribute('data-variant', 'ghost');
     });
 
-    it('uses ghost variant when onDark is false and not mobile', () => {
-      renderWithProviders(
-        <NavMenuButton onDark={false}>Light Button</NavMenuButton>
-      );
+    it('uses ghost variant when dark is false and not mobile', () => {
+      renderWithProviders(<NavMenuButton>Light Button</NavMenuButton>);
 
       const button = screen.getByRole('button');
       expect(button).toHaveAttribute('data-variant', 'ghost');
@@ -232,7 +227,7 @@ describe('NavMenuButton', () => {
       renderWithProviders(
         <NavMenuButton
           to="/complex-route"
-          onDark={false}
+          dark
           variant="secondary"
           ariaLabel="Complex button"
           ariaDescribedBy="complex-desc"
@@ -263,7 +258,7 @@ describe('NavMenuButton', () => {
       isSmallOrMobileVar(true);
 
       renderWithProviders(
-        <NavMenuButton onDark={true} variant="outline">
+        <NavMenuButton dark variant="outline">
           Mobile Dark Button
         </NavMenuButton>
       );

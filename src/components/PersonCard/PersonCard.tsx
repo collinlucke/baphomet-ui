@@ -1,7 +1,6 @@
-import React from 'react';
 import { isAuthenticatedVar } from '../../reactiveVars';
+import { Button, tokens } from 'athameui';
 import { useReactiveVar } from '@apollo/client/react';
-import { Button, baseColors } from 'phantomartist';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Delete02Icon } from '@hugeicons/core-free-icons';
 
@@ -12,10 +11,14 @@ export type PersonProps = {
   profilePath: string;
 };
 
-export const PersonCard: React.FC<{
+export type RemovePersonFunction = (personId: number) => void;
+
+type PersonCardProps = {
   person: PersonProps;
-  removePerson?: (id: number) => void;
-}> = ({ person, removePerson }) => {
+  removePerson?: RemovePersonFunction;
+};
+
+export const PersonCard = ({ person, removePerson }: PersonCardProps) => {
   const isAuthenticated = useReactiveVar(isAuthenticatedVar);
   const isAdmin = localStorage.getItem('baphomet-user')
     ? JSON.parse(localStorage.getItem('baphomet-user') || '{}').role === 'admin'
@@ -47,8 +50,8 @@ export const PersonCard: React.FC<{
               size="small"
               onClick={removePersonHandler}
               icon={<HugeiconsIcon icon={Delete02Icon} size={16} />}
-              ariaLabel={`Remove ${person.name}`}
-              className={{ button: baphStyles.button }}
+              aria-label={`Remove ${person.name}`}
+              sx={{ button: baphStyles.button }}
             />
           )}
           <img src={profileImageUrl} alt={person.name} />
@@ -61,7 +64,7 @@ export const PersonCard: React.FC<{
 
 const baphStyles = {
   card: {
-    backgroundColor: baseColors.secondary[200],
+    backgroundColor: tokens.color.secondary[200],
     borderRadius: '5px',
     position: 'relative' as const,
     padding: '0 5px',
@@ -80,7 +83,7 @@ const baphStyles = {
   name: {
     fontWeight: '700',
     fontSize: '.75rem',
-    color: baseColors.secondary[800],
+    color: tokens.color.secondary[800],
     padding: '5px 0',
     lineClamp: 1,
     overflow: 'hidden',
@@ -92,7 +95,7 @@ const baphStyles = {
     fontWeight: '600',
     fontSize: '.75rem',
     lineHeight: '1.5rem',
-    color: baseColors.secondary[800],
+    color: tokens.color.secondary[800],
     padding: '5px 0',
     lineClamp: 1,
     overflow: 'hidden',

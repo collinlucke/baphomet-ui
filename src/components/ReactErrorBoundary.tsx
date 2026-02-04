@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
-import { Button } from 'phantomartist';
-import { BodySection } from './Layouts/BodySection';
+import { Button, Main } from 'athameui';
 import { useLocation, Link } from 'react-router-dom';
 
 type ErrorBoundaryProps = {
@@ -13,7 +12,7 @@ type ErrorBoundaryProps = {
 
 const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
   return (
-    <BodySection>
+    <Main>
       <div
         style={{
           padding: '2rem',
@@ -49,12 +48,12 @@ const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
           <Button onClick={resetErrorBoundary} variant="secondary">
             Try Again
           </Button>
-          <Button variant="ghostOnDark">
+          <Button variant="ghost" dark>
             <Link to="/">Go Home</Link>
           </Button>
         </div>
       </div>
-    </BodySection>
+    </Main>
   );
 };
 

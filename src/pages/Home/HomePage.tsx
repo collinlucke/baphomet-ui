@@ -9,7 +9,7 @@ import { showFeedbackModalVar } from '../../reactiveVars';
 
 type MovieResultsData = {
   movieResults: {
-    searchResults: Array<{
+    searchResults: {
       id: string;
       title: string;
       releaseDate?: string;
@@ -21,11 +21,11 @@ type MovieResultsData = {
       revenue?: number;
       backdropPath?: string;
       tmdbId: string;
-    }>;
+    }[];
   };
 };
 
-const HomePage: React.FC = () => {
+const HomePage = () => {
   const { data } = useQuery<MovieResultsData>(GET_ALL_MOVIES, {
     variables: {
       title: '',
@@ -40,8 +40,6 @@ const HomePage: React.FC = () => {
     showFeedbackModalVar(true);
   };
 
-  // const LinkToFaqClasses = cx(baphStyles.faqLink);
-  console.log(baphStyles.faqLink);
   return (
     <Main>
       <div css={baphStyles.welcomeSection}>
@@ -79,10 +77,6 @@ const HomePage: React.FC = () => {
         <MovieList
           movies={data?.movieResults?.searchResults || null}
           showSearch={false}
-          className={{
-            movieListWrapper: baphStyles.movieListWrapper,
-            listWrapper: baphStyles.listWrapper
-          }}
         />
       </div>
     </Main>
@@ -103,9 +97,6 @@ const baphStyles: { [key: string]: CSSObject } = {
   movieListContainer: {
     position: 'relative',
     width: '100%'
-  },
-  movieListWrapper: {
-    marginTop: '0'
   },
   listWrapper: {
     marginTop: '0'
