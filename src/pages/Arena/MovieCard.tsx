@@ -13,22 +13,10 @@ type MovieCardProps = {
     releaseDate?: string;
     backdropPath?: string;
     posterImages?: {
-      w92?: string;
-      w154?: string;
-      w185?: string;
-      w342?: string;
-      w500?: string;
       w780?: string;
-      original?: string;
     };
     backdropImages?: {
-      w92?: string;
-      w154?: string;
-      w185?: string;
-      w342?: string;
-      w500?: string;
       w780?: string;
-      original?: string;
     };
   };
   ariaLabel?: string;
@@ -184,8 +172,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     backgroundPositionY: '20%',
     backgroundPositionX: 'center',
     '&:hover': {
-      transform: 'scale(1.05)',
-      border: `2px solid ${tokens.color.primary[500]}`,
+      transform: 'scale(1.01)',
       boxShadow: `0 8px 32px rgba(${tokens.color.primary[500]}, 0.3)`
     }
   },

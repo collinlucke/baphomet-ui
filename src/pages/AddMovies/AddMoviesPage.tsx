@@ -56,20 +56,6 @@ type Director = {
 
 type SearchTermType = string | number | undefined;
 
-// type NewMovie = {
-//   title: string;
-//   releaseDate?: string;
-//   genres?: string[];
-//   overview?: string;
-//   posterPath?: string;
-//   backdropPath?: string;
-//   tmdbId?: string;
-//   revenue?: string;
-//   tagline?: string;
-//   topBilledCast?: Array<TopBilledCastMember>;
-//   directors?: Array<Directors>;
-// };
-
 export type CurrentMovie = {
   id?: string | undefined;
   title?: string | undefined;
@@ -389,9 +375,10 @@ const AddMoviesPage = () => {
         <PageTitle title="Add Movies" />
         <div
           css={baphStyles.formContainer}
-          className="baph-add-movies-form-container"
+          data-testid="baph-add-movies-form-container"
         >
           <Search
+            id="search-by-title"
             searchTerm={searchByTitle}
             searchLabel="Enter movie title"
             setSearchTerm={titleSearchTermHandler}
@@ -406,6 +393,7 @@ const AddMoviesPage = () => {
           />
 
           <Search
+            id="search-by-tmdb-id"
             searchTerm={tmdbId}
             searchLabel="Enter TMDB ID"
             setSearchTerm={handleSearchIdChange}

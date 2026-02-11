@@ -50,12 +50,12 @@ const baphStyles = {
     textDecoration: 'none'
   },
   logo: {
-    width: '40px',
-    height: '40px',
+    width: '44px',
+    height: '44px',
     objectFit: 'contain' as const,
     [tokens.media.min.lg]: {
-      width: '48px',
-      height: '48px'
+      width: '56px',
+      height: '56px'
     }
   }
 };

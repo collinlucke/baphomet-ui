@@ -97,7 +97,11 @@ const getContainerStyles = (posterPath: string): CSSObject => ({
   position: 'relative' as const,
   display: 'flex',
   cursor: 'pointer',
-  backgroundImage: posterPath ? `url(${posterPath})` : 'none'
+  backgroundImage: posterPath ? `url(${posterPath})` : 'none',
+  transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+  '&:hover': {
+    transform: 'scale(1.02)'
+  }
 });
 
 const baphStyles = {

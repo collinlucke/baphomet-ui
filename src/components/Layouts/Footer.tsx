@@ -1,5 +1,5 @@
 import { CSSObject } from '@emotion/react';
-import { Footer as AthFooter } from 'athameui';
+import { Footer as AthFooter, Button } from 'athameui';
 import { showFeedbackModalVar } from '../../reactiveVars';
 import { tokens } from 'athameui';
 import { Link } from 'react-router-dom';
@@ -35,7 +35,7 @@ export const Footer = () => {
         </div>
       </div>
 
-      <div css={baphStyles.footerSection}>
+      <div css={[baphStyles.footerSection, { justifyContent: 'center' }]}>
         Movie Data Provided by TMDb{' '}
         <Link
           to="https://www.themoviedb.org/"
@@ -51,17 +51,10 @@ export const Footer = () => {
         </Link>
       </div>
 
-      <div css={baphStyles.footerSection}>
-        <span
-          css={baphStyles.feedbackLink}
-          onClick={handleFeedbackClick}
-          onKeyDown={handleFeedbackClick}
-          role="button"
-          tabIndex={0}
-          aria-label="Send feedback about the application"
-        >
+      <div css={[baphStyles.footerSection, { justifyContent: 'flex-end' }]}>
+        <Button variant="ghost" size="small" onClick={handleFeedbackClick} dark>
           Send Feedback
-        </span>
+        </Button>
       </div>
     </AthFooter>
   );

@@ -35,8 +35,10 @@ export const faqs = [
     heading: "Isn't a Baphomet evil? Isn't Baphomet a satan?",
     content: (
       <div>
-        Without the history lesson, no. Also, how could you call this cute
-        fuggin' thing evil!?
+        <p>
+          Without the history lesson, no. Also, how could you call this cute
+          fuggin' thing evil!?
+        </p>
         <img
           src="/baphy-full-transparent.png"
           alt="Baphomet logo"

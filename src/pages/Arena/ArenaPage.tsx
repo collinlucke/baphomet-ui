@@ -172,6 +172,7 @@ const ArenaPage = () => {
         size="medium"
         onClick={handleSkip}
         disabled={isVoting}
+        dark
       >
         Skip this matchup
       </Button>

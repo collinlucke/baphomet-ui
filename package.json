@@ -1,6 +1,6 @@
 {
   "name": "baphomet-ui",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "type": "module",
   "scripts": {
     "dev": "bash scripts/dev-with-cleanup.sh",
@@ -40,7 +40,7 @@
     "@vitest/browser": "^3.2.4",
     "@vitest/runner": "^3.2.4",
     "apollo-upload-client": "^19.0.0",
-    "athameui": "0.0.7",
+    "athameui": "latest",
     "dotenv": "^17.2.2",
     "graphql": "^16.11.0",
     "hugeicons-react": "^0.3.0",

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client/react';
 import { Avatar } from 'athameui';
-import { FormInput, Button, Main, tokens } from 'athameui';
+import { FormField, Button, Main, tokens } from 'athameui';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Camera02Icon } from '@hugeicons/core-free-icons';
 import { CSSObject } from '@emotion/react';
@@ -87,8 +87,6 @@ const ProfilePage = () => {
 
   return (
     <Main>
-      <h1>Profile Settings</h1>
-
       <div css={baphStyles.pageLayout}>
         {/* Avatar Section - Left Side */}
         <div css={baphStyles.avatarColumn}>
@@ -96,7 +94,7 @@ const ProfilePage = () => {
             <Avatar
               displayName={formData.displayName || formData.username || 'User'}
               imageUrl={formData.avatarUrl}
-              size={120}
+              size="profile"
             />
             <label htmlFor="avatar-upload" css={baphStyles.cameraIconWrapper}>
               <HugeiconsIcon icon={Camera02Icon} size={24} />
@@ -118,7 +116,7 @@ const ProfilePage = () => {
             <div css={baphStyles.formFieldContainers}>
               <h3 css={baphStyles.sectionHeading}>Personal Information</h3>
 
-              <FormInput
+              <FormField
                 label="Username"
                 name="username"
                 value={formData.username}
@@ -129,7 +127,7 @@ const ProfilePage = () => {
                 dark
               />
 
-              <FormInput
+              <FormField
                 label="Display Name"
                 name="displayName"
                 value={formData.displayName}
@@ -138,7 +136,7 @@ const ProfilePage = () => {
                 size="medium"
                 dark
               />
-              <FormInput
+              <FormField
                 label="Email"
                 name="email"
                 type="email"
@@ -149,7 +147,7 @@ const ProfilePage = () => {
                 size="medium"
                 dark
               />
-              <FormInput
+              <FormField
                 label="First Name"
                 name="firstName"
                 value={formData.firstName}
@@ -158,7 +156,7 @@ const ProfilePage = () => {
                 size="medium"
                 dark
               />
-              <FormInput
+              <FormField
                 label="Last Name"
                 name="lastName"
                 value={formData.lastName}
@@ -167,7 +165,7 @@ const ProfilePage = () => {
                 size="medium"
                 dark
               />
-              <FormInput
+              <FormField
                 label="Birthday"
                 name="birthday"
                 type="date"
@@ -189,6 +187,7 @@ const ProfilePage = () => {
                 size="medium"
                 variant="outline"
                 onClick={handleCancel}
+                dark
               >
                 Cancel
               </Button>
@@ -207,7 +206,7 @@ const ProfilePage = () => {
               </p>
 
               <div css={baphStyles.passwordFields}>
-                <FormInput
+                <FormField
                   label="Current Password"
                   name="currentPassword"
                   type="password"
@@ -218,7 +217,7 @@ const ProfilePage = () => {
                   size="medium"
                   dark
                 />
-                <FormInput
+                <FormField
                   label="New Password"
                   name="newPassword"
                   type="password"
@@ -229,7 +228,7 @@ const ProfilePage = () => {
                   size="medium"
                   dark
                 />
-                <FormInput
+                <FormField
                   label="Confirm New Password"
                   name="confirmNewPassword"
                   type="password"
