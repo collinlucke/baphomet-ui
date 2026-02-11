@@ -29,7 +29,7 @@ export const AuthUserAvatarButton = ({ displayName }: AuthUserAvatarProps) => {
         variant="ghost"
         sx={{ button: baphStyles.avatarButton }}
       >
-        <Avatar displayName={displayName || 'User'} />
+        <Avatar displayName={displayName || 'User'} size="medium" />
       </Button>
       <Dropdown
         showDropdown={showUserDropdown}

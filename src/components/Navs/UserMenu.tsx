@@ -53,6 +53,6 @@ const getUserMenuStyles = (isSmallOrMobile: boolean): CSSObject => {
           marginTop: '10px',
           alignItems: 'flex-start' as const
         }
-      : { gap: 0 })
+      : { alignItems: 'center', gap: 0 })
   };
 };

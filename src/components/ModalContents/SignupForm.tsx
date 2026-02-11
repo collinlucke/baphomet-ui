@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client/react';
-import { FormInput, Button } from 'athameui';
+import { FormField, Button } from 'athameui';
 import { CSSObject } from '@emotion/react';
 import { SIGNUP } from '../../api/mutations';
 import { SignupFormData, SignupFormProps } from '../../types/auth.types';
@@ -203,7 +203,7 @@ export const SignupForm = ({ onSuccess, onError }: SignupFormProps) => {
         )}
 
         <div css={baphStyles.fields}>
-          <FormInput
+          <FormField
             label="Username"
             value={formData.username}
             onChange={updateField}
@@ -213,7 +213,7 @@ export const SignupForm = ({ onSuccess, onError }: SignupFormProps) => {
             disabled={isLoading}
             data-testid="signup-username-input"
             name="username"
-            auto-complete="username"
+            autoComplete="username"
             aria-describedby="username-help"
             aria-invalid={!!errors.username}
           />
@@ -221,7 +221,7 @@ export const SignupForm = ({ onSuccess, onError }: SignupFormProps) => {
             Choose a unique username for your account, minimum 3 characters
           </div>
 
-          <FormInput
+          <FormField
             label="Display Name"
             value={formData.displayName}
             onChange={updateField}
@@ -237,7 +237,7 @@ export const SignupForm = ({ onSuccess, onError }: SignupFormProps) => {
             Enter the name that will be shown to other users
           </div>
 
-          <FormInput
+          <FormField
             label="First Name"
             value={formData.firstName}
             onChange={updateField}
@@ -252,7 +252,7 @@ export const SignupForm = ({ onSuccess, onError }: SignupFormProps) => {
             Enter your first name
           </div>
 
-          <FormInput
+          <FormField
             label="Last Name"
             value={formData.lastName}
             onChange={updateField}
@@ -267,7 +267,7 @@ export const SignupForm = ({ onSuccess, onError }: SignupFormProps) => {
             Enter your last name
           </div>
 
-          <FormInput
+          <FormField
             label="Birthday"
             value={formData.birthday}
             onChange={updateField}
@@ -283,7 +283,7 @@ export const SignupForm = ({ onSuccess, onError }: SignupFormProps) => {
             Enter your birthday in YYYY-MM-DD format
           </div>
 
-          <FormInput
+          <FormField
             label="Email"
             type="email"
             value={formData.email}
@@ -302,7 +302,7 @@ export const SignupForm = ({ onSuccess, onError }: SignupFormProps) => {
             Enter a valid email address for account verification and updates
           </div>
 
-          <FormInput
+          <FormField
             label="Password"
             type="password"
             value={formData.password}
@@ -321,7 +321,7 @@ export const SignupForm = ({ onSuccess, onError }: SignupFormProps) => {
             Create a secure password with at least 6 characters
           </div>
 
-          <FormInput
+          <FormField
             label="Confirm Password"
             type="password"
             value={formData.confirmPassword}

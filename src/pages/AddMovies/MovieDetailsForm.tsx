@@ -1,4 +1,4 @@
-import { FormInput, FormInputLabel } from 'athameui';
+import { FormField, FormLabel } from 'athameui';
 import { CSSObject } from '@emotion/react';
 import { SaveButtonGroup } from './SaveButtonGroup';
 import { PersonCardCarousel } from '../../components/PersonCard/PersonCardCarousel';
@@ -54,7 +54,8 @@ export const MovieDetailsForm = ({
   return (
     <form css={baphStyles.form} action={onSubmitHandler}>
       <SaveButtonGroupWithProps />
-      <FormInput
+      <FormField
+        id="movie-title"
         label="Title"
         type="text"
         value={currentMovie?.title || ''}
@@ -63,7 +64,8 @@ export const MovieDetailsForm = ({
         size="medium"
         dark
       />
-      <FormInput
+      <FormField
+        id="movie-release-date"
         size="medium"
         label="Release Date"
         type="text"
@@ -72,7 +74,8 @@ export const MovieDetailsForm = ({
         placeholder="Release Date"
         dark
       />
-      <FormInput
+      <FormField
+        id="movie-genres"
         size="medium"
         label="Genres"
         type="text"
@@ -81,7 +84,8 @@ export const MovieDetailsForm = ({
         placeholder="Genres, comma-separated"
         dark
       />
-      <FormInput
+      <FormField
+        id="movie-overview"
         size="medium"
         label="Overview"
         type="text"
@@ -90,7 +94,8 @@ export const MovieDetailsForm = ({
         placeholder="Overview"
         dark
       />
-      <FormInput
+      <FormField
+        id="movie-revenue"
         size="medium"
         label="Revenue"
         type="text"
@@ -99,7 +104,8 @@ export const MovieDetailsForm = ({
         placeholder="Revenue"
         dark
       />
-      <FormInput
+      <FormField
+        id="movie-poster-path"
         size="medium"
         label="Poster Path"
         type="text"
@@ -108,7 +114,8 @@ export const MovieDetailsForm = ({
         placeholder="Poster image path"
         dark
       />
-      <FormInput
+      <FormField
+        id="movie-backdrop-path"
         size="medium"
         label="Backdrop Path"
         type="text"
@@ -117,7 +124,8 @@ export const MovieDetailsForm = ({
         placeholder="Backdrop image path"
         dark
       />
-      <FormInput
+      <FormField
+        id="movie-tagline"
         size="medium"
         label="Tagline"
         type="text"
@@ -127,7 +135,7 @@ export const MovieDetailsForm = ({
         dark
       />
       <div>
-        <FormInputLabel label={directorsLabel} dark />
+        <FormLabel label={directorsLabel} dark />
         <PersonCardCarousel
           people={currentMovie?.directors || []}
           removePerson={removePerson}
@@ -135,7 +143,7 @@ export const MovieDetailsForm = ({
         />
       </div>
       <div>
-        <FormInputLabel label="Top Billed Cast" dark />
+        <FormLabel label="Top Billed Cast" dark />
         <PersonCardCarousel
           people={currentMovie?.topBilledCast || []}
           removePerson={removePerson}
@@ -172,7 +180,7 @@ export const MovieDetailsForm = ({
           </div>
         )}
       </div>
-      =
+
       <SaveButtonGroupWithProps />
     </form>
   );

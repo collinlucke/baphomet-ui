@@ -1,4 +1,4 @@
-import { Header as AthameHeader, Button, tokens } from 'athameui';
+import { Header as AthameHeader, Button } from 'athameui';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Menu01Icon } from '@hugeicons/core-free-icons';
 import { LogoLink } from './LogoLink';
@@ -39,7 +39,7 @@ export const Header = () => {
 
           <div css={baphStyles.rightContent}>
             {isMobile || !isLargeScreen ? (
-              <div css={baphStyles.rightContent}>
+              <>
                 <Button
                   title="Open main menu flyout"
                   data-testid="open-slide-out-menu-button"
@@ -51,7 +51,7 @@ export const Header = () => {
                   dark
                 />
                 <SlideOutNav displayName={user?.displayName} />
-              </div>
+              </>
             ) : (
               <>
                 <MainNavLinks />
@@ -86,9 +86,6 @@ const baphStyles: { [key: string]: CSSObject } = {
     display: 'flex',
     justifyContent: 'space-between',
     gap: '10px',
-    alignItems: 'center',
-    [tokens.media.min.lg]: {
-      gap: '20px'
-    }
+    alignItems: 'center'
   }
 };

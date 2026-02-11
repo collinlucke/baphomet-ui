@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client/react';
-import { FormInput, Button } from 'athameui';
+import { FormField, Button } from 'athameui';
 import { CSSObject } from '@emotion/react';
 import { LOGIN } from '../../api/mutations';
 import { LoginFormData, LoginFormProps } from '../../types/auth.types';
@@ -163,7 +163,7 @@ export const LoginForm = ({ onSuccess, onError }: LoginFormProps) => {
         )}
 
         <div css={baphStyles.fields}>
-          <FormInput
+          <FormField
             label="Email or Username"
             type="text"
             name="emailOrUsername"
@@ -184,7 +184,7 @@ export const LoginForm = ({ onSuccess, onError }: LoginFormProps) => {
             Enter the email address or username associated with your account
           </div>
 
-          <FormInput
+          <FormField
             label="Password"
             type="password"
             name="password"

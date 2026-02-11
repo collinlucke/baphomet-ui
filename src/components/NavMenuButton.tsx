@@ -25,26 +25,25 @@ type NavMenuButtonProps = {
 export const NavMenuButton = ({
   children,
   to,
-  dark = true,
   ariaLabel,
   ariaDescribedBy,
-  variant,
+  variant = 'ghost',
   testId,
   onClick
 }: NavMenuButtonProps) => {
   const isSmallOrMobile = useReactiveVar(isSmallOrMobileVar);
-  const buttonSize = isSmallOrMobile ? 'medium' : 'small';
 
   const ButtonElement = () => (
     <Button
-      size={buttonSize}
+      size="full"
       variant={variant}
       sx={{ button: baphStyles.button }}
       onClick={onClick}
       aria-label={ariaLabel}
       aria-describedby={ariaDescribedBy}
       data-testid={testId}
-      dark={dark}
+      dark={isSmallOrMobile}
+      textPosition={isSmallOrMobile ? 'left' : 'center'}
     >
       {children}
     </Button>
@@ -55,7 +54,7 @@ export const NavMenuButton = ({
       {!to ? (
         <ButtonElement />
       ) : (
-        <Link to={to}>
+        <Link to={to} style={{ width: '100%' }}>
           <ButtonElement />
         </Link>
       )}

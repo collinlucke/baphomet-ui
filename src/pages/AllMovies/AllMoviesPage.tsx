@@ -63,7 +63,7 @@ const AllMoviesPage = () => {
     getMovieListItems({
       variables: {
         title: searchTerm,
-        limit: 28,
+        limit: 12,
         cursor
       }
     });
@@ -74,7 +74,7 @@ const AllMoviesPage = () => {
     getMovieListItems({
       variables: {
         title: '',
-        limit: 28,
+        limit: 36,
         cursor: ''
       }
     });
@@ -89,7 +89,7 @@ const AllMoviesPage = () => {
     getMovieListItems({
       variables: {
         title: term,
-        limit: 28,
+        limit: 36,
         cursor: ''
       }
     });

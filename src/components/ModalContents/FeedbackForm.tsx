@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client/react';
-import { Button, FormInput } from 'athameui';
+import { Button, FormField } from 'athameui';
 import { CSSObject } from '@emotion/react';
 import { ModalContent } from './ModalContent';
 import { SUBMIT_FEEDBACK } from '../../api/mutations';
@@ -141,7 +141,7 @@ export const FeedbackForm = ({ onSuccess }: FeedbackFormProps) => {
           </div>
         )}
 
-        <FormInput
+        <FormField
           label="Email Address (Optional)"
           type="email"
           name="email"
@@ -160,7 +160,7 @@ export const FeedbackForm = ({ onSuccess }: FeedbackFormProps) => {
           feedback
         </div>
 
-        <FormInput
+        <FormField
           label="Comments"
           type="textarea"
           name="comments"
