@@ -81,14 +81,7 @@ export const getGraphQLEndpoint = () => {
     return 'http://localhost:5050/graphql';
   }
 
-  // PRIORITY 4: Same-origin when the UI is served from Render
-  if (window.location.hostname.endsWith('.onrender.com')) {
-    const renderEndpoint = `${window.location.origin}/graphql`;
-    console.log('Using Render same-origin endpoint:', renderEndpoint);
-    return renderEndpoint;
-  }
-
-  // PRIORITY 5: Production fallback (Cloudflare / custom domain)
+  // PRIORITY 4: Production (Render static site, Cloudflare, custom domain)
   const prodEndpoint =
     import.meta.env.VITE_GRAPHQL_ENDPOINT ||
     'https://baphomet-server.onrender.com/graphql';
