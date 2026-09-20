@@ -14,5 +14,7 @@ services:
         source: /*
         destination: /index.html
     envVars:
+      - key: VITE_GRAPHQL_ENDPOINT
+        value: https://baphomet-server.onrender.com/graphql
       - key: GRAPHQL_BAPHOMET_SERVER_RENDER_URL
         value: https://baphomet-server.onrender.com/graphql
