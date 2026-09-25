@@ -5,7 +5,7 @@ export const ADD_MOVIE = gql`
     $title: String!
     $releaseDate: String
     $overview: String
-    $genres: [String]
+    $genres: [GenreInput]
     $revenue: String
     $posterPath: String
     $backdropPath: String
@@ -48,7 +48,10 @@ export const ADD_MOVIE = gql`
         title
         releaseDate
         overview
-        genres
+        genres {
+          id
+          genre
+        }
         revenue
         posterPath
         backdropPath
@@ -83,7 +86,7 @@ export const UPDATE_MOVIE = gql`
     $backdropPath: String
     $tmdbId: String
     $overview: String
-    $genres: [String]
+    $genres: [GenreInput]
     $revenue: String
     $tagline: String
     $topBilledCast: [CastMemberInput]
@@ -107,7 +110,10 @@ export const UPDATE_MOVIE = gql`
       title
       releaseDate
       overview
-      genres
+      genres {
+        id
+        genre
+      }
       revenue
       posterPath
       backdropPath

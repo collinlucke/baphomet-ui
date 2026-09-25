@@ -4,6 +4,7 @@ import { GET_MOVIE_DETAILS } from '../../api/queries';
 import { useQuery } from '@apollo/client/react';
 import { useParams } from 'react-router-dom';
 import { baseColors } from 'phantomartist';
+import { formatGenres, type Genre } from '../../utils/formatGenres';
 
 type MovieDetailsResponse = {
   movieResults: {
@@ -11,7 +12,7 @@ type MovieDetailsResponse = {
     title: string;
     overview: string;
     releaseDate: string;
-    genres: string[];
+    genres: Genre[];
     posterPath: string;
     backdropPath: string;
     posterImages?: {
@@ -68,7 +69,7 @@ const MovieDetailsPage = () => {
     'Movie Details'
   );
   const genres = (
-    <span css={baphStyles.genres}>{movie?.genres?.join(', ')}</span>
+    <span css={baphStyles.genres}>{formatGenres(movie?.genres)}</span>
   );
   const { major, minor } = movie?.winningPercentage
     ? (() => {

@@ -20,7 +20,10 @@ export const GET_ALL_MOVIES = gql`
         title
         releaseDate
         overview
-        genres
+        genres {
+          id
+          genre
+        }
         revenue
         posterPath
         backdropPath
@@ -76,7 +79,10 @@ export const GET_MOVIE_DETAILS = gql`
       title
       releaseDate
       overview
-      genres
+      genres {
+        id
+        genre
+      }
       revenue
       posterPath
       backdropPath
@@ -143,7 +149,10 @@ export const GET_MOVIES_BY_TITLE = gql`
         title
         releaseDate
         overview
-        genres
+        genres {
+          id
+          genre
+        }
         revenue
         posterPath
         backdropPath
@@ -186,7 +195,10 @@ export const GET_MOVIE_BY_TMDB_ID = gql`
         title
         releaseDate
         overview
-        genres
+        genres {
+          id
+          genre
+        }
         revenue
         posterPath
         backdropPath
@@ -215,7 +227,10 @@ export const FETCH_MOVIE_FROM_TMDB = gql`
       title
       releaseDate
       overview
-      genres
+      genres {
+        id
+        genre
+      }
       revenue
       posterPath
       backdropPath
@@ -285,7 +300,10 @@ export const GET_RANDOM_MATCHUP = gql`
         posterPath
         backdropPath
         releaseDate
-        genres
+        genres {
+          id
+          genre
+        }
         winningPercentage
         totalWins
         totalLosses
@@ -315,7 +333,10 @@ export const GET_RANDOM_MATCHUP = gql`
         posterPath
         backdropPath
         releaseDate
-        genres
+        genres {
+          id
+          genre
+        }
         winningPercentage
         totalWins
         totalLosses

@@ -19,6 +19,7 @@ import {
 } from '../../api/queries';
 import { PersonCardCarousel } from '../../components/PersonCard/PersonCardCarousel';
 import { PossibleMovieMatchesModal } from './PossibleMovieMatchesModal';
+import { formatGenres, type Genre } from '../../utils/formatGenres';
 
 type PossibleMovieMatchResponse = {
   results: PossibleMovieMatch[];
@@ -66,7 +67,7 @@ type Directors = {
 type NewMovie = {
   title: string;
   releaseDate?: string;
-  genres?: string[];
+  genres?: Genre[];
   overview?: string;
   posterPath?: string;
   backdropPath?: string;
@@ -81,7 +82,7 @@ type CurrentMovie = {
   id?: string | undefined;
   title?: string | undefined;
   releaseDate?: string | undefined;
-  genres?: string[] | undefined;
+  genres?: Genre[] | undefined;
   overview?: string | undefined;
   posterPath?: string | undefined;
   backdropPath?: string | undefined;
@@ -256,9 +257,14 @@ const AddMoviesPage: React.FC = () => {
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const value = e.target.value;
       if (field === 'genres') {
+        const names = value.split(',').map(s => s.trim()).filter(Boolean);
+        const previous = currentMovie?.genres ?? [];
         setCurrentMovie({
           ...currentMovie,
-          [field]: value.split(',').map(s => s.trim())
+          [field]: names.map(name => {
+            const existing = previous.find(g => g.genre === name);
+            return existing ?? { id: name, genre: name };
+          })
         });
       } else {
         setCurrentMovie({ ...currentMovie, [field]: value });
@@ -460,7 +466,7 @@ const AddMoviesPage: React.FC = () => {
               size="medium"
               label="Genres"
               type="text"
-              value={currentMovie?.genres?.join(', ') ?? ''}
+              value={formatGenres(currentMovie?.genres)}
               onChange={handleChange('genres')}
               placeholder="Genres, comma-separated"
               onDark
