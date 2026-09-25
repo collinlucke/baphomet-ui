@@ -30,17 +30,17 @@ export const getGraphQLEndpoint = () => {
     ).Capacitor?.isNativePlatform?.();
 
   // Debug logging
-  console.log('Environment Debug:', {
-    protocol: window.location.protocol,
-    hostname: window.location.hostname,
-    isCapacitor,
-    isDev: isDevelopment(),
-    mode: import.meta.env.MODE,
-    androidEndpoint: import.meta.env.VITE_GRAPHQL_ENDPOINT_ANDROID,
-    isNetworkAccess: window.location.hostname !== 'localhost' && 
-                     window.location.hostname !== '127.0.0.1' &&
-                     window.location.hostname.match(/^\d+\.\d+\.\d+\.\d+$/)
-  });
+  // console.log('Environment Debug:', {
+  //   protocol: window.location.protocol,
+  //   hostname: window.location.hostname,
+  //   isCapacitor,
+  //   isDev: isDevelopment(),
+  //   mode: import.meta.env.MODE,
+  //   androidEndpoint: import.meta.env.VITE_GRAPHQL_ENDPOINT_ANDROID,
+  //   isNetworkAccess: window.location.hostname !== 'localhost' &&
+  //                    window.location.hostname !== '127.0.0.1' &&
+  //                    window.location.hostname.match(/^\d+\.\d+\.\d+\.\d+$/)
+  // });
 
   // Add debug alert for mobile
   if (isCapacitor) {
@@ -61,13 +61,17 @@ export const getGraphQLEndpoint = () => {
   }
 
   // PRIORITY 2: Check if accessing via network IP (phone browser)
-  const isNetworkAccess = window.location.hostname !== 'localhost' && 
-                          window.location.hostname !== '127.0.0.1' &&
-                          window.location.hostname.match(/^\d+\.\d+\.\d+\.\d+$/);
-  
+  const isNetworkAccess =
+    window.location.hostname !== 'localhost' &&
+    window.location.hostname !== '127.0.0.1' &&
+    window.location.hostname.match(/^\d+\.\d+\.\d+\.\d+$/);
+
   if (isNetworkAccess && isDevelopment()) {
     const networkEndpoint = `http://${window.location.hostname}:5050/graphql`;
-    console.log('Using network IP endpoint for mobile browser:', networkEndpoint);
+    console.log(
+      'Using network IP endpoint for mobile browser:',
+      networkEndpoint
+    );
     return networkEndpoint;
   }
 
@@ -77,7 +81,7 @@ export const getGraphQLEndpoint = () => {
     return 'http://localhost:5050/graphql';
   }
 
-  // PRIORITY 4: Production fallback
+  // PRIORITY 4: Production (Render static site, Cloudflare, custom domain)
   const prodEndpoint =
     import.meta.env.VITE_GRAPHQL_ENDPOINT ||
     'https://baphomet-server.onrender.com/graphql';

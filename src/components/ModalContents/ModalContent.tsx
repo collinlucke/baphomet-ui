@@ -1,4 +1,4 @@
-import { baseColors } from 'phantomartist';
+import { tokens } from 'athameui';
 
 type ModalContentProps = {
   title: string;
@@ -7,12 +7,12 @@ type ModalContentProps = {
   testId?: string;
 };
 
-export const ModalContent: React.FC<ModalContentProps> = ({
+export const ModalContent = ({
   children,
   title,
   subtitle,
   testId
-}) => {
+}: ModalContentProps) => {
   return (
     <div
       css={baphStyles.modalContent}
@@ -47,10 +47,10 @@ const baphStyles = {
     gap: '0.5rem'
   },
   title: {
-    color: baseColors.primary[500]
+    color: tokens.color.primary[500]
   },
   subtitle: {
     margin: 0,
-    color: baseColors.secondary[800]
+    color: tokens.color.secondary[800]
   }
 };

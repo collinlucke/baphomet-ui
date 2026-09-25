@@ -5,10 +5,7 @@ type ThemeProviderTypes = {
   theme?: Theme;
   children?: ReactNode;
 };
-const BaphThemeProvider: React.FC<ThemeProviderTypes> = ({
-  theme,
-  children
-}) => {
+const BaphThemeProvider = ({ theme, children }: ThemeProviderTypes) => {
   return (
     <EmotionThemeProvider theme={theme || {}}>{children}</EmotionThemeProvider>
   );

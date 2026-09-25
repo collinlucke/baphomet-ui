@@ -1,0 +1,198 @@
+import { FormField, FormLabel } from 'athameui';
+import { CSSObject } from '@emotion/react';
+import { SaveButtonGroup } from './SaveButtonGroup';
+import { PersonCardCarousel } from '../../components/PersonCard/PersonCardCarousel';
+import type { CurrentMovie } from './AddMoviesPage';
+import { formatGenres } from '../../utils/formatGenres';
+
+type MovieDetailsFormProps = {
+  currentMovie?: CurrentMovie;
+  onFormFieldChange: (
+    field: string
+  ) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  removePerson: (id: number, roleType?: string) => void;
+  directorsLabel: string;
+  isExistingMovie: boolean;
+  isLoading: boolean;
+  clearFormHandler: () => void;
+  updateMovie: () => void;
+  addMovie: () => void;
+  searchByTmdbIdHandler: (tmdbId: number) => void;
+  onSubmit: () => void;
+};
+
+export const MovieDetailsForm = ({
+  currentMovie = { title: '' },
+  directorsLabel,
+  isLoading,
+
+  clearFormHandler,
+  onFormFieldChange,
+  onSubmit,
+  removePerson,
+  searchByTmdbIdHandler
+}: MovieDetailsFormProps) => {
+  const onFormFieldChangeHandler =
+    (field: string) =>
+    (
+      e:
+        | React.ChangeEvent<HTMLInputElement>
+        | React.ChangeEvent<HTMLTextAreaElement>
+    ) => {
+      onFormFieldChange(field)(e);
+    };
+
+  const onSubmitHandler = () => {
+    onSubmit();
+  };
+
+  const SaveButtonGroupWithProps = () => (
+    <SaveButtonGroup
+      isLoading={isLoading}
+      clearFormHandler={clearFormHandler}
+      searchByTmdbIdHandler={searchByTmdbIdHandler}
+    />
+  );
+
+  return (
+    <form css={baphStyles.form} action={onSubmitHandler}>
+      <SaveButtonGroupWithProps />
+      <FormField
+        id="movie-title"
+        label="Title"
+        type="text"
+        value={currentMovie?.title || ''}
+        onChange={onFormFieldChangeHandler('title')}
+        placeholder="Movie Title"
+        size="medium"
+        dark
+      />
+      <FormField
+        id="movie-release-date"
+        size="medium"
+        label="Release Date"
+        type="text"
+        value={currentMovie?.releaseDate ?? ''}
+        onChange={onFormFieldChangeHandler('releaseDate')}
+        placeholder="Release Date"
+        dark
+      />
+      <FormField
+        id="movie-genres"
+        size="medium"
+        label="Genres"
+        type="text"
+        value={formatGenres(currentMovie?.genres)}
+        onChange={onFormFieldChangeHandler('genres')}
+        placeholder="Genres, comma-separated"
+        dark
+      />
+      <FormField
+        id="movie-overview"
+        size="medium"
+        label="Overview"
+        type="text"
+        value={currentMovie?.overview ?? ''}
+        onChange={onFormFieldChangeHandler('overview')}
+        placeholder="Overview"
+        dark
+      />
+      <FormField
+        id="movie-revenue"
+        size="medium"
+        label="Revenue"
+        type="text"
+        value={currentMovie?.revenue ?? ''}
+        onChange={onFormFieldChangeHandler('revenue')}
+        placeholder="Revenue"
+        dark
+      />
+      <FormField
+        id="movie-poster-path"
+        size="medium"
+        label="Poster Path"
+        type="text"
+        value={currentMovie?.posterPath ?? ''}
+        onChange={onFormFieldChangeHandler('posterPath')}
+        placeholder="Poster image path"
+        dark
+      />
+      <FormField
+        id="movie-backdrop-path"
+        size="medium"
+        label="Backdrop Path"
+        type="text"
+        value={currentMovie?.backdropPath ?? ''}
+        onChange={onFormFieldChangeHandler('backdropPath')}
+        placeholder="Backdrop image path"
+        dark
+      />
+      <FormField
+        id="movie-tagline"
+        size="medium"
+        label="Tagline"
+        type="text"
+        value={currentMovie?.tagline ?? ''}
+        onChange={onFormFieldChangeHandler('tagline')}
+        placeholder="Tagline"
+        dark
+      />
+      <div>
+        <FormLabel label={directorsLabel} dark />
+        <PersonCardCarousel
+          people={currentMovie?.directors || []}
+          removePerson={removePerson}
+          roleType="Director"
+        />
+      </div>
+      <div>
+        <FormLabel label="Top Billed Cast" dark />
+        <PersonCardCarousel
+          people={currentMovie?.topBilledCast || []}
+          removePerson={removePerson}
+          roleType="Actor"
+        />
+      </div>
+      <div
+      // css={baphStyles.previewContainer}>
+      >
+        {currentMovie?.posterPath ? (
+          <img
+            // css={baphStyles.posterImg}
+            src={`https://image.tmdb.org/t/p/w300${currentMovie?.posterPath}`}
+            alt="Poster Preview"
+          />
+        ) : (
+          <div
+          // css={baphStyles.posterImg}
+          >
+            No Poster Available
+          </div>
+        )}
+        {currentMovie?.backdropPath ? (
+          <img
+            // css={baphStyles.backdropImg}
+            src={`https://image.tmdb.org/t/p/w1280${currentMovie?.backdropPath}`}
+            alt="Backdrop Preview"
+          />
+        ) : (
+          <div
+          // css={baphStyles.backdropImg}
+          >
+            No Backdrop Available
+          </div>
+        )}
+      </div>
+
+      <SaveButtonGroupWithProps />
+    </form>
+  );
+};
+
+const baphStyles: { [key: string]: CSSObject } = {
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '24px'
+  }
+};

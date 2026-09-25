@@ -14,25 +14,27 @@ A movie ranking application where users compare two movies at a time to build ag
 - **Rate Movies** - Go to the Arena and pick your favorites
 - **Movie List** - Search for movies in the database to directly see their score and info
 - **Log In/Log Out** - Because you can
-- **Add Movies to Database** - Search TMDb for movies to add to the Baphomet database by title or TMDb ID - Requires admin privileges
+- **View Profile** - Change user name, password, and other info
+- **Add Movies to Database** - Search TMDb for movies to add to the Baphomet database by title or TMDb ID - Requires admin privileges but you can see the code for it [here](https://github.com/collinlucke/baphomet-ui/tree/main/src/pages/AddMovies)
 
 ## Roadmap
 
-- **Movie Details** - Click on a movie in the list to see more about it.
-- **Leaderboard** - The more you rate the higher you rank
-- **Upgrade to React 19** - Cuz it's 2025
+- **Refactor to Next.js App** - Cuz, why not?!
 
 ## Tech Stack
 
-- **React 18** with TypeScript
-- **Vite** - Build tool and dev server
-- **Apollo GraphQL** - Data fetching and state management
+- **React** with TypeScript
+- **Vite** - Build tool and dev server[^1]
+- **Apollo GraphQL** - Data fetching and state management[^1]
 - **JSON Web Tokens** - Authentication and authorization
-- **Emotion CSS** - CSS-in-JS styling
-- **PhantomArtist** - Custom design system
-- **Vitest** - Testing framework
+- **Emotion CSS** - CSS-in-JS styling[^2]
+- **PhantomArtist** - Custom design system[^3]
+- **Vitest** - Testing framework[^1]
 - **ESLint** - Code quality
 
+[^1]: Will all likely be replaced with Next.js stuff
+[^2]: Moving to the Next.js-blessed Tailwind CSS
+[^3]: Will be using a diffent custom component library built off of PahntomArtist
 ---
 
 ## Related Projects
@@ -40,20 +42,3 @@ A movie ranking application where users compare two movies at a time to build ag
 - **[Baphomet Server](https://github.com/collinlucke/baphomet-server)** - GraphQL backend API
 - **[PhantomArtist](https://github.com/collinlucke/phantomartist)** - Design system library
 
----
-
-## Development
-
-```bash
-# Install dependencies
-pnpm install
-
-# Start development server
-pnpm dev
-
-# Run tests
-pnpm test
-
-# Build for production
-pnpm build
-```

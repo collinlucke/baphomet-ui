@@ -1,22 +1,8 @@
 import { useEffect, useRef } from 'react';
-import { List, Search, baseColors, mediaQueries, Modal } from 'phantomartist';
-import { MovieListItem } from './MovieListItem';
-import { baphColorVariations } from '../../styling/baphTheme';
+import type { Movie } from '../../types/movies.types';
 import { CSSObject } from '@emotion/react';
-
-type Movie = {
-  id: string;
-  title: string;
-  releaseDate?: string;
-  rated?: string;
-  posterPath?: string;
-  winningPercentage: number;
-  overview?: string;
-  genres?: string[];
-  revenue?: number;
-  backdropPath?: string;
-  tmdbId: string;
-};
+import { tokens, List, Search, Modal } from 'athameui';
+import { MovieListItem } from './MovieListItem';
 
 type MovieData = {
   movies: Movie[] | null;
@@ -27,13 +13,16 @@ type MovieData = {
   isLoadingMore?: boolean;
   hasMore?: boolean;
   sortBy?: 'winningPercentage' | 'title' | 'releaseDate';
+  sx?: {
+    list?: CSSObject;
+  };
 
   onScroll?: () => void;
-  onSearch?: (searchTerm: string) => void;
+  onSearch?: (searchTerm: string | number | undefined) => void;
   setSearchTerm?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export const MovieList: React.FC<MovieData> = ({
+export const MovieList = ({
   movies,
   searchTerm,
   totalMovieCount,
@@ -41,13 +30,14 @@ export const MovieList: React.FC<MovieData> = ({
   className,
   isLoadingMore = false,
   hasMore = true,
+  sx,
   onScroll,
   onSearch,
   setSearchTerm
-}) => {
+}: MovieData) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
-  const onSearchHandler = (searchTerm: string) => {
+  const onSearchHandler = (searchTerm: string | number | undefined) => {
     onSearch?.(searchTerm);
   };
 
@@ -103,15 +93,18 @@ export const MovieList: React.FC<MovieData> = ({
 
         {movies?.length ? (
           <>
-            <List className={baphStyles.list} data-testid="movie-list">
+            <List
+              sx={{ list: { ...baphStyles.list, ...sx?.list } }}
+              data-testid="movie-list"
+            >
               {movies &&
                 movies.map(mov => <MovieListItem movie={mov} key={mov.id} />)}
-              {isLoadingMore && (
-                <div css={baphStyles.loadingContainer}>
-                  <div css={baphStyles.loadingText}>Loading more movies...</div>
-                </div>
-              )}
             </List>
+            {isLoadingMore && (
+              <div css={baphStyles.loadingContainer}>
+                <div css={baphStyles.loadingText}>Loading more movies...</div>
+              </div>
+            )}
             {!hasMore && movies.length > 0 && (
               <div css={baphStyles.endContainer}>
                 <div css={baphStyles.endText}>You've reached the end! 🎬</div>
@@ -167,7 +160,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     alignItems: 'center',
     marginBottom: '30px',
     marginTop: '30px',
-    color: baphColorVariations.tertiary[50]
+    color: tokens.color.tertiary.vibrant[500]
   },
   list: {
     display: 'grid',
@@ -176,18 +169,21 @@ const baphStyles: { [key: string]: CSSObject } = {
     paddingInlineStart: 0,
     margin: 0,
     width: '100%',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))',
-    [mediaQueries.minWidth.md]: {
-      gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+    [tokens.media.min.xs]: {
+      gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
       gap: '20px'
     },
-    [mediaQueries.minWidth.lg]: {
-      gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+    [tokens.media.min.md]: {
+      gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+      gap: '20px'
+    },
+    [tokens.media.min.lg]: {
+      gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
       gap: '25px'
     },
-    [mediaQueries.minWidth.xl]: {
-      gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-      gap: '35px'
+    [tokens.media.min.xl]: {
+      gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))'
     }
   },
   movieListWrapper: {
@@ -202,7 +198,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     maxWidth: '1024px'
   },
   resultsText: {
-    color: baphColorVariations.tertiary[50]
+    color: tokens.color.tertiary.vibrant[500]
   },
   loadingContainer: {
     display: 'flex',
@@ -212,7 +208,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     marginTop: '2rem'
   },
   loadingText: {
-    color: baseColors.tertiary[50],
+    color: tokens.color.tertiary.vibrant[500],
     fontSize: '1.1rem',
     fontWeight: 'bold',
     opacity: 0.8,
@@ -231,7 +227,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     marginTop: '2rem'
   },
   endText: {
-    color: baseColors.tertiary[50],
+    color: tokens.color.tertiary.vibrant[500],
     fontSize: '1.2rem',
     fontWeight: 'bold',
     opacity: 0.6,

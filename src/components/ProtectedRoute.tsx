@@ -31,10 +31,10 @@ type ProtectedRouteTypes = {
   element: ComponentType<Record<string, unknown>>;
   props?: Record<string, unknown>;
 };
-export const ProtectedRoute: React.FC<ProtectedRouteTypes> = ({
+export const ProtectedRoute = ({
   element: Component,
   props
-}) => {
+}: ProtectedRouteTypes) => {
   const isAuthenticated = useReactiveVar(isAuthenticatedVar);
   const error = useReactiveVar(errorVar);
   const baphToken = localStorage.getItem('baphomet-token') || null;

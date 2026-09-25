@@ -1,23 +1,16 @@
-import { List, AccordionListItem } from 'phantomartist';
-import { BodySection } from '../../components/Layouts/BodySection';
+import { Main, Accordion } from 'athameui';
 import { PageHeading } from '../../components/Layouts/PageHeading.tsx';
-import { questions } from './faqs.tsx';
+import { faqs } from './faqs.tsx';
 
 const FAQPage = () => {
   return (
-    <BodySection>
+    <Main>
       <PageHeading
         title="FAQ"
         subtitle="That stands for Frequently Asked Questions"
       />
-      <List>
-        {questions.map((item, index) => (
-          <AccordionListItem key={index} title={item.q}>
-            {item.a}
-          </AccordionListItem>
-        ))}
-      </List>
-    </BodySection>
+      <Accordion items={faqs} />
+    </Main>
   );
 };
 export default FAQPage;
