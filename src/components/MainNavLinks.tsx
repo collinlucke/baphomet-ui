@@ -7,7 +7,8 @@ const mainNavPages = [
   { label: 'Arena ', to: '/arena' },
   { label: 'Leaderboard', to: '/leaderboard' },
   { label: 'All Movies', to: '/all-movies' },
-  { label: 'FAQ', to: '/faq' }
+  { label: 'FAQ', to: '/faq' },
+  { label: 'Submittals', to: '/submittals' }
 ];
 
 export const MainNavLinks = () => {

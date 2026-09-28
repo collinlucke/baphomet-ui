@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Header } from './components/Layouts/Header';
 import { Footer } from './components/Layouts/Footer';
 import { screenSizes } from 'phantomartist';
@@ -36,6 +36,8 @@ type BackdropData = {
 };
 
 export const App = () => {
+  const { pathname } = useLocation();
+  const isSubmittals = pathname.startsWith('/submittals');
   const showUnauthorizedModal = useReactiveVar(showUnauthorizedModalVar);
   const showFeedbackModal = useReactiveVar(showFeedbackModalVar);
   const showLoginModal = useReactiveVar(showLoginModalVar);
@@ -44,7 +46,8 @@ export const App = () => {
   const [backdrop, setBackdrop] = useState<string>('');
 
   const { data: backdropData, error: backdropError } = useQuery(
-    GET_RANDOM_BACKDROP_IMAGE
+    GET_RANDOM_BACKDROP_IMAGE,
+    { skip: isSubmittals }
   );
 
   const [checkAuth, { data: authData, error: authError }] =
@@ -152,13 +155,13 @@ export const App = () => {
     <div css={baphStyles.appWrapper}>
       <Globals />
 
-      <Header />
+      {!isSubmittals && <Header />}
 
-      <div css={getMainStyles(backdrop)}>
+      <div css={getMainStyles(isSubmittals ? undefined : backdrop)}>
         <Outlet />
       </div>
 
-      <Footer />
+      {!isSubmittals && <Footer />}
 
       <Modal isOpen={showLoginModal} onClose={closeLoginModalHandler}>
         <LoginForm onSuccess={loginSuccessHandler} />
@@ -188,21 +191,29 @@ const getMainStyles = (backdrop?: string): CSSObject => ({
   position: 'relative' as const,
   zIndex: 0,
   flexGrow: 1,
-  '&::before': {
-    content: '""',
-    position: 'absolute' as const,
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    backgroundAttachment: 'fixed' as const,
-    filter: 'grayscale(100%)',
-    opacity: 0.05,
-    zIndex: -1,
-    backgroundImage: `url(https://image.tmdb.org/t/p/original${backdrop})`
-  }
+  ...(backdrop
+    ? {
+        '&::before': {
+          content: '""',
+          position: 'absolute' as const,
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed' as const,
+          filter: 'grayscale(100%)',
+          opacity: 0.05,
+          zIndex: -1,
+          backgroundImage: `url(https://image.tmdb.org/t/p/original${backdrop})`
+        }
+      }
+      : {
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundColor: 'transparent'
+      })
 });
 
 const baphStyles: { [key: string]: CSSObject } = {

@@ -15,6 +15,9 @@ const ProfilePage = lazy(() => import('./pages/Profile/ProfilePage.tsx'));
 const MovieDetailsPage = lazy(
   () => import('./pages/MovieDetails/MovieDetailsPage.tsx')
 );
+const SubmittalsPage = lazy(
+  () => import('./pages/Submittals/SubmittalsPage.tsx')
+);
 
 const withErrorBoundary = (
   Component: React.LazyExoticComponent<React.ComponentType<object>>
@@ -68,6 +71,10 @@ const routes = [
       {
         path: 'profile',
         element: withErrorBoundary(ProfileRoute)
+      },
+      {
+        path: 'submittals',
+        element: withErrorBoundary(SubmittalsPage)
       },
       {
         path: 'movie/:id',
