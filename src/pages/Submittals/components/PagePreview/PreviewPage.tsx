@@ -399,6 +399,7 @@ export const PreviewPage = ({
         <Box
           onDragOver={(e) => {
             e.preventDefault();
+            e.stopPropagation();
             setIsDragOver(true);
           }}
           onDragLeave={(e) => {
@@ -407,11 +408,11 @@ export const PreviewPage = ({
           }}
           onDrop={(e) => {
             e.preventDefault();
+            e.stopPropagation();
             setIsDragOver(false);
             const file = e.dataTransfer.files?.[0];
             if (file) selectFile(file);
           }}
-          onClick={() => fileInputRef.current?.click()}
           sx={{
             position: "absolute",
             left: DEFAULT_COVER_LAYOUT.x,
@@ -420,7 +421,7 @@ export const PreviewPage = ({
             height: DEFAULT_COVER_HEIGHT,
             border: "3px dashed",
             borderColor: isDragOver ? "primary.400" : "neutral.300",
-            bgcolor: isDragOver ? "rgba(19, 103, 57, 0.06)" : "rgba(0,0,0,0.02)",
+            bgcolor: isDragOver ? "rgba(19, 103, 57, 0.06)" : "rgba(255,255,255,0.92)",
             borderRadius: "8px",
             display: "flex",
             flexDirection: "column",
@@ -429,18 +430,25 @@ export const PreviewPage = ({
             gap: 1.5,
             cursor: "pointer",
             userSelect: "none",
-            zIndex: 0,
+            zIndex: 2,
             transition: "border-color 0.15s ease, background-color 0.15s ease",
             "&:hover": {
               borderColor: "primary.300",
-              bgcolor: "rgba(19, 103, 57, 0.04)",
+              bgcolor: "rgba(19, 103, 57, 0.06)",
             },
           }}
         >
-          <CloudUpload sx={{ fontSize: 64, color: "neutral.400" }} />
+          <CloudUpload
+            sx={{ fontSize: 64, color: "neutral.400", pointerEvents: "none" }}
+          />
           <Typography
             level="title-lg"
-            sx={{ fontSize: 28, color: "neutral.600", textAlign: "center" }}
+            sx={{
+              fontSize: 28,
+              color: "neutral.600",
+              textAlign: "center",
+              pointerEvents: "none",
+            }}
           >
             {isDragOver ? "Drop image here" : "Upload cover image"}
           </Typography>
@@ -451,10 +459,44 @@ export const PreviewPage = ({
               color: "neutral.500",
               textAlign: "center",
               px: 2,
+              pointerEvents: "none",
             }}
           >
             Drag and drop or click to browse
           </Typography>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) selectFile(file);
+            }}
+            onDragOver={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsDragOver(true);
+            }}
+            onDragLeave={(e) => {
+              e.preventDefault();
+              setIsDragOver(false);
+            }}
+            onDrop={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsDragOver(false);
+              const file = e.dataTransfer.files?.[0];
+              if (file) selectFile(file);
+            }}
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              opacity: 0,
+              cursor: "pointer",
+            }}
+          />
         </Box>
       )}
 
@@ -557,16 +599,6 @@ export const PreviewPage = ({
         )}
       </Box>
 
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        onChange={(e) => {
-          const file = e.target.files?.[0];
-          if (file) selectFile(file);
-        }}
-        style={{ display: "none" }}
-      />
     </Box>
   );
 };

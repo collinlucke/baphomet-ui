@@ -33,14 +33,15 @@ export const PlantScheduleUploader = ({
         Plant Schedule
       </Typography>
       <Box
-        onClick={() => fileInputRef.current?.click()}
         onDragOver={(e) => {
           e.preventDefault();
+          e.stopPropagation();
           setIsDragging(true);
         }}
         onDragLeave={() => setIsDragging(false)}
         onDrop={(e) => {
           e.preventDefault();
+          e.stopPropagation();
           setIsDragging(false);
           const file = e.dataTransfer.files?.[0];
           if (file) selectFile(file);
@@ -74,46 +75,80 @@ export const PlantScheduleUploader = ({
               maxHeight: 320,
               objectFit: "contain",
               borderRadius: "8px",
+              pointerEvents: "none",
             }}
           />
         ) : (
           <>
-            <CloudUpload sx={{ fontSize: 36, color: "rgba(255,255,255,0.8)" }} />
-            <Typography level="body-sm" sx={{ color: "#f5f5f5" }}>
+            <CloudUpload
+              sx={{
+                fontSize: 36,
+                color: "rgba(255,255,255,0.8)",
+                pointerEvents: "none",
+              }}
+            />
+            <Typography
+              level="body-sm"
+              sx={{ color: "#f5f5f5", pointerEvents: "none" }}
+            >
               Upload the plant schedule from the plans
             </Typography>
-            <Typography level="body-xs" sx={{ color: "rgba(255,255,255,0.7)" }}>
+            <Typography
+              level="body-xs"
+              sx={{ color: "rgba(255,255,255,0.7)", pointerEvents: "none" }}
+            >
               Drag and drop or click to browse
             </Typography>
           </>
         )}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) selectFile(file);
+          }}
+          onDragOver={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsDragging(true);
+          }}
+          onDragLeave={() => setIsDragging(false)}
+          onDrop={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsDragging(false);
+            const file = e.dataTransfer.files?.[0];
+            if (file) selectFile(file);
+          }}
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            opacity: 0,
+            cursor: "pointer",
+          }}
+        />
         {previewUrl && (
           <IconButton
             size="sm"
             variant="solid"
             color="neutral"
             onClick={(e) => {
+              e.preventDefault();
               e.stopPropagation();
               onChange(null);
               if (fileInputRef.current) fileInputRef.current.value = "";
             }}
-            sx={{ position: "absolute", top: 8, right: 8 }}
+            sx={{ position: "absolute", top: 8, right: 8, zIndex: 1 }}
             title="Remove plant schedule"
           >
             <Close fontSize="small" />
           </IconButton>
         )}
       </Box>
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        hidden
-        onChange={(e) => {
-          const file = e.target.files?.[0];
-          if (file) selectFile(file);
-        }}
-      />
     </Box>
   );
 };
