@@ -1,7 +1,6 @@
 import { memo } from "react";
 import { Box, Checkbox, CircularProgress, IconButton, Sheet, Typography } from "@mui/joy";
 import EditOutlined from "@mui/icons-material/EditOutlined";
-import ImageIcon from "@mui/icons-material/Image";
 import type { GroupedMaterial } from "./materialGrouping";
 
 type CategoryGroupRowProps = {
@@ -94,26 +93,7 @@ export const CategoryGroupRow = memo(function CategoryGroupRow({
         ) : (
           <EditOutlined sx={{ fontSize: 18 }} />
         )}
-      </IconButton>
-      <Box
-        sx={{
-          width: 32,
-          height: 32,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexShrink: 0,
-        }}
-      >
-        <ImageIcon
-          sx={{
-            fontSize: 18,
-            display: "block",
-            color: group.hasImage ? "success.500" : "#9a9a9a",
-          }}
-          titleAccess={group.hasImage ? "Has image" : "No image"}
-        />
-      </Box>
+        </IconButton>
     </Sheet>
   );
 });

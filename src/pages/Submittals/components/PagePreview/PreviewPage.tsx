@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Box, IconButton, Textarea, Typography } from "@mui/joy";
+import { Box, IconButton, Typography } from "@mui/joy";
 import CloudUpload from "@mui/icons-material/CloudUpload";
 import Close from "@mui/icons-material/Close";
 
@@ -51,7 +51,6 @@ type Corner = "nw" | "ne" | "sw" | "se";
 
 export const PreviewPage = ({
   title = "",
-  onTitleChange,
   coverImage = null,
   onCoverImageChange,
   coverImageLayout = DEFAULT_COVER_LAYOUT,
@@ -64,8 +63,6 @@ export const PreviewPage = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragOver, setIsDragOver] = useState(false);
   const [coverImageUrl, setCoverImageUrl] = useState<string | null>(null);
-  const [isEditingTitle, setIsEditingTitle] = useState(false);
-  const titleRef = useRef<HTMLTextAreaElement | null>(null);
   const aspectRatioRef = useRef(
     DEFAULT_COVER_WIDTH / DEFAULT_COVER_HEIGHT,
   );
@@ -186,16 +183,6 @@ export const PreviewPage = ({
     [onCoverImageChange, onCoverImageLayoutChange],
   );
 
-  const onChangeTitleHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const newValue = e.target.value;
-    const el = e.target as HTMLTextAreaElement;
-    const savedValue = el.value;
-    el.value = newValue;
-    const wouldOverflow = el.scrollHeight > el.clientHeight;
-    el.value = savedValue;
-    if (!wouldOverflow) onTitleChange?.(newValue);
-  };
-
   const endInteraction = (e: React.PointerEvent) => {
     if (!interaction.current) return;
     interaction.current = null;
@@ -304,6 +291,7 @@ export const PreviewPage = ({
       {/* Background cover image / upload zone */}
       {coverImageUrl ? (
         <Box
+          aria-label="Move cover photo"
           onPointerDown={startMove}
           onPointerMove={handlePointerMove}
           onPointerUp={endInteraction}
@@ -318,7 +306,7 @@ export const PreviewPage = ({
             outlineColor: "primary.300",
             borderRadius: "8px",
             cursor: "move",
-            zIndex: 0,
+            zIndex: 2,
             touchAction: "none",
           }}
         >
@@ -525,48 +513,21 @@ export const PreviewPage = ({
           }}
         />
 
-        <Textarea
-          slotProps={{
-            textarea: {
-              ref: titleRef,
-              onBlur: () => setIsEditingTitle(false),
-            },
-          }}
-          value={title}
-          onClick={() => {
-            if (isEditingTitle) return;
-            setIsEditingTitle(true);
-            requestAnimationFrame(() => titleRef.current?.focus());
-          }}
-          onChange={onChangeTitleHandler}
-          placeholder={
-            isEditingTitle ? "" : "Property Name | Opportunity Name"
-          }
-          minRows={5}
-          maxRows={7}
-          readOnly={!isEditingTitle}
+        <Typography
           sx={{
             fontSize: "82px",
             fontWeight: "bold",
-            color: "#136739",
+            color: title ? "#136739" : "rgba(19, 103, 57, 0.35)",
             textShadow: "0 2px 3px rgba(0,0,0,0.2)",
             lineHeight: 1.2,
             whiteSpace: "pre-wrap",
-            background: isEditingTitle
-              ? "rgba(255,255,255,0.55)"
-              : "transparent",
-            border: "none",
-            outline: "none",
-            resize: "none",
             width: "100%",
-            p: 0,
-            boxShadow: "none",
-            pointerEvents: "auto",
-            cursor: "text",
-            "--Textarea-focusedHighlight": "transparent",
-            "&:focus-within": { outline: "none" },
+            pointerEvents: "none",
+            userSelect: "none",
           }}
-        />
+        >
+          {title || "Property Name | Opportunity Name"}
+        </Typography>
 
         {categoriesWithMaterials.length > 0 && (
           <Box

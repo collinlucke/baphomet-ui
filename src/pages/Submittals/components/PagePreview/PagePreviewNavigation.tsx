@@ -9,12 +9,31 @@ type PagePreviewNavigationProps = {
   onNext: () => void;
 };
 
+const arrowSx = (canTurn: boolean) => ({
+  bgcolor: canTurn ? "#f5f5f5" : "#2a2a2a",
+  color: canTurn ? "#1a1a1a" : "#4a4a4a",
+  border: "1px solid",
+  borderColor: canTurn ? "#f5f5f5" : "#2a2a2a",
+  "&:hover": {
+    bgcolor: canTurn ? "#ffffff" : "#2a2a2a",
+  },
+  "&.Mui-disabled": {
+    bgcolor: "#2a2a2a",
+    color: "#4a4a4a",
+    borderColor: "#2a2a2a",
+    opacity: 1,
+  },
+});
+
 export const PagePreviewNavigation = ({
   currentPage,
   totalPages,
   onPrev,
   onNext,
 }: PagePreviewNavigationProps) => {
+  const canGoBack = currentPage > 1;
+  const canGoForward = currentPage < totalPages;
+
   return (
     <Box
       sx={{
@@ -27,22 +46,24 @@ export const PagePreviewNavigation = ({
     >
       <IconButton
         size="sm"
-        variant="outlined"
+        variant="plain"
         onClick={onPrev}
-        disabled={currentPage <= 1}
+        disabled={!canGoBack}
+        sx={arrowSx(canGoBack)}
       >
         <ChevronLeft />
       </IconButton>
 
-      <Typography level="body-sm">
+      <Typography level="body-sm" sx={{ color: "#f5f5f5" }}>
         {currentPage} / {totalPages}
       </Typography>
 
       <IconButton
         size="sm"
-        variant="outlined"
+        variant="plain"
         onClick={onNext}
-        disabled={currentPage >= totalPages}
+        disabled={!canGoForward}
+        sx={arrowSx(canGoForward)}
       >
         <ChevronRight />
       </IconButton>

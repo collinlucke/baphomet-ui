@@ -13,7 +13,6 @@ import {
 import { MaterialsList } from './components/MaterialList/MaterialsList';
 import { SelectedMaterialsList } from './components/MaterialList/SelectedMaterialsList';
 // import { BackgroundImageUploader } from "./components/BackgroundImageUploader";
-import { CoverTitleEditor } from './components/CoverTitleEditor';
 import { PagePreview } from './components/PagePreview/PagePreview';
 import {
   PreviewPage,
@@ -78,10 +77,14 @@ export const App = () => {
   const [saveStatus, setSaveStatus] = useState('');
   const [createOpen, setCreateOpen] = useState(false);
   const [newSubmittalName, setNewSubmittalName] = useState('');
+  const [openLibraryRequest, setOpenLibraryRequest] = useState(0);
   const skipNextAutosave = useRef(true);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [plantSchedule, setPlantSchedule] = useState<File | null>(null);
   const [plantScheduleUrl, setPlantScheduleUrl] = useState<string | null>(null);
+  const [plantScheduleMimeType, setPlantScheduleMimeType] = useState<
+    string | null
+  >(null);
 
   const { exportToPdf, isExporting } = usePdfExport();
 
@@ -289,6 +292,24 @@ export const App = () => {
       setCoverImage(uploaded.url);
     }
 
+    let plantScheduleImageUrl: string | null =
+      plantScheduleUrl && !plantScheduleUrl.startsWith('blob:')
+        ? plantScheduleUrl
+        : null;
+    let savedPlantScheduleMimeType = plantScheduleMimeType;
+
+    if (plantSchedule instanceof File) {
+      const uploaded = await uploadCoverImage(plantSchedule);
+      plantScheduleImageUrl = uploaded.url;
+      savedPlantScheduleMimeType = uploaded.mimeType;
+      setPlantSchedule(null);
+      setPlantScheduleMimeType(uploaded.mimeType);
+      setPlantScheduleUrl(current => {
+        if (current?.startsWith('blob:')) URL.revokeObjectURL(current);
+        return uploaded.url;
+      });
+    }
+
     const categories = (materials as any[])
       .map(cat => ({
         id: cat.id as number,
@@ -323,6 +344,8 @@ export const App = () => {
         : null,
       coverImageUrl,
       coverImageMimeType,
+      plantScheduleImageUrl,
+      plantScheduleMimeType: savedPlantScheduleMimeType,
       coverImageLayout,
       categories
     };
@@ -360,6 +383,12 @@ export const App = () => {
     setCoverTitle(saved.coverTitle || '');
     setCoverImage(saved.coverImageUrl);
     setCoverImageLayout(saved.coverImageLayout || DEFAULT_COVER_LAYOUT);
+    setPlantSchedule(null);
+    setPlantScheduleMimeType(saved.plantScheduleMimeType || null);
+    setPlantScheduleUrl(current => {
+      if (current?.startsWith('blob:')) URL.revokeObjectURL(current);
+      return saved.plantScheduleImageUrl || null;
+    });
     setCurrentPageIndex(0);
     setPendingSelection(null);
     setMaterials([]);
@@ -831,7 +860,12 @@ export const App = () => {
         pageNumber: idx + 2,
         totalPages
       })),
-      plantSchedule
+      plantSchedule,
+      plantScheduleUrl:
+        plantScheduleUrl && !plantScheduleUrl.startsWith('blob:')
+          ? plantScheduleUrl
+          : null,
+      plantScheduleMimeType
     });
   };
 
@@ -850,7 +884,10 @@ export const App = () => {
       categoryIds: selectedCategories.map(category => category.id),
       coverImage:
         typeof coverImage === 'string' ? coverImage : coverImage ? 'file' : null,
-      coverImageLayout
+      coverImageLayout,
+      plantSchedule: plantSchedule
+        ? `${plantSchedule.name}:${plantSchedule.size}:${plantSchedule.lastModified}`
+        : plantScheduleUrl
     });
   }, [
     savedSubmittalName,
@@ -858,7 +895,9 @@ export const App = () => {
     materials,
     selectedCategories,
     coverImage,
-    coverImageLayout
+    coverImageLayout,
+    plantSchedule,
+    plantScheduleUrl
   ]);
 
   const saveSubmittalRef = useRef(handleSaveSubmittal);
@@ -883,8 +922,9 @@ export const App = () => {
 
   const handlePlantScheduleChange = (file: File | null) => {
     setPlantSchedule(file);
+    setPlantScheduleMimeType(file ? file.type || 'image/jpeg' : null);
     setPlantScheduleUrl(current => {
-      if (current) URL.revokeObjectURL(current);
+      if (current?.startsWith('blob:')) URL.revokeObjectURL(current);
       return file ? URL.createObjectURL(file) : null;
     });
   };
@@ -912,6 +952,8 @@ export const App = () => {
         opportunity: null,
         coverImageUrl: null,
         coverImageMimeType: null,
+        plantScheduleImageUrl: null,
+        plantScheduleMimeType: null,
         coverImageLayout: DEFAULT_COVER_LAYOUT,
         categories: []
       });
@@ -965,20 +1007,26 @@ export const App = () => {
             </Typography>
           )}
         </Box>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            setNewSubmittalName('');
-            setCreateOpen(true);
-          }}
-          sx={{
-            ml: 'auto',
-            color: '#f5f5f5',
-            borderColor: 'rgba(255,255,255,0.7)'
-          }}
-        >
-          Create New Submittal
-        </Button>
+        <Box sx={{ display: 'flex', gap: 1, ml: 'auto' }}>
+          <Button
+            variant="outlined"
+            onClick={() => setOpenLibraryRequest(request => request + 1)}
+            sx={{
+              color: '#f5f5f5',
+              borderColor: 'rgba(255,255,255,0.7)'
+            }}
+          >
+            Open
+          </Button>
+          <Button
+            onClick={() => {
+              setNewSubmittalName('');
+              setCreateOpen(true);
+            }}
+          >
+            Create New Submittal
+          </Button>
+        </Box>
       </Box>
       <Modal open={createOpen} onClose={() => setCreateOpen(false)}>
         <ModalDialog sx={{ width: 420 }}>
@@ -1054,11 +1102,6 @@ export const App = () => {
           <Typography level="h4" sx={{ color: '#f5f5f5' }}>
             Submittal Preview
           </Typography>
-          <CoverTitleEditor
-            value={coverTitle}
-            onChange={setCoverTitle}
-            opportunity={opportunity}
-          />
           <Box
             sx={{
               width: '100%',
@@ -1082,11 +1125,20 @@ export const App = () => {
                 gap: 1.5
               }}
             >
+            <Input
+              value={coverTitle}
+              onChange={event => setCoverTitle(event.target.value)}
+              placeholder="Name of proposal..."
+              aria-label="Name of proposal"
+              sx={{
+                bgcolor: '#fff',
+                color: '#1a1a1a'
+              }}
+            />
             <PagePreview>
               {currentPageIndex === 0 ? (
                 <PreviewPage
                   title={coverTitle}
-                  onTitleChange={setCoverTitle}
                   coverImage={coverImage}
                   onCoverImageChange={setCoverImage}
                   coverImageLayout={coverImageLayout}
@@ -1116,22 +1168,25 @@ export const App = () => {
                 setCurrentPageIndex(i => Math.min(totalPages - 1, i + 1))
               }
             />
-            <SavedSubmittalsPanel
-              savedId={savedSubmittalId}
-              defaultName={
-                savedSubmittalName ||
-                coverTitle ||
-                opportunity?.name ||
-                'Untitled submittal'
-              }
-              isSaving={isSavingSubmittal}
-              onSave={handleSaveSubmittal}
-              onLoad={handleLoadSubmittal}
-            />
-            <GenerateSubmittalButton
-              onClick={handleDownloadPdf}
-              isLoading={isExporting}
-            />
+            <Box sx={{ display: 'flex', gap: 1, width: '100%' }}>
+              <SavedSubmittalsPanel
+                savedId={savedSubmittalId}
+                openLibraryRequest={openLibraryRequest}
+                defaultName={
+                  savedSubmittalName ||
+                  coverTitle ||
+                  opportunity?.name ||
+                  'Untitled submittal'
+                }
+                isSaving={isSavingSubmittal}
+                onSave={handleSaveSubmittal}
+                onLoad={handleLoadSubmittal}
+              />
+              <GenerateSubmittalButton
+                onClick={handleDownloadPdf}
+                isLoading={isExporting}
+              />
+            </Box>
             </Box>
           </Box>
         </Box>

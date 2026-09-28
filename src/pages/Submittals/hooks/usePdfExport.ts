@@ -29,6 +29,8 @@ type ExportOptions = {
   categories: Category[];
   materialPages?: MaterialPageData[];
   plantSchedule?: File | null;
+  plantScheduleUrl?: string | null;
+  plantScheduleMimeType?: string | null;
 };
 
 function fileToBase64(file: File): Promise<string> {
@@ -57,6 +59,8 @@ export const usePdfExport = () => {
     categories,
     materialPages,
     plantSchedule,
+    plantScheduleUrl,
+    plantScheduleMimeType: savedPlantScheduleMimeType,
   }: ExportOptions) => {
     setIsExporting(true);
     try {
@@ -65,10 +69,14 @@ export const usePdfExport = () => {
       let coverImageUrl: string | null = null;
       let plantScheduleBase64: string | null = null;
       let plantScheduleMimeType: string | null = null;
+      let plantScheduleImageUrl: string | null = null;
 
       if (plantSchedule) {
         plantScheduleBase64 = await fileToBase64(plantSchedule);
         plantScheduleMimeType = plantSchedule.type || "image/jpeg";
+      } else if (plantScheduleUrl) {
+        plantScheduleImageUrl = plantScheduleUrl;
+        plantScheduleMimeType = savedPlantScheduleMimeType || null;
       }
 
       if (coverImage instanceof File) {
@@ -94,6 +102,7 @@ export const usePdfExport = () => {
           materialPages,
           plantScheduleBase64,
           plantScheduleMimeType,
+          plantScheduleUrl: plantScheduleImageUrl,
         }),
       });
 

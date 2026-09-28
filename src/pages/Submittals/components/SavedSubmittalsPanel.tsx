@@ -16,7 +16,6 @@ import {
   Input,
   Divider,
 } from "@mui/joy";
-import FolderOpen from "@mui/icons-material/FolderOpen";
 import DeleteOutline from "@mui/icons-material/DeleteOutline";
 import Save from "@mui/icons-material/Save";
 import {
@@ -29,6 +28,7 @@ type SavedSubmittalsPanelProps = {
   savedId: string | null;
   defaultName: string;
   isSaving: boolean;
+  openLibraryRequest?: number;
   onSave: (name: string) => Promise<void>;
   onLoad: (id: string) => Promise<void>;
 };
@@ -45,6 +45,7 @@ export const SavedSubmittalsPanel = ({
   savedId,
   defaultName,
   isSaving,
+  openLibraryRequest = 0,
   onSave,
   onLoad,
 }: SavedSubmittalsPanelProps) => {
@@ -76,6 +77,13 @@ export const SavedSubmittalsPanel = ({
     setOpen(true);
     await refreshList();
   };
+
+  useEffect(() => {
+    if (!openLibraryRequest) return;
+    void handleOpenLibrary();
+    // The counter is the only trigger; handleOpenLibrary is recreated each render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openLibraryRequest]);
 
   const handleLoad = async (id: string) => {
     setLoadingId(id);
@@ -117,31 +125,16 @@ export const SavedSubmittalsPanel = ({
 
   return (
     <>
-      <Box sx={{ display: "flex", gap: 1, width: "100%" }}>
-        <Button
-          variant="outlined"
-          color="neutral"
-          startDecorator={<FolderOpen />}
-          onClick={handleOpenLibrary}
-          sx={{
-            flex: 1,
-            color: "var(--joy-palette-neutral-outlinedBorder)",
-            "--Icon-color": "var(--joy-palette-neutral-outlinedBorder)",
-          }}
-        >
-          Open
-        </Button>
-        <Button
-          variant="solid"
-          color="neutral"
-          startDecorator={<Save />}
-          loading={isSaving}
-          onClick={handleSaveClick}
-          sx={{ flex: 1 }}
-        >
-          {savedId ? "Update" : "Save"}
-        </Button>
-      </Box>
+      <Button
+        variant="solid"
+        color="neutral"
+        startDecorator={<Save />}
+        loading={isSaving}
+        onClick={handleSaveClick}
+        sx={{ flex: 1 }}
+      >
+        {savedId ? "Update" : "Save"}
+      </Button>
 
       <Modal open={open} onClose={() => setOpen(false)}>
         <ModalDialog sx={{ width: 520, maxWidth: "95vw" }}>
@@ -186,7 +179,6 @@ export const SavedSubmittalsPanel = ({
                           {item.id === savedId ? " (current)" : ""}
                         </Typography>
                         <Typography level="body-xs" sx={{ opacity: 0.7 }}>
-                          {item.opportunity?.name || "No opportunity"} ·{" "}
                           {item.materialCount} materials ·{" "}
                           {formatDate(item.updatedAt)}
                         </Typography>
@@ -226,8 +218,7 @@ export const SavedSubmittalsPanel = ({
             />
             <Divider sx={{ my: 1.5 }} />
             <Typography level="body-xs" sx={{ opacity: 0.65 }}>
-              Saves opportunity, title, cover image/layout, and selected
-              materials.
+              Saves the title, cover image, and selected materials.
             </Typography>
           </DialogContent>
           <DialogActions>

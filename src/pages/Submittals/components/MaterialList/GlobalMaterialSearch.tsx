@@ -69,7 +69,10 @@ export const GlobalMaterialSearch = ({
             borderRadius: 'sm',
             boxShadow: 'md',
             maxHeight: 280,
-            overflowY: 'auto'
+            overflowY: 'auto',
+            color: '#1a1a1a',
+            '& .MuiTypography-root': { color: '#1a1a1a' },
+            '& .MuiListItemButton-root': { color: '#1a1a1a' }
           }}
         >
           <List size="sm" sx={{ '--List-padding': '4px' }}>
@@ -90,13 +93,20 @@ export const GlobalMaterialSearch = ({
                   }}
                 >
                   <Box>
-                    <Typography level="body-sm" fontWeight="md">
+                    <Typography
+                      level="body-sm"
+                      fontWeight="md"
+                      sx={{ '&&': { color: '#1a1a1a' } }}
+                    >
                       {material.itemName}
                     </Typography>
                     {material.alternateName ? (
                       <Typography
                         level="body-xs"
-                        sx={{ opacity: 0.6, fontStyle: 'italic' }}
+                        sx={{
+                          '&&': { color: '#333' },
+                          fontStyle: 'italic'
+                        }}
                       >
                         {material.alternateName}
                       </Typography>

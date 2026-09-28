@@ -32,6 +32,8 @@ export type SavedSubmittalDetail = {
   opportunity: SavedSubmittalOpportunity | null;
   coverImageUrl: string | null;
   coverImageMimeType: string | null;
+  plantScheduleImageUrl: string | null;
+  plantScheduleMimeType: string | null;
   coverImageLayout: CoverImageLayout;
   categories: SavedSubmittalCategory[];
   createdAt: string;
@@ -44,6 +46,8 @@ export type SaveSubmittalPayload = {
   opportunity: SavedSubmittalOpportunity | null;
   coverImageUrl: string | null;
   coverImageMimeType: string | null;
+  plantScheduleImageUrl: string | null;
+  plantScheduleMimeType: string | null;
   coverImageLayout: CoverImageLayout;
   categories: SavedSubmittalCategory[];
 };

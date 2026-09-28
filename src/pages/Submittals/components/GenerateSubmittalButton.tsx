@@ -17,7 +17,7 @@ export const GenerateSubmittalButton = ({
       startDecorator={<Download />}
       color="primary"
       size="md"
-      sx={{ width: "100%" }}
+      sx={{ flex: 1 }}
     >
       Download PDF
     </Button>

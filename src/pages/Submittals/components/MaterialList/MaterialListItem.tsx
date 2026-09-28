@@ -180,25 +180,6 @@ export const MaterialListItem = ({
         >
           <EditOutlined sx={{ fontSize: 18 }} />
         </IconButton>
-        <Box
-          sx={{
-            width: 32,
-            height: 32,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexShrink: 0,
-          }}
-        >
-          <ImageIcon
-            sx={{
-              fontSize: 18,
-              display: "block",
-              color: material.imageUrl ? "success.500" : "#9a9a9a",
-            }}
-            titleAccess={material.imageUrl ? "Has image" : "No image"}
-          />
-        </Box>
       </Sheet>
 
       <Modal open={editOpen} onClose={handleClose}>
