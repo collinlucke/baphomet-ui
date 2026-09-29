@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   Input,
   List,
   ListItem,
   CircularProgress,
   Sheet,
-  Button,
-} from "@mui/joy";
-import Add from "@mui/icons-material/Add";
-import { useDebounce } from "../../../../hooks/useDebounce";
+  Button
+} from '@mui/joy';
+import Add from '@mui/icons-material/Add';
+import { useDebounce } from '../../../../hooks/useDebounce';
 
 type Category = {
   id: number;
@@ -28,14 +28,14 @@ export const CategorySelector = ({
   onSelect,
   onCreate,
   isLoading = false,
-  disabled = false,
+  disabled = false
 }: CategorySelectorProps) => {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const debounced = useDebounce(search, 300);
   const [isOpen, setIsOpen] = useState(false);
 
-  const filteredCategories = availableCategories.filter((cat) =>
-    cat.categoryName.toLowerCase().includes(debounced.toLowerCase()),
+  const filteredCategories = availableCategories.filter(cat =>
+    cat.categoryName.toLowerCase().includes(debounced.toLowerCase())
   );
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,7 +45,7 @@ export const CategorySelector = ({
 
   const handleSelect = (category: Category) => {
     onSelect(category);
-    setSearch("");
+    setSearch('');
     setIsOpen(false);
   };
 
@@ -55,7 +55,7 @@ export const CategorySelector = ({
   };
 
   const exactMatch = availableCategories.some(
-    (cat) => cat.categoryName.toLowerCase() === debounced.trim().toLowerCase(),
+    cat => cat.categoryName.toLowerCase() === debounced.trim().toLowerCase()
   );
   const showDropdown =
     isOpen &&
@@ -66,7 +66,7 @@ export const CategorySelector = ({
     search.length > 0 ? filteredCategories : availableCategories;
 
   return (
-    <Sheet sx={{ position: "relative", mb: 0, width: "100%" }}>
+    <Sheet sx={{ position: 'relative', mb: 0, width: '100%' }}>
       {!isOpen ? (
         <Button
           variant="outlined"
@@ -74,13 +74,17 @@ export const CategorySelector = ({
           loading={disabled || isLoading}
           disabled={disabled || isLoading}
           onClick={handleButtonClick}
-          sx={{ width: "100%", justifyContent: "flex-start" }}
+          sx={{
+            width: '100%',
+            justifyContent: 'flex-start',
+            borderRadius: 'md'
+          }}
         >
           {isLoading
-            ? "Loading categories…"
+            ? 'Loading categories…'
             : disabled
-              ? "Loading category…"
-              : "Add Category"}
+              ? 'Loading category…'
+              : 'Add Category'}
         </Button>
       ) : (
         <Input
@@ -103,26 +107,27 @@ export const CategorySelector = ({
         <Sheet
           variant="outlined"
           sx={{
-            position: "absolute",
-            top: "100%",
+            position: 'absolute',
+            top: '100%',
             left: 0,
             right: 0,
             zIndex: 10,
             mt: 0.5,
-            borderRadius: "md",
-            bgcolor: "background.surface",
+            borderRadius: 'md',
+            bgcolor: 'background.surface',
             maxHeight: 200,
-            overflow: "auto",
+            overflow: 'auto',
+            color: 'red'
           }}
         >
           <List>
-            {categoriesToShow.map((category) => (
+            {categoriesToShow.map(category => (
               <ListItem
                 key={category.id}
                 onClick={() => handleSelect(category)}
                 sx={{
-                  cursor: "pointer",
-                  "&:hover": { bgcolor: "neutral.softBg" },
+                  cursor: 'pointer',
+                  '&:hover': { bgcolor: 'neutral.softBg' }
                 }}
               >
                 {category.categoryName}
@@ -130,15 +135,17 @@ export const CategorySelector = ({
             ))}
             {onCreate && debounced.trim() && !exactMatch && (
               <ListItem
-                onMouseDown={async (event) => {
+                onMouseDown={async event => {
                   event.preventDefault();
                   const created = await onCreate(debounced.trim());
                   handleSelect(created);
                 }}
                 sx={{
-                  cursor: "pointer",
+                  cursor: 'pointer',
                   fontWeight: 600,
-                  "&:hover": { bgcolor: "neutral.softBg" },
+                  '&:hover': {
+                    bgcolor: 'neutral.softBg'
+                  }
                 }}
               >
                 Create &quot;{debounced.trim()}&quot;

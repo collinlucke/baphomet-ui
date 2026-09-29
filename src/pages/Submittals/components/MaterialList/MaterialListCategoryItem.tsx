@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from 'react';
 import {
   Accordion,
   AccordionSummary,
@@ -6,32 +6,32 @@ import {
   IconButton,
   Input,
   Typography,
-  Box,
-} from "@mui/joy";
-import Search from "@mui/icons-material/Search";
-import Delete from "@mui/icons-material/Delete";
-import Add from "@mui/icons-material/Add";
-import { useVirtualizer } from "@tanstack/react-virtual";
-import type { Material } from "./MaterialListItem";
+  Box
+} from '@mui/joy';
+import Search from '@mui/icons-material/Search';
+import Delete from '@mui/icons-material/Delete';
+import Add from '@mui/icons-material/Add';
+import { useVirtualizer } from '@tanstack/react-virtual';
+import type { Material } from './MaterialListItem';
 import {
   fetchUnitTypes,
   syncInstalledKits,
-  updateMaterial,
-} from "../../api/submittals.mutations";
+  updateMaterial
+} from '../../api/submittals.mutations';
 import {
   buildActiveGroupMismatch,
   buildGroupedMaterials,
   getBotanicalName,
   getCommonName,
-  type GroupedMaterial,
-} from "./materialGrouping";
-import { GroupedMaterialEditModal } from "./GroupedMaterialEditModal";
-import { MaterialMismatchModal } from "./MaterialMismatchModal";
-import { IndividualVariantModal } from "./IndividualVariantModal";
-import { AddMaterialItemModal } from "./AddMaterialItemModal";
-import { CategoryGroupRow } from "./CategoryGroupRow";
-import type { CreateMaterialItemResult } from "../../api/submittals.mutations";
-import { formatCost } from "../../../../utils/formatCost";
+  type GroupedMaterial
+} from './materialGrouping';
+import { GroupedMaterialEditModal } from './GroupedMaterialEditModal';
+import { MaterialMismatchModal } from './MaterialMismatchModal';
+import { IndividualVariantModal } from './IndividualVariantModal';
+import { AddMaterialItemModal } from './AddMaterialItemModal';
+import { CategoryGroupRow } from './CategoryGroupRow';
+import type { CreateMaterialItemResult } from '../../api/submittals.mutations';
+import { formatCost } from '../../../../utils/formatCost';
 
 type Category = {
   id: number;
@@ -50,7 +50,7 @@ type MaterialListCategoryItemProps = {
   onImageUpload?: (materialId: number, imageFile: File) => void;
   onCreateMaterialItem?: (
     result: CreateMaterialItemResult,
-    imageFile?: File,
+    imageFile?: File
   ) => Promise<void>;
   onMaterialsUpdated?: (
     updates: Array<{
@@ -62,7 +62,7 @@ type MaterialListCategoryItemProps = {
       allocationUnit?: string;
       categoryId?: number;
       kitId?: number | null;
-    }>,
+    }>
   ) => void;
 };
 
@@ -76,29 +76,29 @@ export const MaterialListCategoryItem = ({
   onImageUpload,
   onCreateMaterialItem,
   onMaterialsUpdated,
-  availableCategories,
+  availableCategories
 }: MaterialListCategoryItemProps) => {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [activeGroupKey, setActiveGroupKey] = useState<string | null>(null);
-  const [commonNameInput, setCommonNameInput] = useState("");
-  const [botanicalNameInput, setBotanicalNameInput] = useState("");
+  const [commonNameInput, setCommonNameInput] = useState('');
+  const [botanicalNameInput, setBotanicalNameInput] = useState('');
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
-    null,
+    null
   );
   const [saving, setSaving] = useState(false);
   const [individualSaving, setIndividualSaving] = useState(false);
   const [showMismatchAlert, setShowMismatchAlert] = useState(false);
   const [editingMaterialId, setEditingMaterialId] = useState<number | null>(
-    null,
+    null
   );
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
-  const [editingCommonName, setEditingCommonName] = useState("");
-  const [editingMaterialAltName, setEditingMaterialAltName] = useState("");
+  const [editingCommonName, setEditingCommonName] = useState('');
+  const [editingMaterialAltName, setEditingMaterialAltName] = useState('');
   const [editingPurchaseUnitCost, setEditingPurchaseUnitCost] = useState(
-    formatCost(0),
+    formatCost(0)
   );
-  const [editingAllocation, setEditingAllocation] = useState("1");
-  const [editingAllocationUnit, setEditingAllocationUnit] = useState("");
+  const [editingAllocation, setEditingAllocation] = useState('1');
+  const [editingAllocationUnit, setEditingAllocationUnit] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [, setIsDragging] = useState(false);
@@ -110,13 +110,13 @@ export const MaterialListCategoryItem = ({
 
   const filteredMaterials = useMemo(() => {
     const query = search.trim().toLowerCase();
-    return category.materials.filter((m) => {
+    return category.materials.filter(m => {
       if (!query) return true;
       const commonName = getCommonName(m).toLowerCase();
       return (
         commonName.includes(query) ||
-        (m.altName ?? "").toLowerCase().includes(query) ||
-        (m.purchaseUnit ?? "").toLowerCase().includes(query)
+        (m.altName ?? '').toLowerCase().includes(query) ||
+        (m.purchaseUnit ?? '').toLowerCase().includes(query)
       );
     });
   }, [category.materials, search]);
@@ -125,7 +125,7 @@ export const MaterialListCategoryItem = ({
 
   const groupedByCommonName = useMemo(
     () => buildGroupedMaterials(filteredMaterials),
-    [filteredMaterials],
+    [filteredMaterials]
   );
 
   const groupVirtualizer = useVirtualizer({
@@ -133,30 +133,30 @@ export const MaterialListCategoryItem = ({
     getScrollElement: () => groupListRef.current,
     estimateSize: () => 40,
     overscan: 10,
-    enabled: expanded,
+    enabled: expanded
   });
 
   const activeGroup = useMemo<GroupedMaterial | null>(
-    () => groupedByCommonName.find((g) => g.key === activeGroupKey) ?? null,
-    [groupedByCommonName, activeGroupKey],
+    () => groupedByCommonName.find(g => g.key === activeGroupKey) ?? null,
+    [groupedByCommonName, activeGroupKey]
   );
 
   const activeGroupMismatch = useMemo(
     () => buildActiveGroupMismatch(activeGroup),
-    [activeGroup],
+    [activeGroup]
   );
 
   // Check if active group contains any new materials (no IDs)
   const isNewGroup = useMemo(() => {
     if (!activeGroup) return false;
-    return activeGroup.materials.some((m) => !m.id || m.id <= 0);
+    return activeGroup.materials.some(m => !m.id || m.id <= 0);
   }, [activeGroup]);
 
   const activeGroupKitIds = useMemo<Record<string, number>>(() => {
     if (!activeGroup) return {};
     const ids: Record<string, number> = {};
-    activeGroup.materials.forEach((m) => {
-      const size = (m.purchaseUnit ?? "").trim();
+    activeGroup.materials.forEach(m => {
+      const size = (m.purchaseUnit ?? '').trim();
       const kitId = Number(m.kitId ?? 0);
       // Key by size within this plant group only — never across the whole category.
       if (size && kitId > 0) {
@@ -168,7 +168,7 @@ export const MaterialListCategoryItem = ({
 
   const hasMissingKits = useMemo(() => {
     if (!activeGroup) return false;
-    return activeGroup.materials.some((m) => {
+    return activeGroup.materials.some(m => {
       const id = Number(m.id);
       return Number.isFinite(id) && id > 0 && !Number(m.kitId);
     });
@@ -179,11 +179,11 @@ export const MaterialListCategoryItem = ({
     const trimmedCommon = commonNameInput.trim();
     const trimmedBotanical = botanicalNameInput.trim();
 
-    return activeGroup.materials.some((material) => {
-      const unit = (material.purchaseUnit ?? "").trim();
+    return activeGroup.materials.some(material => {
+      const unit = (material.purchaseUnit ?? '').trim();
       const nextName = unit ? `${trimmedCommon} - ${unit}` : trimmedCommon;
-      const currentName = (material.materialName ?? "").trim();
-      const currentBotanical = (material.altName ?? "").trim();
+      const currentName = (material.materialName ?? '').trim();
+      const currentBotanical = (material.altName ?? '').trim();
       const currentCategoryId = material.categoryId ?? category.id;
 
       if (currentName !== nextName) return true;
@@ -201,14 +201,14 @@ export const MaterialListCategoryItem = ({
     commonNameInput,
     botanicalNameInput,
     selectedCategoryId,
-    category.id,
+    category.id
   ]);
 
   const canSaveGroup =
     hasGroupFieldChanges || hasMissingKits || Boolean(selectedFile);
 
   const modalImageSrc =
-    preview ?? activeGroup?.materials.find((m) => m.imageUrl)?.imageUrl ?? null;
+    preview ?? activeGroup?.materials.find(m => m.imageUrl)?.imageUrl ?? null;
 
   const clearModalMediaState = () => {
     if (preview) URL.revokeObjectURL(preview);
@@ -221,8 +221,8 @@ export const MaterialListCategoryItem = ({
     clearModalMediaState();
     setShowMismatchAlert(false);
     setEditingMaterialId(null);
-    setEditingCommonName("");
-    setEditingMaterialAltName("");
+    setEditingCommonName('');
+    setEditingMaterialAltName('');
     setActiveGroupKey(null);
     setSelectedSize(null); // Reset selected size
   };
@@ -231,9 +231,9 @@ export const MaterialListCategoryItem = ({
     () =>
       editingMaterialId == null
         ? null
-        : (activeGroup?.materials.find((m) => m.id === editingMaterialId) ??
+        : (activeGroup?.materials.find(m => m.id === editingMaterialId) ??
           null),
-    [activeGroup, editingMaterialId],
+    [activeGroup, editingMaterialId]
   );
 
   const hasIndividualFieldChanges = useMemo(() => {
@@ -243,15 +243,15 @@ export const MaterialListCategoryItem = ({
     const nextCost = Number(editingPurchaseUnitCost);
     const nextAllocation = Number(editingAllocation);
     const nextAllocationUnit = editingAllocationUnit.trim();
-    const unit = (editingMaterial.purchaseUnit ?? "").trim();
+    const unit = (editingMaterial.purchaseUnit ?? '').trim();
     const nextName = unit ? `${nextCommon} - ${unit}` : nextCommon;
 
-    if ((editingMaterial.materialName ?? "").trim() !== nextName) return true;
-    if ((editingMaterial.altName ?? "").trim() !== nextAlt) return true;
+    if ((editingMaterial.materialName ?? '').trim() !== nextName) return true;
+    if ((editingMaterial.altName ?? '').trim() !== nextAlt) return true;
     if (Number(editingMaterial.purchaseUnitCost ?? 0) !== nextCost) return true;
     if (Number(editingMaterial.allocation ?? 1) !== nextAllocation) return true;
     if (
-      String(editingMaterial.allocationUnit ?? "").trim() !== nextAllocationUnit
+      String(editingMaterial.allocationUnit ?? '').trim() !== nextAllocationUnit
     ) {
       return true;
     }
@@ -262,7 +262,7 @@ export const MaterialListCategoryItem = ({
     editingMaterialAltName,
     editingPurchaseUnitCost,
     editingAllocation,
-    editingAllocationUnit,
+    editingAllocationUnit
   ]);
 
   const canSaveIndividual =
@@ -274,34 +274,34 @@ export const MaterialListCategoryItem = ({
 
   const addSizeSourceMaterial = useMemo(
     () => editingMaterial ?? activeGroup?.materials[0] ?? null,
-    [editingMaterial, activeGroup],
+    [editingMaterial, activeGroup]
   );
 
   const addSizeCommonName = useMemo(
     () => getCommonName(addSizeSourceMaterial),
-    [addSizeSourceMaterial],
+    [addSizeSourceMaterial]
   );
   const addSizeBotanicalName = useMemo(
     () => getBotanicalName(addSizeSourceMaterial),
-    [addSizeSourceMaterial],
+    [addSizeSourceMaterial]
   );
 
   const beginIndividualEdit = (material: Material) => {
     setEditingMaterialId(material.id);
     setEditingCommonName(getCommonName(material));
-    setEditingMaterialAltName((material.altName ?? "").trim());
+    setEditingMaterialAltName((material.altName ?? '').trim());
     setEditingPurchaseUnitCost(formatCost(material.purchaseUnitCost));
     setEditingAllocation(String(material.allocation ?? 1));
-    setEditingAllocationUnit(String(material.allocationUnit ?? ""));
+    setEditingAllocationUnit(String(material.allocationUnit ?? ''));
   };
 
   const closeIndividualEdit = () => {
     setEditingMaterialId(null);
-    setEditingCommonName("");
-    setEditingMaterialAltName("");
+    setEditingCommonName('');
+    setEditingMaterialAltName('');
     setEditingPurchaseUnitCost(formatCost(0));
-    setEditingAllocation("1");
-    setEditingAllocationUnit("");
+    setEditingAllocation('1');
+    setEditingAllocationUnit('');
   };
 
   const handleSaveIndividualMaterial = async () => {
@@ -313,41 +313,41 @@ export const MaterialListCategoryItem = ({
     const nextAllocation = Number(editingAllocation);
     const nextAllocationUnit = editingAllocationUnit.trim();
     if (!nextCommon) {
-      alert("Name cannot be empty.");
+      alert('Name cannot be empty.');
       return;
     }
 
     if (!Number.isFinite(nextCost) || nextCost < 0) {
-      alert("Purchase Unit Cost must be a non-negative number.");
+      alert('Purchase Unit Cost must be a non-negative number.');
       return;
     }
 
     if (!Number.isFinite(nextAllocation) || nextAllocation <= 0) {
-      alert("Allocation must be a positive number.");
+      alert('Allocation must be a positive number.');
       return;
     }
 
     if (!nextAllocationUnit) {
-      alert("Allocation Unit cannot be empty.");
+      alert('Allocation Unit cannot be empty.');
       return;
     }
 
     const material = activeGroup?.materials.find(
-      (m) => m.id === editingMaterialId,
+      m => m.id === editingMaterialId
     );
     if (!material) {
       closeIndividualEdit();
       return;
     }
 
-    const unit = (material.purchaseUnit ?? "").trim();
+    const unit = (material.purchaseUnit ?? '').trim();
     const nextName = unit ? `${nextCommon} - ${unit}` : nextCommon;
 
-    const currentName = (material.materialName ?? "").trim();
-    const currentAlt = (material.altName ?? "").trim();
+    const currentName = (material.materialName ?? '').trim();
+    const currentAlt = (material.altName ?? '').trim();
     const currentCost = Number(material.purchaseUnitCost ?? 0);
     const currentAllocation = Number(material.allocation ?? 1);
-    const currentAllocationUnit = String(material.allocationUnit ?? "").trim();
+    const currentAllocationUnit = String(material.allocationUnit ?? '').trim();
     const payload: {
       itemName?: string;
       alternateName?: string;
@@ -388,8 +388,8 @@ export const MaterialListCategoryItem = ({
             altName: payload.alternateName ?? currentAlt,
             purchaseUnitCost: payload.purchaseUnitCost ?? currentCost,
             allocation: payload.allocation ?? currentAllocation,
-            allocationUnit: payload.allocationUnit ?? currentAllocationUnit,
-          },
+            allocationUnit: payload.allocationUnit ?? currentAllocationUnit
+          }
         ]);
       }
 
@@ -398,44 +398,44 @@ export const MaterialListCategoryItem = ({
           const kitSyncResult = await syncInstalledKits([editingMaterialId]);
           if (kitSyncResult.failed > 0) {
             console.warn(
-              "Installed kit lookup/sync failed for variant:",
-              kitSyncResult,
+              'Installed kit lookup/sync failed for variant:',
+              kitSyncResult
             );
             if (needsKitLookup) {
               alert(
-                "Saved material changes, but an installed kit could not be found or synced.",
+                'Saved material changes, but an installed kit could not be found or synced.'
               );
             }
           }
           const renameBlocked = kitSyncResult.details.some(
-            (detail) =>
-              detail.status === "updated" &&
-              typeof detail.reason === "string" &&
-              /Aspire refused rename/i.test(detail.reason),
+            detail =>
+              detail.status === 'updated' &&
+              typeof detail.reason === 'string' &&
+              /Aspire refused rename/i.test(detail.reason)
           );
           if (renameBlocked) {
             alert(
-              "Saved and linked the kit, but Aspire refused to rename it (legacy unit-conversion data). Fix allocation conversion on that kit in Aspire, then save again.",
+              'Saved and linked the kit, but Aspire refused to rename it (legacy unit-conversion data). Fix allocation conversion on that kit in Aspire, then save again.'
             );
           }
           const kitUpdates = kitSyncResult.details
             .filter(
-              (detail) =>
-                (detail.status === "updated" ||
-                  detail.status === "recreated") &&
-                Number(detail.kitId ?? detail.replacementKitId ?? 0) > 0,
+              detail =>
+                (detail.status === 'updated' ||
+                  detail.status === 'recreated') &&
+                Number(detail.kitId ?? detail.replacementKitId ?? 0) > 0
             )
-            .map((detail) => ({
+            .map(detail => ({
               id: detail.materialId,
-              kitId: Number(detail.replacementKitId ?? detail.kitId),
+              kitId: Number(detail.replacementKitId ?? detail.kitId)
             }));
           if (kitUpdates.length > 0) {
             onMaterialsUpdated?.(kitUpdates);
           }
         } catch (error) {
-          console.warn("Installed kit sync failed after variant save:", error);
+          console.warn('Installed kit sync failed after variant save:', error);
           if (needsKitLookup) {
-            alert("Saved material changes, but installed kit lookup failed.");
+            alert('Saved material changes, but installed kit lookup failed.');
           }
         }
       }
@@ -443,8 +443,8 @@ export const MaterialListCategoryItem = ({
       // Close and regroup the category list so identical variants collapse together.
       closeModal();
     } catch (error) {
-      console.error("Failed to save material variant:", error);
-      alert("Failed to save material variant. Please try again.");
+      console.error('Failed to save material variant:', error);
+      alert('Failed to save material variant. Please try again.');
     } finally {
       setIndividualSaving(false);
     }
@@ -454,26 +454,26 @@ export const MaterialListCategoryItem = ({
     setActiveGroupKey(groupKey);
     setCommonNameInput(commonName);
     setSelectedCategoryId(category.id);
-    const group = groupedByCommonName.find((g) => g.key === groupKey);
-    setBotanicalNameInput(group?.botanicalName ?? "");
+    const group = groupedByCommonName.find(g => g.key === groupKey);
+    setBotanicalNameInput(group?.botanicalName ?? '');
 
     if (group) {
       const commonNameCandidates = [
         ...new Set(
           group.materials
-            .map((material) => getCommonName(material).trim())
-            .filter(Boolean),
-        ),
+            .map(material => getCommonName(material).trim())
+            .filter(Boolean)
+        )
       ];
       const botanicalCandidates = [
         ...new Set(
           group.materials
-            .map((material) => getBotanicalName(material).trim())
-            .filter(Boolean),
-        ),
+            .map(material => getBotanicalName(material).trim())
+            .filter(Boolean)
+        )
       ];
       setShowMismatchAlert(
-        commonNameCandidates.length > 1 || botanicalCandidates.length > 1,
+        commonNameCandidates.length > 1 || botanicalCandidates.length > 1
       );
     } else {
       setShowMismatchAlert(false);
@@ -484,21 +484,21 @@ export const MaterialListCategoryItem = ({
     if (unitTypeOptions.length === 0 && !loadingUnitTypes) {
       setLoadingUnitTypes(true);
       fetchUnitTypes()
-        .then((units) => setUnitTypeOptions(units))
-        .catch((error) => {
-          console.error("Failed to load unit types:", error);
+        .then(units => setUnitTypeOptions(units))
+        .catch(error => {
+          console.error('Failed to load unit types:', error);
         })
         .finally(() => setLoadingUnitTypes(false));
     }
   };
 
   const handleFileSelect = (file: File) => {
-    if (!file.type.startsWith("image/")) {
-      alert("Please select an image file");
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file');
       return;
     }
     if (file.size > 10 * 1024 * 1024) {
-      alert("File size must be less than 10MB");
+      alert('File size must be less than 10MB');
       return;
     }
     setSelectedFile(file);
@@ -507,8 +507,8 @@ export const MaterialListCategoryItem = ({
   };
 
   const toggleGroupSelection = (group: { materials: Material[] }) => {
-    const allSelected = group.materials.every((m) => m.selected);
-    group.materials.forEach((material) => {
+    const allSelected = group.materials.every(m => m.selected);
+    group.materials.forEach(material => {
       if (material.selected === allSelected) {
         onToggleMaterial(material.id);
       }
@@ -521,7 +521,7 @@ export const MaterialListCategoryItem = ({
     const trimmedCommon = commonNameInput.trim();
     const trimmedBotanical = botanicalNameInput.trim();
     if (!trimmedCommon) {
-      alert("Name cannot be empty.");
+      alert('Name cannot be empty.');
       return;
     }
 
@@ -536,10 +536,10 @@ export const MaterialListCategoryItem = ({
       }> = [];
 
       for (const material of activeGroup.materials) {
-        const unit = (material.purchaseUnit ?? "").trim();
+        const unit = (material.purchaseUnit ?? '').trim();
         const nextName = unit ? `${trimmedCommon} - ${unit}` : trimmedCommon;
-        const currentName = (material.materialName ?? "").trim();
-        const currentBotanical = (material.altName ?? "").trim();
+        const currentName = (material.materialName ?? '').trim();
+        const currentBotanical = (material.altName ?? '').trim();
         const currentCategoryId = material.categoryId ?? category.id;
 
         const payload: {
@@ -568,14 +568,14 @@ export const MaterialListCategoryItem = ({
                 : {}),
               ...(payload.categoryId !== undefined
                 ? { categoryId: payload.categoryId }
-                : {}),
-            }),
+                : {})
+            })
           );
           localUpdates.push({
             id: material.id,
             materialName: nextName,
             altName: trimmedBotanical,
-            categoryId: selectedCategoryId ?? currentCategoryId,
+            categoryId: selectedCategoryId ?? currentCategoryId
           });
         }
       }
@@ -589,78 +589,78 @@ export const MaterialListCategoryItem = ({
 
       // Sync/rename kits after field changes, or look up missing kits on save.
       const materialIdsToSync = activeGroup.materials
-        .filter((material) => {
+        .filter(material => {
           const id = Number(material.id);
           if (!Number.isFinite(id) || id <= 0) return false;
           if (hasGroupFieldChanges) return true;
           return !Number(material.kitId);
         })
-        .map((material) => Number(material.id));
+        .map(material => Number(material.id));
 
       if (materialIdsToSync.length > 0) {
         try {
           const kitSyncResult = await syncInstalledKits(materialIdsToSync);
           if (kitSyncResult.failed > 0) {
             console.warn(
-              "Some installed kit names failed to sync:",
-              kitSyncResult,
+              'Some installed kit names failed to sync:',
+              kitSyncResult
             );
             alert(
-              `Saved material changes, but ${kitSyncResult.failed} installed kit update(s) failed.`,
+              `Saved material changes, but ${kitSyncResult.failed} installed kit update(s) failed.`
             );
           }
           const renameBlocked = kitSyncResult.details.filter(
-            (detail) =>
-              detail.status === "updated" &&
-              typeof detail.reason === "string" &&
-              /Aspire refused rename/i.test(detail.reason),
+            detail =>
+              detail.status === 'updated' &&
+              typeof detail.reason === 'string' &&
+              /Aspire refused rename/i.test(detail.reason)
           );
           if (renameBlocked.length > 0) {
             console.warn(
-              "Some kits were linked but Aspire blocked renaming:",
-              renameBlocked,
+              'Some kits were linked but Aspire blocked renaming:',
+              renameBlocked
             );
             alert(
-              `Saved and linked ${renameBlocked.length} kit(s), but Aspire refused to rename them (legacy unit-conversion data). Fix allocation conversion on those kits in Aspire, then save again.`,
+              `Saved and linked ${renameBlocked.length} kit(s), but Aspire refused to rename them (legacy unit-conversion data). Fix allocation conversion on those kits in Aspire, then save again.`
             );
           }
           const skippedMissing = kitSyncResult.details.filter(
-            (detail) =>
-              detail.status === "skipped" &&
-              detail.reason === "no matching kit found",
+            detail =>
+              detail.status === 'skipped' &&
+              detail.reason === 'no matching kit found'
           );
           if (skippedMissing.length > 0 && !hasGroupFieldChanges) {
             alert(
-              `Could not find installed kits for ${skippedMissing.length} material(s).`,
+              `Could not find installed kits for ${skippedMissing.length} material(s).`
             );
           }
           const kitUpdates = kitSyncResult.details
             .filter(
-              (detail) =>
-                (detail.status === "updated" ||
-                  detail.status === "recreated") &&
-                Number(detail.kitId ?? detail.replacementKitId ?? 0) > 0,
+              detail =>
+                (detail.status === 'updated' ||
+                  detail.status === 'recreated') &&
+                Number(detail.kitId ?? detail.replacementKitId ?? 0) > 0
             )
-            .map((detail) => ({
+            .map(detail => ({
               id: detail.materialId,
-              kitId: Number(detail.replacementKitId ?? detail.kitId),
+              kitId: Number(detail.replacementKitId ?? detail.kitId)
             }));
           if (kitUpdates.length > 0) {
             onMaterialsUpdated?.(kitUpdates);
           }
         } catch (error) {
-          console.warn("Installed kit sync failed after material save:", error);
+          console.warn('Installed kit sync failed after material save:', error);
           alert(
-            "Saved material changes, but installed kit naming could not be synchronized.",
+            'Saved material changes, but installed kit naming could not be synchronized.'
           );
         }
       }
 
       if (selectedFile && onImageUpload) {
         await Promise.all(
-          activeGroup.materials.map((material) =>
-            Promise.resolve(onImageUpload(material.id, selectedFile)),
-          ),
+          activeGroup.materials.map(material =>
+            Promise.resolve(onImageUpload(material.id, selectedFile))
+          )
         );
       }
 
@@ -673,8 +673,8 @@ export const MaterialListCategoryItem = ({
         : `common:${trimmedCommon.toLowerCase()}`;
       setActiveGroupKey(nextKey);
     } catch (error) {
-      console.error("Failed to save grouped material:", error);
-      alert("Failed to save. Please try again.");
+      console.error('Failed to save grouped material:', error);
+      alert('Failed to save. Please try again.');
     } finally {
       setSaving(false);
     }
@@ -683,12 +683,12 @@ export const MaterialListCategoryItem = ({
   return (
     <Box
       sx={{
-        position: "relative",
-        display: "flex",
-        alignItems: "flex-start",
-        width: "100%",
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'flex-start',
+        width: '100%',
         gap: 1,
-        mb: 1,
+        mb: 1
       }}
     >
       <Accordion
@@ -697,19 +697,23 @@ export const MaterialListCategoryItem = ({
         sx={{
           flex: 1,
           minWidth: 0,
-          border: "1px solid",
-          borderColor: "divider",
+          border: '1px solid',
+          borderColor: 'lightgrey',
           borderRadius: 5,
-          overflow: "hidden",
-          justifyContent: "center",
-          "--AccordionDetails-transition":
-            "grid-template-rows 0.3s ease, padding-block 0.3s ease",
+          overflow: 'hidden',
+          justifyContent: 'center',
+          '--AccordionDetails-transition':
+            'grid-template-rows 0.3s ease, padding-block 0.3s ease'
         }}
       >
-        <AccordionSummary sx={{ height: "31px" }}>
+        <AccordionSummary sx={{ height: '31px' }}>
           <Typography
             level="title-md"
-            sx={{ flexGrow: 1, marginLeft: 1 }}
+            sx={{
+              flexGrow: 1,
+              marginLeft: 1,
+              '&:hover': { color: 'black' }
+            }}
             className="sub-category-name"
           >
             {category.categoryName}
@@ -718,31 +722,33 @@ export const MaterialListCategoryItem = ({
 
         <AccordionDetails>
           <Input
+            data-testid="category-item-search-input"
             size="sm"
             placeholder="Search name..."
             startDecorator={<Search fontSize="small" />}
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={e => setSearch(e.target.value)}
             sx={{ m: 1 }}
           />
           <Box
+            data-testid="category-item-list"
             ref={groupListRef}
             sx={{
-              maxHeight: "calc(10 * 40px)",
-              overflowY: "auto",
-              scrollbarWidth: "none",
-              "&::-webkit-scrollbar": { display: "none" },
-              position: "relative",
+              maxHeight: 'calc(10 * 40px)',
+              overflowY: 'auto',
+              scrollbarWidth: 'none',
+              '&::-webkit-scrollbar': { display: 'none' },
+              position: 'relative'
             }}
           >
             <Box
               sx={{
                 height: `${groupVirtualizer.getTotalSize()}px`,
-                width: "100%",
-                position: "relative",
+                width: '100%',
+                position: 'relative'
               }}
             >
-              {groupVirtualizer.getVirtualItems().map((virtualRow) => {
+              {groupVirtualizer.getVirtualItems().map(virtualRow => {
                 const group = groupedByCommonName[virtualRow.index];
                 const openingThisGroup =
                   loadingUnitTypes && activeGroupKey === group.key;
@@ -752,11 +758,11 @@ export const MaterialListCategoryItem = ({
                     data-index={virtualRow.index}
                     ref={groupVirtualizer.measureElement}
                     sx={{
-                      position: "absolute",
+                      position: 'absolute',
                       top: 0,
                       left: 0,
-                      width: "100%",
-                      transform: `translateY(${virtualRow.start}px)`,
+                      width: '100%',
+                      transform: `translateY(${virtualRow.start}px)`
                     }}
                   >
                     <CategoryGroupRow
@@ -776,12 +782,12 @@ export const MaterialListCategoryItem = ({
       <Box
         sx={{
           zIndex: 1,
-          display: "flex",
+          display: 'flex',
           flexShrink: 0,
           width: 72,
-          justifyContent: "flex-end",
-          alignItems: "center",
-          gap: 0.5,
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          gap: 0.5
         }}
       >
         {onAddItemInCategory && (
@@ -831,12 +837,12 @@ export const MaterialListCategoryItem = ({
         }
         onSave={handleSaveGroup}
         onFileSelect={handleFileSelect}
-        availableCategories={(availableCategories || []).map((c) => ({
+        availableCategories={(availableCategories || []).map(c => ({
           id: c.id.toString(),
-          name: c.categoryName,
+          name: c.categoryName
         }))}
         selectedCategoryId={selectedCategoryId?.toString() ?? null}
-        onCategoryChange={(value) => setSelectedCategoryId(Number(value))}
+        onCategoryChange={value => setSelectedCategoryId(Number(value))}
       />
 
       <MaterialMismatchModal
@@ -850,9 +856,9 @@ export const MaterialListCategoryItem = ({
           setBotanicalNameInput(botanicalName);
           setShowMismatchAlert(false);
         }}
-        onEditMaterial={(materialId) => {
+        onEditMaterial={materialId => {
           const material = activeGroup?.materials.find(
-            (m) => m.id === materialId,
+            m => m.id === materialId
           );
           if (material) {
             beginIndividualEdit(material);
@@ -864,7 +870,7 @@ export const MaterialListCategoryItem = ({
         open={editingMaterialId != null}
         commonName={editingCommonName}
         botanicalName={editingMaterialAltName}
-        purchaseUnit={(editingMaterial?.purchaseUnit ?? "").trim()}
+        purchaseUnit={(editingMaterial?.purchaseUnit ?? '').trim()}
         purchaseUnitCost={editingPurchaseUnitCost}
         allocation={editingAllocation}
         allocationUnit={editingAllocationUnit}
@@ -893,7 +899,7 @@ export const MaterialListCategoryItem = ({
           open={showAddSizeModal}
           title="Add Size"
           categories={[
-            { id: category.id, categoryName: category.categoryName },
+            { id: category.id, categoryName: category.categoryName }
           ]}
           lockedCategoryId={category.id}
           initialValues={{
@@ -908,17 +914,17 @@ export const MaterialListCategoryItem = ({
             purchaseUnitCost: Number(
               editingMaterialId != null
                 ? editingPurchaseUnitCost || formatCost(0)
-                : (addSizeSourceMaterial?.purchaseUnitCost ?? 0),
+                : (addSizeSourceMaterial?.purchaseUnitCost ?? 0)
             ),
             allocation: Number(
               editingMaterialId != null
-                ? editingAllocation || "1"
-                : (addSizeSourceMaterial?.allocation ?? 1),
+                ? editingAllocation || '1'
+                : (addSizeSourceMaterial?.allocation ?? 1)
             ),
             allocationUnit:
               (editingMaterialId != null
                 ? editingAllocationUnit
-                : String(addSizeSourceMaterial?.allocationUnit ?? "")) || "",
+                : String(addSizeSourceMaterial?.allocationUnit ?? '')) || ''
           }}
           onClose={() => setShowAddSizeModal(false)}
           onAfterCreate={async (result, imageFile) => {

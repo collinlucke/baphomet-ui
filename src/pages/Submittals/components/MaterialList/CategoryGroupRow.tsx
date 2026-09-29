@@ -1,7 +1,14 @@
-import { memo } from "react";
-import { Box, Checkbox, CircularProgress, IconButton, Sheet, Typography } from "@mui/joy";
-import EditOutlined from "@mui/icons-material/EditOutlined";
-import type { GroupedMaterial } from "./materialGrouping";
+import { memo } from 'react';
+import {
+  Box,
+  Checkbox,
+  CircularProgress,
+  IconButton,
+  Sheet,
+  Typography
+} from '@mui/joy';
+import EditOutlined from '@mui/icons-material/EditOutlined';
+import type { GroupedMaterial } from './materialGrouping';
 
 type CategoryGroupRowProps = {
   group: GroupedMaterial;
@@ -14,28 +21,29 @@ export const CategoryGroupRow = memo(function CategoryGroupRow({
   group,
   openingThisGroup,
   onOpen,
-  onToggleSelection,
+  onToggleSelection
 }: CategoryGroupRowProps) {
-  const allSelected = group.materials.every((m) => m.selected);
-  const someSelected = group.materials.some((m) => m.selected);
+  const allSelected = group.materials.every(m => m.selected);
+  const someSelected = group.materials.some(m => m.selected);
 
   return (
     <Sheet
+      data-testid="catalog-item"
       sx={{
-        display: "flex",
-        alignItems: "center",
-        height: 40,
+        display: 'flex',
+        alignItems: 'center',
         px: 1,
         ml: 1,
+        mr: 1,
         mb: 0.5,
         gap: 0.75,
-        cursor: openingThisGroup ? "wait" : "pointer",
-        borderRadius: "8px",
-        overflow: "hidden",
-        bgcolor: "#fff",
+        cursor: openingThisGroup ? 'wait' : 'pointer',
+        borderRadius: '8px',
+        overflow: 'hidden',
+        bgcolor: '#fff',
         opacity: openingThisGroup ? 0.75 : 1,
-        pointerEvents: openingThisGroup ? "none" : "auto",
-        "&:hover": { bgcolor: "#f3f3f3" },
+        pointerEvents: openingThisGroup ? 'none' : 'auto',
+        '&:hover': { bgcolor: '#f3f3f3' }
       }}
       onClick={() => {
         if (openingThisGroup) return;
@@ -43,8 +51,8 @@ export const CategoryGroupRow = memo(function CategoryGroupRow({
       }}
     >
       <Box
-        onClick={(e) => e.stopPropagation()}
-        sx={{ display: "flex", alignItems: "center", flexShrink: 0 }}
+        onClick={e => e.stopPropagation()}
+        sx={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}
       >
         <Checkbox
           size="sm"
@@ -52,7 +60,7 @@ export const CategoryGroupRow = memo(function CategoryGroupRow({
           indeterminate={!allSelected && someSelected}
           onChange={onToggleSelection}
           disabled={openingThisGroup}
-          sx={{ "--Checkbox-size": "18px" }}
+          sx={{ '--Checkbox-size': '18px' }}
         />
       </Box>
       <Typography
@@ -61,11 +69,11 @@ export const CategoryGroupRow = memo(function CategoryGroupRow({
           flex: 1,
           minWidth: 0,
           lineHeight: 1.2,
-          color: "#1a1a1a",
-          "&&": { color: "#1a1a1a" },
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-          whiteSpace: "nowrap",
+          color: '#1a1a1a',
+          '&&': { color: '#1a1a1a' },
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap'
         }}
       >
         {group.commonName}
@@ -74,17 +82,17 @@ export const CategoryGroupRow = memo(function CategoryGroupRow({
         size="sm"
         variant="plain"
         disabled={openingThisGroup}
-        onClick={(e) => {
+        onClick={e => {
           e.stopPropagation();
           if (openingThisGroup) return;
           onOpen();
         }}
         sx={{
-          "--IconButton-size": "32px",
+          '--IconButton-size': '32px',
           flexShrink: 0,
-          alignSelf: "center",
-          color: "#444",
-          "&:hover": { color: "primary.500" },
+          alignSelf: 'center',
+          color: '#444',
+          '&:hover': { color: 'primary.500' }
         }}
         title="Edit grouped material"
       >
@@ -93,7 +101,7 @@ export const CategoryGroupRow = memo(function CategoryGroupRow({
         ) : (
           <EditOutlined sx={{ fontSize: 18 }} />
         )}
-        </IconButton>
+      </IconButton>
     </Sheet>
   );
 });

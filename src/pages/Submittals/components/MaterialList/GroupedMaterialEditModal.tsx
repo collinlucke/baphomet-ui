@@ -1,4 +1,4 @@
-import { useRef, useState, useMemo } from "react";
+import { useRef, useState, useMemo } from 'react';
 import {
   Box,
   Button,
@@ -16,17 +16,17 @@ import {
   Tabs,
   TabList,
   Tab,
-  Link,
-} from "@mui/joy";
-import ImageIcon from "@mui/icons-material/Image";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import type { GroupedMaterial } from "./materialGrouping";
-import type { Material } from "./MaterialListItem";
-import { formatCost } from "../../../../utils/formatCost";
+  Link
+} from '@mui/joy';
+import ImageIcon from '@mui/icons-material/Image';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import type { GroupedMaterial } from './materialGrouping';
+import type { Material } from './MaterialListItem';
+import { formatCost } from '../../../../utils/formatCost';
 import {
   kitDetailsUrl,
-  materialDetailsUrl,
-} from "../../../../utils/aspireUrls";
+  materialDetailsUrl
+} from '../../../../utils/aspireUrls';
 
 type GroupedMaterialEditModalProps = {
   open: boolean;
@@ -75,7 +75,7 @@ export const GroupedMaterialEditModal = ({
   selectedCategoryId,
   onCategoryChange,
   selectedSize,
-  onSetSelectedSize,
+  onSetSelectedSize
 }: GroupedMaterialEditModalProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const [selectedImageSourceSize, setSelectedImageSourceSize] = useState<
@@ -95,7 +95,7 @@ export const GroupedMaterialEditModal = ({
     if (!effectiveSelectedSize || !activeGroup) return null;
     return (
       activeGroup.materials.find(
-        (m) => (m.purchaseUnit ?? "").trim() === effectiveSelectedSize.trim(),
+        m => (m.purchaseUnit ?? '').trim() === effectiveSelectedSize.trim()
       ) ?? null
     );
   }, [effectiveSelectedSize, activeGroup]);
@@ -106,25 +106,30 @@ export const GroupedMaterialEditModal = ({
   >(() => {
     if (!activeGroup) return [];
     return activeGroup.materials
-      .filter((m) => m.imageUrl)
-      .map((m) => ({
-        size: (m.purchaseUnit ?? "").trim(),
-        material: m,
+      .filter(m => m.imageUrl)
+      .map(m => ({
+        size: (m.purchaseUnit ?? '').trim(),
+        material: m
       }))
-      .filter((item) => item.size && item.size !== effectiveSelectedSize);
+      .filter(item => item.size && item.size !== effectiveSelectedSize);
   }, [activeGroup, effectiveSelectedSize]);
 
   // Prefer a freshly picked local preview, then fallback picker, then existing image.
   const currentImageUrl = useMemo<string | null>(() => {
     if (modalImageSrc) return modalImageSrc;
-    if (selectedImageSourceSize && selectedImageSourceSize !== "current") {
+    if (selectedImageSourceSize && selectedImageSourceSize !== 'current') {
       const sourceSize = sizesWithImages.find(
-        (item) => item.size === selectedImageSourceSize,
+        item => item.size === selectedImageSourceSize
       );
       return sourceSize?.material.imageUrl ?? null;
     }
     return selectedMaterial?.imageUrl ?? null;
-  }, [modalImageSrc, selectedMaterial, selectedImageSourceSize, sizesWithImages]);
+  }, [
+    modalImageSrc,
+    selectedMaterial,
+    selectedImageSourceSize,
+    sizesWithImages
+  ]);
 
   // Determine if current size is new (no material URLs)
   const selectedMaterialId = selectedMaterial?.id ?? null;
@@ -156,8 +161,8 @@ export const GroupedMaterialEditModal = ({
     <Modal open={open} onClose={onClose}>
       <ModalDialog
         sx={{
-          width: { xs: "calc(100vw - 2rem)", sm: "min(920px, 94vw)" },
-          maxWidth: 920,
+          width: { xs: 'calc(100vw - 2rem)', sm: 'min(920px, 94vw)' },
+          maxWidth: 920
         }}
       >
         <ModalClose onClick={onClose} />
@@ -165,14 +170,14 @@ export const GroupedMaterialEditModal = ({
         {/* Header with Title, Size Tabs, and Add Size Button */}
         <Box
           sx={{
-            display: "flex",
-            alignItems: "center",
+            display: 'flex',
+            alignItems: 'center',
             gap: 1.5,
             pb: 1,
-            mb: 1,
+            mb: 1
           }}
         >
-          <Typography level="title-md" sx={{ whiteSpace: "nowrap" }}>
+          <Typography level="title-md" sx={{ whiteSpace: 'nowrap' }}>
             Edit Items
           </Typography>
 
@@ -182,14 +187,13 @@ export const GroupedMaterialEditModal = ({
               value={effectiveSelectedSize}
               onChange={(_, value) => onSetSelectedSize(value as string | null)}
             >
-              <TabList sx={{ minWidth: 200, flexWrap: "wrap" }}>
-                {activeGroup.sizes.map((size) => (
+              <TabList sx={{ minWidth: 200, flexWrap: 'wrap' }}>
+                {activeGroup.sizes.map(size => (
                   <Tab
                     key={`size-tab-${size}`}
                     value={size}
                     sx={{
-                      fontWeight:
-                        size === effectiveSelectedSize ? "600" : "400",
+                      fontWeight: size === effectiveSelectedSize ? '600' : '400'
                     }}
                   >
                     {size}
@@ -206,29 +210,11 @@ export const GroupedMaterialEditModal = ({
               color="primary"
               size="sm"
               onClick={onAddSize}
-              sx={{ whiteSpace: "nowrap" }}
+              sx={{ whiteSpace: 'nowrap' }}
             >
               Add Size
             </Button>
           )}
-        </Box>
-
-        <Box
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 2,
-            px: 0.25,
-            mt: -0.5,
-            mb: 0.5,
-          }}
-        >
-          <Typography level="body-xs" sx={{ color: "neutral.500" }}>
-            Material ID: <strong>{selectedMaterialId ?? "—"}</strong>
-          </Typography>
-          <Typography level="body-xs" sx={{ color: "neutral.500" }}>
-            Kit ID: <strong>{selectedKitId ?? "—"}</strong>
-          </Typography>
         </Box>
 
         <Stack spacing={2} sx={{ mt: 1 }}>
@@ -237,10 +223,10 @@ export const GroupedMaterialEditModal = ({
               sx={{
                 px: 1,
                 py: 0.75,
-                borderRadius: "sm",
-                bgcolor: "warning.softBg",
-                border: "1px solid",
-                borderColor: "warning.softColor",
+                borderRadius: 'sm',
+                bgcolor: 'warning.softBg',
+                border: '1px solid',
+                borderColor: 'warning.softColor'
               }}
             >
               <Typography level="body-sm" color="warning">
@@ -253,10 +239,10 @@ export const GroupedMaterialEditModal = ({
           {/* Two-Column Layout: Left (Group-level), Right (Size-specific) */}
           <Box
             sx={{
-              display: "grid",
-              gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
               gap: 3,
-              alignItems: "flex-start",
+              alignItems: 'flex-start'
             }}
           >
             {/* Left Column: Group-Level Fields */}
@@ -265,14 +251,14 @@ export const GroupedMaterialEditModal = ({
                 <FormLabel>Name</FormLabel>
                 <Input
                   value={commonNameInput}
-                  onChange={(e) => onCommonNameChange(e.target.value)}
+                  onChange={e => onCommonNameChange(e.target.value)}
                 />
               </FormControl>
               <FormControl>
                 <FormLabel>Alternate Name</FormLabel>
                 <Input
                   value={botanicalNameInput}
-                  onChange={(e) => onBotanicalNameChange(e.target.value)}
+                  onChange={e => onBotanicalNameChange(e.target.value)}
                   placeholder="Optional alternate name"
                 />
               </FormControl>
@@ -282,7 +268,7 @@ export const GroupedMaterialEditModal = ({
                   value={selectedCategoryId}
                   onChange={(_, value) => onCategoryChange(value as string)}
                 >
-                  {availableCategories.map((cat) => (
+                  {availableCategories.map(cat => (
                     <Option key={cat.id} value={cat.id}>
                       {cat.name}
                     </Option>
@@ -291,10 +277,10 @@ export const GroupedMaterialEditModal = ({
               </FormControl>
               <Typography
                 level="body-xs"
-                sx={{ color: "neutral.500", px: 0.25 }}
+                sx={{ color: 'neutral.500', px: 0.25 }}
               >
-                Changes to Name, Alternate Name, or Category apply to all
-                sizes in this group.
+                Changes to Name, Alternate Name, or Category apply to all sizes
+                in this group.
               </Typography>
             </Stack>
 
@@ -308,22 +294,22 @@ export const GroupedMaterialEditModal = ({
                 {currentImageUrl ? (
                   <Box
                     sx={{
-                      display: "flex",
-                      flexDirection: "column",
+                      display: 'flex',
+                      flexDirection: 'column',
                       gap: 1,
-                      maxWidth: 300,
+                      maxWidth: 300
                     }}
                   >
                     <Card
-                      onDragOver={(e) => {
+                      onDragOver={e => {
                         e.preventDefault();
                         setIsDragging(true);
                       }}
-                      onDragLeave={(e) => {
+                      onDragLeave={e => {
                         e.preventDefault();
                         setIsDragging(false);
                       }}
-                      onDrop={(e) => {
+                      onDrop={e => {
                         e.preventDefault();
                         setIsDragging(false);
                         handleDrop(e.dataTransfer.files[0]);
@@ -331,51 +317,51 @@ export const GroupedMaterialEditModal = ({
                       onClick={openPicker}
                       sx={{
                         p: 1,
-                        textAlign: "center",
-                        border: isDragging ? "2px dashed" : undefined,
-                        borderColor: isDragging ? "primary.500" : undefined,
-                        cursor: "pointer",
-                        display: "inline-block",
-                        maxWidth: "100%",
+                        textAlign: 'center',
+                        border: isDragging ? '2px dashed' : undefined,
+                        borderColor: isDragging ? 'primary.500' : undefined,
+                        cursor: 'pointer',
+                        display: 'inline-block',
+                        maxWidth: '100%'
                       }}
                     >
                       <img
                         src={currentImageUrl}
                         alt="Material size"
                         style={{
-                          maxWidth: "100%",
-                          height: "auto",
-                          objectFit: "contain",
+                          maxWidth: '100%',
+                          height: 'auto',
+                          objectFit: 'contain',
                           borderRadius: 6,
-                          maxHeight: 200,
+                          maxHeight: 200
                         }}
                       />
                     </Card>
                     {selectedImageSourceSize &&
-                      selectedImageSourceSize !== "current" && (
+                      selectedImageSourceSize !== 'current' && (
                         <Typography
                           level="body-xs"
-                          sx={{ color: "neutral.500" }}
+                          sx={{ color: 'neutral.500' }}
                         >
-                          Using image from:{" "}
+                          Using image from:{' '}
                           <strong>{selectedImageSourceSize}</strong>
                         </Typography>
                       )}
                   </Box>
                 ) : (
                   <Box
-                    sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+                    sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}
                   >
                     <Box
-                      onDragOver={(e) => {
+                      onDragOver={e => {
                         e.preventDefault();
                         setIsDragging(true);
                       }}
-                      onDragLeave={(e) => {
+                      onDragLeave={e => {
                         e.preventDefault();
                         setIsDragging(false);
                       }}
-                      onDrop={(e) => {
+                      onDrop={e => {
                         e.preventDefault();
                         setIsDragging(false);
                         handleDrop(e.dataTransfer.files[0]);
@@ -383,36 +369,36 @@ export const GroupedMaterialEditModal = ({
                       onClick={openPicker}
                       sx={{
                         p: 2,
-                        textAlign: "center",
-                        border: "2px dashed",
-                        borderColor: isDragging ? "primary.500" : "neutral.300",
-                        borderRadius: "md",
+                        textAlign: 'center',
+                        border: '2px dashed',
+                        borderColor: isDragging ? 'primary.500' : 'neutral.300',
+                        borderRadius: 'md',
                         bgcolor: isDragging
-                          ? "primary.50"
-                          : "background.level1",
-                        cursor: "pointer",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        alignItems: "center",
+                          ? 'primary.50'
+                          : 'background.level1',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
                         minHeight: 140,
-                        "&:hover": {
-                          borderColor: "primary.400",
-                          bgcolor: "background.level2",
-                        },
+                        '&:hover': {
+                          borderColor: 'primary.400',
+                          bgcolor: 'background.level2'
+                        }
                       }}
                     >
                       <ImageIcon
                         sx={{
                           fontSize: 32,
-                          color: "neutral.400",
-                          mb: 0.5,
+                          color: 'neutral.400',
+                          mb: 0.5
                         }}
                       />
-                      <Typography level="body-sm" sx={{ color: "neutral.500" }}>
+                      <Typography level="body-sm" sx={{ color: 'neutral.500' }}>
                         {isDragging
-                          ? "Drop image here"
-                          : "Drag & drop or click to upload"}
+                          ? 'Drop image here'
+                          : 'Drag & drop or click to upload'}
                       </Typography>
                     </Box>
 
@@ -449,8 +435,8 @@ export const GroupedMaterialEditModal = ({
                     type="number"
                     slotProps={{
                       input: {
-                        step: "0.01",
-                      },
+                        step: '0.01'
+                      }
                     }}
                     value={formatCost(selectedMaterial.purchaseUnitCost)}
                     startDecorator="$"
@@ -459,66 +445,27 @@ export const GroupedMaterialEditModal = ({
                 </Box>
               )}
 
-              {/* Material & Kit Links - Below Purchase Unit Cost */}
-              {!isNewSize && (materialUrl || kitUrl) && (
-                <Stack
-                  spacing={1}
-                  sx={{
-                    p: 1.5,
-                    borderRadius: "md",
-                    bgcolor: "info.softBg",
-                    border: "1px solid",
-                    borderColor: "info.softColor",
-                  }}
-                >
-                  {materialUrl && (
-                    <Link
-                      href={materialUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      level="body-sm"
-                      sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
-                    >
-                      Open Item
-                      <OpenInNewIcon sx={{ fontSize: "1rem" }} />
-                    </Link>
-                  )}
-                  {kitUrl && (
-                    <Link
-                      href={kitUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      level="body-sm"
-                      sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
-                    >
-                      Open Kit
-                      <OpenInNewIcon sx={{ fontSize: "1rem" }} />
-                    </Link>
-                  )}
-                </Stack>
-              )}
-
               {/* Size-Specific Properties (Display Only) */}
               {selectedMaterial && (
                 <Box
                   sx={{
                     p: 1.5,
-                    borderRadius: "md",
-                    bgcolor: "background.level1",
+                    borderRadius: 'md',
+                    bgcolor: 'background.level1'
                   }}
                 >
                   <Stack spacing={1.5}>
                     <Box>
-                      <Typography level="body-sm" sx={{ color: "neutral.500" }}>
+                      <Typography level="body-sm" sx={{ color: 'neutral.500' }}>
                         Size
                       </Typography>
                       <Typography level="body-md" sx={{ mt: 0.25 }}>
-                        {(selectedMaterial.purchaseUnit ?? "").trim() ||
-                          "No size information"}
+                        {(selectedMaterial.purchaseUnit ?? '').trim() ||
+                          'No size information'}
                       </Typography>
                     </Box>
                     <Box>
-                      <Typography level="body-sm" sx={{ color: "neutral.500" }}>
+                      <Typography level="body-sm" sx={{ color: 'neutral.500' }}>
                         Allocation
                       </Typography>
                       <Typography level="body-md" sx={{ mt: 0.25 }}>
@@ -526,11 +473,11 @@ export const GroupedMaterialEditModal = ({
                       </Typography>
                     </Box>
                     <Box>
-                      <Typography level="body-sm" sx={{ color: "neutral.500" }}>
+                      <Typography level="body-sm" sx={{ color: 'neutral.500' }}>
                         Allocation Unit
                       </Typography>
                       <Typography level="body-md" sx={{ mt: 0.25 }}>
-                        {selectedMaterial.allocationUnit ?? "—"}
+                        {selectedMaterial.allocationUnit ?? '—'}
                       </Typography>
                     </Box>
                   </Stack>
@@ -543,8 +490,8 @@ export const GroupedMaterialEditModal = ({
             ref={fileInputRef}
             type="file"
             accept="image/*"
-            style={{ display: "none" }}
-            onChange={(e) => {
+            style={{ display: 'none' }}
+            onChange={e => {
               const file = e.target.files?.[0];
               if (file) {
                 handleDrop(file);
@@ -554,9 +501,9 @@ export const GroupedMaterialEditModal = ({
 
           <Box
             sx={{
-              display: "flex",
+              display: 'flex',
               gap: 1,
-              justifyContent: "flex-end",
+              justifyContent: 'flex-end'
             }}
           >
             <Button variant="plain" color="neutral" onClick={onClose}>

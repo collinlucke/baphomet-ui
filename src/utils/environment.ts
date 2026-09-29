@@ -85,7 +85,6 @@ export const getGraphQLEndpoint = () => {
   const prodEndpoint =
     import.meta.env.VITE_GRAPHQL_ENDPOINT ||
     'https://baphomet-server.onrender.com/graphql';
-  console.log('Using production endpoint:', prodEndpoint);
   return prodEndpoint;
 };
 
