@@ -14,8 +14,8 @@ import Add from '@mui/icons-material/Add';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import type { Material } from './MaterialListItem';
 import {
+  deleteMaterial,
   fetchUnitTypes,
-  syncInstalledKits,
   updateMaterial
 } from '../../api/submittals.mutations';
 import {
@@ -32,6 +32,7 @@ import { AddMaterialItemModal } from './AddMaterialItemModal';
 import { CategoryGroupRow } from './CategoryGroupRow';
 import type { CreateMaterialItemResult } from '../../api/submittals.mutations';
 import { formatCost } from '../../../../utils/formatCost';
+import { isEmptyRichText } from './richText';
 
 type Category = {
   id: number;
@@ -57,13 +58,14 @@ type MaterialListCategoryItemProps = {
       id: number;
       materialName?: string;
       altName?: string;
+      description?: string;
       purchaseUnitCost?: number;
       allocation?: number;
       allocationUnit?: string;
       categoryId?: number;
-      kitId?: number | null;
     }>
   ) => void;
+  onMaterialsDeleted?: (ids: Array<number | string>) => void;
 };
 
 export const MaterialListCategoryItem = ({
@@ -76,16 +78,19 @@ export const MaterialListCategoryItem = ({
   onImageUpload,
   onCreateMaterialItem,
   onMaterialsUpdated,
+  onMaterialsDeleted,
   availableCategories
 }: MaterialListCategoryItemProps) => {
   const [search, setSearch] = useState('');
   const [activeGroupKey, setActiveGroupKey] = useState<string | null>(null);
   const [commonNameInput, setCommonNameInput] = useState('');
   const [botanicalNameInput, setBotanicalNameInput] = useState('');
+  const [descriptionInput, setDescriptionInput] = useState('');
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
     null
   );
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [individualSaving, setIndividualSaving] = useState(false);
   const [showMismatchAlert, setShowMismatchAlert] = useState(false);
   const [editingMaterialId, setEditingMaterialId] = useState<number | null>(
@@ -152,28 +157,6 @@ export const MaterialListCategoryItem = ({
     return activeGroup.materials.some(m => !m.id || m.id <= 0);
   }, [activeGroup]);
 
-  const activeGroupKitIds = useMemo<Record<string, number>>(() => {
-    if (!activeGroup) return {};
-    const ids: Record<string, number> = {};
-    activeGroup.materials.forEach(m => {
-      const size = (m.purchaseUnit ?? '').trim();
-      const kitId = Number(m.kitId ?? 0);
-      // Key by size within this plant group only — never across the whole category.
-      if (size && kitId > 0) {
-        ids[size] = kitId;
-      }
-    });
-    return ids;
-  }, [activeGroup]);
-
-  const hasMissingKits = useMemo(() => {
-    if (!activeGroup) return false;
-    return activeGroup.materials.some(m => {
-      const id = Number(m.id);
-      return Number.isFinite(id) && id > 0 && !Number(m.kitId);
-    });
-  }, [activeGroup]);
-
   const hasGroupFieldChanges = useMemo(() => {
     if (!activeGroup) return false;
     const trimmedCommon = commonNameInput.trim();
@@ -194,18 +177,23 @@ export const MaterialListCategoryItem = ({
       ) {
         return true;
       }
+      const currentDescription = material.description ?? '';
+      const nextDescription = isEmptyRichText(descriptionInput)
+        ? ''
+        : descriptionInput;
+      if (currentDescription !== nextDescription) return true;
       return false;
     });
   }, [
     activeGroup,
     commonNameInput,
     botanicalNameInput,
+    descriptionInput,
     selectedCategoryId,
     category.id
   ]);
 
-  const canSaveGroup =
-    hasGroupFieldChanges || hasMissingKits || Boolean(selectedFile);
+  const canSaveGroup = hasGroupFieldChanges || Boolean(selectedFile);
 
   const modalImageSrc =
     preview ?? activeGroup?.materials.find(m => m.imageUrl)?.imageUrl ?? null;
@@ -223,6 +211,7 @@ export const MaterialListCategoryItem = ({
     setEditingMaterialId(null);
     setEditingCommonName('');
     setEditingMaterialAltName('');
+    setDescriptionInput('');
     setActiveGroupKey(null);
     setSelectedSize(null); // Reset selected size
   };
@@ -265,12 +254,7 @@ export const MaterialListCategoryItem = ({
     editingAllocationUnit
   ]);
 
-  const canSaveIndividual =
-    hasIndividualFieldChanges ||
-    (editingMaterial != null &&
-      Number.isFinite(Number(editingMaterial.id)) &&
-      Number(editingMaterial.id) > 0 &&
-      !Number(editingMaterial.kitId));
+  const canSaveIndividual = hasIndividualFieldChanges;
 
   const addSizeSourceMaterial = useMemo(
     () => editingMaterial ?? activeGroup?.materials[0] ?? null,
@@ -370,9 +354,8 @@ export const MaterialListCategoryItem = ({
       payload.purchaseUnitCost !== undefined ||
       payload.allocation !== undefined ||
       payload.allocationUnit !== undefined;
-    const needsKitLookup = !Number(material.kitId);
 
-    if (!hasFieldUpdates && !needsKitLookup) {
+    if (!hasFieldUpdates) {
       closeIndividualEdit();
       return;
     }
@@ -393,53 +376,6 @@ export const MaterialListCategoryItem = ({
         ]);
       }
 
-      if (hasFieldUpdates || needsKitLookup) {
-        try {
-          const kitSyncResult = await syncInstalledKits([editingMaterialId]);
-          if (kitSyncResult.failed > 0) {
-            console.warn(
-              'Installed kit lookup/sync failed for variant:',
-              kitSyncResult
-            );
-            if (needsKitLookup) {
-              alert(
-                'Saved material changes, but an installed kit could not be found or synced.'
-              );
-            }
-          }
-          const renameBlocked = kitSyncResult.details.some(
-            detail =>
-              detail.status === 'updated' &&
-              typeof detail.reason === 'string' &&
-              /Aspire refused rename/i.test(detail.reason)
-          );
-          if (renameBlocked) {
-            alert(
-              'Saved and linked the kit, but Aspire refused to rename it (legacy unit-conversion data). Fix allocation conversion on that kit in Aspire, then save again.'
-            );
-          }
-          const kitUpdates = kitSyncResult.details
-            .filter(
-              detail =>
-                (detail.status === 'updated' ||
-                  detail.status === 'recreated') &&
-                Number(detail.kitId ?? detail.replacementKitId ?? 0) > 0
-            )
-            .map(detail => ({
-              id: detail.materialId,
-              kitId: Number(detail.replacementKitId ?? detail.kitId)
-            }));
-          if (kitUpdates.length > 0) {
-            onMaterialsUpdated?.(kitUpdates);
-          }
-        } catch (error) {
-          console.warn('Installed kit sync failed after variant save:', error);
-          if (needsKitLookup) {
-            alert('Saved material changes, but installed kit lookup failed.');
-          }
-        }
-      }
-
       // Close and regroup the category list so identical variants collapse together.
       closeModal();
     } catch (error) {
@@ -456,6 +392,10 @@ export const MaterialListCategoryItem = ({
     setSelectedCategoryId(category.id);
     const group = groupedByCommonName.find(g => g.key === groupKey);
     setBotanicalNameInput(group?.botanicalName ?? '');
+    setDescriptionInput(
+      group?.materials.find(material => (material.description ?? '').trim())
+        ?.description ?? ''
+    );
 
     if (group) {
       const commonNameCandidates = [
@@ -528,10 +468,14 @@ export const MaterialListCategoryItem = ({
     setSaving(true);
     try {
       const updatePromises: Promise<void>[] = [];
+      const nextDescription = isEmptyRichText(descriptionInput)
+        ? ''
+        : descriptionInput;
       const localUpdates: Array<{
         id: number;
         materialName?: string;
         altName?: string;
+        description?: string;
         categoryId?: number;
       }> = [];
 
@@ -545,11 +489,15 @@ export const MaterialListCategoryItem = ({
         const payload: {
           itemName?: string;
           alternateName?: string;
+          description?: string;
           categoryId?: number;
         } = {};
         if (currentName !== nextName) payload.itemName = nextName;
         if (currentBotanical !== trimmedBotanical) {
           payload.alternateName = trimmedBotanical;
+        }
+        if ((material.description ?? '') !== nextDescription) {
+          payload.description = nextDescription;
         }
         if (selectedCategoryId && currentCategoryId !== selectedCategoryId) {
           payload.categoryId = selectedCategoryId;
@@ -558,6 +506,7 @@ export const MaterialListCategoryItem = ({
         if (
           payload.itemName ||
           payload.alternateName !== undefined ||
+          payload.description !== undefined ||
           payload.categoryId !== undefined
         ) {
           updatePromises.push(
@@ -565,6 +514,9 @@ export const MaterialListCategoryItem = ({
               ...(payload.itemName ? { itemName: payload.itemName } : {}),
               ...(payload.alternateName !== undefined
                 ? { alternateName: payload.alternateName }
+                : {}),
+              ...(payload.description !== undefined
+                ? { description: payload.description }
                 : {}),
               ...(payload.categoryId !== undefined
                 ? { categoryId: payload.categoryId }
@@ -575,6 +527,7 @@ export const MaterialListCategoryItem = ({
             id: material.id,
             materialName: nextName,
             altName: trimmedBotanical,
+            description: nextDescription,
             categoryId: selectedCategoryId ?? currentCategoryId
           });
         }
@@ -585,75 +538,6 @@ export const MaterialListCategoryItem = ({
       }
       if (localUpdates.length > 0) {
         onMaterialsUpdated?.(localUpdates);
-      }
-
-      // Sync/rename kits after field changes, or look up missing kits on save.
-      const materialIdsToSync = activeGroup.materials
-        .filter(material => {
-          const id = Number(material.id);
-          if (!Number.isFinite(id) || id <= 0) return false;
-          if (hasGroupFieldChanges) return true;
-          return !Number(material.kitId);
-        })
-        .map(material => Number(material.id));
-
-      if (materialIdsToSync.length > 0) {
-        try {
-          const kitSyncResult = await syncInstalledKits(materialIdsToSync);
-          if (kitSyncResult.failed > 0) {
-            console.warn(
-              'Some installed kit names failed to sync:',
-              kitSyncResult
-            );
-            alert(
-              `Saved material changes, but ${kitSyncResult.failed} installed kit update(s) failed.`
-            );
-          }
-          const renameBlocked = kitSyncResult.details.filter(
-            detail =>
-              detail.status === 'updated' &&
-              typeof detail.reason === 'string' &&
-              /Aspire refused rename/i.test(detail.reason)
-          );
-          if (renameBlocked.length > 0) {
-            console.warn(
-              'Some kits were linked but Aspire blocked renaming:',
-              renameBlocked
-            );
-            alert(
-              `Saved and linked ${renameBlocked.length} kit(s), but Aspire refused to rename them (legacy unit-conversion data). Fix allocation conversion on those kits in Aspire, then save again.`
-            );
-          }
-          const skippedMissing = kitSyncResult.details.filter(
-            detail =>
-              detail.status === 'skipped' &&
-              detail.reason === 'no matching kit found'
-          );
-          if (skippedMissing.length > 0 && !hasGroupFieldChanges) {
-            alert(
-              `Could not find installed kits for ${skippedMissing.length} material(s).`
-            );
-          }
-          const kitUpdates = kitSyncResult.details
-            .filter(
-              detail =>
-                (detail.status === 'updated' ||
-                  detail.status === 'recreated') &&
-                Number(detail.kitId ?? detail.replacementKitId ?? 0) > 0
-            )
-            .map(detail => ({
-              id: detail.materialId,
-              kitId: Number(detail.replacementKitId ?? detail.kitId)
-            }));
-          if (kitUpdates.length > 0) {
-            onMaterialsUpdated?.(kitUpdates);
-          }
-        } catch (error) {
-          console.warn('Installed kit sync failed after material save:', error);
-          alert(
-            'Saved material changes, but installed kit naming could not be synchronized.'
-          );
-        }
       }
 
       if (selectedFile && onImageUpload) {
@@ -677,6 +561,22 @@ export const MaterialListCategoryItem = ({
       alert('Failed to save. Please try again.');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleDeleteGroup = async () => {
+    if (!activeGroup || deleting) return;
+    const ids = activeGroup.materials.map(material => material.id);
+    setDeleting(true);
+    try {
+      await Promise.all(ids.map(id => deleteMaterial(id)));
+      onMaterialsDeleted?.(ids);
+      closeModal();
+    } catch (error) {
+      console.error('Failed to delete item:', error);
+      alert('Failed to delete. Please try again.');
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -820,14 +720,17 @@ export const MaterialListCategoryItem = ({
         botanicalNameInput={botanicalNameInput}
         modalImageSrc={modalImageSrc}
         saving={saving}
+        deleting={deleting}
         canSave={canSaveGroup}
-        kitIds={activeGroupKitIds}
         selectedSize={selectedSize}
         onSetSelectedSize={setSelectedSize}
         isNewGroup={isNewGroup}
         onCommonNameChange={setCommonNameInput}
         onBotanicalNameChange={setBotanicalNameInput}
+        descriptionInput={descriptionInput}
+        onDescriptionChange={setDescriptionInput}
         onClose={closeModal}
+        onDelete={activeGroup?.materials.length ? handleDeleteGroup : undefined}
         onAddSize={
           onCreateMaterialItem
             ? () => {
@@ -897,7 +800,7 @@ export const MaterialListCategoryItem = ({
       {onCreateMaterialItem && (
         <AddMaterialItemModal
           open={showAddSizeModal}
-          title="Add Size"
+          title="Add Variant"
           categories={[
             { id: category.id, categoryName: category.categoryName }
           ]}

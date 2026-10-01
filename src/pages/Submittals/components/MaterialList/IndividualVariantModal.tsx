@@ -147,8 +147,8 @@ export const IndividualVariantModal = ({
               }}
             >
               <FormControl>
-                <FormLabel>Size</FormLabel>
-                <Input value={purchaseUnit || "No size information"} readOnly />
+                <FormLabel>Variant</FormLabel>
+                <Input value={purchaseUnit || "No variant"} readOnly />
               </FormControl>
               <FormControl>
                 <FormLabel>Purchase Unit Cost</FormLabel>
@@ -198,7 +198,7 @@ export const IndividualVariantModal = ({
           >
             {onAddSize && (
               <Button variant="outlined" color="primary" onClick={onAddSize}>
-                Add Size
+                Add Variant
               </Button>
             )}
             <Button variant="plain" color="neutral" onClick={onClose}>

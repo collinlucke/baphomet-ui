@@ -25,7 +25,7 @@ import { AppendixPage } from './components/PagePreview/AppendixPage';
 import { PlantScheduleUploader } from './components/PlantScheduleUploader';
 import { GenerateSubmittalButton } from './components/GenerateSubmittalButton';
 import { SavedSubmittalsPanel } from './components/SavedSubmittalsPanel';
-import { useQueries, useQueryClient } from '@tanstack/react-query';
+import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
 import { usePdfExport } from './hooks/usePdfExport';
 import type { CreateMaterialItemResult } from './api/submittals.mutations';
 import {
@@ -35,10 +35,10 @@ import {
   uploadCoverImage
 } from './api/savedSubmittals.api';
 import { getCommonName } from './components/MaterialList/materialGrouping';
+import { descriptionBlockHeight } from './components/MaterialList/richText';
 import { PageShell } from '../../components/PageShell';
 import { PageContent } from './components/PageLayout';
 import { apiFetch } from './api/apiClient';
-import { ITEM_CATEGORIES } from './categories';
 
 const AUTOSAVE_DELAY_MS = 3000;
 
@@ -117,6 +117,17 @@ export const App = () => {
 
   // Lazy-load materials for each selected category in parallel
   // Use a Submittals-specific query key so it does not collide with Material Editor.
+  const catalogCategoriesQuery = useQuery({
+    queryKey: ['submittals', 'categories'],
+    queryFn: async () => {
+      const res = await apiFetch('/api/submittals/categories');
+      return parseArrayResponse<{ id: string | number; categoryName: string }>(
+        res
+      );
+    },
+    staleTime: 5 * 60 * 1000
+  });
+
   const categoryMaterialsQueries = useQueries({
     queries: selectedCategories.map(cat => ({
       queryKey: ['submittals', 'materials', 'by-category', cat.id],
@@ -164,8 +175,6 @@ export const App = () => {
             id: number;
             selected?: boolean;
             imageUrl?: string;
-            kitId?: number | null;
-            kitUrl?: string | null;
           }
         >((existing?.materials ?? []).map((m: any) => [m.id, m]));
 
@@ -174,10 +183,8 @@ export const App = () => {
           const withCategory = {
             ...m,
             categoryId: m.categoryId ?? categoryId,
-            // Prefer optimistic local image/kit links until server catches up.
-            imageUrl: local?.imageUrl ?? m.imageUrl,
-            kitId: local?.kitId ?? m.kitId ?? null,
-            kitUrl: local?.kitUrl ?? m.kitUrl ?? null
+            // Prefer an optimistic local image until the server catches up.
+            imageUrl: local?.imageUrl ?? m.imageUrl
           };
           const shouldSelect =
             selectedById.has(m.id) ||
@@ -203,6 +210,26 @@ export const App = () => {
             (m: any) => !restoreIds.includes(m.id)
           );
           nextMaterials = [...orderedSelected, ...rest];
+        } else if (existing?.materials?.length) {
+          const mergedById = new Map(
+            nextMaterials.map((material: any) => [String(material.id), material])
+          );
+          const ordered: any[] = [];
+          const seen = new Set<string>();
+          for (const local of existing.materials) {
+            const id = String(local.id);
+            const next = mergedById.get(id);
+            if (!next || seen.has(id)) continue;
+            ordered.push(next);
+            seen.add(id);
+          }
+          for (const material of nextMaterials) {
+            const id = String(material.id);
+            if (seen.has(id)) continue;
+            ordered.push(material);
+            seen.add(id);
+          }
+          nextMaterials = ordered;
         } else {
           nextMaterials.sort((a: any, b: any) =>
             String(a.materialName ?? '').localeCompare(
@@ -268,11 +295,13 @@ export const App = () => {
 
   const availableCategories = useMemo(() => {
     const selectedIds = new Set(selectedCategories.map(c => String(c.id)));
-    return ITEM_CATEGORIES.filter(name => !selectedIds.has(name)).map(name => ({
-      id: name as unknown as number,
-      categoryName: name
-    }));
-  }, [selectedCategories]);
+    return (catalogCategoriesQuery.data ?? [])
+      .filter(cat => cat.categoryName && !selectedIds.has(String(cat.id)))
+      .map(cat => ({
+        id: cat.categoryName as unknown as number,
+        categoryName: cat.categoryName
+      }));
+  }, [catalogCategoriesQuery.data, selectedCategories]);
 
   // Categories that are selected but whose materials haven't loaded yet
   const loadingCategories = useMemo(() => {
@@ -525,17 +554,24 @@ export const App = () => {
 
       return prev.map(c => {
         if (c.id !== catId) return c;
+        const updated = c.materials.map((m: any) => {
+          if (m.id === bestVariant.id) {
+            return { ...m, selected: true };
+          }
+          if (variantIdsToDeselect.has(m.id)) {
+            return { ...m, selected: false };
+          }
+          return m;
+        });
+        const selectedItem = updated.find((m: any) => m.id === bestVariant.id);
+        const rest = updated.filter((m: any) => m.id !== bestVariant.id);
         return {
           ...c,
-          materials: c.materials.map((m: any) => {
-            if (m.id === bestVariant.id) {
-              return { ...m, selected: true };
-            }
-            if (variantIdsToDeselect.has(m.id)) {
-              return { ...m, selected: false };
-            }
-            return m;
-          })
+          materials: [
+            ...rest.filter((m: any) => m.selected),
+            selectedItem,
+            ...rest.filter((m: any) => !m.selected)
+          ].filter(Boolean)
         };
       });
     });
@@ -597,16 +633,37 @@ export const App = () => {
     }
   };
 
+  const handleMaterialsDeleted = (ids: Array<number | string>) => {
+    const idSet = new Set(ids.map(id => String(id)));
+    setMaterials((prevMaterials: any) =>
+      prevMaterials.map((category: any) => ({
+        ...category,
+        materials: category.materials.filter(
+          (material: any) => !idSet.has(String(material.id))
+        )
+      }))
+    );
+    void queryClient.invalidateQueries({
+      queryKey: ['submittals', 'materials', 'by-category']
+    });
+    void queryClient.invalidateQueries({
+      queryKey: ['submittals', 'categories']
+    });
+    void queryClient.invalidateQueries({
+      queryKey: ['submittals', 'material-search']
+    });
+  };
+
   const handleMaterialsUpdated = (
     updates: Array<{
       id: number;
       materialName?: string;
       altName?: string;
+      description?: string;
       purchaseUnitCost?: number;
       allocation?: number;
       allocationUnit?: string;
       categoryId?: number;
-      kitId?: number | null;
     }>
   ) => {
     if (!updates.length) return;
@@ -622,12 +679,12 @@ export const App = () => {
             ...material,
             materialName: next.materialName ?? material.materialName,
             altName: next.altName ?? material.altName,
+            description: next.description ?? material.description,
             purchaseUnitCost:
               next.purchaseUnitCost ?? material.purchaseUnitCost,
             allocation: next.allocation ?? material.allocation,
             allocationUnit: next.allocationUnit ?? material.allocationUnit,
-            categoryId: next.categoryId ?? material.categoryId,
-            kitId: next.kitId !== undefined ? next.kitId : material.kitId
+            categoryId: next.categoryId ?? material.categoryId
           };
         })
       }))
@@ -643,10 +700,12 @@ export const App = () => {
     )?.categoryName;
     if (fromSelected?.trim()) return fromSelected;
 
-    const fromList = ITEM_CATEGORIES.find(name => name === String(categoryId));
-    if (fromList) return fromList;
+    const fromCatalog = catalogCategoriesQuery.data?.find(
+      cat => String(cat.id) === String(categoryId)
+    )?.categoryName;
+    if (fromCatalog?.trim()) return fromCatalog;
 
-    return trimmed || `Category ${categoryId}`;
+    return trimmed || String(categoryId);
   };
 
   const handleCreateMaterialItem = async (
@@ -692,6 +751,7 @@ export const App = () => {
         itemType: created.itemType,
         materialName: created.materialName,
         altName: created.altName ?? '',
+        description: created.description ?? '',
         purchaseUnit: created.purchaseUnit ?? '',
         purchaseUnitCost: created.purchaseUnitCost ?? 0,
         allocation: created.allocation ?? 1,
@@ -699,9 +759,7 @@ export const App = () => {
         selected: created.selected ?? false,
         imageUrl,
         availableToBid: created.availableToBid,
-        active: created.active,
-        kitId: result.kit?.id ?? null,
-        kitUrl: result.urls?.kit ?? null
+        active: created.active
       };
 
       const existingCategoryIndex = prev.findIndex(
@@ -736,12 +794,7 @@ export const App = () => {
           };
         }
 
-        const nextMaterials = [...category.materials, materialToInsert].sort(
-          (a: any, b: any) =>
-            String(a.materialName ?? '').localeCompare(
-              String(b.materialName ?? '')
-            )
-        );
+        const nextMaterials = [...category.materials, materialToInsert];
 
         return {
           ...category,
@@ -755,7 +808,10 @@ export const App = () => {
       });
     });
 
-    // Refetch so a create-stub category picks up the rest of its Aspire items.
+    // Refetch so a newly created category picks up the rest of its items.
+    await queryClient.invalidateQueries({
+      queryKey: ['submittals', 'categories']
+    });
     await queryClient.invalidateQueries({
       queryKey: ['submittals', 'materials', 'by-category', created.categoryId]
     });
@@ -767,6 +823,7 @@ export const App = () => {
       id: number;
       materialName: string;
       altName?: string;
+      description?: string;
       purchaseUnit?: string;
       imageUrl?: string;
       categoryName: string;
@@ -778,6 +835,7 @@ export const App = () => {
             id: mat.id,
             materialName: getCommonName(mat),
             altName: mat.altName,
+            description: mat.description,
             purchaseUnit: mat.purchaseUnit,
             imageUrl: mat.imageUrl,
             categoryName: cat.categoryName
@@ -792,11 +850,13 @@ export const App = () => {
   // Heights are in px at the full 816×1056 page scale.
   // Item row: 120px circle + 8px gap = 128px per item after the first (first = 120px).
   // Category heading: 32px text + 8px gap + 4px extra top margin (if not first) ≈ 44px.
+  // The first item under a heading also has 15px of extra space.
   // Usable content height: page 1056 − 48px top padding − 36px bottom padding − 50px footer = 922px.
   const materialPageChunks = useMemo(() => {
     const ITEM_H = 120; // height of one item row
     const GAP = 8; // flex gap between rows
     const HEADING_H = 44; // height consumed by a category heading row
+    const FIRST_ITEM_GAP = 15; // extra space under a category heading
     const MAX_H = 880; // conservative usable height per page (below footer)
 
     type Item = (typeof allSelectedMaterials)[0];
@@ -807,14 +867,20 @@ export const App = () => {
 
     for (const item of allSelectedMaterials) {
       const isNewCat = item.categoryName !== lastCat;
-      const rowH =
-        (page.length === 0 ? 0 : GAP) + (isNewCat ? HEADING_H : 0) + ITEM_H;
+      const itemH = Math.max(
+        ITEM_H,
+        88 + descriptionBlockHeight(item.description)
+      );
+      const headingExtra =
+        isNewCat && item.categoryName ? HEADING_H + FIRST_ITEM_GAP : 0;
+      const rowH = (page.length === 0 ? 0 : GAP) + headingExtra + itemH;
 
       if (page.length > 0 && usedHeight + rowH > MAX_H) {
         // Carry this item to next page
         chunks.push(page);
         page = [item];
-        usedHeight = ITEM_H + (item.categoryName ? HEADING_H : 0);
+        usedHeight =
+          itemH + (item.categoryName ? HEADING_H + FIRST_ITEM_GAP : 0);
         lastCat = item.categoryName ?? '';
       } else {
         page.push(item);
@@ -1072,9 +1138,11 @@ export const App = () => {
             onToggleMaterial={onToggleMaterialHandler}
             onRemoveMaterial={onRemoveMaterialHandler}
             onAddCategory={onAddCategoryHandler}
+            isLoadingCategories={catalogCategoriesQuery.isLoading}
             onGlobalSelect={onGlobalSelectHandler}
             onImageUpload={handleMaterialImageUpload}
             onMaterialsUpdated={handleMaterialsUpdated}
+            onMaterialsDeleted={handleMaterialsDeleted}
             onCreateMaterialItem={handleCreateMaterialItem}
           />
           <SelectedMaterialsList

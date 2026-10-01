@@ -102,7 +102,7 @@ export const MaterialMismatchModal = ({
                     >
                       ID: {match.id}
                       {match.purchaseUnit
-                        ? ` | Size: ${match.purchaseUnit}`
+                        ? ` | Variant: ${match.purchaseUnit}`
                         : ""}
                       {match.botanicalName
                         ? ` | Alternate: ${match.botanicalName}`

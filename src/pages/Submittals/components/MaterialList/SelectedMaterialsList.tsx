@@ -50,25 +50,35 @@ export const SelectedMaterialsList = ({
     0,
   );
 
-  const dragKey = useRef<string | null>(null); // "catId-matId"
+  const dragItem = useRef<{
+    categoryId: string | number;
+    materialId: string | number;
+  } | null>(null);
   const [dragOverKey, setDragOverKey] = useState<string | null>(null);
   const dragCategoryId = useRef<number | null>(null);
   const [dragOverCategoryId, setDragOverCategoryId] = useState<number | null>(
     null,
   );
 
-  const key = (catId: number, matId: number) => `${catId}-${matId}`;
+  const itemKey = (catId: string | number, matId: string | number) =>
+    `${catId}::${matId}`;
 
-  const handleDrop = (toCatId: number, toMatId: number) => {
-    if (!dragKey.current) return;
-    const [fromCatIdStr, fromMatIdStr] = dragKey.current.split("-");
-    const fromCatId = parseInt(fromCatIdStr);
-    const fromMatId = parseInt(fromMatIdStr);
-    dragKey.current = null;
+  const sameId = (a: string | number, b: string | number) =>
+    String(a) === String(b);
+
+  const handleDrop = (
+    toCatId: string | number,
+    toMatId: string | number,
+  ) => {
+    const from = dragItem.current;
+    dragItem.current = null;
     setDragOverKey(null);
-    if (fromCatId !== toCatId || fromMatId === toMatId) return;
+    if (!from) return;
+    if (sameId(from.categoryId, toCatId) && sameId(from.materialId, toMatId)) {
+      return;
+    }
+    if (!sameId(from.categoryId, toCatId)) return;
 
-    // Build the new flat list with the item moved within its category
     const flat = materials.flatMap((cat) =>
       cat.materials
         .filter((m) => m.selected)
@@ -79,10 +89,12 @@ export const SelectedMaterialsList = ({
         })),
     );
     const fromIdx = flat.findIndex(
-      (i) => i.categoryId === fromCatId && i.material.id === fromMatId,
+      (i) =>
+        sameId(i.categoryId, from.categoryId) &&
+        sameId(i.material.id, from.materialId),
     );
     const toIdx = flat.findIndex(
-      (i) => i.categoryId === toCatId && i.material.id === toMatId,
+      (i) => sameId(i.categoryId, toCatId) && sameId(i.material.id, toMatId),
     );
     if (fromIdx === -1 || toIdx === -1) return;
     const reordered = [...flat];
@@ -186,22 +198,31 @@ export const SelectedMaterialsList = ({
               </Typography>
             </Box>
             {category.materials.map((material) => {
-              const k = key(category.id, material.id);
+              const k = itemKey(category.id, material.id);
               return (
                 <Box
                   key={material.id}
                   component="div"
                   draggable
-                  onDragStart={() => {
-                    dragKey.current = k;
+                  onDragStart={(event) => {
+                    event.stopPropagation();
+                    dragItem.current = {
+                      categoryId: category.id,
+                      materialId: material.id,
+                    };
                   }}
-                  onDragOver={(e) => {
-                    e.preventDefault();
+                  onDragOver={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
                     setDragOverKey(k);
                   }}
-                  onDrop={() => handleDrop(category.id, material.id)}
+                  onDrop={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    handleDrop(category.id, material.id);
+                  }}
                   onDragEnd={() => {
-                    dragKey.current = null;
+                    dragItem.current = null;
                     setDragOverKey(null);
                   }}
                   sx={{

@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/joy";
+import { isEmptyRichText, sanitizeRichText } from "../MaterialList/richText";
 
 export const ITEMS_PER_PAGE = 7;
 
@@ -7,6 +8,7 @@ export type MaterialPageItem = {
   materialName: string;
   imageUrl?: string;
   altName?: string;
+  description?: string;
   purchaseUnit?: string;
   categoryName?: string;
 };
@@ -122,6 +124,8 @@ export const MaterialPage = ({
         }
 
         const { item, index } = row;
+        const followsHeading =
+          rowIdx > 0 && rows[rowIdx - 1]?.type === "heading";
         // eslint-disable-next-line no-lone-blocks
         {
           const isEven = index % 2 === 0;
@@ -257,6 +261,29 @@ export const MaterialPage = ({
                   </Typography>
                 </Box>
               </Box>
+              {item.description && !isEmptyRichText(item.description) && (
+                <Box
+                  data-testid="sub-material-description"
+                  sx={{
+                    mt: "6px",
+                    color: "#1a1a1a",
+                    fontSize: "14px",
+                    lineHeight: 1.35,
+                    textAlign: "left",
+                    "& img": {
+                      display: "block",
+                      maxWidth: "100%",
+                      maxHeight: "160px",
+                      objectFit: "contain",
+                      mt: "6px",
+                    },
+                    "& p": { m: 0 },
+                  }}
+                  dangerouslySetInnerHTML={{
+                    __html: sanitizeRichText(item.description),
+                  }}
+                />
+              )}
             </Box>
           );
 
@@ -266,7 +293,11 @@ export const MaterialPage = ({
               data-testid="sub-material-item"
               sx={{
                 display: "flex",
-                alignItems: "center",
+                mt: followsHeading ? "15px" : 0,
+                alignItems:
+                  item.description && !isEmptyRichText(item.description)
+                    ? "flex-start"
+                    : "center",
                 gap: "16px",
                 flexDirection: isEven ? "row" : "row-reverse",
               }}

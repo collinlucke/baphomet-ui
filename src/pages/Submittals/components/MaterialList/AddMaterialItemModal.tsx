@@ -6,24 +6,23 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Link,
+  Autocomplete,
   Modal,
   ModalClose,
   ModalDialog,
   Option,
   Select,
   Stack,
-  Textarea,
   Typography,
 } from "@mui/joy";
 import ImageIcon from "@mui/icons-material/Image";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import {
   createMaterialItem,
   type CreateMaterialItemResult,
 } from "../../api/submittals.mutations";
-import { ITEM_CATEGORIES } from "../../categories";
 import { ITEM_SIZES } from "../../sizes";
+import { RichTextDescription } from "./RichTextDescription";
+import { isEmptyRichText } from "./richText";
 
 type CategoryOption = {
   id: number;
@@ -51,13 +50,11 @@ type AddMaterialItemModalProps = {
 
 type SuccessState = {
   materialName: string;
-  kitName: string;
-  materialUrl: string;
-  kitUrl: string;
 };
 
 export const AddMaterialItemModal = ({
   open,
+  categories,
   lockedCategoryId,
   title = "Add Item",
   initialValues,
@@ -151,7 +148,7 @@ export const AddMaterialItemModal = ({
   const handleSubmit = async () => {
     const trimmedCommon = commonName.trim();
     const trimmedAlternate = alternateName.trim();
-    const trimmedDescription = description.trim();
+    const descriptionHtml = isEmptyRichText(description) ? "" : description;
     const trimmedPurchaseUnit = purchaseUnit.trim();
 
     if (!trimmedCommon) {
@@ -159,7 +156,8 @@ export const AddMaterialItemModal = ({
       return;
     }
 
-    if (!categoryName) {
+    const trimmedCategory = (categoryName ?? "").trim();
+    if (!trimmedCategory) {
       alert("Category is required.");
       return;
     }
@@ -169,18 +167,15 @@ export const AddMaterialItemModal = ({
       const result = await createMaterialItem({
         commonName: trimmedCommon,
         purchaseUnit: trimmedPurchaseUnit,
-        categoryId: categoryName,
+        categoryId: trimmedCategory,
         alternateName: trimmedAlternate,
-        description: trimmedDescription,
+        description: descriptionHtml,
       });
 
       await onAfterCreate(result, selectedFile ?? undefined);
 
       setSuccess({
         materialName: result.material.materialName,
-        kitName: result.kit?.kitName || "",
-        materialUrl: result.urls.material,
-        kitUrl: result.urls.kit,
       });
     } catch (error) {
       console.error("Failed to create material item:", error);
@@ -220,7 +215,6 @@ export const AddMaterialItemModal = ({
               <Typography level="body-xs" sx={{ mt: 0.5 }}>
                 Item: {success.materialName}
               </Typography>
-              <Typography level="body-xs">Kit: {success.kitName}</Typography>
             </Box>
           )}
 
@@ -252,28 +246,30 @@ export const AddMaterialItemModal = ({
 
               <FormControl>
                 <FormLabel>Description</FormLabel>
-                <Textarea
-                  minRows={3}
+                <RichTextDescription
                   value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Optional"
+                  onChange={setDescription}
                 />
               </FormControl>
 
               <FormControl>
                 <FormLabel>Category</FormLabel>
-                <Select
-                  value={categoryName}
-                  onChange={(_, value) => setCategoryName(value ?? null)}
+                <Autocomplete
+                  freeSolo
                   disabled={lockedCategoryId != null}
-                  placeholder="Select a category"
-                >
-                  {ITEM_CATEGORIES.map((name) => (
-                    <Option key={name} value={name}>
-                      {name}
-                    </Option>
-                  ))}
-                </Select>
+                  placeholder="Select or type a new category"
+                  options={[
+                    ...new Set(categories.map((category) => category.categoryName)),
+                  ]}
+                  value={categoryName ?? ""}
+                  onChange={(_, value) => {
+                    setCategoryName(typeof value === "string" ? value : null);
+                  }}
+                  onInputChange={(_, value, reason) => {
+                    if (reason === "reset") return;
+                    setCategoryName(value);
+                  }}
+                />
               </FormControl>
             </Stack>
 
@@ -382,7 +378,7 @@ export const AddMaterialItemModal = ({
               }}
             >
               <FormControl>
-                <FormLabel>Size</FormLabel>
+                <FormLabel>Variant</FormLabel>
                 <Select
                   value={purchaseUnit || null}
                   onChange={(_, value) => setPurchaseUnit(value ?? "")}
@@ -397,42 +393,6 @@ export const AddMaterialItemModal = ({
               </FormControl>
             </Box>
           </Box>
-          {success && (
-            <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap" }}>
-              <Link
-                href={success.materialUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                color="primary"
-                underline="always"
-                sx={{
-                  fontWeight: 700,
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 0.5,
-                }}
-              >
-                Open Item
-                <OpenInNewIcon sx={{ fontSize: 14 }} />
-              </Link>
-              <Link
-                href={success.kitUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                color="primary"
-                underline="always"
-                sx={{
-                  fontWeight: 700,
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 0.5,
-                }}
-              >
-                Open Kit
-                <OpenInNewIcon sx={{ fontSize: 14 }} />
-              </Link>
-            </Box>
-          )}
           <input
             ref={fileInputRef}
             type="file"

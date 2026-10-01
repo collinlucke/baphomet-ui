@@ -10,6 +10,7 @@ type MaterialPageData = {
     id: number;
     materialName: string;
     altName?: string;
+    description?: string;
     imageUrl?: string;
     categoryName?: string;
   }>;

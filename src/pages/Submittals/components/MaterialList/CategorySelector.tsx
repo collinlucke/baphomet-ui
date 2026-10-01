@@ -84,7 +84,7 @@ export const CategorySelector = ({
             ? 'Loading categories…'
             : disabled
               ? 'Loading category…'
-              : 'Add Category'}
+              : 'Search Categories'}
         </Button>
       ) : (
         <Input

@@ -27,6 +27,7 @@ export type Material = {
   className?: string;
   materialName: string;
   altName?: string;
+  description?: string;
   purchaseUnit?: string;
   purchaseUnitCost?: number;
   allocation?: number;
@@ -36,8 +37,6 @@ export type Material = {
   active: boolean;
   availableToBid: boolean;
   itemType: string;
-  kitId?: number | null;
-  kitUrl?: string | null;
 };
 
 type MaterialListItemProps = {
@@ -202,7 +201,7 @@ export const MaterialListItem = ({
               />
             </FormControl>
             <FormControl>
-              <FormLabel>Size</FormLabel>
+              <FormLabel>Variant</FormLabel>
               <Typography level="body-sm" sx={{ py: 0.75 }}>
                 {material.purchaseUnit}
               </Typography>

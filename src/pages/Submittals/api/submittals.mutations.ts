@@ -3,6 +3,7 @@ import { apiFetch } from './apiClient';
 export type UpdateMaterialPayload = {
   itemName?: string;
   alternateName?: string;
+  description?: string;
   categoryId?: number;
   purchaseUnitCost?: number;
   allocation?: number;
@@ -12,19 +13,6 @@ export type UpdateMaterialPayload = {
 export type UnitTypeOption = {
   id: number;
   name: string;
-};
-
-export type SyncInstalledKitsResult = {
-  updated: number;
-  failed: number;
-  skipped: number;
-  details: Array<{
-    materialId: number;
-    kitId?: number;
-    replacementKitId?: number;
-    status: 'updated' | 'failed' | 'skipped' | 'recreated';
-    reason?: string;
-  }>;
 };
 
 export type CreateMaterialItemPayload = {
@@ -40,6 +28,7 @@ export type CreatedMaterialItem = {
   itemType: string;
   materialName: string;
   altName?: string;
+  description?: string;
   purchaseUnit?: string;
   purchaseUnitCost?: number;
   allocation?: number;
@@ -54,14 +43,14 @@ export type CreatedMaterialItem = {
 
 export type CreateMaterialItemResult = {
   material: CreatedMaterialItem;
-  kit: {
-    id: number;
-    kitName: string;
-  };
-  urls: {
-    material: string;
-    kit: string;
-  };
+};
+
+export const deleteMaterial = async (id: number | string): Promise<void> => {
+  const res = await apiFetch(`/api/materials/${id}`, { method: 'DELETE' });
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({ error: 'Unknown error' }));
+    throw new Error(error.error || `Failed to delete material ${id}`);
+  }
 };
 
 export const updateMaterial = async (
@@ -77,23 +66,6 @@ export const updateMaterial = async (
     const error = await res.json().catch(() => ({ error: 'Unknown error' }));
     throw new Error(error.error || `Failed to update material ${id}`);
   }
-};
-
-export const syncInstalledKits = async (
-  materialIds: number[]
-): Promise<SyncInstalledKitsResult> => {
-  const res = await apiFetch('/api/materials/sync-installed-kits', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ materialIds })
-  });
-
-  if (!res.ok) {
-    const error = await res.json().catch(() => ({ error: 'Unknown error' }));
-    throw new Error(error.error || 'Failed to sync installed kits');
-  }
-
-  return res.json();
 };
 
 export const fetchUnitTypes = async (): Promise<UnitTypeOption[]> => {

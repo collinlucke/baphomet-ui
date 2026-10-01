@@ -1,4 +1,4 @@
-import { useRef, useState, useMemo } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import {
   Box,
   Button,
@@ -15,18 +15,12 @@ import {
   Option,
   Tabs,
   TabList,
-  Tab,
-  Link
+  Tab
 } from '@mui/joy';
 import ImageIcon from '@mui/icons-material/Image';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import type { GroupedMaterial } from './materialGrouping';
 import type { Material } from './MaterialListItem';
-import { formatCost } from '../../../../utils/formatCost';
-import {
-  kitDetailsUrl,
-  materialDetailsUrl
-} from '../../../../utils/aspireUrls';
+import { RichTextDescription } from './RichTextDescription';
 
 type GroupedMaterialEditModalProps = {
   open: boolean;
@@ -35,15 +29,18 @@ type GroupedMaterialEditModalProps = {
   hasMismatch: boolean;
   commonNameInput: string;
   botanicalNameInput: string;
+  descriptionInput: string;
   modalImageSrc: string | null;
   saving: boolean;
-  kitIds?: Record<string, number>; // Maps size -> kit catalog item ID
+  deleting?: boolean;
   isNewGroup?: boolean;
   canSave?: boolean;
   onCommonNameChange: (value: string) => void;
   onBotanicalNameChange: (value: string) => void;
+  onDescriptionChange: (value: string) => void;
   onClose: () => void;
   onAddSize?: () => void;
+  onDelete?: () => void;
   onSave: () => void;
   onFileSelect: (file: File) => void;
   availableCategories: { id: string; name: string }[];
@@ -60,15 +57,18 @@ export const GroupedMaterialEditModal = ({
   hasMismatch,
   commonNameInput,
   botanicalNameInput,
+  descriptionInput,
   modalImageSrc,
   saving,
-  kitIds = {},
+  deleting = false,
   isNewGroup: _isNewGroup = false,
   canSave = true,
   onCommonNameChange,
   onBotanicalNameChange,
+  onDescriptionChange,
   onClose,
   onAddSize,
+  onDelete,
   onSave,
   onFileSelect,
   availableCategories,
@@ -78,6 +78,7 @@ export const GroupedMaterialEditModal = ({
   onSetSelectedSize
 }: GroupedMaterialEditModalProps) => {
   const [isDragging, setIsDragging] = useState(false);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [selectedImageSourceSize, setSelectedImageSourceSize] = useState<
     string | null
   >(null);
@@ -131,22 +132,9 @@ export const GroupedMaterialEditModal = ({
     sizesWithImages
   ]);
 
-  // Determine if current size is new (no material URLs)
-  const selectedMaterialId = selectedMaterial?.id ?? null;
-  const isNewSize = useMemo(() => {
-    return !selectedMaterialId;
-  }, [selectedMaterialId]);
-
-  // Get URLs for current size
-  const materialUrl = selectedMaterialId
-    ? materialDetailsUrl(selectedMaterialId)
-    : null;
-  // Prefer the selected material's own kit; fall back to size map for this group only.
-  const selectedKitId =
-    Number(selectedMaterial?.kitId ?? 0) ||
-    (effectiveSelectedSize ? (kitIds[effectiveSelectedSize] ?? 0) : 0) ||
-    null;
-  const kitUrl = selectedKitId ? kitDetailsUrl(selectedKitId) : null;
+  useEffect(() => {
+    if (!open) setConfirmingDelete(false);
+  }, [open, activeGroup?.key]);
 
   const openPicker = () => fileInputRef.current?.click();
 
@@ -212,7 +200,7 @@ export const GroupedMaterialEditModal = ({
               onClick={onAddSize}
               sx={{ whiteSpace: 'nowrap' }}
             >
-              Add Size
+              Add Variant
             </Button>
           )}
         </Box>
@@ -279,7 +267,7 @@ export const GroupedMaterialEditModal = ({
                 level="body-xs"
                 sx={{ color: 'neutral.500', px: 0.25 }}
               >
-                Changes to Name, Alternate Name, or Category apply to all sizes
+                Changes to Name, Alternate Name, or Category apply to all variants
                 in this group.
               </Typography>
             </Stack>
@@ -289,7 +277,7 @@ export const GroupedMaterialEditModal = ({
               {/* Size Image */}
               <Box>
                 <Typography level="body-sm" fontWeight="md" sx={{ mb: 0.75 }}>
-                  Size Image
+                  Variant Image
                 </Typography>
                 {currentImageUrl ? (
                   <Box
@@ -405,13 +393,13 @@ export const GroupedMaterialEditModal = ({
                     {/* Fallback Image Picker */}
                     {sizesWithImages.length > 0 && (
                       <FormControl>
-                        <FormLabel>Or pick image from another size</FormLabel>
+                        <FormLabel>Or pick an image from another variant</FormLabel>
                         <Select
                           value={selectedImageSourceSize}
                           onChange={(_, value) =>
                             setSelectedImageSourceSize(value)
                           }
-                          placeholder="Select a size with an image"
+                          placeholder="Select a variant with an image"
                         >
                           {sizesWithImages.map(({ size }) => (
                             <Option key={`img-source-${size}`} value={size}>
@@ -424,67 +412,16 @@ export const GroupedMaterialEditModal = ({
                   </Box>
                 )}
               </Box>
-
-              {/* Editable Purchase Unit Cost - just below Size Image */}
-              {selectedMaterial && (
-                <Box>
-                  <Typography level="body-sm" fontWeight="md" sx={{ mb: 0.75 }}>
-                    Purchase Unit Cost
-                  </Typography>
-                  <Input
-                    type="number"
-                    slotProps={{
-                      input: {
-                        step: '0.01'
-                      }
-                    }}
-                    value={formatCost(selectedMaterial.purchaseUnitCost)}
-                    startDecorator="$"
-                    readOnly
-                  />
-                </Box>
-              )}
-
-              {/* Size-Specific Properties (Display Only) */}
-              {selectedMaterial && (
-                <Box
-                  sx={{
-                    p: 1.5,
-                    borderRadius: 'md',
-                    bgcolor: 'background.level1'
-                  }}
-                >
-                  <Stack spacing={1.5}>
-                    <Box>
-                      <Typography level="body-sm" sx={{ color: 'neutral.500' }}>
-                        Size
-                      </Typography>
-                      <Typography level="body-md" sx={{ mt: 0.25 }}>
-                        {(selectedMaterial.purchaseUnit ?? '').trim() ||
-                          'No size information'}
-                      </Typography>
-                    </Box>
-                    <Box>
-                      <Typography level="body-sm" sx={{ color: 'neutral.500' }}>
-                        Allocation
-                      </Typography>
-                      <Typography level="body-md" sx={{ mt: 0.25 }}>
-                        {selectedMaterial.allocation ?? 1}
-                      </Typography>
-                    </Box>
-                    <Box>
-                      <Typography level="body-sm" sx={{ color: 'neutral.500' }}>
-                        Allocation Unit
-                      </Typography>
-                      <Typography level="body-md" sx={{ mt: 0.25 }}>
-                        {selectedMaterial.allocationUnit ?? '—'}
-                      </Typography>
-                    </Box>
-                  </Stack>
-                </Box>
-              )}
             </Stack>
           </Box>
+
+          <FormControl>
+            <FormLabel>Description</FormLabel>
+            <RichTextDescription
+              value={descriptionInput}
+              onChange={onDescriptionChange}
+            />
+          </FormControl>
 
           <input
             ref={fileInputRef}
@@ -503,15 +440,64 @@ export const GroupedMaterialEditModal = ({
             sx={{
               display: 'flex',
               gap: 1,
+              alignItems: 'center',
               justifyContent: 'flex-end'
             }}
           >
-            <Button variant="plain" color="neutral" onClick={onClose}>
-              Cancel
-            </Button>
-            <Button loading={saving} disabled={!canSave} onClick={onSave}>
-              Save
-            </Button>
+            {onDelete &&
+              (confirmingDelete ? (
+                <>
+                  <Typography level="body-sm" sx={{ mr: 'auto' }}>
+                    {(activeGroup?.materials.length ?? 0) > 1
+                      ? 'Delete this item and its variants?'
+                      : 'Delete this item?'}
+                  </Typography>
+                  <Button
+                    variant="plain"
+                    color="neutral"
+                    disabled={deleting}
+                    onClick={() => setConfirmingDelete(false)}
+                  >
+                    Keep
+                  </Button>
+                  <Button
+                    color="danger"
+                    loading={deleting}
+                    onClick={onDelete}
+                  >
+                    Delete
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  variant="outlined"
+                  color="danger"
+                  disabled={saving || deleting}
+                  onClick={() => setConfirmingDelete(true)}
+                  sx={{ mr: 'auto' }}
+                >
+                  Delete
+                </Button>
+              ))}
+            {!confirmingDelete && (
+              <>
+                <Button
+                  variant="plain"
+                  color="neutral"
+                  disabled={deleting}
+                  onClick={onClose}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  loading={saving}
+                  disabled={!canSave || deleting}
+                  onClick={onSave}
+                >
+                  Save
+                </Button>
+              </>
+            )}
           </Box>
         </Stack>
       </ModalDialog>

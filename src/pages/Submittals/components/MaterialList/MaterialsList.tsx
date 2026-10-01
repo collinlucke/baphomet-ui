@@ -42,13 +42,14 @@ type MaterialsListProps = {
       id: number;
       materialName?: string;
       altName?: string;
+      description?: string;
       purchaseUnitCost?: number;
       allocation?: number;
       allocationUnit?: string;
       categoryId?: number;
-      kitId?: number | null;
     }>,
   ) => void;
+  onMaterialsDeleted?: (ids: Array<number | string>) => void;
   onCreateMaterialItem?: (
     result: CreateMaterialItemResult,
     imageFile?: File,
@@ -67,6 +68,7 @@ export const MaterialsList = ({
   onGlobalSelect,
   onImageUpload,
   onMaterialsUpdated,
+  onMaterialsDeleted,
   onCreateMaterialItem,
   isLoadingCategories = false,
 }: MaterialsListProps) => {
@@ -143,6 +145,7 @@ export const MaterialsList = ({
           onImageUpload={onImageUpload}
           onCreateMaterialItem={onCreateMaterialItem}
           onMaterialsUpdated={onMaterialsUpdated}
+          onMaterialsDeleted={onMaterialsDeleted}
         />
       ))}
 
@@ -207,7 +210,7 @@ export const MaterialsList = ({
 
       {materials.length === 0 && (
         <Typography level="body-sm" sx={{ opacity: 0.6, mt: 2 }}>
-          No categories added yet. Click &quot;Add Category&quot; to get started.
+          No categories added yet. Click &quot;Search Categories&quot; to get started.
         </Typography>
       )}
 
