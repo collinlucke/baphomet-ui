@@ -1,22 +1,5 @@
 # Development Guide
 
-## PhantomArtist Dependency
-
-This project uses the local PhantomArtist design system for development but the published package for production:
-
-- **Development**: Links to local `../phantomartist` directory for live changes
-- **Production**: Uses published `@collinlucke/phantomartist@^1.0.3` from npm
-
-### Setup Commands
-
-```bash
-# Development setup (links local PhantomArtist)
-pnpm install:dev
-
-# Production setup (uses published package)
-pnpm install:prod
-```
-
 ## Quick Start
 
 ```bash
@@ -50,65 +33,6 @@ pnpm dev:simple   # Basic Vite without port cleanup
 - **Basic Vite server**: Original `vite` command without modifications
 - **No port cleanup**: May start on alternative ports if 5173 is busy
 - **Fallback option**: If cleanup scripts cause issues
-
-## Accessibility Analysis
-
-This project includes comprehensive accessibility analysis powered by PhantomArtist design system.
-
-### Browser Console Commands
-
-Start the dev server (`pnpm dev`) and open browser console to access these functions:
-
-#### Full System Analysis
-
-```javascript
-analyzeFullSystem();
-```
-
-Analyzes all color combinations across the entire application.
-
-#### Component Analysis
-
-```javascript
-analyzeComponent('ComponentName');
-```
-
-**Available components:**
-
-- `"Button"` - Button elements and styling
-- `"LoginForm"` - Login form interface
-- `"Heading"` - Header and navigation
-- `"HomePage"` - Homepage elements
-
-#### Page Analysis
-
-```javascript
-analyzePage('PageName');
-```
-
-**Available pages:**
-
-- `"home"` - Homepage layout and colors
-- `"login"` - Login page interface
-
-#### Quick Color Checks
-
-```javascript
-checkColors('#foreground', '#background', 'context');
-```
-
-**Examples:**
-
-```javascript
-checkColors('#FFFFFF', '#146B68', 'Primary Button');
-checkColors('#333333', '#FFFFFF', 'Body Text');
-```
-
-### Package Script Reference
-
-```bash
-pnpm accessibility  # Show accessibility analysis guide
-```
 
 ## Testing & Quality
 

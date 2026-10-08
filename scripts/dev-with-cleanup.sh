@@ -27,9 +27,5 @@ else
   echo "⚠️ Could not detect system type for port cleanup"
 fi
 
-# Setup PhantomArtist for development
-echo "🎨 Setting up PhantomArtist for development..."
-node setup-phantomartist.js --local
-
 echo "🚀 Starting Vite dev server..."
 vite

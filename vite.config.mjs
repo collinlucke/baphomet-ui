@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import del from 'rollup-plugin-delete';
-import path from 'path';
 
 export default defineConfig({
   plugins: [
@@ -18,24 +17,9 @@ export default defineConfig({
       }
     }
   ],
-  resolve: {
-    alias:
-      process.env.NODE_ENV === 'development'
-        ? {
-            phantomartist: path.resolve(__dirname, '../phantomartist/lib'),
-            '@collinlucke/phantomartist': path.resolve(
-              __dirname,
-              '../phantomartist/lib'
-            )
-          }
-        : {}
-  },
   server: {
     port: 5173,
     host: '0.0.0.0',
-    watch: {
-      ignored: ['!**/phantomartist/lib/**']
-    },
     fs: {
       allow: ['..']
     }
@@ -58,7 +42,6 @@ export default defineConfig({
     ]
   },
   optimizeDeps: {
-    exclude: ['@collinlucke/phantomartist'],
     include: [
       'react',
       'react-dom',
@@ -72,7 +55,6 @@ export default defineConfig({
     }
   },
   define: {
-    __USE_LOCAL_PHANTOMARTIST__: process.env.NODE_ENV === 'development',
     __DEV_MODE__: process.env.NODE_ENV === 'development'
   },
   esbuild: {

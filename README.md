@@ -28,17 +28,16 @@ A movie ranking application where users compare two movies at a time to build ag
 - **Apollo GraphQL** - Data fetching and state management[^1]
 - **JSON Web Tokens** - Authentication and authorization
 - **Emotion CSS** - CSS-in-JS styling[^2]
-- **PhantomArtist** - Custom design system[^3]
+- **athameui** - Component library
 - **Vitest** - Testing framework[^1]
 - **ESLint** - Code quality
 
 [^1]: Will all likely be replaced with Next.js stuff
 [^2]: Moving to the Next.js-blessed Tailwind CSS
-[^3]: Will be using a diffent custom component library built off of PahntomArtist
 ---
 
 ## Related Projects
 
 - **[Baphomet Server](https://github.com/collinlucke/baphomet-server)** - GraphQL backend API
-- **[PhantomArtist](https://github.com/collinlucke/phantomartist)** - Design system library
+- **[athameui](https://github.com/collinlucke/athameui)** - Component library
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { Header } from './components/Layouts/Header';
 import { Footer } from './components/Layouts/Footer';
 import { Modal, breakpoints } from 'athameui';
@@ -54,7 +54,7 @@ export const App = () => {
 
     isMobileVar(navigator.userAgent.includes('Mobile'));
     isLandscapeVar(window.innerHeight < window.innerWidth);
-    isLargeScreenVar((window.innerWidth >= breakpoints.lg) as number);
+    isLargeScreenVar(window.innerWidth >= breakpoints.lg);
     isMobileAndLandscapeVar(isMobileVar() && isLandscapeVar());
     showSlideOutMenuVar(isMobileVar() && showSlideOutMenu);
     isSmallOrMobileVar(!isLargeScreenVar() || isMobileVar());
@@ -153,7 +153,7 @@ export const App = () => {
 
       <Header />
 
-      <div css={backdrop}>
+      <div css={getMainStyles(backdrop)}>
         <Outlet />
       </div>
 

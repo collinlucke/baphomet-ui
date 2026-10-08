@@ -8,7 +8,7 @@ sed -i 's/"athameui": "[^"]*"/"athameui": "link:..\/athameui"/' package.json
 
 # Add postinstall script back if not present
 if ! grep -q '"postinstall"' package.json; then
-    sed -i '/"install:prod": "bash scripts\/use-npm-phantomartist.sh"/a\    "postinstall": "pnpm use:local",' package.json
+    sed -i '/"install:athame:prod"/a\    "postinstall": "pnpm use:local",' package.json
 fi
 
 # Reinstall dependencies

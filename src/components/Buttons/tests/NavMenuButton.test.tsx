@@ -11,40 +11,6 @@ const testClient = new ApolloClient({
   link: new ApolloLink()
 });
 
-jest.mock('phantomartist', () => ({
-  Button: ({
-    children,
-    size,
-    variant,
-    className,
-    onClick,
-    ariaLabel,
-    ariaDescribedBy,
-    testId
-  }: {
-    children: React.ReactNode;
-    size: string;
-    variant: string;
-    className?: { button?: unknown };
-    onClick?: () => void;
-    ariaLabel?: string;
-    ariaDescribedBy?: string;
-    testId?: string;
-  }) => (
-    <button
-      onClick={onClick}
-      aria-label={ariaLabel}
-      aria-describedby={ariaDescribedBy}
-      data-testid={testId}
-      data-size={size}
-      data-variant={variant}
-      className={className?.button ? 'custom-button-class' : ''}
-    >
-      {children}
-    </button>
-  )
-}));
-
 const renderWithProviders = (ui: React.ReactElement) => {
   return render(
     <BrowserRouter>

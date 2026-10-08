@@ -22,7 +22,6 @@
 
 ### Changed
 
-- **PhantomArtist Upgrade**: Updated to PhantomArtist v1.1.0 with consolidated InputField component and enhanced accessibility features
 - **Button Component Props**: Migrated from legacy aria-\* props to new ariaLabel and ariaDescribedby props for better TypeScript support
 - **Component Naming**: Renamed ColorShowcase to StylesShowcase for clearer purpose identification
 - **Development Scripts**: Simplified install:dev script by removing NODE_ENV dependency for better cross-platform compatibility
@@ -31,7 +30,7 @@
 
 ### Removed
 
-- **Legacy Form Components**: Transitioned away from old PhantomArtist form components to consolidated InputField
+- **Legacy Form Components**: Transitioned to the consolidated InputField component
 - **Deprecated Test Files**: Cleaned up unused test scaffolding files (SignupFormRealistic.browser.test.tsx, SignupFormSimple.browser.test.tsx)
 
 ### Fixed
@@ -51,7 +50,7 @@
 
 ### Changed
 
-- Removed `debounce` in favor of PhantomArtist's `useDebounced`
+- Removed `debounce` in favor of `useDebounced`
 - Change app packages to v1.0.0
 
 ### Removed
@@ -279,7 +278,7 @@
 
 ### Added
 
-- Implemented `Modal` from `PhantomArtist`
+- Implemented `Modal`
 
 ### Changed
 
@@ -301,7 +300,7 @@
 ### Added
 
 - Added `Welcome` page
-- Created Theme Provider that can pass styles to PhantomArtist
+- Created a theme provider for shared styles
 - Add mysterious `Arena` page
 
 ### Changed
@@ -349,11 +348,9 @@
 ### Changed
 
 - Updated the README
-- Changed `set-dependencies.ts` to only worry about pulling in the published version of
-  PhantomArtist in prod
 - Updated `vite.config.mjs` to use Emotion css
 - Switched from `createBrowserRouter` to `createHashRouter` due to routing breaks
-- Made `Heading.tsx` use PhantomArtist's `<Heading>` instead of `<HeadingMain>` and made the
+- Made `Heading.tsx` use `<Heading>` instead of `<HeadingMain>` and made the
   appropriate updates to it works.
   - `styleX.css` to `index.css`
 

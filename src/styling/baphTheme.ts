@@ -185,8 +185,8 @@ export const baphTypography = {
 };
 
 export const baphScrollbarStyles = {
-  sbTrackColor: baseColors.secondary[400],
-  sbThumbColor: baseColors.secondary[700],
+  sbTrackColor: baphColorVariations.secondary[400],
+  sbThumbColor: baphColorVariations.secondary[700],
   sbSize: '5px'
 };
 

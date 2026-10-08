@@ -9,10 +9,8 @@ export default [
       'dist/**/*',
       'build/**/*',
       'node_modules/**/*',
-      'phantomartist/**/*',
       '*.config.js',
-      '*.config.mjs',
-      'setup-phantomartist.js'
+      '*.config.mjs'
     ]
   },
   {
