@@ -1,5 +1,3 @@
-import { baseColors } from 'phantomartist';
-
 export const baphColors = {
   primary: '#0B1828',
   secondary: '#146B68',
