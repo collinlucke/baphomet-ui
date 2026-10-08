@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Header } from './components/Layouts/Header';
 import { Footer } from './components/Layouts/Footer';
-import { screenSizes } from 'phantomartist';
-import { Modal } from 'athameui';
+import { Modal, breakpoints } from 'athameui';
 import {
   isAuthenticatedVar,
   showUnauthorizedModalVar,
@@ -36,8 +35,6 @@ type BackdropData = {
 };
 
 export const App = () => {
-  const { pathname } = useLocation();
-  const isSubmittals = pathname.startsWith('/submittals');
   const showUnauthorizedModal = useReactiveVar(showUnauthorizedModalVar);
   const showFeedbackModal = useReactiveVar(showFeedbackModalVar);
   const showLoginModal = useReactiveVar(showLoginModalVar);
@@ -46,8 +43,7 @@ export const App = () => {
   const [backdrop, setBackdrop] = useState<string>('');
 
   const { data: backdropData, error: backdropError } = useQuery(
-    GET_RANDOM_BACKDROP_IMAGE,
-    { skip: isSubmittals }
+    GET_RANDOM_BACKDROP_IMAGE
   );
 
   const [checkAuth, { data: authData, error: authError }] =
@@ -58,7 +54,7 @@ export const App = () => {
 
     isMobileVar(navigator.userAgent.includes('Mobile'));
     isLandscapeVar(window.innerHeight < window.innerWidth);
-    isLargeScreenVar(window.innerWidth >= screenSizes.lg);
+    isLargeScreenVar((window.innerWidth >= breakpoints.lg) as number);
     isMobileAndLandscapeVar(isMobileVar() && isLandscapeVar());
     showSlideOutMenuVar(isMobileVar() && showSlideOutMenu);
     isSmallOrMobileVar(!isLargeScreenVar() || isMobileVar());
@@ -155,13 +151,13 @@ export const App = () => {
     <div css={baphStyles.appWrapper}>
       <Globals />
 
-      {!isSubmittals && <Header />}
+      <Header />
 
-      <div css={getMainStyles(isSubmittals ? undefined : backdrop)}>
+      <div css={backdrop}>
         <Outlet />
       </div>
 
-      {!isSubmittals && <Footer />}
+      <Footer />
 
       <Modal isOpen={showLoginModal} onClose={closeLoginModalHandler}>
         <LoginForm onSuccess={loginSuccessHandler} />
@@ -209,7 +205,7 @@ const getMainStyles = (backdrop?: string): CSSObject => ({
           backgroundImage: `url(https://image.tmdb.org/t/p/original${backdrop})`
         }
       }
-      : {
+    : {
         display: 'flex',
         flexDirection: 'column',
         backgroundColor: 'transparent'

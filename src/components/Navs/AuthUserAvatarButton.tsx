@@ -1,7 +1,5 @@
-import { useState, useRef } from 'react';
-import { Button } from 'athameui';
-import { Dropdown } from 'phantomartist';
-import { Avatar } from 'athameui';
+import { useState } from 'react';
+import { Avatar, Button, Dropdown } from 'athameui';
 import { UserMenu } from './UserMenu';
 
 type AuthUserAvatarProps = {
@@ -9,9 +7,6 @@ type AuthUserAvatarProps = {
 };
 
 export const AuthUserAvatarButton = ({ displayName }: AuthUserAvatarProps) => {
-  const dropdownRef = useRef<HTMLDivElement>(
-    null
-  ) as React.RefObject<HTMLDivElement>;
   const [showUserDropdown, setShowUserDropdown] = useState(false);
 
   const toggleDropdownHandler = () => {
@@ -23,7 +18,7 @@ export const AuthUserAvatarButton = ({ displayName }: AuthUserAvatarProps) => {
   };
 
   return (
-    <div css={baphStyles.userMenu} ref={dropdownRef}>
+    <div css={baphStyles.userMenu}>
       <Button
         onClick={toggleDropdownHandler}
         variant="ghost"
@@ -32,10 +27,9 @@ export const AuthUserAvatarButton = ({ displayName }: AuthUserAvatarProps) => {
         <Avatar displayName={displayName || 'User'} size="medium" />
       </Button>
       <Dropdown
-        showDropdown={showUserDropdown}
-        className={{ dropdownWrapper: baphStyles.dropdown }}
-        closeDropdown={closeDropdownHandler}
-        dropdownRef={dropdownRef}
+        isOpen={showUserDropdown}
+        sx={{ dropdown: baphStyles.dropdown }}
+        onClose={closeDropdownHandler}
       >
         <UserMenu setShowUserDropdown={setShowUserDropdown} />
       </Dropdown>

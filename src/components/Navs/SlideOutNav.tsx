@@ -1,5 +1,4 @@
-import { SlideOutMenu } from 'phantomartist';
-import { Avatar } from 'athameui';
+import { Avatar, SlideOut } from 'athameui';
 import { MainNavLinks } from '../MainNavLinks';
 import { UserMenu } from './UserMenu';
 import { UnauthorizedButtons } from './UnauthorizedButtons';
@@ -15,9 +14,9 @@ export const SlideOutNav = ({ displayName }: SlideOutNavProps) => {
   const isAuthenticated = useReactiveVar(isAuthenticatedVar);
 
   return (
-    <SlideOutMenu
-      showSlideOut={showSlideOutMenu}
-      setShowSlideOut={showSlideOutMenuVar}
+    <SlideOut
+      isOpen={showSlideOutMenu}
+      onClose={() => showSlideOutMenuVar(false)}
     >
       <MainNavLinks />
       <hr css={baphStyles.divider} />
@@ -25,7 +24,7 @@ export const SlideOutNav = ({ displayName }: SlideOutNavProps) => {
         <Avatar displayName={displayName} sx={{ avatar: baphStyles.avatar }} />
       )}
       {isAuthenticated ? <UserMenu /> : <UnauthorizedButtons />}
-    </SlideOutMenu>
+    </SlideOut>
   );
 };
 

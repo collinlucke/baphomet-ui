@@ -1,4 +1,4 @@
-import { ButtonGroup, tokens } from 'athameui';
+import { ButtonGroup, breakpoints } from 'athameui';
 import { MainNavLinkItem } from './MainNavLinkItem';
 import { showSlideOutMenuVar, isSmallOrMobileVar } from '../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
@@ -7,8 +7,7 @@ const mainNavPages = [
   { label: 'Arena ', to: '/arena' },
   { label: 'Leaderboard', to: '/leaderboard' },
   { label: 'All Movies', to: '/all-movies' },
-  { label: 'FAQ', to: '/faq' },
-  { label: 'Submittals', to: '/submittals' }
+  { label: 'FAQ', to: '/faq' }
 ];
 
 export const MainNavLinks = () => {
@@ -42,7 +41,7 @@ export const MainNavLinks = () => {
 const baphStyles = {
   buttonGroup: {
     gap: 0,
-    [tokens.media.min.lg]: {
+    [`@media (min-width: ${breakpoints.lg}px)`]: {
       gap: '5px'
     }
   }
