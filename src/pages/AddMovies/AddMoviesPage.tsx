@@ -7,7 +7,7 @@ import {
 } from './addMoviesPageReactiveVars';
 import { Button, Search, Main, tokens } from 'athameui';
 import { PageTitle } from '../../components/PageTitle';
-import { MovieDetailsForm } from './MovieDetailsForm';
+import { AddMovieForm } from './AddMovieForm';
 import { CSSObject } from '@emotion/react';
 import { ADD_MOVIE, UPDATE_MOVIE } from '../../api/mutations';
 import {
@@ -46,6 +46,7 @@ type TopBilledCastMember = {
   name: string;
   role: string;
   profilePath: string;
+  __typename?: string;
 };
 
 type Director = {
@@ -61,6 +62,7 @@ export type CurrentMovie = {
   id?: string | undefined;
   title?: string | undefined;
   releaseDate?: string | undefined;
+  mpaRating?: string | undefined;
   genres?: Genre[] | undefined;
   overview?: string | undefined;
   posterPath?: string | undefined;
@@ -74,9 +76,10 @@ export type CurrentMovie = {
 
 export type PossibleMovieMatch = {
   id: string;
-  tmdbId: number;
+  tmdbId: string;
   title: string;
   releaseDate: string;
+  mpaRating: string;
   overview: string;
   posterPath: string | null;
   backdropPath: string | null;
@@ -122,7 +125,7 @@ const AddMoviesPage = () => {
   }>(FETCH_POSSIBLE_MOVIE_MATCHES);
 
   // ----- HANDLERS ----- //
-  const fetchByTmdbIdHandler = async (tmdbId?: number | undefined) => {
+  const fetchByTmdbIdHandler = async (tmdbId?: string | undefined) => {
     if (!tmdbId) return;
     setIsLoading(true);
     setShowFoundInDbMessage(false);
@@ -149,7 +152,7 @@ const AddMoviesPage = () => {
     }
   };
 
-  const searchByTmdbIdHandler = async (tmdbId: number) => {
+  const searchByTmdbIdHandler = async (tmdbId: string) => {
     if (!tmdbId) return;
 
     setIsLoading(true);
@@ -159,7 +162,6 @@ const AddMoviesPage = () => {
       });
 
       const { found, movie } = movieByTmdbIdResponse.data?.movieResult || {};
-      console.log('Movie by TMDB ID response:', movieByTmdbIdResponse);
       if (found && movie) {
         currentMovieVar(movie);
         isExistingMovieVar(true);
@@ -169,7 +171,6 @@ const AddMoviesPage = () => {
       if (!found) {
         try {
           const data = await fetchMovieFromTmdb({ variables: { tmdbId } });
-          console.log('Fetched movie from TMDB:', data);
           currentMovieVar(data.data?.fetchedMovie);
         } catch (error) {
           console.error('Error fetching movie from TMDB:', error);
@@ -180,15 +181,11 @@ const AddMoviesPage = () => {
       console.error('Error searching for movie:', error);
     }
   };
-  const handleSearchIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTmdbId(parseInt(e.target.value, 10));
-  };
 
   const titleSearchTermHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchByTitle(e.target.value);
   };
 
-  /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
   const searchByTitleHandler = async (title: SearchTermType) => {
     if (!title?.toString().trim()) return;
     setIsSearching(true);
@@ -209,9 +206,8 @@ const AddMoviesPage = () => {
       setIsSearching(false);
     }
   };
-  /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
-  const selectMovieHandler = async (tmdbId: number) => {
+  const selectMovieHandler = async (tmdbId: string) => {
     setShowMovieModal(false);
     const movieByTmdbIdResponse = await getMovieByTmdbId({
       variables: { tmdbId }
@@ -353,9 +349,8 @@ const AddMoviesPage = () => {
       ? 'Director'
       : 'Directors';
 
-  const removePerson = (id: number, roleType?: string | undefined): void => {
-    console.log('Removing person with ID:', id, 'from', roleType);
-    if (roleType === 'topBilledCast') {
+  const removePerson = (id: number, personType?: string | undefined): void => {
+    if (personType === 'CastMember') {
       const updatedMovie = {
         ...currentMovie,
         topBilledCast:
@@ -365,7 +360,8 @@ const AddMoviesPage = () => {
           )
       };
       currentMovieVar(updatedMovie);
-    } else {
+    }
+    if (personType === 'Director') {
       const updatedMovie = {
         ...currentMovie,
         directors:
@@ -380,7 +376,7 @@ const AddMoviesPage = () => {
 
   return (
     <>
-      <Main>
+      <Main sx={{ mainContent: baphStyles.mainNarrowContent }}>
         <PageTitle title="Add Movies" />
         <div
           css={baphStyles.formContainer}
@@ -405,8 +401,10 @@ const AddMoviesPage = () => {
             id="search-by-tmdb-id"
             searchTerm={tmdbId}
             searchLabel="Enter TMDB ID"
-            setSearchTerm={handleSearchIdChange}
-            onSearch={searchByTitleHandler}
+            setSearchTerm={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setTmdbId(parseInt(e.target.value))
+            }
+            onSearch={() => searchByTmdbIdHandler(tmdbId?.toString() || '')}
             inputSize="medium"
             buttonSize="medium"
             buttonVariant="tertiary"
@@ -422,7 +420,7 @@ const AddMoviesPage = () => {
                 size="small"
                 variant="secondary"
                 onClick={() => {
-                  fetchByTmdbIdHandler(currentMovie?.tmdbId);
+                  fetchByTmdbIdHandler(currentMovie?.tmdbId?.toString());
                 }}
               >
                 Refetch from TMDB
@@ -431,7 +429,7 @@ const AddMoviesPage = () => {
           )}
 
           <hr css={baphStyles.divider} />
-          <MovieDetailsForm
+          <AddMovieForm
             onFormFieldChange={onFormFieldChange}
             onSubmit={onSubmit}
             currentMovie={currentMovie}
@@ -459,6 +457,9 @@ const AddMoviesPage = () => {
 export default AddMoviesPage;
 
 const baphStyles: { [key: string]: CSSObject } = {
+  mainNarrowContent: {
+    maxWidth: '768px'
+  },
   successMessage: {
     color: tokens.color.secondary.vibrant[700]
   },
@@ -482,7 +483,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     flexDirection: 'column' as const
   },
   previewContainer: {
-    gap: '2rem',
+    gap: '1rem',
     display: 'flex',
     width: '100%',
     maxWidth: '800px',

@@ -1,9 +1,16 @@
-import { Main, tokens } from 'athameui';
+import { Main, Carousel, tokens } from 'athameui';
 import { PageHeading } from '../../components/Layouts/PageHeading';
 import { GET_MOVIE_DETAILS } from '../../api/queries';
 import { useQuery } from '@apollo/client/react';
 import { useParams } from 'react-router-dom';
 import { formatGenres, type Genre } from '../../utils/formatGenres';
+import { PersonCard } from '../../components/PersonCard/PersonCard';
+
+export type Director = {
+  id: number;
+  name: string;
+  profilePath?: string;
+};
 
 export type MovieDetailsResponse = {
   movieResults: {
@@ -42,15 +49,14 @@ export type MovieDetailsResponse = {
     addedBy: string;
     lastUpdated: string;
     createdAt: string;
-    directors?: string[];
-    topBilledCast?: { id: number; name: string; profileUrl?: string }[];
+    directors?: Director[];
+    topBilledCast?: { id: number; name: string; profilePath?: string }[];
     tagline?: string;
   };
 };
 
 const MovieDetailsPage = () => {
   const { id } = useParams();
-
   const { data } = useQuery<MovieDetailsResponse>(GET_MOVIE_DETAILS, {
     variables: { id }
   });
@@ -58,6 +64,7 @@ const MovieDetailsPage = () => {
   const releaseYear = movie?.releaseDate
     ? new Date(movie.releaseDate).getFullYear()
     : null;
+
   const title = movie ? (
     <>
       {' '}
@@ -110,18 +117,27 @@ const MovieDetailsPage = () => {
             alt={movie?.title}
             css={baphStyles.poster}
           />
-          {movie?.tagline && <span>{movie?.tagline}</span>}
+          {movie?.tagline && (
+            <span css={baphStyles.tagline}>{movie?.tagline}</span>
+          )}
         </div>
         <div css={baphStyles.detailItemsWrapper}>
           {detailItem({
             name: 'Director',
-            value: movie?.directors?.join(', ')
+            value: movie?.directors?.map(director => director.name).join(', ')
           })}
           {detailItem({ name: 'Release Date', value: movie?.releaseDate })}
           {detailItem({ name: 'Revenue', value: movie?.revenue })}
           {detailItem({ name: 'Rated', value: movie?.rated })}
         </div>
-        <div css={baphStyles.overview}>{movie?.overview}</div>
+        <div css={baphStyles.overview}>
+          <div css={baphStyles.overviewText}>{movie?.overview}</div>
+          <Carousel>
+            {movie?.topBilledCast?.map(person => (
+              <PersonCard key={person.id} person={person} />
+            ))}
+          </Carousel>
+        </div>
       </div>
     </Main>
   );
@@ -154,11 +170,15 @@ const baphStyles = {
   },
   detailsContainer: {
     display: 'flex',
+    width: '100%',
+    minWidth: 0,
     marginTop: '20px',
     gap: '20px'
   },
   posterContainer: {
+    padding: '15px',
     maxWidth: '300px',
+    height: '100%',
     flex: 2,
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     overflow: 'hidden',
@@ -170,8 +190,11 @@ const baphStyles = {
     width: '100%',
     height: '100%',
     objectFit: 'cover' as const,
-    padding: '15px',
-    borderRadius: '20px'
+    borderRadius: '5px'
+  },
+  tagline: {
+    fontStyle: 'italic',
+    marginTop: '10px'
   },
   detailItemsWrapper: {
     maxWidth: '175px',
@@ -193,9 +216,15 @@ const baphStyles = {
     fontWeight: 400 as const
   },
   overview: {
-    flex: 3,
+    display: 'flex',
+    flex: '3 1 0',
+    flexDirection: 'column' as const,
+    minWidth: 0,
     backgroundColor: tokens.color.secondary[500],
     padding: '15px',
     borderRadius: '10px'
+  },
+  overviewText: {
+    marginBottom: '30px'
   }
 };

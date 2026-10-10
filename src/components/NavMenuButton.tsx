@@ -54,7 +54,7 @@ export const NavMenuButton = ({
       {!to ? (
         <ButtonElement />
       ) : (
-        <Link to={to} style={{ width: '100%' }}>
+        <Link to={to}>
           <ButtonElement />
         </Link>
       )}

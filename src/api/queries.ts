@@ -19,6 +19,7 @@ export const GET_ALL_MOVIES = gql`
         id
         title
         releaseDate
+        mpaRating
         overview
         genres {
           id
@@ -78,6 +79,7 @@ export const GET_MOVIE_DETAILS = gql`
       id
       title
       releaseDate
+      mpaRating
       overview
       genres {
         id
@@ -148,21 +150,11 @@ export const GET_MOVIES_BY_TITLE = gql`
         id
         title
         releaseDate
+        mpaRating
         overview
         genres {
           id
-          genre
-        }
-        revenue
-        posterPath
-        backdropPath
-        tmdbId
-        tagline
-        topBilledCast {
-          id
-          name
-          role
-          profilePath
+          mpaRating
         }
         directors {
           id
@@ -194,6 +186,7 @@ export const GET_MOVIE_BY_TMDB_ID = gql`
         id
         title
         releaseDate
+        mpaRating
         overview
         genres {
           id
@@ -226,6 +219,7 @@ export const FETCH_MOVIE_FROM_TMDB = gql`
     fetchedMovie: fetchMovieFromTmdb(tmdbId: $tmdbId) {
       title
       releaseDate
+      mpaRating
       overview
       genres {
         id
@@ -258,8 +252,10 @@ export const FETCH_POSSIBLE_MOVIE_MATCHES = gql`
       page
       results {
         id
+        tmdbId
         title
         releaseDate
+        mpaRating
         overview
         genreIds
         posterPath
@@ -300,6 +296,7 @@ export const GET_RANDOM_MATCHUP = gql`
         posterPath
         backdropPath
         releaseDate
+        mpaRating
         genres {
           id
           genre
@@ -333,6 +330,7 @@ export const GET_RANDOM_MATCHUP = gql`
         posterPath
         backdropPath
         releaseDate
+        mpaRating
         genres {
           id
           genre

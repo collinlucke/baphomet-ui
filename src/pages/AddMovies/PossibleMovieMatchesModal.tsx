@@ -8,7 +8,7 @@ type PossibleMovieMatchesProps = {
   possibleMatches: PossibleMovieMatch[];
   showModal: boolean;
   handleCloseModal: () => void;
-  selectMovieHandler: (tmdbId: number) => void;
+  selectMovieHandler: (tmdbId: string) => void;
 };
 
 export const PossibleMovieMatchesModal = ({

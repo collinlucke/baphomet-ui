@@ -30,14 +30,21 @@ const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
           An error occurred on this page. Don't worry, the rest of the app
           should still work.
         </p>
-        <details style={{ marginTop: '1rem', textAlign: 'left' }}>
+        <details
+          style={{
+            marginTop: '1rem',
+            textAlign: 'left'
+          }}
+        >
           <summary>Error details (for developers)</summary>
           <pre
             style={{
               padding: '1rem',
               overflow: 'auto',
               fontSize: '0.8rem',
-              marginTop: '0.5rem'
+              marginTop: '0.5rem',
+              width: '100%',
+              textWrap: 'wrap'
             }}
           >
             {error instanceof Error ? error.message : String(error)}

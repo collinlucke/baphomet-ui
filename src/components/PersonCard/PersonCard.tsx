@@ -3,15 +3,20 @@ import { Button, tokens } from 'athameui';
 import { useReactiveVar } from '@apollo/client/react';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Delete02Icon } from '@hugeicons/core-free-icons';
+import { useLocation } from 'react-router-dom';
 
 export type PersonProps = {
   id: number;
   name: string;
   role?: string;
-  profilePath: string;
+  profilePath?: string;
+  __typename?: string;
 };
 
-export type RemovePersonFunction = (personId: number) => void;
+export type RemovePersonFunction = (
+  personId: number,
+  personType: string
+) => void;
 
 type PersonCardProps = {
   person: PersonProps;
@@ -24,9 +29,11 @@ export const PersonCard = ({ person, removePerson }: PersonCardProps) => {
     ? JSON.parse(localStorage.getItem('baphomet-user') || '{}').role === 'admin'
     : false;
 
+  const { pathname } = useLocation();
+
   const removePersonHandler = () => {
-    if (removePerson) {
-      removePerson(person.id);
+    if (removePerson && person.__typename) {
+      removePerson(person.id, person.__typename);
     }
   };
 
@@ -44,7 +51,7 @@ export const PersonCard = ({ person, removePerson }: PersonCardProps) => {
       <div css={baphStyles.name}>{person.name}</div>
       {person.profilePath && (
         <div css={baphStyles.imageContainer}>
-          {isAuthenticated && isAdmin && (
+          {isAuthenticated && isAdmin && pathname === '/add-movies' && (
             <Button
               variant="ghost"
               size="small"
@@ -54,7 +61,7 @@ export const PersonCard = ({ person, removePerson }: PersonCardProps) => {
               sx={{ button: baphStyles.button }}
             />
           )}
-          <img src={profileImageUrl} alt={person.name} />
+          <img src={profileImageUrl} alt={person.name} css={baphStyles.image} />
         </div>
       )}
       <div css={baphStyles.role}>{person.role}</div>
@@ -69,7 +76,11 @@ const baphStyles = {
     position: 'relative' as const,
     padding: '0 5px',
     flex: '0 0 110px',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    maxHeight: '225px'
+  },
+  image: {
+    width: '100%'
   },
   imageContainer: {
     position: 'relative' as const
@@ -78,7 +89,8 @@ const baphStyles = {
     padding: '0',
     position: 'absolute' as const,
     top: '5px',
-    right: '5px'
+    right: '5px',
+    color: tokens.color.error.vibrant[700]
   },
   name: {
     fontWeight: '700',

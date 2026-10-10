@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { CSSObject } from '@emotion/react';
 import { ContainerScalingText, tokens } from 'athameui';
 import { Link } from 'react-router-dom';
@@ -21,17 +21,22 @@ export const MovieListItem = ({ movie }: MovieListItemProps) => {
   const [majorSize, setMajorSize] = useState('');
   const [minorSize, setMinorSize] = useState('');
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    const element = liRef.current;
+    if (!element) return;
+
     const updateFontSizes = () => {
-      const width = liRef.current?.offsetWidth;
-      setMajorSize(`${width! / 60}rem`);
-      setMinorSize(`${width! / 75}rem`);
+      const width = element.offsetWidth || 0;
+
+      setMajorSize(`${width / 47}rem`);
+      setMinorSize(`${width / 75}rem`);
     };
 
     updateFontSizes();
-    window.addEventListener('resize', updateFontSizes);
-    return () => window.removeEventListener('resize', updateFontSizes);
-  }, []);
+    const observer = new ResizeObserver(updateFontSizes);
+    observer.observe(element);
+    return () => observer.disconnect();
+  });
 
   return (
     <li

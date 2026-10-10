@@ -10,7 +10,7 @@ import {
 type SaveButtonGroupProps = {
   isLoading?: boolean;
 
-  searchByTmdbIdHandler: (tmdbId: number) => void;
+  searchByTmdbIdHandler: (tmdbId: string) => void;
   clearFormHandler: () => void;
 };
 
@@ -25,7 +25,7 @@ export const SaveButtonGroup = ({
 
   const fetchByTmdbIdHandler = () => {
     if (currentMovie?.tmdbId) {
-      searchByTmdbIdHandler(currentMovie.tmdbId);
+      searchByTmdbIdHandler(currentMovie.tmdbId.toString());
     }
   };
 

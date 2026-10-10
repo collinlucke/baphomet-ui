@@ -1,6 +1,4 @@
-import { isMobileVar } from '../../reactiveVars';
-import { tokens } from 'athameui';
-import { useReactiveVar } from '@apollo/client/react';
+import { Carousel } from 'athameui';
 import { PersonCard } from './PersonCard';
 import type { PersonProps } from './PersonCard';
 
@@ -15,8 +13,6 @@ export const PersonCardCarousel = ({
   roleType = 'people',
   removePerson
 }: PersonCardCarouselProps) => {
-  const isMobile = useReactiveVar(isMobileVar);
-
   const removePersonHandler = (id: number) => {
     if (removePerson) {
       removePerson(id, roleType);
@@ -24,11 +20,7 @@ export const PersonCardCarousel = ({
   };
 
   return (
-    <div
-      css={baphStyles.carousel}
-      className={`person-card-carousel ${!isMobile ? 'scrollable' : ''}`}
-    >
-      {people.length === 0 && `No ${roleType} found.`}
+    <Carousel emptyMessage={`No ${roleType} found.`}>
       {people.map(person => (
         <PersonCard
           key={person.id}
@@ -36,17 +28,6 @@ export const PersonCardCarousel = ({
           removePerson={removePersonHandler}
         />
       ))}
-    </div>
+    </Carousel>
   );
-};
-
-const baphStyles = {
-  carousel: {
-    display: 'flex',
-    border: `5px solid ${tokens.color.secondary[800]}`,
-    borderRadius: '10px',
-    padding: '10px',
-    overflowX: 'auto' as const,
-    gap: '10px'
-  }
 };
