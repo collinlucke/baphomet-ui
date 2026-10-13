@@ -18,19 +18,6 @@ export const getGraphQLEndpoint = () => {
       window as typeof window & { Capacitor?: { isNativePlatform?(): boolean } }
     ).Capacitor?.isNativePlatform?.();
 
-  // Debug logging
-  // console.log('Environment Debug:', {
-  //   protocol: window.location.protocol,
-  //   hostname: window.location.hostname,
-  //   isCapacitor,
-  //   isDev: isDevelopment(),
-  //   mode: import.meta.env.MODE,
-  //   androidEndpoint: import.meta.env.VITE_GRAPHQL_ENDPOINT_ANDROID,
-  //   isNetworkAccess: window.location.hostname !== 'localhost' &&
-  //                    window.location.hostname !== '127.0.0.1' &&
-  //                    window.location.hostname.match(/^\d+\.\d+\.\d+\.\d+$/)
-  // });
-
   // Add debug alert for mobile
   if (isCapacitor) {
     alert(

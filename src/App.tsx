@@ -202,7 +202,11 @@ const getMainStyles = (backdrop?: string): CSSObject => ({
           filter: 'grayscale(100%)',
           opacity: 0.05,
           zIndex: -1,
-          backgroundImage: `url(https://image.tmdb.org/t/p/original${backdrop})`
+          backgroundImage: `url(${
+            backdrop.startsWith('http')
+              ? backdrop
+              : `https://image.tmdb.org/t/p/original${backdrop}`
+          })`
         }
       }
     : {

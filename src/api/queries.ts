@@ -30,18 +30,6 @@ export const GET_ALL_MOVIES = gql`
         backdropPath
         tmdbId
         tagline
-        topBilledCast {
-          id
-          name
-          role
-          profilePath
-        }
-        directors {
-          id
-          name
-          profilePath
-          role
-        }
         addedBy
         lastUpdated
         createdAt
@@ -90,17 +78,19 @@ export const GET_MOVIE_DETAILS = gql`
       backdropPath
       tmdbId
       tagline
-      topBilledCast {
-        id
+      cast {
+        personId
+        character
+        order
         name
-        role
         profilePath
       }
-      directors {
-        id
+      crew {
+        personId
+        job
+        department
         name
         profilePath
-        role
       }
       addedBy
       lastUpdated
@@ -154,13 +144,7 @@ export const GET_MOVIES_BY_TITLE = gql`
         overview
         genres {
           id
-          mpaRating
-        }
-        directors {
-          id
-          name
-          role
-          profilePath
+          genre
         }
         addedBy
         lastUpdated
@@ -197,17 +181,19 @@ export const GET_MOVIE_BY_TMDB_ID = gql`
         backdropPath
         tmdbId
         tagline
-        topBilledCast {
-          id
+        cast {
+          personId
+          character
+          order
           name
-          role
           profilePath
         }
-        directors {
-          id
+        crew {
+          personId
+          job
+          department
           name
           profilePath
-          role
         }
       }
     }
@@ -230,17 +216,50 @@ export const FETCH_MOVIE_FROM_TMDB = gql`
       backdropPath
       tmdbId
       tagline
-      topBilledCast {
-        id
+      imdbId
+      originalTitle
+      originalLanguage
+      homepage
+      status
+      runtime
+      budget
+      popularity
+      voteAverage
+      voteCount
+      adult
+      spokenLanguages
+      productionCompanies
+      productionCountries
+      originCountries
+      keywords
+      logoPath
+      posterPaths
+      backdropPaths
+      certifications {
+        country
+        rating
+        releaseDate
+      }
+      videos {
         name
-        role
+        site
+        key
+        type
+        official
+      }
+      cast {
+        personId
+        character
+        order
+        name
         profilePath
       }
-      directors {
-        id
+      crew {
+        personId
+        job
+        department
         name
         profilePath
-        role
       }
     }
   }

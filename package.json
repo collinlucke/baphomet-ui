@@ -15,8 +15,6 @@
     "link:athame": "pnpm link ../athameui",
     "unlink:athame": "pnpm unlink athameui",
     "use:local": "node scripts/link-local-athameui.js",
-    "install:athame:dev": "bash scripts/use-local-athameui.sh",
-    "install:athame:prod": "bash scripts/use-npm-athameui.sh",
     "postinstall": "node scripts/link-local-athameui.js"
   },
   "dependencies": {

@@ -79,7 +79,7 @@ export const AddMovieForm = ({
           value={new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: 'USD'
-          }).format(parseInt(currentMovie?.revenue ?? '0'))}
+          }).format(Number(currentMovie?.revenue ?? 0))}
         />
       </div>
       <div css={baphStyles.movieDetailsFormFieldGroup}>
@@ -97,25 +97,42 @@ export const AddMovieForm = ({
         <div css={baphStyles.carouselContainer}>
           <FormLabel label={directorsLabel} dark />
           <Carousel>
-            {currentMovie?.directors?.map(person => (
-              <PersonCard
-                key={person.id}
-                person={person}
-                removePerson={removePerson}
-              />
-            ))}
+            {currentMovie?.crew
+              ?.filter(person => person.job === 'Director')
+              .map(person => (
+                <PersonCard
+                  key={person.personId}
+                  person={{
+                    id: person.personId,
+                    name: person.name || '',
+                    role: person.job,
+                    profilePath: person.profilePath || '',
+                    __typename: 'CrewCredit'
+                  }}
+                  removePerson={removePerson}
+                />
+              ))}
           </Carousel>
         </div>
         <div css={baphStyles.carouselContainer}>
           <FormLabel label="Top Billed Cast" dark />
           <Carousel>
-            {currentMovie?.topBilledCast?.map(person => (
-              <PersonCard
-                key={person.id}
-                person={person}
-                removePerson={removePerson}
-              />
-            ))}
+            {[...(currentMovie?.cast ?? [])]
+              .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+              .slice(0, 10)
+              .map(person => (
+                <PersonCard
+                  key={person.personId}
+                  person={{
+                    id: person.personId,
+                    name: person.name || '',
+                    role: person.character,
+                    profilePath: person.profilePath || '',
+                    __typename: 'CastCredit'
+                  }}
+                  removePerson={removePerson}
+                />
+              ))}
           </Carousel>
         </div>
       </div>

@@ -24,6 +24,7 @@ export const MainNavLinkItem = ({
         textPosition={isSmallOrMobile ? 'left' : 'center'}
         dark
         onClick={onClick}
+        wrap
       >
         {label}
       </Button>

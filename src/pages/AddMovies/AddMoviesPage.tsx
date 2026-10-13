@@ -16,7 +16,7 @@ import {
   FETCH_POSSIBLE_MOVIE_MATCHES
 } from '../../api/queries';
 import { PossibleMovieMatchesModal } from './PossibleMovieMatchesModal';
-import { type Genre } from '../../utils/formatGenres';
+import type { Genre } from '../../types/movies.types';
 
 type PossibleMovieMatchResponse = {
   results: PossibleMovieMatch[];
@@ -41,19 +41,22 @@ type ExistingMovieData = {
   };
 };
 
-type TopBilledCastMember = {
-  id: number;
-  name: string;
-  role: string;
-  profilePath: string;
+type CastCredit = {
+  personId: number;
+  character?: string;
+  order?: number;
+  name?: string;
+  profilePath?: string;
   __typename?: string;
 };
 
-type Director = {
-  id: number;
-  name: string;
-  profilePath: string;
-  role: string;
+type CrewCredit = {
+  personId: number;
+  job?: string;
+  department?: string;
+  name?: string;
+  profilePath?: string;
+  __typename?: string;
 };
 
 type SearchTermType = string | number | undefined;
@@ -67,11 +70,38 @@ export type CurrentMovie = {
   overview?: string | undefined;
   posterPath?: string | undefined;
   backdropPath?: string | undefined;
-  tmdbId?: number | undefined;
-  revenue?: string | undefined;
+  tmdbId?: number | string | undefined;
+  imdbId?: string;
+  originalTitle?: string;
+  originalLanguage?: string;
+  homepage?: string;
+  status?: string;
+  runtime?: number | null;
+  budget?: number | null;
+  popularity?: number | null;
+  voteAverage?: number | null;
+  voteCount?: number | null;
+  adult?: boolean;
+  spokenLanguages?: string[];
+  productionCompanies?: string[];
+  productionCountries?: string[];
+  originCountries?: string[];
+  keywords?: string[];
+  logoPath?: string;
+  posterPaths?: string[];
+  backdropPaths?: string[];
+  certifications?: { country?: string; rating?: string; releaseDate?: string }[];
+  videos?: {
+    name?: string;
+    site?: string;
+    key?: string;
+    type?: string;
+    official?: boolean;
+  }[];
+  revenue?: number | string | undefined;
   tagline?: string | undefined;
-  topBilledCast?: TopBilledCastMember[] | undefined;
-  directors?: Director[] | undefined;
+  cast?: CastCredit[] | undefined;
+  crew?: CrewCredit[] | undefined;
 };
 
 export type PossibleMovieMatch = {
@@ -252,8 +282,8 @@ const AddMoviesPage = () => {
       tmdbId: undefined,
       overview: '',
       tagline: '',
-      topBilledCast: [],
-      directors: []
+      cast: [],
+      crew: []
     });
   };
 
@@ -287,24 +317,20 @@ const AddMoviesPage = () => {
       __typename: string;
     };
 
-    if (rest.topBilledCast) {
-      rest.topBilledCast = rest.topBilledCast.map(cast => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { __typename, ...castRest } = cast as TopBilledCastMember & {
-          __typename: string;
-        };
-        return castRest;
-      });
+    if (rest.cast) {
+      rest.cast = rest.cast.map(({ personId, character, order }) => ({
+        personId,
+        character,
+        order
+      }));
     }
 
-    if (rest?.directors) {
-      rest.directors = rest.directors.map(director => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { __typename, ...directorRest } = director as Director & {
-          __typename: string;
-        };
-        return directorRest;
-      });
+    if (rest.crew) {
+      rest.crew = rest.crew.map(({ personId, job, department }) => ({
+        personId,
+        job,
+        department
+      }));
     }
 
     const updateData = {
@@ -323,54 +349,69 @@ const AddMoviesPage = () => {
         releaseDate: currentMovie.releaseDate,
         overview: currentMovie.overview,
         genres: currentMovie.genres,
-        revenue: currentMovie.revenue,
+        revenue:
+          currentMovie.revenue == null || currentMovie.revenue === ''
+            ? null
+            : Number(currentMovie.revenue),
         posterPath: currentMovie.posterPath,
         backdropPath: currentMovie.backdropPath,
-        tmdbId: currentMovie.tmdbId,
+        tmdbId:
+          currentMovie.tmdbId == null ? undefined : String(currentMovie.tmdbId),
+        imdbId: currentMovie.imdbId,
+        originalTitle: currentMovie.originalTitle,
+        originalLanguage: currentMovie.originalLanguage,
+        homepage: currentMovie.homepage,
+        status: currentMovie.status,
+        runtime: currentMovie.runtime,
+        budget: currentMovie.budget,
+        popularity: currentMovie.popularity,
+        voteAverage: currentMovie.voteAverage,
+        voteCount: currentMovie.voteCount,
+        adult: currentMovie.adult,
+        mpaRating: currentMovie.mpaRating,
+        spokenLanguages: currentMovie.spokenLanguages,
+        productionCompanies: currentMovie.productionCompanies,
+        productionCountries: currentMovie.productionCountries,
+        originCountries: currentMovie.originCountries,
+        keywords: currentMovie.keywords,
+        logoPath: currentMovie.logoPath,
+        posterPaths: currentMovie.posterPaths,
+        backdropPaths: currentMovie.backdropPaths,
+        certifications: currentMovie.certifications,
+        videos: currentMovie.videos,
         tagline: currentMovie.tagline,
-        topBilledCast: currentMovie.topBilledCast?.map(cast => ({
-          id: cast.id,
-          name: cast.name,
-          profilePath: cast.profilePath,
-          role: cast.role
+        cast: currentMovie.cast?.map(({ personId, character, order }) => ({
+          personId,
+          character,
+          order
         })),
-        directors: currentMovie.directors?.map(director => ({
-          id: director.id,
-          name: director.name,
-          profilePath: director.profilePath,
-          role: 'Director'
+        crew: currentMovie.crew?.map(({ personId, job, department }) => ({
+          personId,
+          job,
+          department
         })),
         ...additionalData
       }
     });
   };
-  const directorsLabel =
-    currentMovie?.directors && currentMovie.directors.length === 1
-      ? 'Director'
-      : 'Directors';
+  const directors =
+    currentMovie?.crew?.filter(person => person.job === 'Director') ?? [];
+  const directorsLabel = directors.length === 1 ? 'Director' : 'Directors';
 
   const removePerson = (id: number, personType?: string | undefined): void => {
-    if (personType === 'CastMember') {
-      const updatedMovie = {
+    if (personType === 'CastCredit') {
+      currentMovieVar({
         ...currentMovie,
-        topBilledCast:
-          currentMovie?.topBilledCast &&
-          currentMovie.topBilledCast.filter(
-            (member: TopBilledCastMember): boolean => member.id !== id
-          )
-      };
-      currentMovieVar(updatedMovie);
+        cast: currentMovie?.cast?.filter(member => member.personId !== id)
+      });
     }
-    if (personType === 'Director') {
-      const updatedMovie = {
+    if (personType === 'CrewCredit') {
+      currentMovieVar({
         ...currentMovie,
-        directors:
-          currentMovie?.directors &&
-          currentMovie.directors.filter(
-            (director: Director): boolean => director.id !== id
-          )
-      };
-      currentMovieVar(updatedMovie);
+        crew: currentMovie?.crew?.filter(
+          member => !(member.personId === id && member.job === 'Director')
+        )
+      });
     }
   };
 

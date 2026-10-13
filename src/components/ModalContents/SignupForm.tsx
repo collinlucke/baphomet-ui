@@ -350,8 +350,7 @@ export const SignupForm = ({ onSuccess, onError }: SignupFormProps) => {
               !formData.username.trim() ||
               !formData.email.trim() ||
               !formData.password ||
-              !formData.confirmPassword ||
-              !formData.displayName.trim()
+              !formData.confirmPassword
             }
             data-testid="signup-submit-button"
             sx={{ button: baphStyles.signUpButton }}

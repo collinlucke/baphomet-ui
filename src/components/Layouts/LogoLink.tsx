@@ -1,4 +1,4 @@
-import { tokens } from 'athameui';
+import { maxLg } from 'athameui';
 import { Link } from 'react-router-dom';
 import { showSlideOutMenuVar, isMobileVar } from '../../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
@@ -16,7 +16,7 @@ export const LogoLink = () => {
       aria-label="Baphomet - Go to homepage"
       onClick={isMobile ? closeSlideOutMenu : undefined}
     >
-      <h1 css={getTitleStyles(isMobile)}>Baphomet</h1>
+      <h1 css={getTitleStyles(isMobile)}>Baphy</h1>
       <img
         src="/baphy-favicon.png"
         alt="Baphomet logo"
@@ -36,7 +36,7 @@ const getTitleStyles = (isMobile: boolean) => ({
       }
     : {
         fontSize: '1.6rem',
-        [tokens.media.min.lg]: {
+        [maxLg]: {
           fontSize: '2rem'
         }
       })
@@ -53,7 +53,7 @@ const baphStyles = {
     width: '44px',
     height: '44px',
     objectFit: 'contain' as const,
-    [tokens.media.min.lg]: {
+    [maxLg]: {
       width: '56px',
       height: '56px'
     }

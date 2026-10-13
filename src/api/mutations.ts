@@ -6,13 +6,35 @@ export const ADD_MOVIE = gql`
     $releaseDate: String
     $overview: String
     $genres: [GenreInput]
-    $revenue: String
+    $revenue: Float
     $posterPath: String
     $backdropPath: String
     $tmdbId: String
+    $imdbId: String
+    $originalTitle: String
+    $originalLanguage: String
+    $homepage: String
+    $status: String
+    $runtime: Int
+    $budget: Float
+    $popularity: Float
+    $voteAverage: Float
+    $voteCount: Int
+    $adult: Boolean
+    $mpaRating: String
+    $spokenLanguages: [String]
+    $productionCompanies: [String]
+    $productionCountries: [String]
+    $originCountries: [String]
+    $keywords: [String]
+    $logoPath: String
+    $posterPaths: [String]
+    $backdropPaths: [String]
+    $certifications: [CertificationInput]
+    $videos: [VideoInput]
+    $cast: [CastCreditInput]
+    $crew: [CrewCreditInput]
     $tagline: String
-    $topBilledCast: [CastMemberInput]
-    $directors: [DirectorInput]
     $addedBy: ID
     $lastUpdated: DateTime
     $createdAt: DateTime
@@ -30,9 +52,31 @@ export const ADD_MOVIE = gql`
       posterPath: $posterPath
       backdropPath: $backdropPath
       tmdbId: $tmdbId
+      imdbId: $imdbId
+      originalTitle: $originalTitle
+      originalLanguage: $originalLanguage
+      homepage: $homepage
+      status: $status
+      runtime: $runtime
+      budget: $budget
+      popularity: $popularity
+      voteAverage: $voteAverage
+      voteCount: $voteCount
+      adult: $adult
+      mpaRating: $mpaRating
+      spokenLanguages: $spokenLanguages
+      productionCompanies: $productionCompanies
+      productionCountries: $productionCountries
+      originCountries: $originCountries
+      keywords: $keywords
+      logoPath: $logoPath
+      posterPaths: $posterPaths
+      backdropPaths: $backdropPaths
+      certifications: $certifications
+      videos: $videos
+      cast: $cast
+      crew: $crew
       tagline: $tagline
-      topBilledCast: $topBilledCast
-      directors: $directors
       addedBy: $addedBy
       lastUpdated: $lastUpdated
       createdAt: $createdAt
@@ -54,17 +98,19 @@ export const ADD_MOVIE = gql`
       backdropPath
       tmdbId
       tagline
-      topBilledCast {
-        id
+      cast {
+        personId
+        character
+        order
         name
-        role
         profilePath
       }
-      directors {
-        id
+      crew {
+        personId
+        job
+        department
         name
         profilePath
-        role
       }
       totalWins
       totalLosses
@@ -84,10 +130,11 @@ export const UPDATE_MOVIE = gql`
     $tmdbId: String
     $overview: String
     $genres: [GenreInput]
-    $revenue: String
+    $revenue: Float
     $tagline: String
-    $topBilledCast: [CastMemberInput]
-    $directors: [DirectorInput]
+    $mpaRating: String
+    $cast: [CastCreditInput]
+    $crew: [CrewCreditInput]
   ) {
     updateMovie(
       id: $id
@@ -100,8 +147,9 @@ export const UPDATE_MOVIE = gql`
       genres: $genres
       revenue: $revenue
       tagline: $tagline
-      topBilledCast: $topBilledCast
-      directors: $directors
+      mpaRating: $mpaRating
+      cast: $cast
+      crew: $crew
     ) {
       id
       title
@@ -116,17 +164,19 @@ export const UPDATE_MOVIE = gql`
       backdropPath
       tmdbId
       tagline
-      topBilledCast {
-        id
+      cast {
+        personId
+        character
+        order
         name
         profilePath
-        role
       }
-      directors {
-        id
+      crew {
+        personId
+        job
+        department
         name
         profilePath
-        role
       }
       totalWins
       totalLosses

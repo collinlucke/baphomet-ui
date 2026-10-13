@@ -1,59 +1,11 @@
-import { Main, Carousel, tokens } from 'athameui';
+import { Main, Carousel, tokens, minXl } from 'athameui';
 import { PageHeading } from '../../components/Layouts/PageHeading';
 import { GET_MOVIE_DETAILS } from '../../api/queries';
 import { useQuery } from '@apollo/client/react';
 import { useParams } from 'react-router-dom';
-import { formatGenres, type Genre } from '../../utils/formatGenres';
+import { formatGenres } from '../../utils/formatGenres';
+import type { MovieDetailsResponse } from '../../types/movies.types';
 import { PersonCard } from '../../components/PersonCard/PersonCard';
-
-export type Director = {
-  id: number;
-  name: string;
-  profilePath?: string;
-};
-
-export type MovieDetailsResponse = {
-  movieResults: {
-    id: number;
-    title: string;
-    overview: string;
-    releaseDate: string;
-    genres: Genre[];
-    posterPath: string;
-    backdropPath: string;
-    posterImages?: {
-      w92?: string;
-      w154?: string;
-      w185?: string;
-      w342?: string;
-      w500?: string;
-      w780?: string;
-      original?: string;
-    };
-    backdropImages?: {
-      w92?: string;
-      w154?: string;
-      w185?: string;
-      w342?: string;
-      w500?: string;
-      w780?: string;
-      original?: string;
-    };
-    rated?: string;
-    revenue?: number;
-    tmdbId: string;
-    winningPercentage: number;
-    totalWins: number;
-    totalLosses: number;
-    totalComparisons: number;
-    addedBy: string;
-    lastUpdated: string;
-    createdAt: string;
-    directors?: Director[];
-    topBilledCast?: { id: number; name: string; profilePath?: string }[];
-    tagline?: string;
-  };
-};
 
 const MovieDetailsPage = () => {
   const { id } = useParams();
@@ -111,31 +63,47 @@ const MovieDetailsPage = () => {
         }
       />
       <div css={baphStyles.detailsContainer}>
-        <div css={baphStyles.posterContainer}>
-          <img
-            src={movie?.posterImages?.w500}
-            alt={movie?.title}
-            css={baphStyles.poster}
-          />
-          {movie?.tagline && (
-            <span css={baphStyles.tagline}>{movie?.tagline}</span>
-          )}
-        </div>
-        <div css={baphStyles.detailItemsWrapper}>
-          {detailItem({
-            name: 'Director',
-            value: movie?.directors?.map(director => director.name).join(', ')
-          })}
-          {detailItem({ name: 'Release Date', value: movie?.releaseDate })}
-          {detailItem({ name: 'Revenue', value: movie?.revenue })}
-          {detailItem({ name: 'Rated', value: movie?.rated })}
+        <div css={baphStyles.posterContainerWrapper}>
+          <div css={baphStyles.posterContainer}>
+            <img
+              src={movie?.posterImages?.w500}
+              alt={movie?.title}
+              css={baphStyles.poster}
+            />
+            {movie?.tagline && (
+              <span css={baphStyles.tagline}>{movie?.tagline}</span>
+            )}
+          </div>
+          <div css={baphStyles.detailItemsWrapper}>
+            {detailItem({
+              name: 'Director',
+              value: movie?.crew
+                ?.filter(person => person.job === 'Director')
+                .map(director => director.name)
+                .join(', ')
+            })}
+            {detailItem({ name: 'Release Date', value: movie?.releaseDate })}
+            {detailItem({ name: 'Revenue', value: movie?.revenue })}
+            {detailItem({ name: 'Rated', value: movie?.mpaRating })}
+          </div>
         </div>
         <div css={baphStyles.overview}>
           <div css={baphStyles.overviewText}>{movie?.overview}</div>
           <Carousel>
-            {movie?.topBilledCast?.map(person => (
-              <PersonCard key={person.id} person={person} />
-            ))}
+            {[...(movie?.cast ?? [])]
+              .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+              .slice(0, 10)
+              .map(person => (
+                <PersonCard
+                  key={person.personId}
+                  person={{
+                    id: person.personId,
+                    name: person.name || '',
+                    role: person.character,
+                    profilePath: person.profilePath || ''
+                  }}
+                />
+              ))}
           </Carousel>
         </div>
       </div>
@@ -173,7 +141,11 @@ const baphStyles = {
     width: '100%',
     minWidth: 0,
     marginTop: '20px',
-    gap: '20px'
+    gap: '20px',
+    flexDirection: 'column' as const,
+    [minXl]: {
+      flexDirection: 'row' as const
+    }
   },
   posterContainer: {
     padding: '15px',
@@ -185,6 +157,14 @@ const baphStyles = {
     borderRadius: '10px',
     outline: `5px solid ${tokens.color.secondary[800]}`,
     outlineOffset: '-5px'
+  },
+  posterContainerWrapper: {
+    display: 'flex',
+    flexDirection: 'row' as const,
+    gap: '20px'
+    // [minMd]: {
+    //   flexDirection: 'column' as const
+    // }
   },
   poster: {
     width: '100%',
