@@ -1,4 +1,4 @@
-import { maxLg } from 'athameui';
+import { font, media } from 'athameui';
 import { Link } from 'react-router-dom';
 import { showSlideOutMenuVar, isMobileVar } from '../../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
@@ -32,13 +32,10 @@ const getTitleStyles = (isMobile: boolean) => ({
   margin: 0,
   ...(isMobile
     ? {
-        fontSize: '1.5rem'
+        fontSize: font.size.lg
       }
     : {
-        fontSize: '1.6rem',
-        [maxLg]: {
-          fontSize: '2rem'
-        }
+        fontSize: font.size['2xl']
       })
 });
 
@@ -53,7 +50,7 @@ const baphStyles = {
     width: '44px',
     height: '44px',
     objectFit: 'contain' as const,
-    [maxLg]: {
+    [media.max.lg]: {
       width: '56px',
       height: '56px'
     }

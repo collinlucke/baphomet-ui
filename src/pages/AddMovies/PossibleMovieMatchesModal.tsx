@@ -1,8 +1,6 @@
 import { CSSObject } from '@emotion/react';
-import { tokens, Button, Modal } from 'athameui';
+import { color, Button, Modal } from 'athameui';
 import type { PossibleMovieMatch } from './AddMoviesPage';
-
-const { color } = tokens;
 
 type PossibleMovieMatchesProps = {
   possibleMatches: PossibleMovieMatch[];

@@ -25,7 +25,6 @@ import { LoginForm } from './components/ModalContents/LoginForm';
 import { FeedbackForm } from './components/ModalContents/FeedbackForm';
 import { UnauthorizedModalContent } from './components/ModalContents/UnauthorizedModalContent';
 import type { AuthData } from './types/CustomTypes.types';
-import { Globals } from './styling/Globals';
 import './styling/index.css';
 
 type BackdropData = {
@@ -149,8 +148,6 @@ export const App = () => {
 
   return (
     <div css={baphStyles.appWrapper}>
-      <Globals />
-
       <Header />
 
       <div css={getMainStyles(backdrop)}>

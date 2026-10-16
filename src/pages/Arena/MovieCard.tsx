@@ -1,4 +1,4 @@
-import { tokens } from 'athameui';
+import { color, media } from 'athameui';
 import { CSSObject } from '@emotion/react';
 import { isMobileVar } from '../../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
@@ -139,7 +139,7 @@ const getMovieCardStyles = (
   return {
     ...baphStyles.movieCard,
     backgroundImage: `url(${backdropImageUrl})`,
-    [tokens.media.min.lg]: {
+    [media.min.lg]: {
       backgroundImage: isMobile
         ? `url(${backdropImageUrl})`
         : `url(${posterImageUrl})`,
@@ -166,14 +166,14 @@ const baphStyles: { [key: string]: CSSObject } = {
     overflow: 'hidden',
     cursor: 'pointer',
     transition: 'all 0.3s ease',
-    border: `2px solid ${tokens.color.tertiary[600]}`,
+    border: `2px solid ${color.tertiary[600]}`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPositionY: '20%',
     backgroundPositionX: 'center',
     '&:hover': {
       transform: 'scale(1.01)',
-      boxShadow: `0 8px 32px rgba(${tokens.color.primary[500]}, 0.3)`
+      boxShadow: `0 8px 32px rgba(${color.primary[500]}, 0.3)`
     }
   },
   movieCardDisabled: {
@@ -181,7 +181,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     opacity: 0.7,
     '&:hover': {
       transform: 'none',
-      border: `2px solid ${tokens.color.tertiary[600]}`,
+      border: `2px solid ${color.tertiary[600]}`,
       boxShadow: 'none'
     }
   },
@@ -210,7 +210,7 @@ const baphStyles: { [key: string]: CSSObject } = {
   movieYear: {
     margin: '0.25rem 0 0',
     fontSize: '0.75rem',
-    color: tokens.color.tertiary[300],
+    color: color.tertiary[300],
     textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)'
   }
 };

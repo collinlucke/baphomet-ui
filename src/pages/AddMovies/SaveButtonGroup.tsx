@@ -9,15 +9,21 @@ import {
 
 type SaveButtonGroupProps = {
   isLoading?: boolean;
+  isEditing: boolean;
 
   searchByTmdbIdHandler: (tmdbId: string) => void;
   clearFormHandler: () => void;
+  onEdit: () => void;
+  onCancel: () => void;
 };
 
 export const SaveButtonGroup = ({
   isLoading,
+  isEditing,
   searchByTmdbIdHandler,
-  clearFormHandler
+  clearFormHandler,
+  onEdit,
+  onCancel
 }: SaveButtonGroupProps) => {
   const isMovieLoading = useReactiveVar(isMovieLoadingVar);
   const isExistingMovie = isExistingMovieVar();
@@ -31,39 +37,67 @@ export const SaveButtonGroup = ({
 
   return (
     <ButtonGroup sx={{ buttonGroup: baphStyles.saveButtonGroup }}>
-      <Button
-        size="small"
-        variant="secondary"
-        type="submit"
-        disabled={!currentMovie?.title || isLoading}
-        dark
-      >
-        {isMovieLoading
-          ? 'Loading...'
-          : isExistingMovie
-            ? 'Update Movie'
-            : 'Add Movie'}
-      </Button>
-      {isExistingMovie && (
+      {!isEditing && (
+        <Button
+          size="small"
+          variant="secondary"
+          type="button"
+          dark
+          onClick={onEdit}
+          disabled={isLoading}
+        >
+          Edit Movie
+        </Button>
+      )}
+      {isEditing && (
+        <Button
+          size="small"
+          variant="secondary"
+          type="submit"
+          disabled={!currentMovie?.title || isLoading}
+          dark
+        >
+          {isMovieLoading
+            ? 'Loading...'
+            : isExistingMovie
+              ? 'Update Movie'
+              : 'Add Movie'}
+        </Button>
+      )}
+      {isExistingMovie && !isEditing && (
         <Button
           size="small"
           variant="secondary"
           dark
+          type="button"
           onClick={fetchByTmdbIdHandler}
           disabled={isLoading}
         >
           Refetch from TMDB
         </Button>
       )}
-      <Button
-        size="small"
-        variant="outline"
-        dark
-        type="reset"
-        onClick={clearFormHandler}
-      >
-        Clear
-      </Button>
+      {isEditing && (
+        <Button
+          size="small"
+          variant="outline"
+          dark
+          type="button"
+          onClick={onCancel}
+        >
+          Cancel
+        </Button>
+      )}
+      {isEditing && (
+        <Button
+          size="small"
+          variant="outline"
+          dark
+          type="button"
+          onClick={clearFormHandler}
+        >
+          Clear
+        </Button>
+      )}
     </ButtonGroup>
   );
 };

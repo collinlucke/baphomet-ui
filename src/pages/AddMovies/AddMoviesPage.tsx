@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useMutation, useLazyQuery } from '@apollo/client/react';
 import { useReactiveVar } from '@apollo/client/react';
 import {
   isExistingMovieVar,
   currentMovieVar
 } from './addMoviesPageReactiveVars';
-import { Button, Search, Main, tokens } from 'athameui';
+import { Button, Search, Main, color, media } from 'athameui';
 import { PageTitle } from '../../components/PageTitle';
 import { AddMovieForm } from './AddMovieForm';
 import { CSSObject } from '@emotion/react';
@@ -90,7 +90,11 @@ export type CurrentMovie = {
   logoPath?: string;
   posterPaths?: string[];
   backdropPaths?: string[];
-  certifications?: { country?: string; rating?: string; releaseDate?: string }[];
+  certifications?: {
+    country?: string;
+    rating?: string;
+    releaseDate?: string;
+  }[];
   videos?: {
     name?: string;
     site?: string;
@@ -116,7 +120,29 @@ export type PossibleMovieMatch = {
   genreIds: number[];
 };
 
+const emptyMovie: CurrentMovie = {
+  id: '',
+  title: '',
+  releaseDate: '',
+  genres: [],
+  revenue: '',
+  posterPath: '',
+  backdropPath: '',
+  tmdbId: undefined,
+  overview: '',
+  tagline: '',
+  cast: [],
+  crew: []
+};
+
 const AddMoviesPage = () => {
+  const didResetForm = useRef(false);
+  if (!didResetForm.current) {
+    didResetForm.current = true;
+    currentMovieVar(emptyMovie);
+    isExistingMovieVar(false);
+  }
+
   const [tmdbId, setTmdbId] = useState<number | undefined>(undefined);
   const [searchByTitle, setSearchByTitle] = useState<string>('');
   const [showMovieModal, setShowMovieModal] = useState<boolean>(false);
@@ -126,6 +152,7 @@ const AddMoviesPage = () => {
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showFoundInDbMessage, setShowFoundInDbMessage] = useState(false);
+  const [formEpoch, setFormEpoch] = useState(0);
   const isExistingMovie = useReactiveVar(isExistingMovieVar);
   const currentMovie = useReactiveVar(currentMovieVar);
   const additionalData = {
@@ -165,7 +192,7 @@ const AddMoviesPage = () => {
         variables: { tmdbId: tmdbId }
       });
       if (data) {
-        currentMovieVar({ ...currentMovie, ...data.fetchedMovie });
+        replaceMovie({ ...currentMovie, ...data.fetchedMovie });
       }
     } catch (err) {
       console.error('Error fetching movie data:', err);
@@ -174,12 +201,37 @@ const AddMoviesPage = () => {
     }
   };
 
-  const onSubmit = () => {
-    if (isExistingMovie) {
-      handleUpdateMovie();
-    } else {
-      addMovieHandler();
+  const lookupMovieInDb = async (tmdbId?: string | number) => {
+    if (tmdbId == null || tmdbId === '') {
+      isExistingMovieVar(false);
+      return null;
     }
+
+    const response = await getMovieByTmdbId({
+      variables: { tmdbId: String(tmdbId) }
+    });
+    const { found, movie } = response.data?.movieResult || {};
+    if (found && movie) {
+      isExistingMovieVar(true);
+      return movie;
+    }
+
+    isExistingMovieVar(false);
+    return null;
+  };
+
+  const onSubmit = async () => {
+    const existing = await lookupMovieInDb(currentMovie?.tmdbId);
+    if (existing) {
+      await handleUpdateMovie(existing.id);
+      return;
+    }
+    await addMovieHandler();
+  };
+
+  const replaceMovie = (movie?: CurrentMovie) => {
+    currentMovieVar(movie);
+    setFormEpoch(epoch => epoch + 1);
   };
 
   const searchByTmdbIdHandler = async (tmdbId: string) => {
@@ -193,22 +245,24 @@ const AddMoviesPage = () => {
 
       const { found, movie } = movieByTmdbIdResponse.data?.movieResult || {};
       if (found && movie) {
-        currentMovieVar(movie);
+        replaceMovie(movie);
         isExistingMovieVar(true);
         setShowFoundInDbMessage(true);
       }
 
       if (!found) {
+        isExistingMovieVar(false);
         try {
           const data = await fetchMovieFromTmdb({ variables: { tmdbId } });
-          currentMovieVar(data.data?.fetchedMovie);
+          replaceMovie(data.data?.fetchedMovie);
         } catch (error) {
           console.error('Error fetching movie from TMDB:', error);
         }
-        return;
       }
     } catch (error) {
       console.error('Error searching for movie:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -245,19 +299,18 @@ const AddMoviesPage = () => {
     const { found, movie } = movieByTmdbIdResponse.data?.movieResult || {};
 
     if (found && movie) {
-      currentMovieVar(movie);
+      replaceMovie(movie);
       isExistingMovieVar(true);
       setShowFoundInDbMessage(true);
       return;
     }
-    if (!found) {
-      try {
-        const data = await fetchMovieFromTmdb({ variables: { tmdbId } });
-        currentMovieVar(data.data?.fetchedMovie);
-      } catch (error) {
-        console.error('Error fetching movie from TMDB:', error);
-      }
-      return;
+
+    isExistingMovieVar(false);
+    try {
+      const data = await fetchMovieFromTmdb({ variables: { tmdbId } });
+      replaceMovie(data.data?.fetchedMovie);
+    } catch (error) {
+      console.error('Error fetching movie from TMDB:', error);
     }
   };
 
@@ -271,20 +324,8 @@ const AddMoviesPage = () => {
     setSearchByTitle('');
     setPossibleMatches([]);
     setShowFoundInDbMessage(false);
-    currentMovieVar({
-      id: '',
-      title: '',
-      releaseDate: '',
-      genres: [],
-      revenue: '',
-      posterPath: '',
-      backdropPath: '',
-      tmdbId: undefined,
-      overview: '',
-      tagline: '',
-      cast: [],
-      crew: []
-    });
+    isExistingMovieVar(false);
+    replaceMovie(emptyMovie);
   };
 
   const onFormFieldChange =
@@ -309,13 +350,14 @@ const AddMoviesPage = () => {
       }
     };
 
-  const handleUpdateMovie = async () => {
+  const handleUpdateMovie = async (existingId?: string) => {
     if (!currentMovie) return;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { __typename, ...rest } = currentMovie as CurrentMovie & {
       __typename: string;
     };
+    if (existingId) rest.id = existingId;
 
     if (rest.cast) {
       rest.cast = rest.cast.map(({ personId, character, order }) => ({
@@ -338,7 +380,7 @@ const AddMoviesPage = () => {
       lastUpdated: new Date().toISOString()
     };
 
-    updateMovie({ variables: updateData });
+    await updateMovie({ variables: updateData });
   };
 
   const addMovieHandler = async () => {
@@ -417,7 +459,7 @@ const AddMoviesPage = () => {
 
   return (
     <>
-      <Main sx={{ mainContent: baphStyles.mainNarrowContent }}>
+      <Main width="medium">
         <PageTitle title="Add Movies" />
         <div
           css={baphStyles.formContainer}
@@ -471,6 +513,7 @@ const AddMoviesPage = () => {
 
           <hr css={baphStyles.divider} />
           <AddMovieForm
+            key={formEpoch}
             onFormFieldChange={onFormFieldChange}
             onSubmit={onSubmit}
             currentMovie={currentMovie}
@@ -498,14 +541,11 @@ const AddMoviesPage = () => {
 export default AddMoviesPage;
 
 const baphStyles: { [key: string]: CSSObject } = {
-  mainNarrowContent: {
-    maxWidth: '768px'
-  },
   successMessage: {
-    color: tokens.color.secondary.vibrant[700]
+    color: color.secondary.vibrant[700]
   },
   errorMessage: {
-    color: tokens.color.error.vibrant[700]
+    color: color.error.vibrant[700]
   },
   formFieldContainers: {
     display: 'flex',
@@ -530,7 +570,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     maxWidth: '800px',
     flexDirection: 'column' as const,
     alignItems: 'center',
-    [tokens.media.min.md]: {
+    [media.min.md]: {
       flexDirection: 'row' as const,
       alignItems: 'flex-start'
     }
@@ -541,8 +581,8 @@ const baphStyles: { [key: string]: CSSObject } = {
     width: '200px',
     borderRadius: '4px',
     objectFit: 'cover' as const,
-    backgroundColor: tokens.color.secondary[500],
-    border: `1px solid ${tokens.color.tertiary[600]}`,
+    backgroundColor: color.secondary[500],
+    border: `1px solid ${color.tertiary[600]}`,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
@@ -554,17 +594,17 @@ const baphStyles: { [key: string]: CSSObject } = {
     minWidth: '0',
     borderRadius: '4px',
     objectFit: 'cover' as const,
-    backgroundColor: tokens.color.secondary[500],
-    border: `1px solid ${tokens.color.tertiary[600]}`,
+    backgroundColor: color.secondary[500],
+    border: `1px solid ${color.tertiary[600]}`,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    [tokens.media.max.md]: {
+    [media.max.md]: {
       width: '100%'
     }
   },
   divider: {
-    borderTop: `1px solid ${tokens.color.tertiary[500]}`,
+    borderTop: `1px solid ${color.tertiary[500]}`,
     width: '100%'
   }
 };

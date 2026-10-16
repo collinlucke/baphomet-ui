@@ -11,11 +11,3 @@ export const setupIntersectionObserverMock = () => {
 
   return mockIntersectionObserver;
 };
-
-export const setupThemeMock = () => {
-  vi.mock('../../styling/baphTheme', () => ({
-    baphColorVariations: {
-      tertiary: { 50: '#ffffff' }
-    }
-  }));
-};

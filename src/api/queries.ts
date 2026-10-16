@@ -424,3 +424,12 @@ export const GET_USER_LEADERBOARD = gql`
     }
   }
 `;
+
+export const TMDB_MOVIE_IMAGES = gql`
+  query tmdbMovieImages($tmdbId: String!) {
+    tmdbMovieImages(tmdbId: $tmdbId) {
+      posters
+      backdrops
+    }
+  }
+`;

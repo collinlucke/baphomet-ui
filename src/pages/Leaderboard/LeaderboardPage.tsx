@@ -57,7 +57,7 @@ const LeaderboardPage = () => {
   }, [fetchLeaderboard]);
 
   return (
-    <Main>
+    <Main width="medium">
       <PageHeading
         title="Leaderboard"
         subtitle="Basically, it's a quantifiable list of who's better than you."

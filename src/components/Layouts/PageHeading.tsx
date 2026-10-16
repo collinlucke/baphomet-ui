@@ -1,5 +1,5 @@
 import { CSSObject } from '@emotion/react';
-import { tokens } from 'athameui';
+import { media } from 'athameui';
 import { isMobileVar } from '../../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
 
@@ -55,7 +55,7 @@ export const PageHeading = ({
 const getHeadingStyes = (isMobile: boolean) => ({
   ...baphStyles.heading,
   fontSize: '1.75rem',
-  [tokens.media.min.md]: {
+  [media.min.md]: {
     fontSize: isMobile ? '1.65rem' : '2rem'
   }
 });

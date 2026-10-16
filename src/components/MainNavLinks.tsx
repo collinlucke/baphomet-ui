@@ -1,4 +1,4 @@
-import { ButtonGroup, breakpoints } from 'athameui';
+import { ButtonGroup, media } from 'athameui';
 import { MainNavLinkItem } from './MainNavLinkItem';
 import { showSlideOutMenuVar, isSmallOrMobileVar } from '../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
@@ -41,7 +41,7 @@ export const MainNavLinks = () => {
 const baphStyles = {
   buttonGroup: {
     gap: 0,
-    [`@media (min-width: ${breakpoints.lg}px)`]: {
+    [media.min.lg]: {
       gap: '5px'
     }
   }

@@ -3,19 +3,12 @@
   "version": "1.8.1",
   "type": "module",
   "scripts": {
-    "dev": "bash scripts/dev-with-cleanup.sh",
-    "dev:windows": "powershell -ExecutionPolicy Bypass -File scripts/dev-with-cleanup.ps1",
-    "dev:simple": "vite",
-    "dev:local": "pnpm use:local && pnpm dev",
+    "dev": "node scripts/link-local-athameui.js && bash scripts/dev-with-cleanup.sh",
     "test": "vitest",
     "build": "tsc && vite build",
     "lint": "eslint src/ --report-unused-disable-directives --max-warnings 50",
     "lint:fix": "eslint . --report-unused-disable-directives --max-warnings 50 --fix",
-    "preview": "vite preview",
-    "link:athame": "pnpm link ../athameui",
-    "unlink:athame": "pnpm unlink athameui",
-    "use:local": "node scripts/link-local-athameui.js",
-    "postinstall": "node scripts/link-local-athameui.js"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@apollo/client": "^4.0.4",

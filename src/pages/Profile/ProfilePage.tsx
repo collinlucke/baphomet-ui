@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client/react';
 import { Avatar } from 'athameui';
-import { FormField, Button, Main, tokens } from 'athameui';
+import { FormField, Button, Main, color, media } from 'athameui';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Camera02Icon } from '@hugeicons/core-free-icons';
 import { CSSObject } from '@emotion/react';
@@ -269,7 +269,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     display: 'flex',
     gap: '2rem',
     flexDirection: 'column',
-    [tokens.media.min.md]: {
+    [media.min.md]: {
       flexDirection: 'row'
     }
   },
@@ -277,7 +277,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     display: 'flex',
     alignItems: 'flex-start',
     justifyContent: 'center',
-    [tokens.media.min.md]: {
+    [media.min.md]: {
       flex: '0 0 200px'
     }
   },
@@ -313,18 +313,18 @@ const baphStyles: { [key: string]: CSSObject } = {
     justifyContent: 'flex-start'
   },
   divider: {
-    borderTop: `1px solid ${tokens.color.tertiary[500]}`,
+    borderTop: `1px solid ${color.tertiary[500]}`,
     width: '100%',
     margin: '2rem 0'
   },
   sectionHeading: {
-    color: tokens.color.primary.vibrant[300],
+    color: color.primary.vibrant[300],
     fontSize: '1.25rem',
     fontWeight: 'bold',
     margin: '0 0 1rem 0'
   },
   sectionDescription: {
-    color: tokens.color.tertiary.vibrant[300],
+    color: color.tertiary.vibrant[300],
     fontSize: '0.875rem',
     margin: '0 0 1rem 0',
     fontStyle: 'italic'
@@ -340,7 +340,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     right: 0,
     padding: 8,
     cursor: 'pointer',
-    color: tokens.color.primary[100],
+    color: color.primary[100],
     transition: 'all 0.2s ease',
     '&:hover': {
       transform: 'scale(1.1)'
@@ -358,7 +358,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     display: 'flex',
     gap: '1rem',
     flexDirection: 'column',
-    [tokens.media.min.md]: {
+    [media.min.md]: {
       flexDirection: 'column'
     }
   }

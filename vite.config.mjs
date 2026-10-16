@@ -1,8 +1,31 @@
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import del from 'rollup-plugin-delete';
 
+const localAthame = resolve('..', 'athameui');
+const useLocalAthame = existsSync(resolve(localAthame, 'package.json'));
+
 export default defineConfig({
+  resolve: useLocalAthame
+    ? {
+        alias: [
+          {
+            find: 'athameui/tokens.css',
+            replacement: resolve(localAthame, 'styles/tokens.css')
+          },
+          {
+            find: 'athameui/theme.css',
+            replacement: resolve(localAthame, 'styles/theme.css')
+          },
+          {
+            find: 'athameui',
+            replacement: resolve(localAthame, 'main.ts')
+          }
+        ]
+      }
+    : undefined,
   plugins: [
     react({
       jsxImportSource: '@emotion/react',
@@ -42,6 +65,7 @@ export default defineConfig({
     ]
   },
   optimizeDeps: {
+    exclude: useLocalAthame ? ['athameui'] : [],
     include: [
       'react',
       'react-dom',

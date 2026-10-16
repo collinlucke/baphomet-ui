@@ -1,12 +1,10 @@
 import { CSSObject } from '@emotion/react';
 import { Footer as AthFooter, Button } from 'athameui';
 import { showFeedbackModalVar } from '../../reactiveVars';
-import { tokens } from 'athameui';
+import { color, media } from 'athameui';
 import { Link } from 'react-router-dom';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Github01Icon } from '@hugeicons/core-free-icons';
-
-const { color, media } = tokens;
 
 export const Footer = () => {
   const handleFeedbackClick = (e: React.KeyboardEvent | React.MouseEvent) => {

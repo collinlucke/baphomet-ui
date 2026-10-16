@@ -6,7 +6,7 @@ import { SUBMIT_VOTE } from '../../api/mutations';
 import { Main } from 'athameui';
 import { PageHeading } from '../../components/Layouts/PageHeading.tsx';
 import { MovieCard } from './MovieCard.tsx';
-import { Button, tokens } from 'athameui';
+import { Button, color, media } from 'athameui';
 import { CSSObject } from '@emotion/react';
 import {
   isLargeScreenVar,
@@ -268,7 +268,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     minHeight: '300px'
   },
   loadingText: {
-    color: tokens.color.tertiary[300],
+    color: color.tertiary[300],
     fontSize: '1.1rem'
   },
   errorContainer: {
@@ -277,12 +277,12 @@ const baphStyles: { [key: string]: CSSObject } = {
     alignItems: 'center',
     gap: '1rem',
     padding: '2rem',
-    backgroundColor: tokens.color.secondary[700],
+    backgroundColor: color.secondary[700],
     borderRadius: '8px',
-    border: `1px solid ${tokens.color.error[500]}`
+    border: `1px solid ${color.error[500]}`
   },
   errorText: {
-    color: tokens.color.error.vibrant[300],
+    color: color.error.vibrant[300],
     textAlign: 'center',
     margin: 0,
     fontSize: '1.1rem'
@@ -299,14 +299,14 @@ const baphStyles: { [key: string]: CSSObject } = {
     top: '20%'
   },
   voteSuccess: {
-    backgroundColor: tokens.color.secondary.vibrant[700],
-    color: tokens.color.secondary.vibrant[300],
-    border: `1px solid ${tokens.color.secondary.vibrant[500]}`
+    backgroundColor: color.secondary.vibrant[700],
+    color: color.secondary.vibrant[300],
+    border: `1px solid ${color.secondary.vibrant[500]}`
   },
   voteError: {
-    backgroundColor: tokens.color.error.vibrant[700],
-    color: tokens.color.error.vibrant[300],
-    border: `1px solid ${tokens.color.error.vibrant[500]}`
+    backgroundColor: color.error.vibrant[700],
+    color: color.error.vibrant[300],
+    border: `1px solid ${color.error.vibrant[500]}`
   },
   matchupContainer: {
     display: 'flex',
@@ -331,18 +331,18 @@ const baphStyles: { [key: string]: CSSObject } = {
   vsText: {
     fontSize: '2rem',
     fontWeight: 'bold',
-    color: tokens.color.primary.vibrant[300],
+    color: color.primary.vibrant[300],
     textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
     padding: '1rem',
-    backgroundColor: tokens.color.secondary[700],
+    backgroundColor: color.secondary[700],
     borderRadius: '50%',
     width: '50px',
     height: '50px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    border: `2px solid ${tokens.color.primary.vibrant[500]}`,
-    [tokens.media.min.lg]: {
+    border: `2px solid ${color.primary.vibrant[500]}`,
+    [media.min.lg]: {
       fontSize: '3rem',
       width: '80px',
       height: '80px'

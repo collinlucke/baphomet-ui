@@ -1,4 +1,4 @@
-import { tokens } from 'athameui';
+import { color } from 'athameui';
 
 type ModalContentProps = {
   title: string;
@@ -47,10 +47,10 @@ const baphStyles = {
     gap: '0.5rem'
   },
   title: {
-    color: tokens.color.primary[500]
+    color: color.primary[500]
   },
   subtitle: {
     margin: 0,
-    color: tokens.color.secondary[800]
+    color: color.secondary[800]
   }
 };

@@ -1,13 +1,19 @@
-import { Main, Carousel, tokens, minXl } from 'athameui';
+import { Main, Carousel, Button, color, media, font } from 'athameui';
 import { PageHeading } from '../../components/Layouts/PageHeading';
 import { GET_MOVIE_DETAILS } from '../../api/queries';
 import { useQuery } from '@apollo/client/react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { formatGenres } from '../../utils/formatGenres';
 import type { MovieDetailsResponse } from '../../types/movies.types';
 import { PersonCard } from '../../components/PersonCard/PersonCard';
+import { isAuthenticatedVar } from '../../reactiveVars';
+import { useReactiveVar } from '@apollo/client/react';
 
 const MovieDetailsPage = () => {
+  const isAuthenticated = useReactiveVar(isAuthenticatedVar);
+  const user = localStorage.getItem('baphomet-user')
+    ? JSON.parse(localStorage.getItem('baphomet-user') || '{}')
+    : null;
   const { id } = useParams();
   const { data } = useQuery<MovieDetailsResponse>(GET_MOVIE_DETAILS, {
     variables: { id }
@@ -16,7 +22,7 @@ const MovieDetailsPage = () => {
   const releaseYear = movie?.releaseDate
     ? new Date(movie.releaseDate).getFullYear()
     : null;
-
+  console.log(isAuthenticated, user);
   const title = movie ? (
     <>
       {' '}
@@ -57,8 +63,17 @@ const MovieDetailsPage = () => {
         subtitle={genres}
         rightContent={
           <div css={baphStyles.scoreWrapper}>
-            <span css={baphStyles.major}>{`${major}`}.</span>
-            <span css={baphStyles.minor}>{minor}</span>
+            <div>
+              <span css={baphStyles.major}>{`${major}`}.</span>
+              <span css={baphStyles.minor}>{minor}</span>
+            </div>
+            {isAuthenticated && user && user.role === 'admin' && (
+              <Link to={`/movies/${movie?.id}/edit`}>
+                <Button variant="outline" dark size="small">
+                  Edit Movie
+                </Button>
+              </Link>
+            )}
           </div>
         }
       />
@@ -88,7 +103,9 @@ const MovieDetailsPage = () => {
           </div>
         </div>
         <div css={baphStyles.overview}>
+          <h3>Overview</h3>
           <div css={baphStyles.overviewText}>{movie?.overview}</div>
+          <h3>Top Billed Cast</h3>
           <Carousel>
             {[...(movie?.cast ?? [])]
               .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
@@ -115,26 +132,30 @@ export default MovieDetailsPage;
 
 const baphStyles = {
   title: {
-    fontSize: '1.75em'
+    fontSize: font.size['3xl']
   },
   releaseYear: {
-    fontSize: '1em',
+    fontSize: font.size['md'],
     marginLeft: '0.25em'
   },
   scoreWrapper: {
     fontWeight: 600 as const,
     position: 'absolute' as const,
     right: 0,
-    color: tokens.color.error[400]
+    top: 0,
+    color: color.error[400],
+    display: 'flex',
+    flexDirection: 'column' as const,
+    alignItems: 'end' as const
   },
   genres: {
     fontStyle: 'italic'
   },
   major: {
-    fontSize: '6em'
+    fontSize: font.size['5xl']
   },
   minor: {
-    fontSize: '3.5em'
+    fontSize: font.size['4xl']
   },
   detailsContainer: {
     display: 'flex',
@@ -143,38 +164,38 @@ const baphStyles = {
     marginTop: '20px',
     gap: '20px',
     flexDirection: 'column' as const,
-    [minXl]: {
+    [media.min.xl]: {
       flexDirection: 'row' as const
     }
   },
   posterContainer: {
+    display: 'flex',
+    flexDirection: 'column' as const,
+    alignItems: 'center' as const,
     padding: '15px',
-    maxWidth: '300px',
-    height: '100%',
+    maxWidth: '375px',
+    height: 'fit-content',
     flex: 2,
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     overflow: 'hidden',
     borderRadius: '10px',
-    outline: `5px solid ${tokens.color.secondary[800]}`,
+    outline: `5px solid ${color.secondary[800]}`,
     outlineOffset: '-5px'
   },
   posterContainerWrapper: {
     display: 'flex',
     flexDirection: 'row' as const,
     gap: '20px'
-    // [minMd]: {
-    //   flexDirection: 'column' as const
-    // }
   },
   poster: {
     width: '100%',
-    height: '100%',
     objectFit: 'cover' as const,
-    borderRadius: '5px'
+    borderRadius: '.5rem'
   },
   tagline: {
     fontStyle: 'italic',
-    marginTop: '10px'
+    marginTop: '8px',
+    fontSize: '.75rem'
   },
   detailItemsWrapper: {
     maxWidth: '175px',
@@ -200,7 +221,7 @@ const baphStyles = {
     flex: '3 1 0',
     flexDirection: 'column' as const,
     minWidth: 0,
-    backgroundColor: tokens.color.secondary[500],
+    backgroundColor: color.secondary[500],
     padding: '15px',
     borderRadius: '10px'
   },

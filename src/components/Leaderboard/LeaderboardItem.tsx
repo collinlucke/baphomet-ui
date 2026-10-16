@@ -1,5 +1,5 @@
 import { CSSObject } from '@emotion/react';
-import { baphColors, baphColorVariations } from '../../styling/baphTheme';
+import { color, font } from 'athameui';
 
 type User = {
   id: string;
@@ -171,14 +171,14 @@ const baphStyles: { [key: string]: CSSObject } = {
   },
 
   regularRank: {
-    background: `linear-gradient(135deg, ${baphColorVariations.primary[100]} 0%, ${baphColorVariations.secondary[100]} 100%)`,
-    border: `1px solid ${baphColorVariations.secondary[300]}`,
-    color: baphColors.darkText,
+    background: `linear-gradient(135deg, ${color.primary[100]} 0%, ${color.secondary[100]} 100%)`,
+    border: `1px solid ${color.secondary[300]}`,
+    color: color.text.dark,
     boxShadow: `0 2px 8px rgba(20, 107, 104, 0.1)`,
 
     '&:hover': {
       transform: 'translateY(-2px) scale(1.02)',
-      background: `linear-gradient(135deg, ${baphColorVariations.secondary[200]} 0%, ${baphColorVariations.tertiary[200]} 100%)`,
+      background: `linear-gradient(135deg, ${color.secondary[200]} 0%, ${color.tertiary[200]} 100%)`,
       boxShadow: `0 4px 16px rgba(20, 107, 104, 0.2)`
     }
   },
@@ -191,7 +191,7 @@ const baphStyles: { [key: string]: CSSObject } = {
   },
 
   rankDisplayPodium: {
-    fontSize: '24px',
+    fontSize: font.size['xl'],
     fontWeight: 'bold',
     minWidth: '60px',
     textAlign: 'center',
@@ -199,35 +199,35 @@ const baphStyles: { [key: string]: CSSObject } = {
   },
 
   rankDisplayRegular: {
-    fontSize: '18px',
+    fontSize: font.size['md'],
     fontWeight: 'bold',
     minWidth: '50px',
     textAlign: 'center'
   },
 
   nameFirst: {
-    fontSize: '20px',
+    fontSize: font.size['lg'],
     fontWeight: 'bold',
     textShadow: '0 1px 2px rgba(0,0,0,0.2)',
     flex: 1
   },
 
   nameSecond: {
-    fontSize: '18px',
+    fontSize: font.size['md'],
     fontWeight: 'bold',
     textShadow: '0 1px 2px rgba(0,0,0,0.2)',
     flex: 1
   },
 
   nameThird: {
-    fontSize: '16px',
+    fontSize: font.size['sm'],
     fontWeight: 'bold',
     textShadow: '0 1px 2px rgba(0,0,0,0.2)',
     flex: 1
   },
 
   nameRegular: {
-    fontSize: '16px',
+    fontSize: font.size['sm'],
     fontWeight: 'normal',
     flex: 1
   },
@@ -240,18 +240,18 @@ const baphStyles: { [key: string]: CSSObject } = {
   },
 
   voteCountPodium: {
-    fontSize: '18px',
+    fontSize: font.size['md'],
     fontWeight: 'bold',
     textShadow: '0 1px 2px rgba(0,0,0,0.2)'
   },
 
   voteCountRegular: {
-    fontSize: '16px',
+    fontSize: font.size['sm'],
     fontWeight: 'bold'
   },
 
   voteLabel: {
-    fontSize: '12px',
+    fontSize: font.size['xs'],
     opacity: 0.8,
     textTransform: 'uppercase' as const,
     letterSpacing: '0.5px'

@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, tokens } from 'athameui';
+import { Button, ButtonGroup, media } from 'athameui';
 import {
   showLoginModalVar,
   showSignUpModalVar,
@@ -56,7 +56,7 @@ export const UnauthorizedButtons = () => {
 const getButtonGroupStyles = (isSmallOrMobile: boolean) => ({
   alignItems: 'start' as const,
   gap: '10px',
-  [tokens.media.min.lg]: {
+  [media.min.lg]: {
     gap: '15px'
   },
   ...(isSmallOrMobile ? { marginTop: '20px' } : {})

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { Movie } from '../../types/movies.types';
 import { CSSObject } from '@emotion/react';
-import { tokens, List, Search, Modal } from 'athameui';
+import { media, color, List, Search, Modal } from 'athameui';
 import { MovieListItem } from './MovieListItem';
 
 type MovieData = {
@@ -160,7 +160,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     alignItems: 'center',
     marginBottom: '30px',
     marginTop: '30px',
-    color: tokens.color.tertiary.vibrant[500]
+    color: color.tertiary.vibrant[500]
   },
   list: {
     display: 'grid',
@@ -170,19 +170,19 @@ const baphStyles: { [key: string]: CSSObject } = {
     margin: 0,
     width: '100%',
     gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-    [tokens.media.min.xs]: {
+    [media.min.xs]: {
       gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
       gap: '20px'
     },
-    [tokens.media.min.md]: {
+    [media.min.md]: {
       gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
       gap: '20px'
     },
-    [tokens.media.min.lg]: {
+    [media.min.lg]: {
       gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
       gap: '25px'
     },
-    [tokens.media.min.xl]: {
+    [media.min.xl]: {
       gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))'
     }
   },
@@ -198,7 +198,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     maxWidth: '1024px'
   },
   resultsText: {
-    color: tokens.color.tertiary.vibrant[500]
+    color: color.tertiary.vibrant[500]
   },
   loadingContainer: {
     display: 'flex',
@@ -208,7 +208,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     marginTop: '2rem'
   },
   loadingText: {
-    color: tokens.color.tertiary.vibrant[500],
+    color: color.tertiary.vibrant[500],
     fontSize: '1.1rem',
     fontWeight: 'bold',
     opacity: 0.8,
@@ -227,7 +227,7 @@ const baphStyles: { [key: string]: CSSObject } = {
     marginTop: '2rem'
   },
   endText: {
-    color: tokens.color.tertiary.vibrant[500],
+    color: color.tertiary.vibrant[500],
     fontSize: '1.2rem',
     fontWeight: 'bold',
     opacity: 0.6,

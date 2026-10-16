@@ -1,5 +1,5 @@
 import { isAuthenticatedVar } from '../../reactiveVars';
-import { Button, tokens } from 'athameui';
+import { Button, color } from 'athameui';
 import { useReactiveVar } from '@apollo/client/react';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Delete02Icon } from '@hugeicons/core-free-icons';
@@ -51,16 +51,19 @@ export const PersonCard = ({ person, removePerson }: PersonCardProps) => {
       <div css={baphStyles.name}>{person.name}</div>
       {person.profilePath && (
         <div css={baphStyles.imageContainer}>
-          {isAuthenticated && isAdmin && pathname === '/add-movies' && (
-            <Button
-              variant="ghost"
-              size="small"
-              onClick={removePersonHandler}
-              icon={<HugeiconsIcon icon={Delete02Icon} size={16} />}
-              aria-label={`Remove ${person.name}`}
-              sx={{ button: baphStyles.button }}
-            />
-          )}
+          {isAuthenticated &&
+            isAdmin &&
+            pathname === '/add-movies' &&
+            removePerson && (
+              <Button
+                variant="ghost"
+                size="small"
+                onClick={removePersonHandler}
+                icon={<HugeiconsIcon icon={Delete02Icon} size={16} />}
+                aria-label={`Remove ${person.name}`}
+                sx={{ button: baphStyles.button }}
+              />
+            )}
           <img src={profileImageUrl} alt={person.name} css={baphStyles.image} />
         </div>
       )}
@@ -71,7 +74,7 @@ export const PersonCard = ({ person, removePerson }: PersonCardProps) => {
 
 const baphStyles = {
   card: {
-    backgroundColor: tokens.color.secondary[200],
+    backgroundColor: color.secondary[200],
     borderRadius: '5px',
     position: 'relative' as const,
     padding: '0 5px',
@@ -90,12 +93,12 @@ const baphStyles = {
     position: 'absolute' as const,
     top: '5px',
     right: '5px',
-    color: tokens.color.error.vibrant[700]
+    color: color.error.vibrant[700]
   },
   name: {
     fontWeight: '700',
     fontSize: '.75rem',
-    color: tokens.color.secondary[800],
+    color: color.secondary[800],
     padding: '5px 0',
     lineClamp: 1,
     overflow: 'hidden',
@@ -107,7 +110,7 @@ const baphStyles = {
     fontWeight: '600',
     fontSize: '.75rem',
     lineHeight: '1.5rem',
-    color: tokens.color.secondary[800],
+    color: color.secondary[800],
     padding: '5px 0',
     lineClamp: 1,
     overflow: 'hidden',

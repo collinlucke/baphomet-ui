@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { CSSObject } from '@emotion/react';
-import { ContainerScalingText, tokens } from 'athameui';
+import { ContainerScalingText, color } from 'athameui';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 
@@ -120,7 +120,7 @@ const baphStyles = {
     height: '100%',
     backgroundColor: '#ccc',
     backgroundSize: 'cover',
-    border: `2px solid ${tokens.color.primary.vibrant[500]}`
+    border: `2px solid ${color.primary.vibrant[500]}`
   },
   scoreWrapper: {
     position: 'absolute' as const,
@@ -131,16 +131,16 @@ const baphStyles = {
     lineHeight: 'normal'
   },
   major: {
-    color: tokens.color.primary.vibrant[500],
+    color: color.primary.vibrant[500],
     fontWeight: 'bold',
-    WebkitTextStroke: `1px ${tokens.color.primary.vibrant[700]}`,
+    WebkitTextStroke: `1px ${color.primary.vibrant[700]}`,
     paintOrder: 'stroke fill',
     textShadow: '2px 2px 4px rgba(0, 0, 0, 1)'
   },
   minor: {
-    color: tokens.color.primary.vibrant[500],
+    color: color.primary.vibrant[500],
     fontWeight: 'bold',
-    WebkitTextStroke: `1px ${tokens.color.primary.vibrant[700]}`,
+    WebkitTextStroke: `1px ${color.primary.vibrant[700]}`,
     paintOrder: 'stroke fill',
     marginLeft: '2px',
     textShadow: '2px 2px 4px rgba(0, 0, 0, 1)'
