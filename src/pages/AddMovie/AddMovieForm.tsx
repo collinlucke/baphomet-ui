@@ -232,6 +232,7 @@ export const AddMovieForm = ({
         <button
           type="button"
           css={baphStyles.previewButton}
+          aria-label="Choose a poster"
           onClick={() => setImagePicker('poster')}
         >
           <div css={baphStyles.posterImgwWrapper}>
@@ -240,7 +241,7 @@ export const AddMovieForm = ({
               <img
                 css={baphStyles.previewButtonImage}
                 src={`https://image.tmdb.org/t/p/w300${currentMovie?.posterPath}`}
-                alt="Poster Preview"
+                alt=""
               />
             ) : (
               <div css={baphStyles.posterImg}>No Poster Available</div>
@@ -250,6 +251,7 @@ export const AddMovieForm = ({
         <button
           type="button"
           css={baphStyles.previewButton}
+          aria-label="Choose a backdrop"
           onClick={() => setImagePicker('backdrop')}
         >
           <div css={baphStyles.backdropImgwWrapper}>
@@ -258,7 +260,7 @@ export const AddMovieForm = ({
               <img
                 css={baphStyles.previewButtonImage}
                 src={`https://image.tmdb.org/t/p/w1280${currentMovie?.backdropPath}`}
-                alt="Backdrop Preview"
+                alt=""
               />
             ) : (
               <div css={baphStyles.backdropImg}>No Backdrop Available</div>

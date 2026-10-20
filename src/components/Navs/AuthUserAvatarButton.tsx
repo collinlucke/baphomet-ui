@@ -23,6 +23,8 @@ export const AuthUserAvatarButton = ({ displayName }: AuthUserAvatarProps) => {
         onClick={toggleDropdownHandler}
         variant="ghost"
         sx={{ button: baphStyles.avatarButton }}
+        aria-label={`Account menu for ${displayName || 'user'}`}
+        aria-expanded={showUserDropdown}
       >
         <Avatar displayName={displayName || 'User'} size="medium" />
       </Button>

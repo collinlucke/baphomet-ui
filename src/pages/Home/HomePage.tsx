@@ -70,13 +70,13 @@ const HomePage = () => {
 
         <LinkToFaq />
         <br />
-        <div
+        <button
+          type="button"
           css={baphStyles.feedback}
-          role="button"
           onClick={showFeedbackHandler}
         >
           And if you have any feedback, don't hesitate to reach out!
-        </div>
+        </button>
       </div>
       <div css={baphStyles.movieListContainer}>
         <h3>Current Movie Standings...</h3>
@@ -117,6 +117,10 @@ const baphStyles: { [key: string]: CSSObject } = {
     fontWeight: 'bold',
     width: 'fit-content',
     margin: '0 auto',
+    padding: 0,
+    border: 'none',
+    background: 'none',
+    font: 'inherit',
     '&:hover': {
       color: '#0056b3'
     }

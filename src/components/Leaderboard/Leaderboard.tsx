@@ -58,7 +58,9 @@ export const Leaderboard = ({
       {!hasMore && leaderboard.length > 0 && (
         <p>
           This is the worst person ever!{' '}
-          <HugeiconsIcon icon={CircleArrowUp02Icon} size={20} />
+          <span aria-hidden="true">
+            <HugeiconsIcon icon={CircleArrowUp02Icon} size={20} />
+          </span>
         </p>
       )}
     </div>

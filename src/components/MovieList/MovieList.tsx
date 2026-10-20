@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { Movie } from '../../types/movies.types';
 import { CSSObject } from '@emotion/react';
-import { media, color, List, Search, Modal } from 'athameui';
+import { media, color, List, Search } from 'athameui';
 import { MovieListItem } from './MovieListItem';
 
 type MovieData = {
@@ -119,9 +119,6 @@ export const MovieList = ({
         )}
         <div ref={sentinelRef} css={baphStyles.sentinel} />
       </div>
-      <Modal isOpen={false} onClose={() => {}} title="Movie Details">
-        modal stuff
-      </Modal>
     </>
   );
 };

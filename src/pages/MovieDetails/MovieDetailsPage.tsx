@@ -58,7 +58,7 @@ const MovieDetailsPage = () => {
           <div css={baphStyles.posterContainer}>
             <img
               src={movie?.posterImages?.w500}
-              alt={movie?.title}
+              alt={movie?.title || 'Movie poster'}
               css={baphStyles.poster}
             />
             {movie?.tagline && (

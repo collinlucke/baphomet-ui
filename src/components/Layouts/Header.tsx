@@ -21,6 +21,7 @@ export const Header = () => {
   const isMobile = useReactiveVar(isMobileVar);
   const isSmallOrMobile = useReactiveVar(isSmallOrMobileVar);
   const isAuthenticated = useReactiveVar(isAuthenticatedVar);
+  const menuOpen = useReactiveVar(showSlideOutMenuVar);
   const user = localStorage.getItem('baphomet-user')
     ? JSON.parse(localStorage.getItem('baphomet-user') || '{}')
     : null;
@@ -47,7 +48,8 @@ export const Header = () => {
                   size="small"
                   icon={<HugeiconsIcon icon={Menu01Icon} size={24} />}
                   onClick={openSlideOutMenuHandler}
-                  aria-label={'Open main menu flyout'}
+                  aria-label="Open main menu"
+                  aria-expanded={menuOpen}
                   dark
                 />
                 <SlideOutNav displayName={user?.displayName} />

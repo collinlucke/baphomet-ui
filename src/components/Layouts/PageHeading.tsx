@@ -43,7 +43,7 @@ export const PageHeading = ({
       {subtitle && (
         <h4
           css={[baphStyles.subtitle, className?.subtitle]}
-          aria-label={`Subtitle: ${subtitle}`}
+          id={`${headingId}-subtitle`}
         >
           {subtitle}
         </h4>

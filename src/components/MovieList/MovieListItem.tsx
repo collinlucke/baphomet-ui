@@ -20,6 +20,9 @@ export const MovieListItem = ({ movie }: MovieListItemProps) => {
   const [major, minor] = winningPercentage.split('.');
   const [majorSize, setMajorSize] = useState('');
   const [minorSize, setMinorSize] = useState('');
+  const accessibleName = movie.posterPath
+    ? `${movie.title}, winning percentage ${winningPercentage}`
+    : `${movie.title}, poster unavailable, winning percentage ${winningPercentage}`;
 
   useLayoutEffect(() => {
     const element = liRef.current;
@@ -42,14 +45,12 @@ export const MovieListItem = ({ movie }: MovieListItemProps) => {
     <li
       ref={liRef}
       css={getContainerStyles(movie.posterPath || '')}
-      tabIndex={0}
-      aria-label={`Open details for ${movie.title}`}
       data-testid={`movie-item-${movie.tmdbId}`}
       key={movie.id}
     >
       <Link
         to={`/movie/${movie.id}`}
-        aria-label={`Open details for ${movie.title}`}
+        aria-label={accessibleName}
         className="block w-full"
       >
         <motion.div
@@ -64,7 +65,7 @@ export const MovieListItem = ({ movie }: MovieListItemProps) => {
             {movie.posterPath ? (
               <img
                 src={`https://image.tmdb.org/t/p/w500${movie.posterPath}`}
-                alt={movie.title}
+                alt=""
                 css={baphStyles.poster}
               />
             ) : (
@@ -73,7 +74,7 @@ export const MovieListItem = ({ movie }: MovieListItemProps) => {
                 maxFontSize={20}
                 minFontSize={6}
               >
-                Not found
+                <span aria-hidden="true">Not found</span>
               </ContainerScalingText>
             )}
             <motion.div
@@ -82,6 +83,7 @@ export const MovieListItem = ({ movie }: MovieListItemProps) => {
               transition={{ duration: 0.5, delay: 0.5 }}
               css={baphStyles.scoreWrapper}
               data-testid="movie-winning-percentage"
+              aria-hidden="true"
             >
               <span css={baphStyles.major} style={{ fontSize: majorSize }}>
                 {major}.
@@ -105,6 +107,12 @@ const getContainerStyles = (posterPath: string): CSSObject => ({
   backgroundImage: posterPath ? `url(${posterPath})` : 'none',
   transition: 'transform 0.2s ease, box-shadow 0.2s ease',
   '&:hover': {
+    transform: 'scale(1.02)'
+  },
+  '& a:focus': {
+    outline: 'none'
+  },
+  '& a:focus-within': {
     transform: 'scale(1.02)'
   }
 });

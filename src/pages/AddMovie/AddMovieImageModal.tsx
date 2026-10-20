@@ -81,10 +81,12 @@ export const AddMovieImageModal = ({
             kind === 'poster' ? baphStyles.posterGrid : baphStyles.backdropGrid
           }
         >
-          {images.map(filePath => (
+          {images.map((filePath, i) => (
             <button
               key={filePath}
               type="button"
+              aria-label={`Select ${kind} ${i + 1}`}
+              aria-pressed={filePath === selectedPath}
               css={[
                 baphStyles.option,
                 filePath === selectedPath && baphStyles.selected

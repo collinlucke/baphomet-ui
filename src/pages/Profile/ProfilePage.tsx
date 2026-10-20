@@ -102,6 +102,7 @@ const ProfilePage = () => {
                 id="avatar-upload"
                 type="file"
                 accept="image/*"
+                aria-label="Upload profile photo"
                 css={baphStyles.avatarInput}
                 onChange={handleAvatarChange}
               />

@@ -14,6 +14,7 @@ export const ScrollToTopButton = () => {
         sx={{ button: baphStyles.button }}
         variant="secondary"
         onClick={handleScroll}
+        aria-label="Back to top"
       >
         <HugeiconsIcon icon={ArrowUp01Icon} width="50" height="50" />
       </Button>

@@ -72,6 +72,7 @@ export const AddMovieVideoModal = ({
                 baphStyles.option,
                 video.key === selectedKey && baphStyles.selected
               ]}
+              aria-pressed={video.key === selectedKey}
               onClick={() => {
                 onSelect(video);
                 onClose();
