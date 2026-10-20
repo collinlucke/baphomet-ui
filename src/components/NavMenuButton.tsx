@@ -35,7 +35,7 @@ export const NavMenuButton = ({
 
   const ButtonElement = () => (
     <Button
-      size="full"
+      size="small"
       variant={variant}
       sx={{ button: baphStyles.button }}
       onClick={onClick}

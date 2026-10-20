@@ -128,13 +128,32 @@ export const UPDATE_MOVIE = gql`
     $posterPath: String
     $backdropPath: String
     $tmdbId: String
+    $imdbId: String
+    $originalTitle: String
+    $originalLanguage: String
+    $homepage: String
+    $status: String
+    $runtime: Int
+    $budget: Float
+    $popularity: Float
+    $voteAverage: Float
+    $voteCount: Int
+    $adult: Boolean
     $overview: String
     $genres: [GenreInput]
     $revenue: Float
-    $tagline: String
     $mpaRating: String
+    $spokenLanguages: [String]
+    $productionCompanies: [String]
+    $productionCountries: [String]
+    $originCountries: [String]
+    $keywords: [String]
+    $logoPath: String
+    $tagline: String
+    $videos: [VideoInput]
     $cast: [CastCreditInput]
     $crew: [CrewCreditInput]
+    $lastUpdated: DateTime
   ) {
     updateMovie(
       id: $id
@@ -143,13 +162,32 @@ export const UPDATE_MOVIE = gql`
       posterPath: $posterPath
       backdropPath: $backdropPath
       tmdbId: $tmdbId
+      imdbId: $imdbId
+      originalTitle: $originalTitle
+      originalLanguage: $originalLanguage
+      homepage: $homepage
+      status: $status
+      runtime: $runtime
+      budget: $budget
+      popularity: $popularity
+      voteAverage: $voteAverage
+      voteCount: $voteCount
+      adult: $adult
       overview: $overview
       genres: $genres
       revenue: $revenue
-      tagline: $tagline
       mpaRating: $mpaRating
+      spokenLanguages: $spokenLanguages
+      productionCompanies: $productionCompanies
+      productionCountries: $productionCountries
+      originCountries: $originCountries
+      keywords: $keywords
+      logoPath: $logoPath
+      tagline: $tagline
+      videos: $videos
       cast: $cast
       crew: $crew
+      lastUpdated: $lastUpdated
     ) {
       id
       title

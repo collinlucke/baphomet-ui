@@ -1,5 +1,5 @@
 import { makeVar } from '@apollo/client';
-import { CurrentMovie } from './AddMoviesPage';
+import { CurrentMovie } from '../../types/movies.types';
 
 export const currentMovieVar = makeVar({} as CurrentMovie);
 export const isExistingMovieVar = makeVar(false);

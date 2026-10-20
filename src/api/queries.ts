@@ -78,12 +78,44 @@ export const GET_MOVIE_DETAILS = gql`
       backdropPath
       tmdbId
       tagline
+      imdbId
+      originalTitle
+      originalLanguage
+      homepage
+      status
+      runtime
+      budget
+      popularity
+      voteAverage
+      voteCount
+      adult
+      spokenLanguages
+      productionCompanies
+      productionCountries
+      originCountries
+      keywords
+      logoPath
+      certifications {
+        country
+        rating
+        releaseDate
+      }
+      videos {
+        name
+        site
+        key
+        type
+        official
+      }
       cast {
         personId
         character
         order
         name
         profilePath
+        profileImages {
+          w185
+        }
       }
       crew {
         personId
@@ -91,6 +123,9 @@ export const GET_MOVIE_DETAILS = gql`
         department
         name
         profilePath
+        profileImages {
+          w185
+        }
       }
       addedBy
       lastUpdated
@@ -181,12 +216,22 @@ export const GET_MOVIE_BY_TMDB_ID = gql`
         backdropPath
         tmdbId
         tagline
+        videos {
+          name
+          site
+          key
+          type
+          official
+        }
         cast {
           personId
           character
           order
           name
           profilePath
+          profileImages {
+            w185
+          }
         }
         crew {
           personId
@@ -194,6 +239,9 @@ export const GET_MOVIE_BY_TMDB_ID = gql`
           department
           name
           profilePath
+          profileImages {
+            w185
+          }
         }
       }
     }
@@ -253,6 +301,9 @@ export const FETCH_MOVIE_FROM_TMDB = gql`
         order
         name
         profilePath
+        profileImages {
+          w185
+        }
       }
       crew {
         personId
@@ -260,7 +311,21 @@ export const FETCH_MOVIE_FROM_TMDB = gql`
         department
         name
         profilePath
+        profileImages {
+          w185
+        }
       }
+    }
+  }
+`;
+
+export const SEARCH_PEOPLE = gql`
+  query searchPeople($name: String!) {
+    people: searchPeople(name: $name) {
+      personId
+      name
+      profilePath
+      knownFor
     }
   }
 `;

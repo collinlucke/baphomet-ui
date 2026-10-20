@@ -1,23 +1,28 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { FormField, FormLabel, Carousel } from 'athameui';
 import { CSSObject } from '@emotion/react';
-import { SaveButtonGroup } from './SaveButtonGroup';
-import type { CurrentMovie } from './AddMoviesPage';
-import { currentMovieVar } from './addMoviesPageReactiveVars';
+import { SaveButtonGroup } from '../../components/Buttons/SaveButtonGroup';
+import type {
+  CurrentMovie,
+  CrewCredit,
+  MovieVideo
+} from '../../types/movies.types';
+import { currentMovieVar } from './addMoviePageReactiveVars';
 import { formatGenres } from '../../utils/formatGenres';
 import { PersonCard } from '../../components/PersonCard/PersonCard';
 import { AddMovieImageModal } from './AddMovieImageModal';
+import { AddMovieVideoModal } from './AddMovieVideoModal';
 
 type MovieDetailsFormProps = {
   currentMovie?: CurrentMovie;
   onFormFieldChange: (
     field: string
   ) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  removePerson: (id: number, roleType?: string) => void;
   directorsLabel: string;
   isExistingMovie: boolean;
   isLoading: boolean;
   clearFormHandler: () => void;
+  deleteMovieHandler: () => void;
   updateMovie: () => void;
   addMovie: () => void;
   searchByTmdbIdHandler: (tmdbId: string) => void;
@@ -30,16 +35,15 @@ export const AddMovieForm = ({
   isLoading,
 
   clearFormHandler,
+  deleteMovieHandler,
   onFormFieldChange,
   onSubmit,
-  removePerson,
   searchByTmdbIdHandler
 }: MovieDetailsFormProps) => {
-  const [isEditing, setIsEditing] = useState(false);
   const [imagePicker, setImagePicker] = useState<'poster' | 'backdrop' | null>(
     null
   );
-  const snapshotRef = useRef<CurrentMovie | null>(null);
+  const [videoPickerOpen, setVideoPickerOpen] = useState(false);
 
   const onFormFieldChangeHandler =
     (field: string) =>
@@ -51,18 +55,6 @@ export const AddMovieForm = ({
       onFormFieldChange(field)(e);
     };
 
-  const startEditing = () => {
-    snapshotRef.current = structuredClone(currentMovie);
-    setIsEditing(true);
-  };
-
-  const cancelEditing = () => {
-    if (snapshotRef.current) {
-      currentMovieVar(snapshotRef.current);
-    }
-    setIsEditing(false);
-  };
-
   const selectImage = (filePath: string) => {
     const field = imagePicker === 'backdrop' ? 'backdropPath' : 'posterPath';
     onFormFieldChange(field)({
@@ -70,17 +62,21 @@ export const AddMovieForm = ({
     } as React.ChangeEvent<HTMLInputElement>);
   };
 
+  const selectVideo = (video: MovieVideo) => {
+    currentMovieVar({
+      ...currentMovieVar(),
+      videos: [video]
+    });
+  };
+
+  const trailer = currentMovie?.videos?.[0];
+
   const SaveButtonGroupWithProps = () => (
     <SaveButtonGroup
-      isEditing={isEditing}
       isLoading={isLoading}
-      clearFormHandler={() => {
-        clearFormHandler();
-        setIsEditing(false);
-      }}
+      clearFormHandler={clearFormHandler}
+      deleteMovieHandler={deleteMovieHandler}
       searchByTmdbIdHandler={searchByTmdbIdHandler}
-      onEdit={startEditing}
-      onCancel={cancelEditing}
     />
   );
 
@@ -90,7 +86,6 @@ export const AddMovieForm = ({
       onSubmit={async event => {
         event.preventDefault();
         await onSubmit();
-        setIsEditing(false);
       }}
     >
       <SaveButtonGroupWithProps />
@@ -104,7 +99,7 @@ export const AddMovieForm = ({
           placeholder="Movie Title"
           size="medium"
           dark
-          readOnly={!isEditing}
+          readOnly
         />
         <FormField
           id="movie-tmdb-id"
@@ -115,7 +110,7 @@ export const AddMovieForm = ({
           placeholder="TMDB ID"
           size="medium"
           dark
-          readOnly={!isEditing}
+          readOnly
         />
         <FormField
           id="movie-release-date"
@@ -126,7 +121,7 @@ export const AddMovieForm = ({
           placeholder="Release Date"
           size="medium"
           dark
-          readOnly={!isEditing}
+          readOnly
         />
         <FormField
           id="movie-mpa-rating"
@@ -137,7 +132,7 @@ export const AddMovieForm = ({
           placeholder="MPA Rating"
           size="medium"
           dark
-          readOnly={!isEditing}
+          readOnly
         />
       </div>
       <div css={baphStyles.movieDetailsFormFieldGroup}>
@@ -150,18 +145,25 @@ export const AddMovieForm = ({
           placeholder="Genres, comma-separated"
           size="medium"
           dark
-          readOnly={!isEditing}
+          readOnly
         />
         <FormField
           id="movie-revenue"
           label="Revenue"
           type="text"
-          value={currentMovie?.revenue ?? ''}
+          value={
+            currentMovie?.revenue
+              ? Intl.NumberFormat('en-US', {
+                  style: 'currency',
+                  currency: 'USD'
+                }).format(Number(currentMovie.revenue))
+              : '0.00'
+          }
           onChange={onFormFieldChangeHandler('revenue')}
           placeholder="Revenue"
           size="medium"
           dark
-          readOnly={!isEditing}
+          readOnly
         />
       </div>
       <div css={baphStyles.movieDetailsFormFieldGroup}>
@@ -175,7 +177,7 @@ export const AddMovieForm = ({
           size="medium"
           autoResize
           dark
-          readOnly={!isEditing}
+          readOnly
         />
         <FormField
           id="movie-tagline"
@@ -186,14 +188,14 @@ export const AddMovieForm = ({
           placeholder="Tagline"
           size="medium"
           dark
-          readOnly={!isEditing}
+          readOnly
         />
       </div>
       <div css={baphStyles.movieDetailsFormFieldGroup}>
         <Carousel label={directorsLabel}>
           {currentMovie?.crew
-            ?.filter(person => person.job === 'Director')
-            .map(person => (
+            ?.filter((person: CrewCredit) => person.job === 'Director')
+            .map((person: CrewCredit) => (
               <PersonCard
                 key={person.personId}
                 person={{
@@ -201,17 +203,16 @@ export const AddMovieForm = ({
                   name: person.name || '',
                   role: person.job,
                   profilePath: person.profilePath || '',
+                  profileImages: person.profileImages,
                   __typename: 'CrewCredit'
                 }}
-                removePerson={isEditing ? removePerson : undefined}
               />
             ))}
         </Carousel>
 
         <Carousel label="Top Billed Cast">
           {[...(currentMovie?.cast ?? [])]
-            .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-            .slice(0, 10)
+            .sort((left, right) => (left.order ?? 0) - (right.order ?? 0))
             .map(person => (
               <PersonCard
                 key={person.personId}
@@ -220,9 +221,9 @@ export const AddMovieForm = ({
                   name: person.name || '',
                   role: person.character,
                   profilePath: person.profilePath || '',
+                  profileImages: person.profileImages,
                   __typename: 'CastCredit'
                 }}
-                removePerson={isEditing ? removePerson : undefined}
               />
             ))}
         </Carousel>
@@ -230,13 +231,8 @@ export const AddMovieForm = ({
       <div css={baphStyles.movieDetailsImageFieldGroup}>
         <button
           type="button"
-          css={[
-            baphStyles.previewButton,
-            { cursor: isEditing ? 'pointer' : 'default' }
-          ]}
-          onClick={() => {
-            if (isEditing) setImagePicker('poster');
-          }}
+          css={baphStyles.previewButton}
+          onClick={() => setImagePicker('poster')}
         >
           <div css={baphStyles.posterImgwWrapper}>
             <FormLabel label="Poster" dark />
@@ -253,13 +249,8 @@ export const AddMovieForm = ({
         </button>
         <button
           type="button"
-          css={[
-            baphStyles.previewButton,
-            { cursor: isEditing ? 'pointer' : 'default' }
-          ]}
-          onClick={() => {
-            if (isEditing) setImagePicker('backdrop');
-          }}
+          css={baphStyles.previewButton}
+          onClick={() => setImagePicker('backdrop')}
         >
           <div css={baphStyles.backdropImgwWrapper}>
             <FormLabel label="Backdrop" dark />
@@ -275,6 +266,35 @@ export const AddMovieForm = ({
           </div>
         </button>
       </div>
+      <div css={baphStyles.trailerBlock}>
+        <FormLabel label="Trailer" dark />
+        {trailer?.key ? (
+          <div css={baphStyles.trailerFrame}>
+            <iframe
+              css={baphStyles.trailer}
+              src={`https://www.youtube-nocookie.com/embed/${trailer.key}`}
+              title={trailer.name || 'Trailer'}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+            <button
+              type="button"
+              css={baphStyles.trailerChoose}
+              onClick={() => setVideoPickerOpen(true)}
+            >
+              Choose a different trailer
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            css={baphStyles.previewButton}
+            onClick={() => setVideoPickerOpen(true)}
+          >
+            No trailer selected
+          </button>
+        )}
+      </div>
       <AddMovieImageModal
         isOpen={imagePicker !== null}
         kind={imagePicker ?? 'poster'}
@@ -286,6 +306,13 @@ export const AddMovieForm = ({
         }
         onClose={() => setImagePicker(null)}
         onSelect={selectImage}
+      />
+      <AddMovieVideoModal
+        isOpen={videoPickerOpen}
+        tmdbId={currentMovie?.tmdbId}
+        selectedKey={trailer?.key}
+        onClose={() => setVideoPickerOpen(false)}
+        onSelect={selectVideo}
       />
       <SaveButtonGroupWithProps />
     </form>
@@ -322,5 +349,32 @@ const baphStyles: { [key: string]: CSSObject } = {
     width: '100%',
     height: 'auto',
     objectFit: 'contain'
+  },
+  trailer: {
+    width: '100%',
+    aspectRatio: '16 / 9',
+    border: 'none'
+  },
+  trailerBlock: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px'
+  },
+  trailerFrame: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px'
+  },
+  trailerChoose: {
+    alignSelf: 'flex-start',
+    padding: 0,
+    border: 'none',
+    background: 'transparent',
+    color: 'inherit',
+    textDecoration: 'underline',
+    cursor: 'pointer'
+  },
+  posterImg: {
+    marginTop: '.75rem'
   }
 };

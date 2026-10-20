@@ -4,121 +4,46 @@ import { useReactiveVar } from '@apollo/client/react';
 import {
   isExistingMovieVar,
   currentMovieVar
-} from './addMoviesPageReactiveVars';
-import { Button, Search, Main, color, media } from 'athameui';
+} from './addMoviePageReactiveVars';
+import { Search, Main, color, media } from 'athameui';
 import { PageTitle } from '../../components/PageTitle';
 import { AddMovieForm } from './AddMovieForm';
 import { CSSObject } from '@emotion/react';
-import { ADD_MOVIE, UPDATE_MOVIE } from '../../api/mutations';
+import { ADD_MOVIE, UPDATE_MOVIE, DELETE_MOVIE } from '../../api/mutations';
 import {
   GET_MOVIE_BY_TMDB_ID,
   FETCH_MOVIE_FROM_TMDB,
   FETCH_POSSIBLE_MOVIE_MATCHES
 } from '../../api/queries';
 import { PossibleMovieMatchesModal } from './PossibleMovieMatchesModal';
-import type { Genre } from '../../types/movies.types';
+import type {
+  CurrentMovie,
+  MovieVideo,
+  PossibleMovieMatch,
+  PossibleMovieMatchResponse,
+  AddMovieData,
+  UpdateMovieData,
+  ExistingMovieData
+} from '../../types/movies.types';
+import type { SearchTermType } from '../../types/shared.types';
 
-type PossibleMovieMatchResponse = {
-  results: PossibleMovieMatch[];
-  page: number;
-  totalPages: number;
-  totalResults: number;
+const withOneTrailer = (movie?: CurrentMovie) => {
+  if (!movie?.videos?.length) return movie;
+  const chosen =
+    movie.videos.find(video => video.official && video.type === 'Trailer') ||
+    movie.videos.find(video => video.type === 'Trailer') ||
+    movie.videos[0];
+  return { ...movie, videos: chosen ? [chosen] : [] };
 };
 
-type AddMovieData = {
-  addMovie: CurrentMovie;
-};
-
-type UpdateMovieData = {
-  updateMovie: CurrentMovie;
-};
-
-type ExistingMovieData = {
-  movieResult: {
-    found: boolean;
-    errorMessage: string;
-    movie: CurrentMovie | undefined;
-  };
-};
-
-type CastCredit = {
-  personId: number;
-  character?: string;
-  order?: number;
-  name?: string;
-  profilePath?: string;
-  __typename?: string;
-};
-
-type CrewCredit = {
-  personId: number;
-  job?: string;
-  department?: string;
-  name?: string;
-  profilePath?: string;
-  __typename?: string;
-};
-
-type SearchTermType = string | number | undefined;
-
-export type CurrentMovie = {
-  id?: string | undefined;
-  title?: string | undefined;
-  releaseDate?: string | undefined;
-  mpaRating?: string | undefined;
-  genres?: Genre[] | undefined;
-  overview?: string | undefined;
-  posterPath?: string | undefined;
-  backdropPath?: string | undefined;
-  tmdbId?: number | string | undefined;
-  imdbId?: string;
-  originalTitle?: string;
-  originalLanguage?: string;
-  homepage?: string;
-  status?: string;
-  runtime?: number | null;
-  budget?: number | null;
-  popularity?: number | null;
-  voteAverage?: number | null;
-  voteCount?: number | null;
-  adult?: boolean;
-  spokenLanguages?: string[];
-  productionCompanies?: string[];
-  productionCountries?: string[];
-  originCountries?: string[];
-  keywords?: string[];
-  logoPath?: string;
-  posterPaths?: string[];
-  backdropPaths?: string[];
-  certifications?: {
-    country?: string;
-    rating?: string;
-    releaseDate?: string;
-  }[];
-  videos?: {
-    name?: string;
-    site?: string;
-    key?: string;
-    type?: string;
-    official?: boolean;
-  }[];
-  revenue?: number | string | undefined;
-  tagline?: string | undefined;
-  cast?: CastCredit[] | undefined;
-  crew?: CrewCredit[] | undefined;
-};
-
-export type PossibleMovieMatch = {
-  id: string;
-  tmdbId: string;
-  title: string;
-  releaseDate: string;
-  mpaRating: string;
-  overview: string;
-  posterPath: string | null;
-  backdropPath: string | null;
-  genreIds: number[];
-};
+const videoInput = (videos?: MovieVideo[]) =>
+  (videos ?? []).map(({ name, site, key, type, official }) => ({
+    name,
+    site,
+    key,
+    type,
+    official
+  }));
 
 const emptyMovie: CurrentMovie = {
   id: '',
@@ -169,6 +94,7 @@ const AddMoviesPage = () => {
   const [addMovie] = useMutation<AddMovieData>(ADD_MOVIE);
 
   const [updateMovie] = useMutation<UpdateMovieData>(UPDATE_MOVIE);
+  const [deleteMovie] = useMutation<{ deleteMovie: boolean }>(DELETE_MOVIE);
 
   const [getMovieByTmdbId] =
     useLazyQuery<ExistingMovieData>(GET_MOVIE_BY_TMDB_ID);
@@ -192,7 +118,11 @@ const AddMoviesPage = () => {
         variables: { tmdbId: tmdbId }
       });
       if (data) {
-        replaceMovie({ ...currentMovie, ...data.fetchedMovie });
+        replaceMovie({
+          ...currentMovie,
+          ...withOneTrailer(data.fetchedMovie),
+          id: currentMovie.id
+        });
       }
     } catch (err) {
       console.error('Error fetching movie data:', err);
@@ -254,7 +184,7 @@ const AddMoviesPage = () => {
         isExistingMovieVar(false);
         try {
           const data = await fetchMovieFromTmdb({ variables: { tmdbId } });
-          replaceMovie(data.data?.fetchedMovie);
+          replaceMovie(withOneTrailer(data.data?.fetchedMovie));
         } catch (error) {
           console.error('Error fetching movie from TMDB:', error);
         }
@@ -278,7 +208,8 @@ const AddMoviesPage = () => {
       const response = await fetchPossibleMovieMatches({
         variables: { title }
       });
-      const results = response?.data?.possibleMovieMatches?.results || [];
+      const results =
+        response?.data?.possibleMovieMatches?.possibleMatches || [];
 
       if (results && results.length > 0) {
         setPossibleMatches(results);
@@ -308,7 +239,7 @@ const AddMoviesPage = () => {
     isExistingMovieVar(false);
     try {
       const data = await fetchMovieFromTmdb({ variables: { tmdbId } });
-      replaceMovie(data.data?.fetchedMovie);
+      replaceMovie(withOneTrailer(data.data?.fetchedMovie));
     } catch (error) {
       console.error('Error fetching movie from TMDB:', error);
     }
@@ -326,6 +257,21 @@ const AddMoviesPage = () => {
     setShowFoundInDbMessage(false);
     isExistingMovieVar(false);
     replaceMovie(emptyMovie);
+  };
+
+  const deleteMovieHandler = async () => {
+    if (!currentMovie?.id) return;
+    const title = currentMovie.title || 'this movie';
+    if (!window.confirm(`Remove ${title} from the database?`)) return;
+    setIsLoading(true);
+    try {
+      await deleteMovie({ variables: { id: currentMovie.id } });
+      clearFormHandler();
+    } catch (error) {
+      console.error('Error deleting movie:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const onFormFieldChange =
@@ -377,6 +323,9 @@ const AddMoviesPage = () => {
 
     const updateData = {
       ...rest,
+      ...(Array.isArray(rest.videos)
+        ? { videos: videoInput(rest.videos) }
+        : {}),
       lastUpdated: new Date().toISOString()
     };
 
@@ -420,7 +369,7 @@ const AddMoviesPage = () => {
         posterPaths: currentMovie.posterPaths,
         backdropPaths: currentMovie.backdropPaths,
         certifications: currentMovie.certifications,
-        videos: currentMovie.videos,
+        videos: videoInput(currentMovie.videos),
         tagline: currentMovie.tagline,
         cast: currentMovie.cast?.map(({ personId, character, order }) => ({
           personId,
@@ -440,27 +389,14 @@ const AddMoviesPage = () => {
     currentMovie?.crew?.filter(person => person.job === 'Director') ?? [];
   const directorsLabel = directors.length === 1 ? 'Director' : 'Directors';
 
-  const removePerson = (id: number, personType?: string | undefined): void => {
-    if (personType === 'CastCredit') {
-      currentMovieVar({
-        ...currentMovie,
-        cast: currentMovie?.cast?.filter(member => member.personId !== id)
-      });
-    }
-    if (personType === 'CrewCredit') {
-      currentMovieVar({
-        ...currentMovie,
-        crew: currentMovie?.crew?.filter(
-          member => !(member.personId === id && member.job === 'Director')
-        )
-      });
-    }
+  const setTmdbIdHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTmdbId(parseInt(e.target.value));
   };
 
   return (
     <>
       <Main width="medium">
-        <PageTitle title="Add Movies" />
+        <PageTitle title="Add Movie" />
         <div
           css={baphStyles.formContainer}
           data-testid="baph-add-movies-form-container"
@@ -484,10 +420,8 @@ const AddMoviesPage = () => {
             id="search-by-tmdb-id"
             searchTerm={tmdbId}
             searchLabel="Enter TMDB ID"
-            setSearchTerm={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setTmdbId(parseInt(e.target.value))
-            }
-            onSearch={() => searchByTmdbIdHandler(tmdbId?.toString() || '')}
+            setSearchTerm={setTmdbIdHandler}
+            onSearch={() => searchByTmdbIdHandler(tmdbId?.toString() ?? '')}
             inputSize="medium"
             buttonSize="medium"
             buttonVariant="tertiary"
@@ -498,16 +432,7 @@ const AddMoviesPage = () => {
           />
           {showFoundInDbMessage && (
             <div css={baphStyles.messageContainer}>
-              {`${currentMovie?.title} found in database and loaded for editing. Would you like to refetch the latest data from TMDB?`}
-              <Button
-                size="small"
-                variant="secondary"
-                onClick={() => {
-                  fetchByTmdbIdHandler(currentMovie?.tmdbId?.toString());
-                }}
-              >
-                Refetch from TMDB
-              </Button>
+              {`${currentMovie?.title} is already in the database. Refetch from TMDB to replace the stored details.`}
             </div>
           )}
 
@@ -517,14 +442,16 @@ const AddMoviesPage = () => {
             onFormFieldChange={onFormFieldChange}
             onSubmit={onSubmit}
             currentMovie={currentMovie}
-            removePerson={removePerson}
             directorsLabel={directorsLabel}
             isExistingMovie={isExistingMovie}
             updateMovie={handleUpdateMovie}
             addMovie={addMovieHandler}
             isLoading={isLoading}
             clearFormHandler={clearFormHandler}
-            searchByTmdbIdHandler={searchByTmdbIdHandler}
+            deleteMovieHandler={deleteMovieHandler}
+            searchByTmdbIdHandler={id => {
+              void fetchByTmdbIdHandler(id);
+            }}
           />
         </div>
       </Main>

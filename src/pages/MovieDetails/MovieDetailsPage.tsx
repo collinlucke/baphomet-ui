@@ -1,37 +1,19 @@
-import { Main, Carousel, Button, color, media, font } from 'athameui';
+import { Main, Carousel, color, media, font } from 'athameui';
 import { PageHeading } from '../../components/Layouts/PageHeading';
 import { GET_MOVIE_DETAILS } from '../../api/queries';
 import { useQuery } from '@apollo/client/react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { formatGenres } from '../../utils/formatGenres';
 import type { MovieDetailsResponse } from '../../types/movies.types';
 import { PersonCard } from '../../components/PersonCard/PersonCard';
-import { isAuthenticatedVar } from '../../reactiveVars';
-import { useReactiveVar } from '@apollo/client/react';
 
 const MovieDetailsPage = () => {
-  const isAuthenticated = useReactiveVar(isAuthenticatedVar);
-  const user = localStorage.getItem('baphomet-user')
-    ? JSON.parse(localStorage.getItem('baphomet-user') || '{}')
-    : null;
   const { id } = useParams();
   const { data } = useQuery<MovieDetailsResponse>(GET_MOVIE_DETAILS, {
     variables: { id }
   });
   const movie = data?.movieResults;
-  const releaseYear = movie?.releaseDate
-    ? new Date(movie.releaseDate).getFullYear()
-    : null;
-  console.log(isAuthenticated, user);
-  const title = movie ? (
-    <>
-      {' '}
-      <span css={baphStyles.title}>{movie.title}</span>{' '}
-      <span css={baphStyles.releaseYear}>({releaseYear})</span>
-    </>
-  ) : (
-    'Movie Details'
-  );
+  const title = movie?.title;
   const genres = (
     <span css={baphStyles.genres}>{formatGenres(movie?.genres)}</span>
   );
@@ -55,6 +37,7 @@ const MovieDetailsPage = () => {
       <div css={baphStyles.detailValue}>{value}</div>
     </div>
   );
+  console.log(movie);
 
   return (
     <Main>
@@ -67,13 +50,6 @@ const MovieDetailsPage = () => {
               <span css={baphStyles.major}>{`${major}`}.</span>
               <span css={baphStyles.minor}>{minor}</span>
             </div>
-            {isAuthenticated && user && user.role === 'admin' && (
-              <Link to={`/movies/${movie?.id}/edit`}>
-                <Button variant="outline" dark size="small">
-                  Edit Movie
-                </Button>
-              </Link>
-            )}
           </div>
         }
       />
@@ -98,7 +74,21 @@ const MovieDetailsPage = () => {
                 .join(', ')
             })}
             {detailItem({ name: 'Release Date', value: movie?.releaseDate })}
-            {detailItem({ name: 'Revenue', value: movie?.revenue })}
+            {detailItem({
+              name: 'Budget',
+              value: Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+              }).format(movie?.budget ?? 0)
+            })}
+
+            {detailItem({
+              name: 'Revenue',
+              value: Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+              }).format(movie?.revenue ?? 0)
+            })}
             {detailItem({ name: 'Rated', value: movie?.mpaRating })}
           </div>
         </div>
@@ -108,8 +98,7 @@ const MovieDetailsPage = () => {
           <h3>Top Billed Cast</h3>
           <Carousel>
             {[...(movie?.cast ?? [])]
-              .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-              .slice(0, 10)
+              .sort((left, right) => (left.order ?? 0) - (right.order ?? 0))
               .map(person => (
                 <PersonCard
                   key={person.personId}
@@ -117,7 +106,8 @@ const MovieDetailsPage = () => {
                     id: person.personId,
                     name: person.name || '',
                     role: person.character,
-                    profilePath: person.profilePath || ''
+                    profilePath: person.profilePath || '',
+                    profileImages: person.profileImages
                   }}
                 />
               ))}
@@ -223,7 +213,8 @@ const baphStyles = {
     minWidth: 0,
     backgroundColor: color.secondary[500],
     padding: '15px',
-    borderRadius: '10px'
+    borderRadius: '10px',
+    height: 'fit-content'
   },
   overviewText: {
     marginBottom: '30px'

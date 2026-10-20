@@ -23,6 +23,99 @@ export type Genre = {
   genre: string;
 };
 
+export type ProfileImages = {
+  w185?: string;
+};
+
+export type CastCredit = {
+  personId: number;
+  character?: string;
+  order?: number;
+  name?: string;
+  profilePath?: string;
+  profileImages?: ProfileImages;
+  __typename?: string;
+};
+
+export type CrewCredit = {
+  personId: number;
+  job?: string;
+  department?: string;
+  name?: string;
+  profilePath?: string;
+  profileImages?: ProfileImages;
+  __typename?: string;
+};
+
+export type MovieCertification = {
+  country?: string;
+  rating?: string;
+  releaseDate?: string;
+};
+
+export type MovieVideo = {
+  name?: string;
+  site?: string;
+  key?: string;
+  type?: string;
+  official?: boolean;
+};
+
+export type CurrentMovie = {
+  id?: string | undefined;
+  title?: string | undefined;
+  releaseDate?: string | undefined;
+  mpaRating?: string | undefined;
+  genres?: Genre[] | undefined;
+  overview?: string | undefined;
+  posterPath?: string | undefined;
+  backdropPath?: string | undefined;
+  tmdbId?: number | string | undefined;
+  imdbId?: string;
+  originalTitle?: string;
+  originalLanguage?: string;
+  homepage?: string;
+  status?: string;
+  runtime?: number | null;
+  budget?: number | null;
+  popularity?: number | null;
+  voteAverage?: number | null;
+  voteCount?: number | null;
+  adult?: boolean;
+  spokenLanguages?: string[];
+  productionCompanies?: string[];
+  productionCountries?: string[];
+  originCountries?: string[];
+  keywords?: string[];
+  logoPath?: string;
+  posterPaths?: string[];
+  backdropPaths?: string[];
+  certifications?: MovieCertification[];
+  videos?: MovieVideo[];
+  revenue?: number | string | undefined;
+  tagline?: string | undefined;
+  cast?: CastCredit[] | undefined;
+  crew?: CrewCredit[] | undefined;
+};
+
+export type PossibleMovieMatch = {
+  id: string;
+  tmdbId: string;
+  title: string;
+  releaseDate: string;
+  mpaRating: string;
+  overview: string;
+  posterPath: string | null;
+  backdropPath: string | null;
+  genreIds: number[];
+  results?: PossibleMovieMatch[];
+};
+
+export type PossibleMovieMatchResponse = {
+  possibleMatches: PossibleMovieMatch[];
+  totalCount: number;
+};
+
 export type MovieDetailsResponse = {
   movieResults: {
     id: number;
@@ -32,6 +125,7 @@ export type MovieDetailsResponse = {
     genres: Genre[];
     posterPath: string;
     backdropPath: string;
+    budget: number;
     posterImages?: {
       w92?: string;
       w154?: string;
@@ -67,6 +161,7 @@ export type MovieDetailsResponse = {
       order?: number;
       name?: string;
       profilePath?: string;
+      profileImages?: ProfileImages;
     }[];
     crew?: {
       personId: number;
@@ -74,7 +169,24 @@ export type MovieDetailsResponse = {
       department?: string;
       name?: string;
       profilePath?: string;
+      profileImages?: ProfileImages;
     }[];
     tagline?: string;
+  };
+};
+
+export type AddMovieData = {
+  addMovie: CurrentMovie;
+};
+
+export type UpdateMovieData = {
+  updateMovie: CurrentMovie;
+};
+
+export type ExistingMovieData = {
+  movieResult: {
+    found: boolean;
+    errorMessage: string;
+    movie: CurrentMovie | undefined;
   };
 };

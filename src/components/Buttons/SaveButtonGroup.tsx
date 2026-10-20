@@ -1,29 +1,25 @@
 import { CSSObject } from '@emotion/react';
 import { Button, ButtonGroup } from 'athameui';
 import { useReactiveVar } from '@apollo/client/react';
-import { currentMovieVar } from './addMoviesPageReactiveVars';
+import { currentMovieVar } from '../../pages/AddMovie/addMoviePageReactiveVars';
 import {
   isExistingMovieVar,
   isMovieLoadingVar
-} from './addMoviesPageReactiveVars';
+} from '../../pages/AddMovie/addMoviePageReactiveVars';
 
 type SaveButtonGroupProps = {
   isLoading?: boolean;
-  isEditing: boolean;
 
   searchByTmdbIdHandler: (tmdbId: string) => void;
   clearFormHandler: () => void;
-  onEdit: () => void;
-  onCancel: () => void;
+  deleteMovieHandler: () => void;
 };
 
 export const SaveButtonGroup = ({
   isLoading,
-  isEditing,
   searchByTmdbIdHandler,
   clearFormHandler,
-  onEdit,
-  onCancel
+  deleteMovieHandler
 }: SaveButtonGroupProps) => {
   const isMovieLoading = useReactiveVar(isMovieLoadingVar);
   const isExistingMovie = isExistingMovieVar();
@@ -37,34 +33,20 @@ export const SaveButtonGroup = ({
 
   return (
     <ButtonGroup sx={{ buttonGroup: baphStyles.saveButtonGroup }}>
-      {!isEditing && (
-        <Button
-          size="small"
-          variant="secondary"
-          type="button"
-          dark
-          onClick={onEdit}
-          disabled={isLoading}
-        >
-          Edit Movie
-        </Button>
-      )}
-      {isEditing && (
-        <Button
-          size="small"
-          variant="secondary"
-          type="submit"
-          disabled={!currentMovie?.title || isLoading}
-          dark
-        >
-          {isMovieLoading
-            ? 'Loading...'
-            : isExistingMovie
-              ? 'Update Movie'
-              : 'Add Movie'}
-        </Button>
-      )}
-      {isExistingMovie && !isEditing && (
+      <Button
+        size="small"
+        variant="secondary"
+        type="submit"
+        disabled={!currentMovie?.title || isLoading}
+        dark
+      >
+        {isMovieLoading
+          ? 'Loading...'
+          : isExistingMovie
+            ? 'Update Movie'
+            : 'Add Movie'}
+      </Button>
+      {currentMovie?.tmdbId && (
         <Button
           size="small"
           variant="secondary"
@@ -76,28 +58,28 @@ export const SaveButtonGroup = ({
           Refetch from TMDB
         </Button>
       )}
-      {isEditing && (
+      {isExistingMovie && (
         <Button
           size="small"
           variant="outline"
           dark
           type="button"
-          onClick={onCancel}
+          onClick={deleteMovieHandler}
+          disabled={isLoading}
         >
-          Cancel
+          Remove from database
         </Button>
       )}
-      {isEditing && (
-        <Button
-          size="small"
-          variant="outline"
-          dark
-          type="button"
-          onClick={clearFormHandler}
-        >
-          Clear
-        </Button>
-      )}
+      <Button
+        size="small"
+        variant="outline"
+        dark
+        type="button"
+        onClick={clearFormHandler}
+        disabled={isLoading}
+      >
+        Clear
+      </Button>
     </ButtonGroup>
   );
 };

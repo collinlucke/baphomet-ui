@@ -6,7 +6,7 @@ import NotFoundPage from './pages/NotFound/NotFoundPage.tsx';
 const HomePage = lazy(() => import('./pages/Home/HomePage.tsx'));
 const AllMoviesPage = lazy(() => import('./pages/AllMovies/AllMoviesPage.tsx'));
 const ArenaPage = lazy(() => import('./pages/Arena/ArenaPage.tsx'));
-const AddMoviesPage = lazy(() => import('./pages/AddMovies/AddMoviesPage.tsx'));
+const AddMoviesPage = lazy(() => import('./pages/AddMovie/AddMoviePage.tsx'));
 const LeaderboardPage = lazy(
   () => import('./pages/Leaderboard/LeaderboardPage.tsx')
 );
@@ -56,9 +56,6 @@ const routes = [
       },
       {
         path: 'view/:id'
-      },
-      {
-        path: 'edit/:id'
       },
       { path: 'arena', element: withErrorBoundary(ArenaPage) },
       {
