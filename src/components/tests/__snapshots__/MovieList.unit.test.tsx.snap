@@ -2,22 +2,21 @@
 
 exports[`MovieList Component - Unit Tests > Snapshot Tests > should match snapshot with default props 1`] = `
 <div
-  class="css-hhk6j-MovieList"
+  class="css-172ni6w-MovieList"
   data-testid="baph-movie-list"
 >
   <div
-    aria-label="Search"
-    class="pa-search-form css-m5jsbo"
-    data-testid="baph-search"
+    class="ath-search-form css-0"
     role="search"
+    testid="baph-search"
   >
     <div
-      class="pa-search-wrapper css-114f50u"
+      class="ath-search-wrapper css-0"
     >
       <div
         aria-atomic="true"
         aria-live="polite"
-        class="css-19gqcwz"
+        class="ath-search-results css-0"
         data-testid="total-results"
         role="status"
       >
@@ -26,19 +25,13 @@ exports[`MovieList Component - Unit Tests > Snapshot Tests > should match snapsh
         3
       </div>
       <div
-        class="css-1jlnwea"
+        class="ath-search-input-wrapper"
       >
         <div
-          class="css-1mmmoc7"
+          class="ath-form-input-container ath-search-field-container css-0"
         >
           <input
-            aria-describedby="search-results-count"
-            aria-invalid="false"
-            aria-label="Search Movies"
-            aria-required="false"
-            class="css-jcn22a"
-            data-testid="search-input"
-            id="input-searchTerm"
+            class="ath-form-text-input ath-form-text-input-medium css-0"
             name="searchTerm"
             placeholder="Search Movies"
             type="search"
@@ -49,104 +42,146 @@ exports[`MovieList Component - Unit Tests > Snapshot Tests > should match snapsh
     </div>
   </div>
   <ul
-    class="pa-list css-179vcy7"
+    class="ath-list css-gk44p4"
     role="list"
   >
     <li
-      aria-label="Open details for The Matrix"
-      class="css-zq0ncc"
+      class="css-m7w04"
       data-testid="movie-item-603"
-      role="button"
-      tabindex="0"
     >
-      <div
-        class="css-1u0mlrb"
+      <a
+        aria-label="The Matrix, winning percentage 85.50"
+        class="block w-full"
+        data-discover="true"
+        href="/movie/1"
       >
-        <img
-          alt="The Matrix"
-          class="css-1u6rrjb"
-          src="https://example.com/matrix-poster.jpg"
-        />
         <div
-          class="css-seut52"
+          style="opacity: 0; transform: scale(0.95);"
         >
-          <span
-            class="css-2y6i2r"
+          <div
+            data-state="active"
+            title="The Matrix - 85.50"
           >
-            85
-            .
-          </span>
-          <span
-            class="css-i0h9c4"
-          >
-            50
-          </span>
+            <img
+              alt=""
+              class="css-1bev3sc"
+              src="https://image.tmdb.org/t/p/w500https://example.com/matrix-poster.jpg"
+            />
+            <div
+              aria-hidden="true"
+              class="css-5vroew"
+              data-testid="movie-winning-percentage"
+              style="opacity: 0; transform: translateY(20px);"
+            >
+              <span
+                class="css-r8imd7"
+                style="font-size: 0rem;"
+              >
+                85
+                .
+              </span>
+              <span
+                class="css-rtnva8"
+                style="font-size: 0rem;"
+              >
+                50
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
+      </a>
     </li>
     <li
-      aria-label="Open details for The Godfather"
-      class="css-10225se"
+      class="css-ekgyul"
       data-testid="movie-item-238"
-      role="button"
-      tabindex="0"
     >
-      <div
-        class="css-1u0mlrb"
+      <a
+        aria-label="The Godfather, winning percentage 92.10"
+        class="block w-full"
+        data-discover="true"
+        href="/movie/2"
       >
-        <img
-          alt="The Godfather"
-          class="css-1u6rrjb"
-          src="https://example.com/godfather-poster.jpg"
-        />
         <div
-          class="css-seut52"
+          style="opacity: 0; transform: scale(0.95);"
         >
-          <span
-            class="css-2y6i2r"
+          <div
+            data-state="active"
+            title="The Godfather - 92.10"
           >
-            92
-            .
-          </span>
-          <span
-            class="css-i0h9c4"
-          >
-            10
-          </span>
+            <img
+              alt=""
+              class="css-1bev3sc"
+              src="https://image.tmdb.org/t/p/w500https://example.com/godfather-poster.jpg"
+            />
+            <div
+              aria-hidden="true"
+              class="css-5vroew"
+              data-testid="movie-winning-percentage"
+              style="opacity: 0; transform: translateY(20px);"
+            >
+              <span
+                class="css-r8imd7"
+                style="font-size: 0rem;"
+              >
+                92
+                .
+              </span>
+              <span
+                class="css-rtnva8"
+                style="font-size: 0rem;"
+              >
+                10
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
+      </a>
     </li>
     <li
-      aria-label="Open details for Pulp Fiction"
-      class="css-1a9vumo"
+      class="css-1nys6qs"
       data-testid="movie-item-680"
-      role="button"
-      tabindex="0"
     >
-      <div
-        class="css-1u0mlrb"
+      <a
+        aria-label="Pulp Fiction, winning percentage 89.30"
+        class="block w-full"
+        data-discover="true"
+        href="/movie/3"
       >
-        <img
-          alt="Pulp Fiction"
-          class="css-1u6rrjb"
-          src="https://example.com/pulpfiction-poster.jpg"
-        />
         <div
-          class="css-seut52"
+          style="opacity: 0; transform: scale(0.95);"
         >
-          <span
-            class="css-2y6i2r"
+          <div
+            data-state="active"
+            title="Pulp Fiction - 89.30"
           >
-            89
-            .
-          </span>
-          <span
-            class="css-i0h9c4"
-          >
-            30
-          </span>
+            <img
+              alt=""
+              class="css-1bev3sc"
+              src="https://image.tmdb.org/t/p/w500https://example.com/pulpfiction-poster.jpg"
+            />
+            <div
+              aria-hidden="true"
+              class="css-5vroew"
+              data-testid="movie-winning-percentage"
+              style="opacity: 0; transform: translateY(20px);"
+            >
+              <span
+                class="css-r8imd7"
+                style="font-size: 0rem;"
+              >
+                89
+                .
+              </span>
+              <span
+                class="css-rtnva8"
+                style="font-size: 0rem;"
+              >
+                30
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
+      </a>
     </li>
   </ul>
   <div
@@ -157,22 +192,21 @@ exports[`MovieList Component - Unit Tests > Snapshot Tests > should match snapsh
 
 exports[`MovieList Component - Unit Tests > Snapshot Tests > should match snapshot with empty movies list 1`] = `
 <div
-  class="css-hhk6j-MovieList"
+  class="css-172ni6w-MovieList"
   data-testid="baph-movie-list"
 >
   <div
-    aria-label="Search"
-    class="pa-search-form css-m5jsbo"
-    data-testid="baph-search"
+    class="ath-search-form css-0"
     role="search"
+    testid="baph-search"
   >
     <div
-      class="pa-search-wrapper css-114f50u"
+      class="ath-search-wrapper css-0"
     >
       <div
         aria-atomic="true"
         aria-live="polite"
-        class="css-19gqcwz"
+        class="ath-search-results css-0"
         data-testid="total-results"
         role="status"
       >
@@ -181,19 +215,13 @@ exports[`MovieList Component - Unit Tests > Snapshot Tests > should match snapsh
         3
       </div>
       <div
-        class="css-1jlnwea"
+        class="ath-search-input-wrapper"
       >
         <div
-          class="css-1mmmoc7"
+          class="ath-form-input-container ath-search-field-container css-0"
         >
           <input
-            aria-describedby="search-results-count"
-            aria-invalid="false"
-            aria-label="Search Movies"
-            aria-required="false"
-            class="css-jcn22a"
-            data-testid="search-input"
-            id="input-searchTerm"
+            class="ath-form-text-input ath-form-text-input-medium css-0"
             name="searchTerm"
             placeholder="Search Movies"
             type="search"
@@ -204,7 +232,7 @@ exports[`MovieList Component - Unit Tests > Snapshot Tests > should match snapsh
     </div>
   </div>
   <div
-    class="css-15vh70y-MovieList"
+    class="css-1yvqe3z-MovieList"
   >
     <h2>
       Real sorry to tell you this, but...
@@ -221,22 +249,21 @@ exports[`MovieList Component - Unit Tests > Snapshot Tests > should match snapsh
 
 exports[`MovieList Component - Unit Tests > Snapshot Tests > should match snapshot with loading state 1`] = `
 <div
-  class="css-hhk6j-MovieList"
+  class="css-172ni6w-MovieList"
   data-testid="baph-movie-list"
 >
   <div
-    aria-label="Search"
-    class="pa-search-form css-m5jsbo"
-    data-testid="baph-search"
+    class="ath-search-form css-0"
     role="search"
+    testid="baph-search"
   >
     <div
-      class="pa-search-wrapper css-114f50u"
+      class="ath-search-wrapper css-0"
     >
       <div
         aria-atomic="true"
         aria-live="polite"
-        class="css-19gqcwz"
+        class="ath-search-results css-0"
         data-testid="total-results"
         role="status"
       >
@@ -245,19 +272,13 @@ exports[`MovieList Component - Unit Tests > Snapshot Tests > should match snapsh
         3
       </div>
       <div
-        class="css-1jlnwea"
+        class="ath-search-input-wrapper"
       >
         <div
-          class="css-1mmmoc7"
+          class="ath-form-input-container ath-search-field-container css-0"
         >
           <input
-            aria-describedby="search-results-count"
-            aria-invalid="false"
-            aria-label="Search Movies"
-            aria-required="false"
-            class="css-jcn22a"
-            data-testid="search-input"
-            id="input-searchTerm"
+            class="ath-form-text-input ath-form-text-input-medium css-0"
             name="searchTerm"
             placeholder="Search Movies"
             type="search"
@@ -268,7 +289,7 @@ exports[`MovieList Component - Unit Tests > Snapshot Tests > should match snapsh
     </div>
   </div>
   <div
-    class="css-15vh70y-MovieList"
+    class="css-1yvqe3z-MovieList"
   >
     <h2>
       Real sorry to tell you this, but...
@@ -285,22 +306,21 @@ exports[`MovieList Component - Unit Tests > Snapshot Tests > should match snapsh
 
 exports[`MovieList Component - Unit Tests > should match snapshot with loading state 1`] = `
 <div
-  class="css-hhk6j-MovieList"
+  class="css-172ni6w-MovieList"
   data-testid="baph-movie-list"
 >
   <div
-    aria-label="Search"
-    class="pa-search-form css-m5jsbo"
-    data-testid="baph-search"
+    class="ath-search-form css-0"
     role="search"
+    testid="baph-search"
   >
     <div
-      class="pa-search-wrapper css-114f50u"
+      class="ath-search-wrapper css-0"
     >
       <div
         aria-atomic="true"
         aria-live="polite"
-        class="css-19gqcwz"
+        class="ath-search-results css-0"
         data-testid="total-results"
         role="status"
       >
@@ -309,19 +329,13 @@ exports[`MovieList Component - Unit Tests > should match snapshot with loading s
         3
       </div>
       <div
-        class="css-1jlnwea"
+        class="ath-search-input-wrapper"
       >
         <div
-          class="css-1mmmoc7"
+          class="ath-form-input-container ath-search-field-container css-0"
         >
           <input
-            aria-describedby="search-results-count"
-            aria-invalid="false"
-            aria-label="Search Movies"
-            aria-required="false"
-            class="css-jcn22a"
-            data-testid="search-input"
-            id="input-searchTerm"
+            class="ath-form-text-input ath-form-text-input-medium css-0"
             name="searchTerm"
             placeholder="Search Movies"
             type="search"
@@ -332,7 +346,7 @@ exports[`MovieList Component - Unit Tests > should match snapshot with loading s
     </div>
   </div>
   <div
-    class="css-15vh70y-MovieList"
+    class="css-1yvqe3z-MovieList"
   >
     <h2>
       Real sorry to tell you this, but...
@@ -349,22 +363,21 @@ exports[`MovieList Component - Unit Tests > should match snapshot with loading s
 
 exports[`MovieList Component - Unit Tests > should match snapshot with search functionality 1`] = `
 <div
-  class="css-hhk6j-MovieList"
+  class="css-172ni6w-MovieList"
   data-testid="baph-movie-list"
 >
   <div
-    aria-label="Search"
-    class="pa-search-form css-m5jsbo"
-    data-testid="baph-search"
+    class="ath-search-form css-0"
     role="search"
+    testid="baph-search"
   >
     <div
-      class="pa-search-wrapper css-114f50u"
+      class="ath-search-wrapper css-0"
     >
       <div
         aria-atomic="true"
         aria-live="polite"
-        class="css-19gqcwz"
+        class="ath-search-results css-0"
         data-testid="total-results"
         role="status"
       >
@@ -373,19 +386,13 @@ exports[`MovieList Component - Unit Tests > should match snapshot with search fu
         3
       </div>
       <div
-        class="css-1jlnwea"
+        class="ath-search-input-wrapper"
       >
         <div
-          class="css-1mmmoc7"
+          class="ath-form-input-container ath-search-field-container css-0"
         >
           <input
-            aria-describedby="search-results-count"
-            aria-invalid="false"
-            aria-label="Search Movies"
-            aria-required="false"
-            class="css-jcn22a"
-            data-testid="search-input"
-            id="input-searchTerm"
+            class="ath-form-text-input ath-form-text-input-medium css-0"
             name="searchTerm"
             placeholder="Search Movies"
             type="search"
@@ -396,104 +403,146 @@ exports[`MovieList Component - Unit Tests > should match snapshot with search fu
     </div>
   </div>
   <ul
-    class="pa-list css-179vcy7"
+    class="ath-list css-gk44p4"
     role="list"
   >
     <li
-      aria-label="Open details for The Matrix"
-      class="css-zq0ncc"
+      class="css-m7w04"
       data-testid="movie-item-603"
-      role="button"
-      tabindex="0"
     >
-      <div
-        class="css-1u0mlrb"
+      <a
+        aria-label="The Matrix, winning percentage 85.50"
+        class="block w-full"
+        data-discover="true"
+        href="/movie/1"
       >
-        <img
-          alt="The Matrix"
-          class="css-1u6rrjb"
-          src="https://example.com/matrix-poster.jpg"
-        />
         <div
-          class="css-seut52"
+          style="opacity: 0; transform: scale(0.95);"
         >
-          <span
-            class="css-2y6i2r"
+          <div
+            data-state="active"
+            title="The Matrix - 85.50"
           >
-            85
-            .
-          </span>
-          <span
-            class="css-i0h9c4"
-          >
-            50
-          </span>
+            <img
+              alt=""
+              class="css-1bev3sc"
+              src="https://image.tmdb.org/t/p/w500https://example.com/matrix-poster.jpg"
+            />
+            <div
+              aria-hidden="true"
+              class="css-5vroew"
+              data-testid="movie-winning-percentage"
+              style="opacity: 0; transform: translateY(20px);"
+            >
+              <span
+                class="css-r8imd7"
+                style="font-size: 0rem;"
+              >
+                85
+                .
+              </span>
+              <span
+                class="css-rtnva8"
+                style="font-size: 0rem;"
+              >
+                50
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
+      </a>
     </li>
     <li
-      aria-label="Open details for The Godfather"
-      class="css-10225se"
+      class="css-ekgyul"
       data-testid="movie-item-238"
-      role="button"
-      tabindex="0"
     >
-      <div
-        class="css-1u0mlrb"
+      <a
+        aria-label="The Godfather, winning percentage 92.10"
+        class="block w-full"
+        data-discover="true"
+        href="/movie/2"
       >
-        <img
-          alt="The Godfather"
-          class="css-1u6rrjb"
-          src="https://example.com/godfather-poster.jpg"
-        />
         <div
-          class="css-seut52"
+          style="opacity: 0; transform: scale(0.95);"
         >
-          <span
-            class="css-2y6i2r"
+          <div
+            data-state="active"
+            title="The Godfather - 92.10"
           >
-            92
-            .
-          </span>
-          <span
-            class="css-i0h9c4"
-          >
-            10
-          </span>
+            <img
+              alt=""
+              class="css-1bev3sc"
+              src="https://image.tmdb.org/t/p/w500https://example.com/godfather-poster.jpg"
+            />
+            <div
+              aria-hidden="true"
+              class="css-5vroew"
+              data-testid="movie-winning-percentage"
+              style="opacity: 0; transform: translateY(20px);"
+            >
+              <span
+                class="css-r8imd7"
+                style="font-size: 0rem;"
+              >
+                92
+                .
+              </span>
+              <span
+                class="css-rtnva8"
+                style="font-size: 0rem;"
+              >
+                10
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
+      </a>
     </li>
     <li
-      aria-label="Open details for Pulp Fiction"
-      class="css-1a9vumo"
+      class="css-1nys6qs"
       data-testid="movie-item-680"
-      role="button"
-      tabindex="0"
     >
-      <div
-        class="css-1u0mlrb"
+      <a
+        aria-label="Pulp Fiction, winning percentage 89.30"
+        class="block w-full"
+        data-discover="true"
+        href="/movie/3"
       >
-        <img
-          alt="Pulp Fiction"
-          class="css-1u6rrjb"
-          src="https://example.com/pulpfiction-poster.jpg"
-        />
         <div
-          class="css-seut52"
+          style="opacity: 0; transform: scale(0.95);"
         >
-          <span
-            class="css-2y6i2r"
+          <div
+            data-state="active"
+            title="Pulp Fiction - 89.30"
           >
-            89
-            .
-          </span>
-          <span
-            class="css-i0h9c4"
-          >
-            30
-          </span>
+            <img
+              alt=""
+              class="css-1bev3sc"
+              src="https://image.tmdb.org/t/p/w500https://example.com/pulpfiction-poster.jpg"
+            />
+            <div
+              aria-hidden="true"
+              class="css-5vroew"
+              data-testid="movie-winning-percentage"
+              style="opacity: 0; transform: translateY(20px);"
+            >
+              <span
+                class="css-r8imd7"
+                style="font-size: 0rem;"
+              >
+                89
+                .
+              </span>
+              <span
+                class="css-rtnva8"
+                style="font-size: 0rem;"
+              >
+                30
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
+      </a>
     </li>
   </ul>
   <div

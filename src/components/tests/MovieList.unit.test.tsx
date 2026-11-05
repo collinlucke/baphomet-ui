@@ -1,11 +1,15 @@
 import '@testing-library/jest-dom';
 import { expect, describe, it, beforeEach, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing/react';
 import { createMovieListItemMock } from './__mocks__/movieListItemMock.tsx';
 import { MovieList } from '../MovieList/MovieList';
-import { setupIntersectionObserverMock } from './__mocks__/browserMocks.ts';
+import {
+  setupIntersectionObserverMock,
+  setupResizeObserverMock
+} from './__mocks__/browserMocks.ts';
 import { mockMovies, mockMovieDetailsQuery } from './__mocks__/testData.ts';
 
 createMovieListItemMock();
@@ -26,14 +30,15 @@ describe('MovieList Component - Unit Tests', () => {
     vi.clearAllMocks();
 
     setupIntersectionObserverMock();
+    setupResizeObserverMock();
   });
 
   describe('Component Logic & Props', () => {
     it('renders movie list when movies are provided', () => {
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]}>
+        <MemoryRouter><MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} />
-        </MockedProvider>
+        </MockedProvider></MemoryRouter>
       );
 
       expect(screen.getByTestId('baph-movie-list')).toBeInTheDocument();
@@ -44,9 +49,9 @@ describe('MovieList Component - Unit Tests', () => {
 
     it('displays total movie count in search component', () => {
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]}>
+        <MemoryRouter><MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} totalMovieCount="5" />
-        </MockedProvider>
+        </MockedProvider></MemoryRouter>
       );
 
       expect(screen.getByTestId('total-results')).toHaveTextContent('5');
@@ -54,9 +59,9 @@ describe('MovieList Component - Unit Tests', () => {
 
     it('handles empty and null movie arrays', () => {
       const { rerender } = render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]}>
+        <MemoryRouter><MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} movies={[]} />
-        </MockedProvider>
+        </MockedProvider></MemoryRouter>
       );
 
       const noResultsLine1 = screen.getByText(
@@ -68,9 +73,9 @@ describe('MovieList Component - Unit Tests', () => {
       expect(noResultsLine2).toBeInTheDocument();
 
       rerender(
-        <MockedProvider mocks={[mockMovieDetailsQuery]}>
+        <MemoryRouter><MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} movies={null} />
-        </MockedProvider>
+        </MockedProvider></MemoryRouter>
       );
 
       expect(noResultsLine1).toBeInTheDocument();
@@ -81,9 +86,9 @@ describe('MovieList Component - Unit Tests', () => {
   describe('Loading States', () => {
     it('shows loading indicator when isLoadingMore is true', () => {
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]}>
+        <MemoryRouter><MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} isLoadingMore={true} />
-        </MockedProvider>
+        </MockedProvider></MemoryRouter>
       );
 
       expect(screen.getByText('Loading more movies...')).toBeInTheDocument();
@@ -91,9 +96,9 @@ describe('MovieList Component - Unit Tests', () => {
 
     it('shows end of results message when hasMore is false', () => {
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]}>
+        <MemoryRouter><MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} hasMore={false} />
-        </MockedProvider>
+        </MockedProvider></MemoryRouter>
       );
 
       expect(
@@ -103,9 +108,9 @@ describe('MovieList Component - Unit Tests', () => {
 
     it('does not show end message when movies array is empty', () => {
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]}>
+        <MemoryRouter><MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} movies={[]} hasMore={false} />
-        </MockedProvider>
+        </MockedProvider></MemoryRouter>
       );
 
       expect(
@@ -120,12 +125,12 @@ describe('MovieList Component - Unit Tests', () => {
       const mockSetSearchTerm = vi.fn();
 
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]}>
+        <MemoryRouter><MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} setSearchTerm={mockSetSearchTerm} />
-        </MockedProvider>
+        </MockedProvider></MemoryRouter>
       );
 
-      const searchInput = screen.getByTestId('search-input');
+      const searchInput = screen.getByPlaceholderText('Search Movies');
       await user.type(searchInput, 'matrix');
 
       expect(mockSetSearchTerm).toHaveBeenCalled();
@@ -133,12 +138,12 @@ describe('MovieList Component - Unit Tests', () => {
 
     it('displays current search term', () => {
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]}>
+        <MemoryRouter><MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} searchTerm="matrix" />
-        </MockedProvider>
+        </MockedProvider></MemoryRouter>
       );
 
-      expect(screen.getByTestId('search-input')).toHaveValue('matrix');
+      expect(screen.getByPlaceholderText('Search Movies')).toHaveValue('matrix');
     });
   });
 
@@ -147,9 +152,9 @@ describe('MovieList Component - Unit Tests', () => {
       const user = userEvent.setup();
 
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]}>
+        <MemoryRouter><MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} />
-        </MockedProvider>
+        </MockedProvider></MemoryRouter>
       );
 
       const movieItem = screen.getByTestId('movie-item-603');
@@ -162,9 +167,9 @@ describe('MovieList Component - Unit Tests', () => {
 
     it('renders modal component', () => {
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]}>
+        <MemoryRouter><MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} />
-        </MockedProvider>
+        </MockedProvider></MemoryRouter>
       );
 
       expect(screen.queryByTestId('modal')).not.toBeInTheDocument();
@@ -174,9 +179,9 @@ describe('MovieList Component - Unit Tests', () => {
   describe('Scroll Functionality', () => {
     it('renders sentinel element for infinite scroll', () => {
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]}>
+        <MemoryRouter><MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} />
-        </MockedProvider>
+        </MockedProvider></MemoryRouter>
       );
 
       const movieListWrapper =
@@ -188,23 +193,23 @@ describe('MovieList Component - Unit Tests', () => {
   describe('Accessibility', () => {
     it('has proper ARIA attributes', () => {
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]}>
+        <MemoryRouter><MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} />
-        </MockedProvider>
+        </MockedProvider></MemoryRouter>
       );
 
       const movieList = screen.getByTestId('baph-movie-list');
       expect(movieList).toBeInTheDocument();
 
-      const searchInput = screen.getByTestId('search-input');
+      const searchInput = screen.getByPlaceholderText('Search Movies');
       expect(searchInput).toHaveAttribute('placeholder', 'Search Movies');
     });
 
     it('renders movie items with proper structure', () => {
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]}>
+        <MemoryRouter><MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} />
-        </MockedProvider>
+        </MockedProvider></MemoryRouter>
       );
 
       const theMatrix = screen.getByTestId('movie-item-603');
@@ -229,13 +234,13 @@ describe('MovieList Component - Unit Tests', () => {
       };
 
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]}>
+        <MemoryRouter><MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...minimalProps} />
-        </MockedProvider>
+        </MockedProvider></MemoryRouter>
       );
 
       expect(screen.getByTestId('baph-movie-list')).toBeInTheDocument();
-      expect(screen.getByTestId('baph-search')).toBeInTheDocument();
+      expect(screen.getByRole('search')).toBeInTheDocument();
     });
 
     it('handles undefined callback functions', () => {
@@ -247,9 +252,9 @@ describe('MovieList Component - Unit Tests', () => {
       };
 
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]}>
+        <MemoryRouter><MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...propsWithUndefinedCallbacks} />
-        </MockedProvider>
+        </MockedProvider></MemoryRouter>
       );
 
       expect(screen.getByTestId('baph-movie-list')).toBeInTheDocument();
@@ -263,9 +268,9 @@ describe('MovieList Component - Unit Tests', () => {
       };
 
       render(
-        <MockedProvider mocks={[mockMovieDetailsQuery]}>
+        <MemoryRouter><MockedProvider mocks={[mockMovieDetailsQuery]}>
           <MovieList {...defaultProps} className={customClassName} />
-        </MockedProvider>
+        </MockedProvider></MemoryRouter>
       );
 
       expect(screen.getByTestId('baph-movie-list')).toBeInTheDocument();
@@ -277,9 +282,9 @@ describe('MovieList Component - Unit Tests', () => {
       const mocks = [mockMovieDetailsQuery];
 
       render(
-        <MockedProvider mocks={mocks}>
+        <MemoryRouter><MockedProvider mocks={mocks}>
           <MovieList {...defaultProps} />
-        </MockedProvider>
+        </MockedProvider></MemoryRouter>
       );
 
       expect(screen.getByTestId('baph-movie-list')).toBeInTheDocument();
@@ -288,9 +293,9 @@ describe('MovieList Component - Unit Tests', () => {
   describe('Snapshot Tests', () => {
     it('should match snapshot with default props', () => {
       const { container } = render(
-        <MockedProvider mocks={[]}>
+        <MemoryRouter><MockedProvider mocks={[]}>
           <MovieList {...defaultProps} />
-        </MockedProvider>
+        </MockedProvider></MemoryRouter>
       );
 
       expect(container.firstChild).toMatchSnapshot();
@@ -298,9 +303,9 @@ describe('MovieList Component - Unit Tests', () => {
 
     it('should match snapshot with empty movies list', () => {
       const { container } = render(
-        <MockedProvider mocks={[]}>
+        <MemoryRouter><MockedProvider mocks={[]}>
           <MovieList {...defaultProps} movies={[]} />
-        </MockedProvider>
+        </MockedProvider></MemoryRouter>
       );
 
       expect(container.firstChild).toMatchSnapshot();
@@ -308,14 +313,14 @@ describe('MovieList Component - Unit Tests', () => {
 
     it('should match snapshot with loading state', () => {
       const { container } = render(
-        <MockedProvider mocks={[]}>
+        <MemoryRouter><MockedProvider mocks={[]}>
           <MovieList
             {...defaultProps}
             movies={[]}
             hasMore={true}
             isLoadingMore={true}
           />
-        </MockedProvider>
+        </MockedProvider></MemoryRouter>
       );
 
       expect(container.firstChild).toMatchSnapshot();
@@ -324,14 +329,14 @@ describe('MovieList Component - Unit Tests', () => {
 
   it('should match snapshot with loading state', () => {
     const { container } = render(
-      <MockedProvider mocks={[]}>
+      <MemoryRouter><MockedProvider mocks={[]}>
         <MovieList
           {...defaultProps}
           movies={[]}
           hasMore={true}
           isLoadingMore={true}
         />
-      </MockedProvider>
+      </MockedProvider></MemoryRouter>
     );
 
     expect(container.firstChild).toMatchSnapshot();
@@ -339,13 +344,13 @@ describe('MovieList Component - Unit Tests', () => {
 
   it('should match snapshot with search functionality', () => {
     const { container } = render(
-      <MockedProvider mocks={[]}>
+      <MemoryRouter><MockedProvider mocks={[]}>
         <MovieList
           {...defaultProps}
           onSearch={vi.fn()}
           searchTerm="test search"
         />
-      </MockedProvider>
+      </MockedProvider></MemoryRouter>
     );
     expect(container.firstChild).toMatchSnapshot();
   });

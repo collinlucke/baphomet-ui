@@ -1,116 +1,130 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Heading > Snapshots > matches snapshot when authenticated > heading-authenticated 1`] = `
+exports[`Header > Snapshots > matches snapshot when authenticated > heading-authenticated 1`] = `
 <div>
   <header
-    aria-label="Site header"
-    class="pa-header css-c9rb8t"
-    role="banner"
+    class="ath-header css-0"
   >
     <div
-      class="css-1j19tx6"
+      class="css-1q9shfe"
     >
-      <a
-        aria-label="Baphomet - Go to homepage"
-        class="css-9u4epn"
-        data-discover="true"
-        data-testid="home-link"
-        href="/"
-      >
-        <h1
-          class="css-yeu9cf"
-        >
-          Baphomet
-        </h1>
-        <img
-          alt="Baphomet logo"
-          aria-hidden="true"
-          class="css-jo2gi6"
-          role="presentation"
-          src="/baphy-favicon.png"
-        />
-      </a>
       <nav
-        aria-label="Main navigation"
-        class="css-bfomv6"
+        class="css-z7mtfw"
       >
-        <div
-          class="pa-button-group horizontal medium css-1a9vhha"
-          role="group"
+        <a
+          aria-label="Baphomet - Go to homepage"
+          class="css-1wvlhgx"
+          data-discover="true"
+          data-testid="logo-link"
+          href="/"
         >
-          <a
-            data-discover="true"
-            href="/arena"
+          <h1
+            class="css-1ccw2wa"
           >
-            <button
-              aria-label="Go to Arena page"
-              class="pa-button ghostOnDark small css-wad0dn"
+            Baphy
+          </h1>
+          <img
+            alt="Baphomet logo"
+            aria-hidden="true"
+            class="css-xj0vep"
+            role="presentation"
+            src="/baphy-favicon.png"
+          />
+        </a>
+        <div
+          class="css-174f635"
+        >
+          <nav>
+            <div
+              class="ath-button-group ath-button-group-direction-row css-77ji9j"
             >
-              Arena
-            </button>
-          </a>
-          <a
-            data-discover="true"
-            href="/leaderboard"
-          >
-            <button
-              aria-label="Go to Leaderboard page"
-              class="pa-button ghostOnDark small css-wad0dn"
-            >
-              Leaderboard
-            </button>
-          </a>
-          <a
-            data-discover="true"
-            href="/all-movies"
-          >
-            <button
-              aria-label="Go to All Movies page"
-              class="pa-button ghostOnDark small css-wad0dn"
-            >
-              All Movies
-            </button>
-          </a>
-          <a
-            data-discover="true"
-            href="/faq"
-          >
-            <button
-              aria-label="Go to FAQ page"
-              class="pa-button ghostOnDark small css-wad0dn"
-            >
-              FAQ
-            </button>
-          </a>
+              <a
+                data-discover="true"
+                href="/arena"
+              >
+                <button
+                  class="ath-button ath-button-small ath-button-ghost ath-button-dark ath-button-wrap ath-button-text-center css-0"
+                  type="button"
+                >
+                  <div>
+                    Arena 
+                  </div>
+                </button>
+              </a>
+              <a
+                data-discover="true"
+                href="/leaderboard"
+              >
+                <button
+                  class="ath-button ath-button-small ath-button-ghost ath-button-dark ath-button-wrap ath-button-text-center css-0"
+                  type="button"
+                >
+                  <div>
+                    Leaderboard
+                  </div>
+                </button>
+              </a>
+              <a
+                data-discover="true"
+                href="/all-movies"
+              >
+                <button
+                  class="ath-button ath-button-small ath-button-ghost ath-button-dark ath-button-wrap ath-button-text-center css-0"
+                  type="button"
+                >
+                  <div>
+                    All Movies
+                  </div>
+                </button>
+              </a>
+              <a
+                data-discover="true"
+                href="/faq"
+              >
+                <button
+                  class="ath-button ath-button-small ath-button-ghost ath-button-dark ath-button-wrap ath-button-text-center css-0"
+                  type="button"
+                >
+                  <div>
+                    FAQ
+                  </div>
+                </button>
+              </a>
+            </div>
+          </nav>
           <div
-            aria-label="User actions"
-            class="pa-button-group horizontal medium css-hegljl"
-            role="group"
+            class="ath-button-group ath-button-group-direction-row css-16kxbp9"
           >
             <button
               aria-describedby="signup-help"
               aria-label="Open sign up form"
-              class="pa-button secondary small css-x6551n"
+              class="ath-button ath-button-small ath-button-tertiary ath-button-text-center css-0"
               data-testid="signup-button"
+              type="button"
             >
-              Sign Up
+              <div>
+                Sign Up
+              </div>
             </button>
             <button
               aria-describedby="login-help"
               aria-label="Open log in form"
-              class="pa-button primary small css-18sumex"
+              class="ath-button ath-button-small ath-button-primary ath-button-dark ath-button-text-center css-0"
               data-testid="login-button"
+              type="button"
             >
-              Log in
+              <div>
+                Log in
+              </div>
             </button>
             <span
-              class="css-1tm92sh"
+              class="css-9nyaor"
               id="signup-help"
             >
               Create a new account to add and rate movies
             </span>
             <span
-              class="css-1tm92sh"
+              class="css-9nyaor"
               id="login-help"
             >
               Sign in to your existing account
@@ -123,117 +137,131 @@ exports[`Heading > Snapshots > matches snapshot when authenticated > heading-aut
 </div>
 `;
 
-exports[`Heading > Snapshots > matches snapshot when not authenticated > heading-not-authenticated 1`] = `
+exports[`Header > Snapshots > matches snapshot when not authenticated > heading-not-authenticated 1`] = `
 <div>
   <header
-    aria-label="Site header"
-    class="pa-header css-c9rb8t"
-    role="banner"
+    class="ath-header css-0"
   >
     <div
-      class="css-1j19tx6"
+      class="css-1q9shfe"
     >
-      <a
-        aria-label="Baphomet - Go to homepage"
-        class="css-9u4epn"
-        data-discover="true"
-        data-testid="home-link"
-        href="/"
-      >
-        <h1
-          class="css-yeu9cf"
-        >
-          Baphomet
-        </h1>
-        <img
-          alt="Baphomet logo"
-          aria-hidden="true"
-          class="css-jo2gi6"
-          role="presentation"
-          src="/baphy-favicon.png"
-        />
-      </a>
       <nav
-        aria-label="Main navigation"
-        class="css-bfomv6"
+        class="css-z7mtfw"
       >
-        <div
-          class="pa-button-group horizontal medium css-1a9vhha"
-          role="group"
+        <a
+          aria-label="Baphomet - Go to homepage"
+          class="css-1wvlhgx"
+          data-discover="true"
+          data-testid="logo-link"
+          href="/"
         >
-          <a
-            data-discover="true"
-            href="/arena"
+          <h1
+            class="css-1ccw2wa"
           >
-            <button
-              aria-label="Go to Arena page"
-              class="pa-button ghostOnDark small css-wad0dn"
+            Baphy
+          </h1>
+          <img
+            alt="Baphomet logo"
+            aria-hidden="true"
+            class="css-xj0vep"
+            role="presentation"
+            src="/baphy-favicon.png"
+          />
+        </a>
+        <div
+          class="css-174f635"
+        >
+          <nav>
+            <div
+              class="ath-button-group ath-button-group-direction-row css-77ji9j"
             >
-              Arena
-            </button>
-          </a>
-          <a
-            data-discover="true"
-            href="/leaderboard"
-          >
-            <button
-              aria-label="Go to Leaderboard page"
-              class="pa-button ghostOnDark small css-wad0dn"
-            >
-              Leaderboard
-            </button>
-          </a>
-          <a
-            data-discover="true"
-            href="/all-movies"
-          >
-            <button
-              aria-label="Go to All Movies page"
-              class="pa-button ghostOnDark small css-wad0dn"
-            >
-              All Movies
-            </button>
-          </a>
-          <a
-            data-discover="true"
-            href="/faq"
-          >
-            <button
-              aria-label="Go to FAQ page"
-              class="pa-button ghostOnDark small css-wad0dn"
-            >
-              FAQ
-            </button>
-          </a>
+              <a
+                data-discover="true"
+                href="/arena"
+              >
+                <button
+                  class="ath-button ath-button-small ath-button-ghost ath-button-dark ath-button-wrap ath-button-text-center css-0"
+                  type="button"
+                >
+                  <div>
+                    Arena 
+                  </div>
+                </button>
+              </a>
+              <a
+                data-discover="true"
+                href="/leaderboard"
+              >
+                <button
+                  class="ath-button ath-button-small ath-button-ghost ath-button-dark ath-button-wrap ath-button-text-center css-0"
+                  type="button"
+                >
+                  <div>
+                    Leaderboard
+                  </div>
+                </button>
+              </a>
+              <a
+                data-discover="true"
+                href="/all-movies"
+              >
+                <button
+                  class="ath-button ath-button-small ath-button-ghost ath-button-dark ath-button-wrap ath-button-text-center css-0"
+                  type="button"
+                >
+                  <div>
+                    All Movies
+                  </div>
+                </button>
+              </a>
+              <a
+                data-discover="true"
+                href="/faq"
+              >
+                <button
+                  class="ath-button ath-button-small ath-button-ghost ath-button-dark ath-button-wrap ath-button-text-center css-0"
+                  type="button"
+                >
+                  <div>
+                    FAQ
+                  </div>
+                </button>
+              </a>
+            </div>
+          </nav>
           <div
-            aria-label="User actions"
-            class="pa-button-group horizontal medium css-hegljl"
-            role="group"
+            class="ath-button-group ath-button-group-direction-row css-16kxbp9"
           >
             <button
               aria-describedby="signup-help"
               aria-label="Open sign up form"
-              class="pa-button secondary small css-x6551n"
+              class="ath-button ath-button-small ath-button-tertiary ath-button-text-center css-0"
               data-testid="signup-button"
+              type="button"
             >
-              Sign Up
+              <div>
+                Sign Up
+              </div>
             </button>
             <button
               aria-describedby="login-help"
               aria-label="Open log in form"
-              class="pa-button primary small css-18sumex"
+              class="ath-button ath-button-small ath-button-primary ath-button-dark ath-button-text-center css-0"
               data-testid="login-button"
+              type="button"
             >
-              Log in
+              <div>
+                Log in
+              </div>
             </button>
             <span
-              class="css-1tm92sh"
+              class="css-9nyaor"
               id="signup-help"
             >
               Create a new account to add and rate movies
             </span>
             <span
-              class="css-1tm92sh"
+              class="css-9nyaor"
               id="login-help"
             >
               Sign in to your existing account

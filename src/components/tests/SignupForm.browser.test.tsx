@@ -84,7 +84,10 @@ describe('SignupForm - Realistic Tests', () => {
               username: 'testuser',
               email: 'test@example.com',
               password: 'password123',
-              displayName: 'Test User'
+              displayName: 'Test User',
+              firstName: '',
+              lastName: '',
+              birthday: ''
             }
           },
           result: {
@@ -156,7 +159,10 @@ describe('SignupForm - Realistic Tests', () => {
               username: 'existinguser',
               email: 'existing@example.com',
               password: 'password123',
-              displayName: 'Existing User'
+              displayName: 'Existing User',
+              firstName: '',
+              lastName: '',
+              birthday: ''
             }
           },
           result: {
@@ -216,10 +222,15 @@ describe('SignupForm - Realistic Tests', () => {
               username: 'testuser',
               email: 'test@example.com',
               password: 'password123',
-              displayName: 'Test User'
+              displayName: 'Test User',
+              firstName: '',
+              lastName: '',
+              birthday: ''
             }
           },
-          networkError: new Error('Network error')
+          error: Object.assign(new Error('Failed to fetch'), {
+            networkError: new Error('Failed to fetch')
+          })
         }
       ];
 
@@ -273,7 +284,10 @@ describe('SignupForm - Realistic Tests', () => {
               username: 'testuser',
               email: 'test@example.com',
               password: 'password123',
-              displayName: 'Test User'
+              displayName: 'Test User',
+              firstName: '',
+              lastName: '',
+              birthday: ''
             }
           },
           result: {

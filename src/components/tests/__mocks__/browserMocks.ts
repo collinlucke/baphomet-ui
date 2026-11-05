@@ -11,3 +11,14 @@ export const setupIntersectionObserverMock = () => {
 
   return mockIntersectionObserver;
 };
+
+export const setupResizeObserverMock = () => {
+  const mockResizeObserver = vi.fn();
+  mockResizeObserver.mockReturnValue({
+    observe: () => null,
+    unobserve: () => null,
+    disconnect: () => null
+  });
+  window.ResizeObserver = mockResizeObserver;
+  return mockResizeObserver;
+};

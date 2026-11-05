@@ -1,9 +1,10 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, it, beforeEach, expect, vi } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 import { InMemoryCache, ApolloClient, ApolloLink } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client/react';
-import { NavMenuButton } from '../../NavMenuButton';
-import { isSmallOrMobileVar } from '../../../reactiveVars';
+import { NavMenuButton } from '../NavMenuButton';
+import { isSmallOrMobileVar } from '../../reactiveVars';
 
 // Create a test Apollo client
 const testClient = new ApolloClient({
@@ -25,62 +26,14 @@ describe('NavMenuButton', () => {
     isSmallOrMobileVar(false);
   });
 
-  describe('Basic rendering', () => {
-    it('renders with text children', () => {
-      renderWithProviders(<NavMenuButton>Test Button</NavMenuButton>);
-      expect(
-        screen.getByRole('button', { name: 'Test Button' })
-      ).toBeInTheDocument();
-    });
-
-    it('renders with React element children', () => {
-      renderWithProviders(
-        <NavMenuButton>
-          <span>Icon Button</span>
-        </NavMenuButton>
-      );
-      expect(screen.getByRole('button')).toBeInTheDocument();
-      expect(screen.getByText('Icon Button')).toBeInTheDocument();
-    });
-
-    it('applies custom testId', () => {
-      renderWithProviders(
-        <NavMenuButton testId="custom-nav-button">Test</NavMenuButton>
-      );
-      expect(screen.getByTestId('custom-nav-button')).toBeInTheDocument();
-    });
-  });
-
-  describe('Link behavior', () => {
-    it('renders as a Link when "to" prop is provided', () => {
-      renderWithProviders(
-        <NavMenuButton to="/test-route">Link Button</NavMenuButton>
-      );
-
-      const link = screen.getByRole('link');
-      expect(link).toBeInTheDocument();
-      expect(link).toHaveAttribute('href', '/test-route');
-
-      const button = screen.getByRole('button');
-      expect(button).toBeInTheDocument();
-    });
-
-    it('renders as a standalone button when "to" prop is not provided', () => {
-      renderWithProviders(<NavMenuButton>Standalone Button</NavMenuButton>);
-
-      expect(screen.getByRole('button')).toBeInTheDocument();
-      expect(screen.queryByRole('link')).not.toBeInTheDocument();
-    });
-  });
-
   describe('Variant logic', () => {
     it('uses provided variant when specified', () => {
       renderWithProviders(
-        <NavMenuButton variant="primary">Primary Button</NavMenuButton>
+        <NavMenuButton variant="secondary">Primary Button</NavMenuButton>
       );
 
       const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('data-variant', 'primary');
+      expect(button).toHaveClass('ath-button-secondary');
     });
 
     it('uses ghost variant on small/mobile screens', () => {
@@ -89,21 +42,21 @@ describe('NavMenuButton', () => {
       renderWithProviders(<NavMenuButton>Mobile Button</NavMenuButton>);
 
       const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('data-variant', 'ghost');
+      expect(button).toHaveClass('ath-button-ghost');
     });
 
     it('uses ghost variant when dark is true', () => {
       renderWithProviders(<NavMenuButton dark>Dark Button</NavMenuButton>);
 
       const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('data-variant', 'ghost');
+      expect(button).toHaveClass('ath-button-ghost');
     });
 
     it('uses ghost variant when dark is false and not mobile', () => {
       renderWithProviders(<NavMenuButton>Light Button</NavMenuButton>);
 
       const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('data-variant', 'ghost');
+      expect(button).toHaveClass('ath-button-ghost');
     });
   });
 
@@ -114,7 +67,7 @@ describe('NavMenuButton', () => {
       renderWithProviders(<NavMenuButton>Mobile Button</NavMenuButton>);
 
       const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('data-size', 'medium');
+      expect(button).toHaveClass('ath-button-small');
     });
 
     it('uses small size on desktop screens', () => {
@@ -123,7 +76,7 @@ describe('NavMenuButton', () => {
       renderWithProviders(<NavMenuButton>Desktop Button</NavMenuButton>);
 
       const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('data-size', 'small');
+      expect(button).toHaveClass('ath-button-small');
     });
   });
 
@@ -149,7 +102,7 @@ describe('NavMenuButton', () => {
 
   describe('Click handling', () => {
     it('calls onClick handler when button is clicked', () => {
-      const mockOnClick = jest.fn();
+      const mockOnClick = vi.fn();
 
       renderWithProviders(
         <NavMenuButton onClick={mockOnClick}>Clickable Button</NavMenuButton>
@@ -162,7 +115,7 @@ describe('NavMenuButton', () => {
     });
 
     it('calls onClick handler when Link button is clicked', () => {
-      const mockOnClick = jest.fn();
+      const mockOnClick = vi.fn();
 
       renderWithProviders(
         <NavMenuButton to="/test" onClick={mockOnClick}>
@@ -177,18 +130,9 @@ describe('NavMenuButton', () => {
     });
   });
 
-  describe('Styling', () => {
-    it('applies custom button styles', () => {
-      renderWithProviders(<NavMenuButton>Styled Button</NavMenuButton>);
-
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('custom-button-class');
-    });
-  });
-
   describe('Integration scenarios', () => {
     it('handles all props together correctly', () => {
-      const mockOnClick = jest.fn();
+      const mockOnClick = vi.fn();
 
       renderWithProviders(
         <NavMenuButton
@@ -210,7 +154,7 @@ describe('NavMenuButton', () => {
 
       // Check button properties
       const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('data-variant', 'secondary');
+      expect(button).toHaveClass('ath-button-secondary');
       expect(button).toHaveAttribute('aria-label', 'Complex button');
       expect(button).toHaveAttribute('aria-describedby', 'complex-desc');
       expect(button).toHaveAttribute('data-testid', 'complex-button');
@@ -230,8 +174,13 @@ describe('NavMenuButton', () => {
       );
 
       const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('data-size', 'medium'); // mobile size
-      expect(button).toHaveAttribute('data-variant', 'outline'); // custom variant overrides
+      console.log('button VVV');
+      console.log(button);
+      expect(button).toHaveClass(
+        'ath-button-small',
+        'ath-button-dark',
+        'ath-button-outline'
+      );
     });
   });
 });

@@ -62,7 +62,7 @@ describe('LoginForm Tests', () => {
           request: {
             query: LOGIN,
             variables: {
-              email: 'test@example.com',
+              emailOrUsername: 'test@example.com',
               password: 'password123'
             }
           },
@@ -123,7 +123,7 @@ describe('LoginForm Tests', () => {
           request: {
             query: LOGIN,
             variables: {
-              email: 'wrong@example.com',
+              emailOrUsername: 'wrong@example.com',
               password: 'wrongpassword'
             }
           },
@@ -169,11 +169,13 @@ describe('LoginForm Tests', () => {
           request: {
             query: LOGIN,
             variables: {
-              email: 'test@example.com',
+              emailOrUsername: 'test@example.com',
               password: 'password123'
             }
           },
-          networkError: new Error('Network error')
+          error: Object.assign(new Error('Failed to fetch'), {
+            networkError: new Error('Failed to fetch')
+          })
         }
       ];
 
@@ -215,7 +217,7 @@ describe('LoginForm Tests', () => {
           request: {
             query: LOGIN,
             variables: {
-              email: 'test@example.com',
+              emailOrUsername: 'test@example.com',
               password: 'password123'
             }
           },

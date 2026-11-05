@@ -6,26 +6,39 @@ import del from 'rollup-plugin-delete';
 
 const localAthame = resolve('..', 'athameui');
 const useLocalAthame = existsSync(resolve(localAthame, 'package.json'));
+const reactDir = resolve('node_modules/react').replaceAll('\\', '/');
+const reactDomDir = resolve('node_modules/react-dom').replaceAll('\\', '/');
+const emotionDir = resolve('node_modules/@emotion/react').replaceAll('\\', '/');
+
+const sharedPackageAliases = [
+  { find: /^react(\/.*)?$/, replacement: `${reactDir}$1` },
+  { find: /^react-dom(\/.*)?$/, replacement: `${reactDomDir}$1` },
+  { find: /^@emotion\/react(\/.*)?$/, replacement: `${emotionDir}$1` }
+];
 
 export default defineConfig({
-  resolve: useLocalAthame
-    ? {
-        alias: [
-          {
-            find: 'athameui/tokens.css',
-            replacement: resolve(localAthame, 'styles/tokens.css')
-          },
-          {
-            find: 'athameui/theme.css',
-            replacement: resolve(localAthame, 'styles/theme.css')
-          },
-          {
-            find: 'athameui',
-            replacement: resolve(localAthame, 'main.ts')
-          }
-        ]
-      }
-    : undefined,
+  resolve: {
+    dedupe: ['react', 'react-dom', '@emotion/react'],
+    alias: [
+      ...(useLocalAthame
+        ? [
+            {
+              find: 'athameui/tokens.css',
+              replacement: resolve(localAthame, 'styles/tokens.css')
+            },
+            {
+              find: 'athameui/theme.css',
+              replacement: resolve(localAthame, 'styles/theme.css')
+            },
+            {
+              find: 'athameui',
+              replacement: resolve(localAthame, 'main.ts')
+            }
+          ]
+        : []),
+      ...sharedPackageAliases
+    ]
+  },
   plugins: [
     react({
       jsxImportSource: '@emotion/react',

@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { expect, describe, it, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { mockLocalStorage } from './__mocks__/mockLocalStorage';
 import { Header } from '../Layouts/Header';
@@ -9,16 +9,31 @@ import { ApolloProvider } from '@apollo/client/react';
 import { InMemoryCache, ApolloClient, ApolloLink } from '@apollo/client';
 import {
   isAuthenticatedVar,
+  isLargeScreenVar,
+  isMobileVar,
+  isSmallOrMobileVar,
   showSignUpModalVar,
-  showLoginModalVar
+  showLoginModalVar,
+  showSlideOutMenuVar
 } from '../../reactiveVars';
 
 beforeEach(() => {
   mockLocalStorage();
   isAuthenticatedVar(false);
+  isLargeScreenVar(true);
+  isMobileVar(false);
+  isSmallOrMobileVar(false);
+  showSlideOutMenuVar(false);
   showSignUpModalVar(false);
   showLoginModalVar(false);
 });
+
+const openAccountMenu = () => {
+  const menu = screen.getByRole('button', { name: /account menu/i });
+  if (menu.getAttribute('aria-expanded') !== 'true') {
+    fireEvent.click(menu);
+  }
+};
 
 const mockClient = new ApolloClient({
   cache: new InMemoryCache(),
@@ -45,17 +60,17 @@ const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 describe('Header', () => {
   describe('Basic rendering', () => {
-    it.only('renders the logo/home link correctly', async () => {
+    it('renders the logo/home link correctly', async () => {
       render(
         <TestWrapper>
           <Header />
         </TestWrapper>
       );
 
-      const homeLink = await screen.getByTestId('home-link');
+      const homeLink = await screen.findByTestId('logo-link');
 
       expect(homeLink).toBeVisible();
-      expect(screen.getByText('Baphomet')).toBeVisible();
+      expect(screen.getByText('Baphy')).toBeVisible();
     });
 
     it('renders navigation buttons', async () => {
@@ -65,9 +80,9 @@ describe('Header', () => {
         </TestWrapper>
       );
 
-      expect(screen.getByText('Arena')).toBeVisible();
-      expect(screen.getByText('Leaderboard')).toBeVisible();
-      expect(screen.getByText('All Movies')).toBeVisible();
+      expect(screen.getByRole('button', { name: /Arena/ })).toBeVisible();
+      expect(screen.getByRole('button', { name: 'Leaderboard' })).toBeVisible();
+      expect(screen.getByRole('button', { name: 'All Movies' })).toBeVisible();
     });
   });
 
@@ -94,7 +109,7 @@ describe('Header', () => {
         </TestWrapper>
       );
 
-      expect(screen.queryByTestId('add-new-movie-button')).toBeNull();
+      expect(screen.queryByRole('button', { name: 'Add Movie' })).toBeNull();
     });
 
     it('opens signup modal when Sign Up button is clicked', async () => {
@@ -151,7 +166,8 @@ describe('Header', () => {
         </TestWrapper>
       );
 
-      expect(await screen.findByTestId('add-new-movie-button')).toBeVisible();
+      openAccountMenu();
+      expect(screen.getByRole('button', { name: 'Add Movie' })).toBeInTheDocument();
     });
 
     it('shows Log out button', async () => {
@@ -161,7 +177,8 @@ describe('Header', () => {
         </TestWrapper>
       );
 
-      expect(screen.getByTestId('logout-button')).toBeVisible();
+      openAccountMenu();
+      expect(screen.getByRole('button', { name: 'Logout' })).toBeVisible();
     });
 
     it('does NOT show Sign Up and Log in buttons', async () => {
@@ -176,15 +193,14 @@ describe('Header', () => {
     });
 
     it('logs out user when Log out button is clicked', async () => {
-      const user = userEvent.setup();
-
       render(
         <TestWrapper>
           <Header />
         </TestWrapper>
       );
 
-      await user.click(screen.getByText('Log out'));
+      openAccountMenu();
+      fireEvent.click(screen.getByRole('button', { name: 'Logout' }));
 
       await waitFor(() => {
         expect(screen.getByText('Sign Up')).toBeVisible();

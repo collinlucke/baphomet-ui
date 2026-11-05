@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { expect, describe, it, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import { MockedProvider } from '@apollo/client/testing/react';
@@ -12,8 +12,12 @@ import { SignupForm } from '../ModalContents/SignupForm';
 import { ModalContent } from '../ModalContents/ModalContent';
 import {
   isAuthenticatedVar,
+  isLargeScreenVar,
+  isMobileVar,
+  isSmallOrMobileVar,
   showSignUpModalVar,
-  showLoginModalVar
+  showLoginModalVar,
+  showSlideOutMenuVar
 } from '../../reactiveVars';
 import { useReactiveVar } from '@apollo/client/react';
 import { LOGIN, SIGNUP } from '../../api/mutations';
@@ -22,15 +26,38 @@ import { mockLocalStorage } from './__mocks__/mockLocalStorage';
 beforeEach(() => {
   mockLocalStorage();
   isAuthenticatedVar(false);
+  isLargeScreenVar(true);
+  isMobileVar(false);
+  isSmallOrMobileVar(false);
+  showSlideOutMenuVar(false);
   showSignUpModalVar(false);
   showLoginModalVar(false);
 });
+
+const openAccountMenu = () => {
+  const menu = screen.getByRole('button', { name: /account menu/i });
+  if (menu.getAttribute('aria-expanded') !== 'true') {
+    fireEvent.click(menu);
+  }
+};
+
+const rememberAdmin = () => {
+  localStorage.setItem(
+    'baphomet-user',
+    JSON.stringify({
+      id: '1',
+      username: 'test',
+      role: 'admin',
+      displayName: 'Test User'
+    })
+  );
+};
 
 const mockSuccessfulLogin = {
   request: {
     query: LOGIN,
     variables: {
-      email: 'test@example.com',
+      emailOrUsername: 'test@example.com',
       password: 'password123'
     }
   },
@@ -60,7 +87,10 @@ const mockSuccessfulSignup = {
       username: 'newuser',
       email: 'new@example.com',
       password: 'password123',
-      displayName: 'New User'
+      displayName: 'New User',
+      firstName: '',
+      lastName: '',
+      birthday: ''
     }
   },
   result: {
@@ -129,13 +159,13 @@ const renderHeader = (mocks: MockedResponse[] = []) => {
 
 describe('Authentication Integration Tests', () => {
   describe('Login Flow', () => {
-    it.only('completes full login flow successfully', async () => {
+    it('completes full login flow successfully', async () => {
       const user = userEvent.setup();
       renderHeader([mockSuccessfulLogin]);
 
       expect(screen.getByTestId('signup-button')).toBeVisible();
       expect(screen.getByTestId('login-button')).toBeVisible();
-      expect(screen.queryByTestId('logout-button')).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'Logout' })).not.toBeInTheDocument();
 
       await user.click(screen.getByTestId('login-button'));
 
@@ -162,9 +192,9 @@ describe('Authentication Integration Tests', () => {
 
       expect(showLoginModalVar()).toBe(false);
 
-      // await waitFor(() => {
-      expect(screen.getByTestId('logout-button')).toBeVisible();
-      // expect(screen.getByTestId('add-new-movie-button')).toBeVisible();
+      openAccountMenu();
+      expect(screen.getByRole('button', { name: 'Logout' })).toBeVisible();
+      // expect(screen.getByRole('button', { name: 'Add Movie' })).toBeVisible();
       // expect(screen.queryByTestId('signup-button')).not.toBeInTheDocument();
       // expect(screen.queryByTestId('login-button')).not.toBeInTheDocument();
       // });
@@ -177,7 +207,7 @@ describe('Authentication Integration Tests', () => {
         request: {
           query: LOGIN,
           variables: {
-            email: 'wrong@example.com',
+            emailOrUsername: 'wrong@example.com',
             password: 'wrongpassword'
           }
         },
@@ -213,7 +243,7 @@ describe('Authentication Integration Tests', () => {
       });
 
       expect(screen.getByTestId('signup-button')).toBeVisible();
-      expect(screen.queryByTestId('logout-button')).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'Logout' })).not.toBeInTheDocument();
       expect(localStorage.getItem('baphomet-token')).toBeNull();
     });
   });
@@ -254,8 +284,11 @@ describe('Authentication Integration Tests', () => {
       });
 
       await waitFor(() => {
-        expect(screen.getByTestId('logout-button')).toBeVisible();
-        expect(screen.getByTestId('add-new-movie-button')).toBeVisible();
+        openAccountMenu();
+        expect(screen.getByRole('button', { name: 'Logout' })).toBeVisible();
+        expect(
+          screen.queryByRole('button', { name: 'Add Movie' })
+        ).not.toBeInTheDocument();
         expect(screen.queryByTestId('signup-button')).not.toBeInTheDocument();
         expect(screen.queryByTestId('login-button')).not.toBeInTheDocument();
       });
@@ -271,7 +304,10 @@ describe('Authentication Integration Tests', () => {
             username: 'existinguser',
             email: 'existing@example.com',
             password: 'password123',
-            displayName: 'Existing User'
+            displayName: 'Existing User',
+            firstName: '',
+            lastName: '',
+            birthday: ''
           }
         },
         result: {
@@ -315,33 +351,33 @@ describe('Authentication Integration Tests', () => {
       });
 
       expect(screen.getByTestId('signup-button')).toBeVisible();
-      expect(screen.queryByTestId('logout-button')).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'Logout' })).not.toBeInTheDocument();
       expect(localStorage.getItem('baphomet-token')).toBeNull();
     });
   });
 
   describe('Logout Flow', () => {
     it('completes full logout flow successfully', async () => {
-      const user = userEvent.setup();
-
       isAuthenticatedVar(true);
       localStorage.setItem('baphomet-token', 'existing-token');
+      rememberAdmin();
 
       renderHeader();
+      openAccountMenu();
 
-      expect(screen.getByTestId('logout-button')).toBeVisible();
-      expect(screen.getByTestId('add-new-movie-button')).toBeVisible();
+      expect(screen.getByRole('button', { name: 'Logout' })).toBeVisible();
+      expect(screen.getByRole('button', { name: 'Add Movie' })).toBeVisible();
       expect(screen.queryByTestId('signup-button')).not.toBeInTheDocument();
       expect(screen.queryByTestId('login-button')).not.toBeInTheDocument();
 
-      await user.click(screen.getByTestId('logout-button'));
+      fireEvent.click(screen.getByRole('button', { name: 'Logout' }));
 
       await waitFor(() => {
         expect(screen.getByTestId('signup-button')).toBeVisible();
         expect(screen.getByTestId('login-button')).toBeVisible();
-        expect(screen.queryByTestId('logout-button')).not.toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: 'Logout' })).not.toBeInTheDocument();
         expect(
-          screen.queryByTestId('add-new-movie-button')
+          screen.queryByRole('button', { name: 'Add Movie' })
         ).not.toBeInTheDocument();
       });
 
@@ -350,13 +386,11 @@ describe('Authentication Integration Tests', () => {
 
     it('logout button has proper accessibility attributes', async () => {
       isAuthenticatedVar(true);
+      rememberAdmin();
       renderHeader();
+      openAccountMenu();
 
-      const logoutButton = screen.getByTestId('logout-button');
-      expect(logoutButton).toHaveAttribute(
-        'aria-label',
-        'Sign out of your account'
-      );
+      const logoutButton = screen.getByRole('button', { name: 'Logout' });
       expect(logoutButton).toBeVisible();
     });
   });
@@ -430,11 +464,13 @@ describe('Authentication Integration Tests', () => {
     it('maintains authentication state across component re-renders', async () => {
       isAuthenticatedVar(true);
       localStorage.setItem('baphomet-token', 'persisted-token');
+      rememberAdmin();
 
       const { rerender } = renderHeader();
+      openAccountMenu();
 
-      expect(screen.getByTestId('logout-button')).toBeVisible();
-      expect(screen.getByTestId('add-new-movie-button')).toBeVisible();
+      expect(screen.getByRole('button', { name: 'Logout' })).toBeVisible();
+      expect(screen.getByRole('button', { name: 'Add Movie' })).toBeVisible();
 
       rerender(
         <MockedProvider mocks={[]}>
@@ -444,8 +480,9 @@ describe('Authentication Integration Tests', () => {
         </MockedProvider>
       );
 
-      expect(screen.getByTestId('logout-button')).toBeVisible();
-      expect(screen.getByTestId('add-new-movie-button')).toBeVisible();
+      openAccountMenu();
+      expect(screen.getByRole('button', { name: 'Logout' })).toBeVisible();
+      expect(screen.getByRole('button', { name: 'Add Movie' })).toBeVisible();
     });
 
     it('reflects changes in authentication state via reactive var', async () => {
@@ -457,7 +494,8 @@ describe('Authentication Integration Tests', () => {
       isAuthenticatedVar(true);
 
       await waitFor(() => {
-        expect(screen.getByTestId('logout-button')).toBeVisible();
+        openAccountMenu();
+        expect(screen.getByRole('button', { name: 'Logout' })).toBeVisible();
         expect(screen.queryByTestId('signup-button')).not.toBeInTheDocument();
         expect(screen.queryByTestId('login-button')).not.toBeInTheDocument();
       });

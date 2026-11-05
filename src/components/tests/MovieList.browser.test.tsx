@@ -2,16 +2,23 @@ import '@testing-library/jest-dom';
 import { expect, describe, it, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
 import { MockedProvider } from '@apollo/client/testing/react';
 import { MovieList } from '../MovieList/MovieList';
-import { setupIntersectionObserverMock } from './__mocks__/browserMocks';
+import {
+  setupIntersectionObserverMock,
+  setupResizeObserverMock
+} from './__mocks__/browserMocks';
 import { mockMovies, mockMovieDetailsQuery } from './__mocks__/testData';
 
 setupIntersectionObserverMock();
+setupResizeObserverMock();
 
 const renderWithApollo = (ui: React.ReactElement) => {
   return render(
-    <MockedProvider mocks={[mockMovieDetailsQuery]}>{ui}</MockedProvider>
+    <MockedProvider mocks={[mockMovieDetailsQuery]}>
+      <MemoryRouter>{ui}</MemoryRouter>
+    </MockedProvider>
   );
 };
 
@@ -36,9 +43,13 @@ describe('MovieList Component - Integration Tests', () => {
       renderWithApollo(<MovieList {...defaultProps} />);
 
       // With real MovieListItem, we check for movie images with alt text
-      expect(screen.getByAltText('The Matrix')).toBeInTheDocument();
-      expect(screen.getByAltText('The Godfather')).toBeInTheDocument();
-      expect(screen.getByAltText('Pulp Fiction')).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: /The Matrix/ })).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: /The Godfather/ })
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: /Pulp Fiction/ })
+      ).toBeInTheDocument();
     });
 
     it('displays total movie count', () => {
@@ -105,7 +116,7 @@ describe('MovieList Component - Integration Tests', () => {
         <MovieList {...defaultProps} setSearchTerm={mockSetSearchTerm} />
       );
 
-      const searchInput = screen.getByTestId('search-input');
+      const searchInput = screen.getByPlaceholderText('Search Movies');
       await user.type(searchInput, 'matrix');
 
       expect(mockSetSearchTerm).toHaveBeenCalled();
@@ -120,7 +131,7 @@ describe('MovieList Component - Integration Tests', () => {
         <MovieList {...defaultProps} setSearchTerm={mockSetSearchTerm} />
       );
 
-      const searchInput = screen.getByTestId('search-input');
+      const searchInput = screen.getByPlaceholderText('Search Movies');
       await user.type(searchInput, 'matrix');
 
       expect(mockSetSearchTerm).toHaveBeenCalled();
@@ -129,7 +140,7 @@ describe('MovieList Component - Integration Tests', () => {
     it('displays current search term', () => {
       renderWithApollo(<MovieList {...defaultProps} searchTerm="matrix" />);
 
-      expect(screen.getByTestId('search-input')).toHaveValue('matrix');
+      expect(screen.getByPlaceholderText('Search Movies')).toHaveValue('matrix');
     });
   });
 
@@ -137,7 +148,7 @@ describe('MovieList Component - Integration Tests', () => {
     it('renders MovieListItem components with click handlers', () => {
       renderWithApollo(<MovieList {...defaultProps} />);
 
-      const matrixMovie = screen.getByAltText('The Matrix');
+      const matrixMovie = screen.getByRole('link', { name: /The Matrix/ });
       expect(matrixMovie).toBeInTheDocument();
 
       const movieItem = matrixMovie.closest('li');
@@ -172,24 +183,22 @@ describe('MovieList Component - Integration Tests', () => {
       expect(movieList).toBeInTheDocument();
 
       // Check that the search input has proper labeling
-      const searchInput = screen.getByTestId('search-input');
+      const searchInput = screen.getByPlaceholderText('Search Movies');
       expect(searchInput).toHaveAttribute('placeholder', 'Search Movies');
     });
 
     it('renders movie items with proper structure', () => {
       renderWithApollo(<MovieList {...defaultProps} />);
 
+      expect(screen.getByRole('link', { name: /The Matrix/ })).toBeInTheDocument();
       expect(
-        screen.getByLabelText('Open details for The Matrix')
+        screen.getByRole('link', { name: /The Godfather/ })
       ).toBeInTheDocument();
       expect(
-        screen.getByLabelText('Open details for The Godfather')
-      ).toBeInTheDocument();
-      expect(
-        screen.getByLabelText('Open details for Pulp Fiction')
+        screen.getByRole('link', { name: /Pulp Fiction/ })
       ).toBeInTheDocument();
 
-      const movieItems = screen.getAllByRole('button');
+      const movieItems = screen.getAllByRole('link');
       expect(movieItems.length).toBeGreaterThan(0);
     });
   });
@@ -206,7 +215,7 @@ describe('MovieList Component - Integration Tests', () => {
       renderWithApollo(<MovieList {...minimalProps} />);
 
       expect(screen.getByTestId('baph-movie-list')).toBeInTheDocument();
-      expect(screen.getByTestId('baph-search')).toBeInTheDocument();
+      expect(screen.getByRole('search')).toBeInTheDocument();
     });
 
     it('handles undefined callback functions', () => {

@@ -16,7 +16,7 @@ const mockLoginSuccess = {
   request: {
     query: LOGIN,
     variables: {
-      email: 'test@example.com',
+      emailOrUsername: 'test@example.com',
       password: 'password123'
     }
   },
@@ -43,7 +43,7 @@ const mockLoginInvalidCredentials = {
   request: {
     query: LOGIN,
     variables: {
-      email: 'wrong@example.com',
+      emailOrUsername: 'wrong@example.com',
       password: 'wrongpassword'
     }
   },
@@ -54,26 +54,26 @@ const mockLoginUserNotExists = {
   request: {
     query: LOGIN,
     variables: {
-      email: 'nonexistent@example.com',
+      emailOrUsername: 'nonexistent@example.com',
       password: 'password123'
     }
   },
   error: new GraphQLError('User does not exist')
 };
 
+const networkFailure = Object.assign(new Error('Failed to fetch'), {
+  networkError: new Error('Failed to fetch')
+});
+
 const mockLoginNetworkError = {
   request: {
     query: LOGIN,
     variables: {
-      email: 'test@example.com',
+      emailOrUsername: 'test@example.com',
       password: 'password123'
     }
   },
-  error: new Error('Network error'),
-  networkError: {
-    name: 'NetworkError',
-    message: 'Network error'
-  }
+  error: networkFailure
 };
 
 describe('LoginForm', () => {
@@ -85,10 +85,10 @@ describe('LoginForm', () => {
         </MockedProvider>
       );
 
-      expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+      expect(screen.getByTestId('login-email-input')).toBeInTheDocument();
+      expect(screen.getByTestId('login-password-input')).toBeInTheDocument();
       expect(
-        screen.getByRole('button', { name: /log in/i })
+        screen.getByTestId('login-submit-button')
       ).toBeInTheDocument();
     });
 
@@ -100,13 +100,13 @@ describe('LoginForm', () => {
       );
 
       expect(
-        screen.getByText('Welcome back to the community!')
+        screen.getByText('Sign in to your account')
       ).toBeInTheDocument();
     });
   });
 
   describe('Form Validation', () => {
-    it('shows validation errors for empty required fields', async () => {
+    it('keeps submit disabled until both fields have a value', async () => {
       const user = userEvent.setup();
 
       render(
@@ -115,16 +115,17 @@ describe('LoginForm', () => {
         </MockedProvider>
       );
 
-      const submitButton = screen.getByRole('button', { name: /log in/i });
-      await user.click(submitButton);
+      const submitButton = screen.getByTestId('login-submit-button');
+      expect(submitButton).toBeDisabled();
 
-      await waitFor(() => {
-        expect(screen.getByText('Email is required')).toBeInTheDocument();
-        expect(screen.getByText('Password is required')).toBeInTheDocument();
-      });
+      await user.type(screen.getByTestId('login-email-input'), 'ada');
+      expect(submitButton).toBeDisabled();
+
+      await user.type(screen.getByTestId('login-password-input'), 'password123');
+      expect(submitButton).toBeEnabled();
     });
 
-    it('shows error for invalid email format', async () => {
+    it('accepts a username that is not an email address', async () => {
       const user = userEvent.setup();
 
       render(
@@ -133,40 +134,46 @@ describe('LoginForm', () => {
         </MockedProvider>
       );
 
-      const emailField = screen.getByLabelText(/email/i);
+      const emailField = screen.getByTestId('login-email-input');
       await user.type(emailField, 'invalid-email');
 
-      const submitButton = screen.getByRole('button', { name: /log in/i });
-      await user.click(submitButton);
+      expect(emailField).toHaveValue('invalid-email');
+      expect(
+        screen.queryByText('Please enter a valid email address')
+      ).not.toBeInTheDocument();
+    });
+
+    it('clears a field error when the user starts typing', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <MockedProvider mocks={[mockLoginInvalidCredentials]}>
+          <LoginForm />
+        </MockedProvider>
+      );
+
+      await user.type(
+        screen.getByTestId('login-email-input'),
+        'wrong@example.com'
+      );
+      await user.type(
+        screen.getByTestId('login-password-input'),
+        'wrongpassword'
+      );
+      await user.click(screen.getByTestId('login-submit-button'));
 
       await waitFor(() => {
         expect(
-          screen.getByText('Please enter a valid email address')
+          screen.getByText('Invalid email or password')
         ).toBeInTheDocument();
       });
-    });
 
-    it('clears field errors when user starts typing', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <MockedProvider mocks={[]}>
-          <LoginForm />
-        </MockedProvider>
-      );
-
-      const submitButton = screen.getByRole('button', { name: /log in/i });
-      await user.click(submitButton);
+      await user.type(screen.getByTestId('login-password-input'), 'x');
 
       await waitFor(() => {
-        expect(screen.getByText('Email is required')).toBeInTheDocument();
-      });
-
-      const emailField = screen.getByLabelText(/email/i);
-      await user.type(emailField, 'test@');
-
-      await waitFor(() => {
-        expect(screen.queryByText('Email is required')).not.toBeInTheDocument();
+        expect(
+          screen.queryByText('Invalid email or password')
+        ).not.toBeInTheDocument();
       });
     });
   });
@@ -182,10 +189,10 @@ describe('LoginForm', () => {
         </MockedProvider>
       );
 
-      await user.type(screen.getByLabelText(/email/i), 'test@example.com');
-      await user.type(screen.getByLabelText(/password/i), 'password123');
+      await user.type(screen.getByTestId('login-email-input'), 'test@example.com');
+      await user.type(screen.getByTestId('login-password-input'), 'password123');
 
-      const submitButton = screen.getByRole('button', { name: /log in/i });
+      const submitButton = screen.getByTestId('login-submit-button');
       await user.click(submitButton);
 
       await waitFor(() => {
@@ -216,23 +223,16 @@ describe('LoginForm', () => {
         </MockedProvider>
       );
 
-      const submitButton = screen.getByRole('button', { name: /log in/i });
-      await user.click(submitButton);
+      await user.type(screen.getByTestId('login-email-input'), 'test@example.com');
+      await user.type(screen.getByTestId('login-password-input'), 'password123');
+      await user.click(screen.getByTestId('login-submit-button'));
 
       await waitFor(() => {
-        expect(screen.getByText('Email is required')).toBeInTheDocument();
+        expect(localStorage.getItem('baphomet-token')).toBe('mock-jwt-token');
       });
 
-      await user.type(screen.getByLabelText(/email/i), 'test@example.com');
-      await user.type(screen.getByLabelText(/password/i), 'password123');
-      await user.click(submitButton);
-
-      await waitFor(() => {
-        expect(screen.queryByText('Email is required')).not.toBeInTheDocument();
-        expect(
-          screen.queryByText('Password is required')
-        ).not.toBeInTheDocument();
-      });
+      expect(screen.queryByText('Email or username is required')).not.toBeInTheDocument();
+      expect(screen.queryByText('Password is required')).not.toBeInTheDocument();
     });
   });
 
@@ -247,10 +247,10 @@ describe('LoginForm', () => {
         </MockedProvider>
       );
 
-      await user.type(screen.getByLabelText(/email/i), 'wrong@example.com');
-      await user.type(screen.getByLabelText(/password/i), 'wrongpassword');
+      await user.type(screen.getByTestId('login-email-input'), 'wrong@example.com');
+      await user.type(screen.getByTestId('login-password-input'), 'wrongpassword');
 
-      const submitButton = screen.getByRole('button', { name: /log in/i });
+      const submitButton = screen.getByTestId('login-submit-button');
       await user.click(submitButton);
 
       await waitFor(() => {
@@ -269,12 +269,12 @@ describe('LoginForm', () => {
       );
 
       await user.type(
-        screen.getByLabelText(/email/i),
+        screen.getByTestId('login-email-input'),
         'nonexistent@example.com'
       );
-      await user.type(screen.getByLabelText(/password/i), 'password123');
+      await user.type(screen.getByTestId('login-password-input'), 'password123');
 
-      const submitButton = screen.getByRole('button', { name: /log in/i });
+      const submitButton = screen.getByTestId('login-submit-button');
       await user.click(submitButton);
 
       await waitFor(() => {
@@ -292,10 +292,10 @@ describe('LoginForm', () => {
         </MockedProvider>
       );
 
-      await user.type(screen.getByLabelText(/email/i), 'test@example.com');
-      await user.type(screen.getByLabelText(/password/i), 'password123');
+      await user.type(screen.getByTestId('login-email-input'), 'test@example.com');
+      await user.type(screen.getByTestId('login-password-input'), 'password123');
 
-      const submitButton = screen.getByRole('button', { name: /log in/i });
+      const submitButton = screen.getByTestId('login-submit-button');
       await user.click(submitButton);
 
       await waitFor(() => {
@@ -310,7 +310,7 @@ describe('LoginForm', () => {
         request: {
           query: LOGIN,
           variables: {
-            email: 'test@example.com',
+            emailOrUsername: 'test@example.com',
             password: 'wrongpassword'
           }
         },
@@ -325,10 +325,10 @@ describe('LoginForm', () => {
         </MockedProvider>
       );
 
-      await user.type(screen.getByLabelText(/email/i), 'test@example.com');
-      await user.type(screen.getByLabelText(/password/i), 'wrongpassword');
+      await user.type(screen.getByTestId('login-email-input'), 'test@example.com');
+      await user.type(screen.getByTestId('login-password-input'), 'wrongpassword');
 
-      const submitButton = screen.getByRole('button', { name: /log in/i });
+      const submitButton = screen.getByTestId('login-submit-button');
       await user.click(submitButton);
 
       await waitFor(() => {
@@ -341,7 +341,7 @@ describe('LoginForm', () => {
         request: {
           query: LOGIN,
           variables: {
-            email: 'notfound@example.com',
+            emailOrUsername: 'notfound@example.com',
             password: 'password123'
           }
         },
@@ -356,10 +356,10 @@ describe('LoginForm', () => {
         </MockedProvider>
       );
 
-      await user.type(screen.getByLabelText(/email/i), 'notfound@example.com');
-      await user.type(screen.getByLabelText(/password/i), 'password123');
+      await user.type(screen.getByTestId('login-email-input'), 'notfound@example.com');
+      await user.type(screen.getByTestId('login-password-input'), 'password123');
 
-      const submitButton = screen.getByRole('button', { name: /log in/i });
+      const submitButton = screen.getByTestId('login-submit-button');
       await user.click(submitButton);
 
       await waitFor(() => {
@@ -372,7 +372,7 @@ describe('LoginForm', () => {
         request: {
           query: LOGIN,
           variables: {
-            email: 'test@example.com',
+            emailOrUsername: 'test@example.com',
             password: 'password123'
           }
         },
@@ -387,10 +387,10 @@ describe('LoginForm', () => {
         </MockedProvider>
       );
 
-      await user.type(screen.getByLabelText(/email/i), 'test@example.com');
-      await user.type(screen.getByLabelText(/password/i), 'password123');
+      await user.type(screen.getByTestId('login-email-input'), 'test@example.com');
+      await user.type(screen.getByTestId('login-password-input'), 'password123');
 
-      const submitButton = screen.getByRole('button', { name: /log in/i });
+      const submitButton = screen.getByTestId('login-submit-button');
       await user.click(submitButton);
 
       await waitFor(() => {
@@ -409,16 +409,16 @@ describe('LoginForm', () => {
         </MockedProvider>
       );
 
-      await user.type(screen.getByLabelText(/email/i), 'test@example.com');
-      await user.type(screen.getByLabelText(/password/i), 'password123');
+      await user.type(screen.getByTestId('login-email-input'), 'test@example.com');
+      await user.type(screen.getByTestId('login-password-input'), 'password123');
 
-      const submitButton = screen.getByRole('button', { name: /log in/i });
+      const submitButton = screen.getByTestId('login-submit-button');
       await user.click(submitButton);
 
       expect(submitButton).toBeDisabled();
 
-      expect(screen.getByLabelText(/email/i)).toBeDisabled();
-      expect(screen.getByLabelText(/password/i)).toBeDisabled();
+      expect(screen.getByTestId('login-email-input')).toBeDisabled();
+      expect(screen.getByTestId('login-password-input')).toBeDisabled();
     });
 
     it('shows loading text on submit button during submission', async () => {
@@ -430,14 +430,14 @@ describe('LoginForm', () => {
         </MockedProvider>
       );
 
-      await user.type(screen.getByLabelText(/email/i), 'test@example.com');
-      await user.type(screen.getByLabelText(/password/i), 'password123');
+      await user.type(screen.getByTestId('login-email-input'), 'test@example.com');
+      await user.type(screen.getByTestId('login-password-input'), 'password123');
 
-      const submitButton = screen.getByRole('button', { name: /log in/i });
+      const submitButton = screen.getByTestId('login-submit-button');
       await user.click(submitButton);
 
       expect(
-        screen.getByRole('button', { name: /logging in.../i })
+        screen.getByRole('button', { name: /signing in, please wait/i })
       ).toBeInTheDocument();
     });
   });
